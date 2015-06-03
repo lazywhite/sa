@@ -1,0 +1,3409 @@
+计划，效率
+
+及时复习,总结
+
+精气神
+
+学习的针对性，资料的选取，过程规划
+系统的学习 官方文档
+
+降噪耳机，眼罩
+汲取思想上的营养
+
+做技术是科学，做管理是艺术
+
+远离发牢骚的人，找到工作中有价值的地方
+
+在工作，生活各种角色中自由转换
+
+要欣赏，发现美好的地方
+不要做卫生纸，要做碗筷
+
+谨言慎行,
+花无重开日，人无再少年
+时势造英雄
+
+
+考试准备
+1.精神状态
+兴奋，极高的反应速度，提神物品：咖啡 做加法运算，注意保暖，复制粘贴
+2.准备物品
+身份证，笔，纸
+3.作息安排
+早去一天，熟悉考场
+
+面试准备：仪表，口香糖，纸笔，简历，清凉油，刷牙
+真诚，沉稳，大方
+
+职业规划，财富增值，消费
+
+知识无外乎记忆
+
+学习计划
+
+整理学习笔记
+
+负载均衡
+虚拟化
+运维的日常事务：监控，数据备份，日志查阅
+交换机设置
+硬件防火墙
+常见攻击的屏蔽
+服务器被入侵的处理
+帐号控制，磁盘控制，大量服务器的统一管理
+服务器同步,ntp,ftp,p2p
+
+
+ddos：arp icmp ip udp tcp 应用层
+
+web集群需要考虑的问题：负载均衡，会话持久
+
+tengine：显示模块 nginx -m
+如何面对海量日志 logrotate 
+闻道有先后，术业有专攻
+最高效的学习方法就是以讲出来的目的去学习
+
+听讲步骤：预习，听课，复习
+自学步骤：粗读，精读，细读
+不要以计算机的思维做事，不是只有对立的两面
+
+expect
+iscsi 持久连接的，数据传输是即时的
+
+/porc 正在运行的系统信息映射  
+  主要输出：进程信息    
+  内存资源信息
+ 
+/sys      
+  硬件设备的工作信息
+
+它们都是伪文件系统，如果了解这些文件的参数，并向里面传递特殊数值，完全可以实现实时调整内核工作特征和硬件工作特征。
+
+shell脚本可产生一系列信息致标准输出，可grep，awk捕获来达到返回值的目的
+
+
+fastdfs mogilefs gridfs moosefs
+make可指定编译器，clang
+llvm：low level virtual machine
+
+asf:hadoop(mapreduce,hdfs)
+
+python(filter,reduce,map,zip)
+
+HDFS工作在用户空间，需要api来访问
+
+
+
+爬虫取得的数据几乎都是非结构化数据，直接存储在文件系统上，需要api来存储和访问
+
+crc32 循环冗余校验
+hive：让hadoop具有sql接口
+pig：让hadoop具有shell接口
+
+moosefs 可直接挂载使用
+
+
+zabbix-server 10051
+zabbix-agent 10050
+
+通信核心是基于 items:key来进行的，请求key值，返回key值
+宏：全局宏，模版宏，主机宏
+UserParameter=<key>,<command>
+key命名的规则
+UserParameter=mysql.status,mysqladmin ping == mysqld is alive
+
+
+zabbix_get 
+
+
+create database zabbix_proxy CHARACTER SET utf8;
+ipmi  intellegent platform management interface 智能平台管理接口
+
+
+事件的来源：trigger；自动发现；自动注册
+action（notification ,operation) 
+host template iterm trigger event  notify media
+DM定义的proxy名字必须要跟proxy配置文件的HOSTNAME保持一致
+
+
+nagios （icinga opsview）报警工具，  cacti画图工具
+
+
+tco total cost of owning
+
+存储的分类
+  通过api进行存储（Mysql）
+  通过文件系统存贮
+  直接使用存储设备
+
+rewrite： last break permanent redirect
+
+如何创建一个repo
+  1.rsync下载所有的epel包
+  2.createrepo
+  3.将文件夹通过http，file，ftp，nfs发布
+  4.写一个repo文件
+
+
+cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+
+
+cvcs：centeral version  control system ;
+dvcs: distribute version control system
+
+blowfish
+last:显示用户登录信息
+lscpu lsof 
+
+netstat总结
+ps总结
+find总结
+-name -iname(不区分大小写) -user -group -uid -gid -nouser -nogroup 
+-type f|d|c|b|l|p|s  -size +20M|-20k 
+-atime  -mtime -ctime  +-#
+-a -o -not 
+-print -ls -exec -delete|xargs 
+
+端口号总结
+snmp：udp161/162 
+dns：53
+memcached:11211
+mongodb:27017
+
+
+mysqladmin –u root –p password"新密码"回车后要求输入旧密码
+
+icmp type
+0：echo reply
+8：echo request
+
+tcp/ip4层模型：物理层，网络层，传输层，应用层
+
+
+
+
+iptables -m multiport --dports 21,25
+
+
+cap：consistency，availability，tolerance of partition
+
+base：basically available，soft state，eventually consistent
+
+
+分布式系统设计原理：在一致性，可用性，分区容错性3个方面，任何分布式
+系统最多只能满足其中两项
+
+
+mogilefs
+  tracker
+  database 
+  storage node 
+
+
+
+btrfs 优点
+  mkfs.btrfs /dev/sda6
+  写时复制
+  Btrfs支持透明压缩，这意味着分区里的每个文件都被自动压缩。这不单减小了文件的大小，还提高了性能
+
+  当创建btrfs文件系统时，你可以将任意个分区或磁盘设备传给mkfsb.btrfs创建的文件系统将跨这些设备。
+  你可以按这种办法"合并"多个分区或设备来得到一个大btrfs文件系。
+  也可从现存的btrfs文件系统中增加或移除设备（务必小心）
+
+
+
+1.安装corosync+pacemaker+pcs
+2.配置集群，加入节点
+3.配置资源
+4.启动资源
+
+
+半同步复制,google的补丁：只等待1个从服务器报告完成后就继续下一个操作，最好在一个机房里
+双主模型可能会导致数据不一致
+percona-toolkit 可检测数据一致性，时间一致性
+多线程复制，1个库只能启用1个线程
+
+mysql-dump;io-thread ,sql-thread
+
+
+
+GTID=UUID+TID
+从节点在应用中继日志时，不会改变GTID
+
+读写分离
+  mysql_proxy:依靠（lua）脚本
+  amoeba:java开发，也支持sharding
+      for mysql
+      for mongodb
+      for aladdine
+
+
+java -version验证工作在client模式还是server模式
+
+
+amoeba：性能调优，jvm和自身读写缓冲
+
+nginx 用户登录
+
+mysql 一从多主，从的从（从引擎blackhole）
+冗余不同于备份
+http 8种method
+ 
+
+curl -v
+node-js
+
+FTP服务一般运行在20和21两个端口。端口20用于在客户端和服务器之间传输数据流，而端口21用于传输控制流，并且是命令通向ftp服务器的进口
+ftp的主动模式与被动模式;被动模式下的防火墙问题
+
+递归与迭代
+路由设置
+交换机配置
+ 
+grep 锚定两个特定字符串之间的内容
+
+1.csma/cd :carrier sense multi access /collision detecte
+是以太网的重要标志
+2.令牌环网：只有持有令牌的主机才能发信
+
+grep -xvf a b | tee c | wc -l
+
+I/O分为两种：
+同步IO
+  阻塞
+  非阻塞
+    忙等待
+    事件驱动
+      水平触发
+      边缘触发
+异步IO
+
+I/O复用：select/poll/kqueue
+内存映射：mmap
+splice：零复制转发
+
+ajp：apache jserv protocal
+jsp:java server page
+
+statement mixed row
+
+
+网游服务端架构
+  单服务器
+  多服务器
+    地图
+    功能
+  分布式：远程对象调用
+pt-table-checksum 检测主从是否同步
+pt-table-sync 主从自动表同步
+sync_binlog 提交立即同步，关闭物理设备的缓存
+
+流程化，规范化，文档化
+  1.不要混合使用存储引擎
+  2.server ID
+  3.尽力避免修改从库
+  4.尽量使用row和mixed格式
+
+
+
+
+查看进程打开的文件 lsof
+
+
+
+数据总线，控制总线，地址总线 通常结合在一起，用寄存器里的
+标志位来区分
+
+计算机启动顺序：BIOS-POST-MBR
+
+内存最小单位为byte，通常以8位一个Byte来管理，字节也是cpu寻址的最小单位
+
+通写：写入到缓存立即同步到内存 write through
+回写：写入缓存后异步同步到内存 write back
+
+MMU：内存管理单元，负责内存的读写和保护
+进程地址空间：Text（代码段）Data（初始化数据段）BSS（初始化为0的数据段）Heap（堆段，自己申请）Stack（操作系统分配）
+32位系统内核内存分段：DMA，ZONE_NORMAL,ZONE_RESERVED
+64位系统内存分段：DMA DMA_32 ZONE_NORMAL
+
+进程需要不断切换，才能达到多任务的目的，每次切换前都要保存现场。
+
+/proc/sys/{dev,fs,kernle,net,vm}
+
+
+
+
+  sar -n SOCK
+  netstat -tnulp
+  lsof -u user
+  lsof -p pid
+  lsof -i [172.16.100.17]:80
+
+内存分页，为了配合文件系统更快速复制，DMA可控制从磁盘到内存的IO，可直接使用总线（会跟cpu发生资源争用）
+scsi自备控制芯片，可完成内存访问和数据传输控制
+32位系统中：DMA总线宽度小，寻址能力有限，物理内存中最低位的16M内存可以被DMA直接访问，并且cpu想访问zone highmem，必须将其映射进zone normal
+
+内存分页：4K 
+透明大页（2M），可提高TLB性能
+cat /proc/meminfo 
+free -m
+cache缓存文件的数据
+buffer缓存文件的元数据：inode，dentry
+
+
+cat /proc/zoneinfo 查看内存分段
+物理内存分为3段：DMA ZONE_NORMAL ZONE_HIGHMEM  
+PAE:36bit
+/proc/PID/oom_adj  2^n 调整oom指数
+echo f > /sysrq-trigger 开启oom清理
+
+vm.nr_hugepages=5 个数
+
+每个cpu都有140个队列
+prefork不适合进程绑定，进程可能会被释放掉
+
+观察cpu负载
+  vmstat 间隔 次数 
+  htop
+  dstat
+  sar -P ALL 1 2
+  top 1
+  watch -n1 'ps axo comm,pid,psr|grep nginx'查看某个进程运行在哪个cpu
+
+中断分为上半部（接收终端，存储数据）下半部（处理中断，处理数据）
+sysctl -a 查看所有内核参数
+
+tcp/ip协议栈在linux系统中是由内核来管理的，非copy型
+socket要描述自己的状态
+
+
+内存映射mmap需要内核支持
+
+
+只有在并行编程模型下开发的程序才能利用到多核cpu的优势
+
+mmu维护一个虚拟内存page tree，将物理地址以4K为单位向外映射
+
+
+PCI（Peripheral Component Interconnect），是一种连接电子计算机主板和外部设备的总线标准
+
+cpu主频速度远远超过内存存取速度
+32位地址总线只能访问到4G内存
+
+jps:查看当前运行的java程序
+jvm的启动需要用bootstrap.jar
+
+
+
+route命令添加到/etc/rc.local来设置永久路由
+     1、route add -net 192.168.2.0 netmask 255.255.255.0 dev eth0
+         添加一条到达192.168.2.0网络的路由，指定网络掩码为255.255.255.0,数据包通过网络接口eth0。
+      2、route add -net 192.57.66.0 netmask 255.255.255.0 gw 192.168.2.1
+         添加一条到达192.57.66.0网络的路由，指定网络掩码为255.255.255.0,数据包通过网关地址192.168.2.1。
+      3、route add -host 192.57.66.200 gw 192.168.2.1
+         所有去往192.57.66.200主机的数据包发往网关地址192.168.2.1。
+      4、route add default gw 192.168.1.1
+         添加一条默认网关，所有的数据包将被转发到192.168.1.1。
+		 
+		 
+
+---------------------------------------
+
+一些网站为了安全起见，会要求我们采用 https 的安全链路来连接网页服务器，下面简单说明 https 协议的工作流程。
+
+1. 首先客户端向网站服务器发送 https 连接请求。
+
+2. 接着网站服务器将其公钥传递给客户端(网站服务器事先需要准备好一组密钥，分别是公钥和私钥)。
+
+3. 客户端收到服务器送来的公钥后，随机生成一个会话密钥(称之为会话密钥(Session Key))，接着使用公钥来加密该密会话密钥，完后发送给服务器端。
+
+4. 服务器端使用私钥解开被加密的会话密钥。于是，这个会话密钥只有该客户端和服务器所拥有。
+
+5. 以后客户端和服务器端之间的通讯就用会话密钥进行对称加密。
+
+
+---------------------------------
+
+
+pecl:php extention community library
+pcre:perl capable regular expression
+
+php -with-mysql ; /usr/local/bin/phpize    ./configure --with-php-config=/usr/local/bin/php-config
+
+mongodb scons编译工具, extension=mongo.so
+memcached本身没有用户认证功能，memcachedphp
+
+shell常见算法
+
+
+--iptables  -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j REDIRECT --to-port 8080 
+
+
+超级进程的意义
+1.减少资源浪费
+2.避免软件功能的重复开发
+
+
+mysql :event cursor procedure index  partition view full-text
+
+CREATE EVENT IF NOT EXISTS test_event ON SCHEDULE EVERY 5 SECOND do insert into test(time)values(now());
+autocommit对mysql-innodb性能的影响
+
+atomicity consistency isolation durability
+
+FastCGI致力于减少网页服务器与CGI程序之间互动的开销，从而使服务器可以同时处理更多的网页请求
+linux取得文件的md5，sha256码
+md5sum
+$"string"
+$()=``
+$(())数学计算
+${var:-"string"}
+
+php加速：apc，xcache，nusphere
+
+mpm：prefork,worker,event
+
+getsebool setsebool  chcon  user,role,type restorecon
+rsyslog-mysql-loganalyzer
+logwatch,logrotate
+
+jsp执行流程图，garbage collection
+
+
+j2se:standard edition：java标准版，只包含必须的库
+j2ee:enterprise edition：针对企业级web应用的java版本，依赖于j2se
+j2me:micro edito 针对移动设备，嵌入式的java版本
+jre：java runtime environment
+jdk：java development kit=jre+开发工具
+jdk包括jre，包含javac编译器，反编译器，jdb，文档工具，jar打包工具，java运行工具，applet-viewer
+Java源文件经编译成字节码程序，通过JVM将每一条指令翻译成不同平台机器码，通过特定平台运行。
+
+AJP是Apache提供的完成与其它服务器通讯的一种协议。在Apache中通过mod_proxy_ajp模块发送AJP数据,另外一端的服务器需要实现AJP协议，能够接受mod_proxy_ajp模块发送的AJP协议数据，在接受到AJP协议数据后做适当处理，并能够将处理结果以AJP协议方式发送回给mod_proxy_ajp模块 
+使用这种协议，具有更高的性能，因为它采用的是二进制传输。比HTTP的文本传输要有更高的效率。
+
+在Apache中要使用mod_proxy和mod_proxy_ajp，在Tomcat中则要开启ajp服务。
+
+
+日志服务syslog logrotate
+tomcat deltamanager--session广播共享
+
+/usr/local/apache/bin/httpd -D DUMP_MODULES | grep proxy
+
+数据结构与算法
+计算机网络
+输入输出运算控制存储
+网卡声卡显卡主板
+南桥北桥
+精简指令集，复杂指令集
+计算机只认识0和1，需要经过各种转换
+操作系统重点在于管理计算机的所有活动以及驱动系统中的所有硬件
+应用程序管理、内存管理、文件系统管理、网络功能实现、硬件驱动管理、实现安全机制
+操作系统需要特定的硬件架构才能运行
+驱动程序针对特定的操作系统开发
+
+unix主机：体系封闭，稳定
+  IBM-AIX:power ,powerpc（cpu性能最强，功耗高）
+  HP-UX:Alpha
+  Sun-Solaris:UltraSpace
+
+x86使用复杂指令集，非x86使用精简指令集或并行执行代码
+revoke all privileges on *.* from 'user'@'host';
+
+
+freebsd ：
+  ifconfig_em0='inet 10.0.0.1 netmask 255.255.0.0'
+  defaultrouter='10.0.0.254'
+  ifconfig_em0='DHCP'
+
+  pciconf=lspci
+  kldstat=lsmod
+  kldload|kldunload=modprobe
+
+初始化磁盘
+# fdisk -BI da0
+
+建立FreeBSD分区
+# bsdlabel -B -w -r da0s1 auto
+
+格式化分区，创建文件系统
+# newfs /dev/da0s1a
+
+服务器主流：IBM/DELL/HP
+不差钱公司一般用小型机
+
+制作kickstart
+upstart
+openQRM
+Cobbler
+PXE
+
+Xen、KVM
+幂等性：无论执行多少次，结果都是一样的
+
+
+批量部署：
+1.系统安装 （实体机安装和虚拟机安装）
+2.配置文件：puppet（ruby）推送 saltstack
+3.命令和控制：func fabric ansible
+
+运维讲究稳定，开发讲究快捷
+DevOps：持续交付-〉持续部署
+
+mktemp -d /tmp/a.XXXX
+
+
+
+puppet：（依赖于ruby）2.6版本已废弃
+  模块（puppetforge）-类-资源
+  factor：因子
+  puppet只需要定义目标状态，不需要定义实现过程
+  集群中节点传输信息的协议:RPC，xmlRPC(基于http），restful
+  子类添加属性+〉
+  mcollective activmq
+
+tracker 端口7001
+memcached 11211
+heartbeat udp 694
+varnish:6081 6082
+mysql-proxy:4041
+mogstored :7500 7501(管理接口)
+
+domain-class。。key--fid  (在同一名称空间中必须为1)
+host  device
+mogadm host mark <hostname> <status>(alive ,down)
+mogadm check(查看状态)
+moglistkeys --trackers=172.16.23.11 --domain=files
+moglistfids      (dev count 副本个数)
+mogadm class (指定副本个数)
+mkdir -pv /mogdata/dev3
+chown -R mogilefs:mogilefs /mogdata/dev3
+vim /etc/mogilefs/mogstored.conf  修改 docroot=/mogdata
+安装perl-IO-AIO
+mogadm host add 172.16.23.15 --ip=172.16.23.14 --state=alive
+mogadm device add <hostname> <id>
+mogadm device list
+mogadm domain add files
+mogilefs数据库的初始化
+/etc/mogilefs/mogilefsd.conf 修改服务器地址，db_user ,db_pass 
+
+mogdelete --trackers='' --domain=  --key='' 删除文件
+mogupload  --trackers='' --domain='' --key='' 上传文件
+mogfileinfo
+moglistkeys
+moglistfids
+mogilefs删除host，必须在数据库中删除设备才能进行
+
+如何批量将文件存入mogilefs，自动将key名设置为文件名
+
+mogdbsetup 用--dbrootuser='root' --dbrootpass='1234' --dbhost=127.0.0.1 来初始化即可
+其他均采用默认选项
+
+tracker 监控节点健康状态，接受检索请求，指挥节点间同步数据
+
+nginx反向代理tracker（upstream），编译时加--with-debug 可看后端服务器错误信息
+
+
+galera 多主复制 codership。mysql postgre 打补丁，装插件
+wsrep API ，wsrep.so ，广播
+galera wsrep特点：绝对同步；多主；并行；无单点故障
+
+=======================
+
+To bootstrap a new cluster you need to start the first mysqld server with an empty cluster address URL specified either in my.cnf or on the command line:
+
+$ mysqld --wsrep_new_cluster
+
+Once you have a cluster running and you want to add/reconnect another node to it, you must supply an address of one of the cluster members in the cluster address URL. E.g. if the first node of the cluster has address 192.168.0.1, then adding a second node would look like
+
+$ mysqld --wsrep_cluster_address=gcomm://192.168.0.1  # DNS names work as well
+
+The new node only needs to connect to one of the existing members. It will automatically retrieve the cluster map and reconnect to the rest of the nodes.
+
+Once all members agree on the membership, state exchange will be initiated during which the new node will be informed of the cluster state. If its state is different from that of the cluster (which is normally the case) it will request snapshot of the state from the cluster 5) and install it before becoming ready for use.
+
+State Snapshot Transfer（sst）
+1.Using mysqldump.
+2.Copying data files directly
+
+wsrep_sst_method=rsync_wan | msqldump
+
+cluser最少3个节点
+
+Mandatory settings:
+
+wsrep_provider — a path to Galera library.
+wsrep_cluster_address — cluster connection URL.
+binlog_format=ROW
+default_storage_engine=InnoDB
+innodb_autoinc_lock_mode=2
+innodb_locks_unsafe_for_binlog=1
+When using Galera provider of version >= 2.0 innodb_doublewrite should always be set to 1 (default)
+innodb_flush_log_at_trx_commit=2
+
+Wsrep-related status variables in MySQL/Galera server can be queried with the standard
+mysql> SHOW STATUS LIKE 'wsrep_%';
+
+
+=================
+YAML是"YAML Ain't a Markup Language"（YAML不是一种置标语言）的递归缩写。
+YAML’s block collections use indentation for scope and begin each entry on its own line. Block sequences indicate each entry with a dash and space ( “- ”). Mappings use a colon and space (“: ”) to mark each key: value pair. Comments begin with an octothorpe (also called a “hash”, “sharp”, “pound”, or “number sign” - “#”).
+
+YAML also has flow styles, using explicit indicators rather than indentation to denote scope. The flow sequence is written as a comma separated list within square brackets. In a similar manner, the flow mapping uses curly braces.
+
+YAML uses three dashes (“---”) to separate directives from document content. This also serves to signal the start of a document if no directives are present. Three dots ( “...”) indicate the end of a document without starting a new one, for use in communication channels.
+
+Repeated nodes (objects) are first identified by an anchor (marked with the ampersand - “&”), and are then aliased (referenced with an asterisk - “*”) thereafter.
+
+A question mark and space (“? ”) indicate a complex mapping key. Within a block collection, key: value pairs can start immediately following the dash, colon, or question mark.
+
+Scalar content can be written in block notation, using a literal style (indicated by “|”) where all line breaks are significant. Alternatively, they can be written with the folded style (denoted by “>”) where each line break is folded to a space unless it ends an empty or a more-indented line.
+
+YAML’s flow scalars include the plain style (most examples thus far) and two quoted styles. The double-quoted style provides escape sequences. The single-quoted style is useful when escaping is not needed. All flow scalars can span multiple lines; line breaks are always folded.
+
+
+--------------
+package:repo,local rpm,sourcecode,binary
+user,group
+file
+exec
+cron
+service
+
+reqiure before notify subscribe
+类，选择，变量，继承，模版，测试，数组
+master/agent初始化，连接，配置
+-----------------
+
+
+slave 配置文件中要加read-only
+
+
+location匹配命令
+
+~      #波浪线表示执行一个正则匹配，区分大小写
+~*    #表示执行一个正则匹配，不区分大小写
+^~    #^~表示普通字符匹配，如果该选项匹配，只匹配该选项，不匹配别的选项，一般用来匹配目录
+=      #进行普通字符精确匹配
+@     #"@" 定义一个命名的 location，使用在内部定向时，例如 error_page, try_files
+
+
+location 匹配的优先级(与location在配置文件中的顺序无关)
+= 精确匹配会第一个被处理。如果发现精确匹配，nginx停止搜索其他匹配。
+普通字符匹配，正则表达式规则和长的块规则将被优先和查询匹配，也就是说如果该项匹配还需去看有没有正则表达式匹配和更长的匹配。
+^~ 则只匹配该规则，nginx停止搜索其他匹配，否则nginx会继续处理其他location指令。
+最后匹配理带有"~"和"~*"的指令，如果找到相应的匹配，则nginx停止搜索其他匹配；当没有正则表达式或者没有正则表达式被匹配的情况下，那么匹配程度最高的逐字匹配指令会被使用。
+
+
+hiphop：将php代码转换为c++代码，但仍需编译
+
+为优化php执行，引入hiphopc，将php代码翻译成c++代码，但编译麻烦，不方便调试，
+又引入hphpi，类似zend 虚拟机，性能太差;HHVM应用JIT技术，边编译边执行
+
+
+
+
+词法分析、语法分析，编译中间代码，执行中间代码等各个部分统称为Zend虚拟机。
+
+php原为解释执行，后用zend虚拟机加速，xcache（国人开发）
+PHP加速器是一个为了提高PHP执行效率，从而缓存起PHP的操作码，这样PHP后面执行就不用解析转换了，可以直接调用PHP操作码，这样速度上就提高了不少。
+常见的php加速器，xcache（国人）eaccelerator ，apc（alternativ php cache），zend optimazer
+
+
+
+HHVM:libevent（事件驱动）,jemalloc(管理内存;firefox使用)，JIT（即时编译器）cmake编译，
+HHVM默认支持mysql，sqlite3，memcached可选择mongodb，redis扩展，依赖mysql5.1
+hhvm有libevent内存泄露问题 hhvm -m server (要求服务器的内存不小于1.2G)
+DefaultDocument=index.php 后边不能有任何空格
+
+hhvm -m daemon -c /etc/hhvm.hdf -u hhvm 
+  REST 从资源的角度来观察整个网络，分布在各处的资源由URI确定，而客户端的应用通过URI来获取资源的表征。获得这些表征致使这些应用程序转变了其状态。随着不断获取资源的表征，客户端应用不断地在转变着其状态，所谓表征状态转移（Representational State Transfer）。
+
+master：8140
+服务端自动签署
+类不能多重继承，节点包含不存在的类（将不会应用，也不会详细报错）
+agent工作阶段：预备，测试，强制，报告
+模块化，站点化
+
+
+  用PCL（puppet configure language)写.pp脚本，用puppet apply name.pp
+  type{‘title’：  attri=>value,}
+  puppet describe TYPE(获取帮助) -s -m
+  puppet资源间的关系  require before  subscribe notify
+  facter -p 输出顶级域的变量名
+  puppet module list
+  puppet master --genconfig
+
+
+mkisofs -r -J -T -V "rhel5-boot.iso" -o /root/rhel5-boot.iso -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table ./boot/
+
+-V<光盘ID>或-volid<光盘ID>   指定光盘的卷册集ID
+-o<映像文件>或-output<映像文件>   指定映像文件的名称
+-J或-joliet   使用Joliet格式的目录与文件名称
+-c<启动文件名称>   制作可启动光盘时，mkisofs会将启动映像文件中的全-eltorito-catalog<启动文件名称>全部内容作成一个文件
+-b<启动映像文件>或-eltorito-boot<启动映像文件>   指定在制作可启动光盘时所需的启动映像文件
+-r或-rational-rock   使用Rock Ridge Extensions，并开放全部文件的读取权限
+-T或-translation-table   建立文件名的转换表，适用于不支持Rock Ridge Extensions的系统上
+
+
+组播范围是从224.0.0.0到239.255.255.255。
+
+
+
+
+
+#客户端第一次启动向服务端发送证书，要求签好之后才能通信
+puppet agent --no-daemonize --onetime --verbose --debug --server=puppet_server(服务端主机名)
+
+puppet服务端签证书
+puppet cert list --all #查看所有客户端的请求(有+号的代表已经签好证书可以通信，没有加号的代表尚未签好证书)
+
+puppet cert --sign puppet_client(客户端主机名) #这条命令加客户端主机名就能签字，自此可以通信
+
+证书出错，要删除/var/lib/puppet/ssl/里面的内容，，注意时间同步和/etc/hosts
+
+file类型资源，要在fileserver.conf里面添加模块物理路径的授权
+
+
+  ipfirewall:ipfw add allow tcp from any to me 22 in via $ext_if
+  ipfilter:pass in on $ext_if proto tcp any to any port 22
+  PF:pass in on $ext_if inet proto tcp from any to $ext_if port 22
+
+/etc/make.conf    MASTER_SITE_OVERRIDE=/path/to/distfiles/${DIST_SUBDIR}
+/etc/profile  PACKAGESITE=/PATH/TO/lATEST
+
+
+在脚本中判断数据库是否存在。
+
+公司的网络环境：1.开发环境 2.测试环境 3.生产环境
+分流给测试环境
+
+自动化运维的几个方面
+  1.os安装层
+  2.自动部署层
+  3.任务管理层
+  4.监控层
+  5.容灾层
+  6.流程层
+  7.安全控制
+  8.容量管理
+
+
+为什么可以缓存
+  程序具有时间局部性和空间局部性
+  程序是由指令加数据组成
+
+cpu性能：主频，缓存大小
+计算机总线：数据总线，地址总线，传输总线
+
+北桥：pci总线
+南桥
+内存桥
+
+cpu指令集是分环的，4个环 有特权指令，不允许用户使用
+内存碎片化
+内存虚拟化：物理地址抽象为逻辑地址
+交换空间：将外存抽象为内存（开发程序不需要考虑内存容量的限制）
+mmu芯片：内存保护，存放分页表
+
+内存热插拔
+内存耗尽 out of memory
+缺页异常：os发通知，从LRU置换回来，重新分配
+内存里的共享对象 so
+
+硬盘等i/o设备上都有寄存器，作为与cpu之间传输数据的媒介
+设备都会有I/O端口，并向cpu注册，作为总线的访问地址
+DMA 直接内存访问，内核授权DMA使用总线传输数据，期间不能随意收回
+内核地址空间（低地址空间），用户地址空间（高地址空间）
+传输数据需要数据总线
+
+固件就是硬件的ROM里面存储的程序，
+
+cpu加电，立即加载主板ROM里的BIOS程序，BIOS会自动发现并注册硬件设备，存储在内存中极低的地址空间里，如果不正常就会报警，并指挥各设备进行IO口注册及中断注册，，BIOS加载CMOS里的设置，来启动第一启动设备，第一设备会有MBR
+
+软中断和硬中断
+mmap内存映射
+
+文件系统模块，网络系统，进程调度模块（调度策略-调度内核线程和用户进程），内存管理模块，设备驱动，
+系统调用，系统库
+perf sar htop /sys /proc
+
+用户空间程序分为：批处理进程，交互进程，守护进程
+分类：cpu bound | IO bound
+调度方式：nice值，动态优先级
+进程上下文切换
+每个进程都有自己的逻辑线性地址空间
+父进程通过fork，wait等系统调用创建子进程，每次系统调用都要进行模式切换
+子进程刚开始时是与父进程共享内存空间的，copy on write，仅在需要时另外开辟空间和复制数据
+大大减轻了系统创建进程的系统开销
+
+调度器要保存进程的状态，维持双向链表
+进程通过mlloc，请求空间，堆段在低地址空间，栈段在高地址空间
+
+
+
+
+
+
+进程调度：scheduler
+进程是程序的一个运行时实例
+时间片，分时复用，实现多任务
+单核心实现多任务，必须要切换，但不得不切换，于是可以用多个物理核心
+进程绑定，不切换，nginx cpu affinity
+
+实时优先级（1-99），数字越大，优先级越高 sched_FIFO或sched_RR
+chrt(change real time ) -f [1-99] /path/to/program 以实时优先级启动一个进程
+chrt -r (round-robin) 
+用户优先级（100-139）-20到19 ，数字越低，优先级越高 sched_Normal,默认为120
+nice (启动时指定优先级)，renice（重新分配优先级）
+1个优先级排一个队列，2.6内核实现了O(1)的调度器
+
+队列中等待调度的进程数占总进程的百分比（针对每个cpu）
+mpstat 1 [N]
+sar（system activity report） -p
+dstate -c
+vmstat 进程切换（cs）
+watch -n1
+进程绑定在cpu上，（prefork不适合进程绑定）
+taskset -c（制定cpu编号，不使用就需要制定16进制 掩码位）  0，3  0-3  -p(pid) 
+
+
+sar -q
+uptime 
+
+
+进程只能看到逻辑线性地址空间，物理内存的分配由os负责
+内存分页：每页大概4K
+内存转换表：（物理地址->逻辑地址），若按位对应，表就太大了，于是有了内存分页（分配一个连续空间）
+
+
+
+在并行模式下开发的应用程序才能利用到多核cpu并行优势
+
+取指单元，解码单元，执行单元
+超标量，超线程
+
+
+
+
+cpu  寄存器 1级缓存 二级缓存    内存（主存） 外存（硬盘）
+
+通写：
+回写：
+
+
+cacti报警功能太差，展示功能好，利用rrd-tool来保存数据并绘图；可安装插件进行报警，cacti只是一个php绘图程序，核心功能由插件或其他工具实现
+nagios报警功能强大，能实现状态切换
+
+cacti和nagios并发处理性较弱，不适合200台以上的网络监控
+zabbix分布式监控
+zabbix可以监控的客户端：1.snmp打印机 2.agent（server）
+3.icmp协议 4.ipmi协议 5.JMX
+
+strace:监控程序的系统调用
+perf：性能评估
+vmstat：虚拟内存
+dstat
+slabtop：内存分配器
+mpstat：多cpu
+iostat
+iotop
+blktrace
+dtrace
+nictrace
+驱动程序==>I/O bridge(南桥北桥)==>IO controller + Network Controller
+
+
+
+zabbix的招牌功能
+  可以精细到每个页面（下载速度，响应时间，状态码）,可自动认证
+  自动发现功能
+  代理功能
+  UI
+agent可以监测的项目：
+  cpu（/proc/cpuinfo)
+  mem(/proc/meminfo)
+  disk()
+  network
+  log
+  file
+  service
+
+预警的方式：
+  SMS
+  Jabber
+  Mail
+  SCRIPT
+架构方式：
+  本地
+  proxy（node+proxy）
+监控java程序  jmx：zapcat agent zapcat trapper
+
+监控目标：
+  服务器（mem，storage，cpu），交换机，路由器，I/O设备
+  操作系统，网络，应用程序（web ，db（replication））
+如何监控：
+  基本：top vmstat iostat mytop innotop show global stauts;show innodb status
+  图形化：nagios（opsview icinga），cacti，zabbix
+监控系统的主要工作：
+  采集数据
+  存储数据
+  分析，展示数据
+  预警
+
+事件（event）
+  trigger
+  discovery
+  registry
+server端开启12个进程
+  watchdog，timer,housekeeper,alerter,poller,http-poller,discoverer,pinger,db_config_syncer,db_data_syncer,nodewatcher,escalator
+
+每个触发器仅能使用一个item，一个item可以供多个触发器使用
+
+触发器间的依赖关系，zabbix不能直接定义主机间的依赖关系
+nagios支持定义主机间依赖关系
+触发器6个等级：not classified ,Information,Warning,Average,High,Disaster
+
+
+
+host up; host down ;service up ;service down ;host discovery ;host lost;service discovery service lost
+
+zabbix poller：池，可处理多个host的监测数据
+
+jmx ：java management extension 即Java管理扩展,是一个为应用程序、设备、系统等植入管理功能的框架。JMX可以跨越一系列异构操作系统平台、系统体系结构和网络传输协议，灵活的开发无缝集成的系统、网络和服务管理应用
+
+监控采集的是离散数值
+
+
+
+采集数据的方式
+  nms：network manager system（采集数据）/agent
+  snmp：simple network manage protocal(windows 装net-snmp包) 3个版本 ，通行版（v2c）明文传输，认证机制薄弱
+  ssh:script
+
+
+
+
+
+pkg软件包管理器
+  pkg info -f zsh（输出详细信息）
+  pkg query "%n is installed from %o in version %v it takes %sh on the system" zsh
+
+  pkgng is not a replacement for port management tools like ports-mgmt/portmaster or ports-mgmt/portupgrade. These tools can be used to install third-party software from both binary packages and the Ports Collection, while pkgng installs only binary packages.
+
+
+
+
+
+	
+  ports collecton：
+    make search name=nginx | key=string
+    make quicksearch 
+    pkg_add [-r],pkg_delete,pkg_info,pkg_version
+
+    安装pkgupgrade pkg pkg_search方便包管理
+
+  package collection:
+    csup -L 2 -h cvsup.FreeBSD.org /usr/share/examples/cvsup/ports-supfile
+    whereis查找相关port
+	   portsnap fetch
+     portsnap extract
+     portsnap update 
+
+     make WRKDIRPREFIX=/usr/home/example/ports install
+     make PREFIX=/usr/home/example/local install
+     make config ;make rmconfig ;make show config 
+
+     freebsd-update 2进制升级系统
+
+     /etc/netstart restart
+
+     系统级别的服务由/etc/rc.d/目录下的脚本决定
+    用户级别的服务由/usr/local/rc.d/目录下的脚本决定
+    将需要启动的服务写进/etc/rc.conf 或/etc/rc.local
+    /etc/rc.d/sshd rcvar
+
+    ifconfig_em0_alias0="inet xxx.xxx.xxx.xxx netmask 255.255.255.xxx"  
+    ifconfig em0 172.16.23.19 netmask 255.255.0.0 [-]alias 
+
+    # dd if=/dev/zero of=/usr/swap0 bs=1024k count=64
+    swapfile="/usr/swap0" 
+    # mdconfig -a -t vnode -f /usr/swap0 -u 0 && swapon /dev/md0
+    shutdown -p
+    启动菜单时 按下数字键 4 boot -s
+    /etc/login.conf
+
+    解释性语言都是平台无关的，产生字节码 运行在虚拟机上
+
+    jail
+      # setenv D /here/is/the/jail
+      # mkdir -p $D 
+      # cd /usr/src
+      # make buildworld 
+      # make installworld DESTDIR=$D 
+      # make distribution DESTDIR=$D 
+      # mount -t devfs devfs $D/dev 
+
+      jail_enable="YES"   # 如果设为 NO 则表示不自动启动 jail
+      jail_list="www"     # 以空格分隔的 jail 名字列表
+
+      jail_www_rootdir="/usr/jail/www"     # jail 的根目录
+      jail_www_hostname="www.example.org"   # jail 的主机名
+      jail_www_ip="192.168.0.10"          # jail 的 IP 地址
+      jail_www_devfs_enable="YES"          # 在 jail 中挂接 devfs
+      jail_www_devfs_ruleset="www_ruleset" # 在 jail 中应用的devfs 规则集
+      # /etc/rc.d/jail start www
+      # /etc/rc.d/jail stop www
+
+      mandatory access control--MAC(类似于linux)
+      Discretionary Access Control——DAC
+
+      自主访问的含义是有访问许可的主体能够直接或间接地向其他主体转让访问权。自主访问控制是在确认主体身份以及（或）它们所属的组的基础上，控制主体的活动，实施用户权限管理、访问属性（读、写、执行）管理等，是一种最为普遍的访问控制手段。自主访问控制的主体可以按自己的意愿决定哪些用户可以访问他们的资源，亦即主体有自主的决定权，一个主体可以有选择地与其它主体共享他的资源。
+
+基于访问控制矩阵的访问控制表（ACL）是DAC中通常采用一种的安全机制。ACL是带有访问权限的矩阵，这些访问权是授予主体访问某一客体的。安全管理员通过维护ACL控制用户访问企业数据。对每一个受保护的资源，ACL对应一个个人用户列表或由个人用户构成的组列表，表中规定了相应的访问模式。当用户数量多、管理数据量大时，由于访问控制的粒度是单个用户，ACL会很庞大。当组织内的人员发生能变化（升迁、换岗、招聘、离职）、工作职能发生变化（新增业务）时，ACL的修改变得异常困难。采用ACL机制管理授权处于一个较低级的层次，管理复杂、代价高以至易于出错。
+
+DAC的主要特征体现在主体可以自主地把自己所拥有客体的访问权限授予其它主体或者从其它主体收回所授予的权限，访问通常基于访问控制表（ACL）。访问控制的粒度是单个用户。没有存取权的用户只允许由授权用户指定对客体的访问权。DAC的缺点是信息在移动过程中其访问权限关系会被改变。如用户A可将其对目标O的访问权限传递给用户B，从而使不具备对O访问权限的B可访问O。
+
+为了实现完备的自主访问控制系统，由访问控制矩阵提供的信息必须以某种形式存放在系统中。访问矩阵中的每行表示一个主体，每一列则表示一个受保护的客体，而矩阵中的元素，则表示主体可以对客体的访问模式。目前，在系统中访问控制矩阵本身，都不是完整地存储起来，因为矩阵中的许多元素常常为空。空元素将会造成存储空间的浪费，而且查找某个元素会耗费很多时间。实际上常常是基于矩阵的行或列来表达访问控制信息。
+
+
+     portupgrade 工具是设计来简化升级已安装的 port 的操作的
+     使用 pkgdb -F 命令来扫描已安装的 port 的列表
+     portupgrade -ai (all and confirm)
+     portupgrade -R firefox (同时升级其依赖的包)
+     portupgrade -PP gnome2 要使用预编译的 package 而不是 ports 来进行安装， 需要指定 -P。 如果指定了这个选项， portupgrade 会搜索 PKG_PATH 中指定的本地目录， 如果没有找到， 则从远程站点下载。 如果本地没有找到， 而且远程站点也没有成功地下载预编译包， 则 portupgrade 将使用 ports。 要禁止使用 port， 可以指定 -PP。
+    
+      # portsclean -C 清理所有work目录
+      # portsclean -D 清理所有distfiles目录
+      # portsclean -DD 清理没有使用的ports的源码文件
+    这个 portsclean 工具是 portupgrade 套件的一部分。
+    portsdb -F -U  升级ports index
+
+
+freebsd的安全机制
+  1.kernel secure level内核安全级别
+  2.MAC 强制访问控制
+  3.Jail 完全jail
+  4.audit 事件审计
+  
+
+  1.事件：要么有主的（可最终归于一个已验证身份的用户），要么无主的（如一次错误的登陆）
+  2.类：相关事件的一个命名集合，如“创建文件”，“执行”，“登陆和注销”
+  3.记录：事件的类，用户，日期
+  启动审计 auditd_enable=“YES”
+  多数情况下， 在配置审计系统时， 管理员只需修改两个文件： audit_control 和 audit_user。 前者控制系统级的审计属性和策略， 而后者则用于针对具体的用户来微调。
+
+  事件筛选表达式
+  # praudit /var/audit/AUDITFILE  (将2进制事件审计日志转化为ASCII查看， -x输出xml)
+
+  提供了基于内核的安全保护而不仅仅是老式unix的基于访问控制的安全保护。bsd为内核划分了安全 等级，这样就可以限制很多不安全的操作,bsd中由内核直接来负责安全，如果内核认为加载的安全模块是不可信的，那么内核将禁止加载模块，这在bsd内核中通过安全级别（securelevel）来实现
+
+  
+kern_securelevel_enable="YES"
+kern_securelevel="-1"
+第一句是打开安全等级，第二句是定义等级。它一共五个等级，下面说说不同之处。
+* kern_securelevel -1：这是系统默认级别，没有提供任何内核的保护错误；
+* kern_securelevel  0：基本上作用不多，当你的系统刚启动就是0级别的，当进入多用户模式的时候就自动变成1级了。
+* kern_securelevel  1：在这个级别上，有如下几个限制：
+a. 不能通过kldload或者kldunload加载或者卸载可加载内核模块；
+b. 应用程序不能通过/dev/mem或者/dev/kmem直接写内存；
+c. 不能直接往已经装在(mounted)磁盘写东西，也就是不能格式化磁盘，但是可以通过标准的内核接口执行写操作；
+d. 不能启动X-windows，同时不能使用chflags来修改文件属性；
+* kern_securelevel  2：在 1 级别的基础上还不能写没装载的磁盘，而且不能在1秒之内制造多次警告，这个是防止DoS控制台的；
+* kern_securelevel  3：在 2 级别的级别上不允许修改IPFW防火墙的规则
+
+
+完全禁止某一个帐号：#pw lock staff
+     Portmanager 是另一个用以简化已安装 port 升级操作的工具。 它可以通过 ports-mgmt/portmanager port 安装：
+      # cd /usr/ports/ports-mgmt/Portmanager
+      # make install clean
+      portmanager -u（升级所有port）-ui（确认信息）
+      如果关于所选 port 的依赖有任何问题， 可以用 Portmanager 来以正确的顺序重新构建它们
+
+      Portmaster 把 ports 分成4类：
+
+        Root ports (不依赖其他的 ports，也不被依赖)
+
+        Trunk ports (不依赖其他的 ports，但是被其他的 ports 依赖)
+
+        Branch ports (依赖于其他的 ports，同时也被依赖)
+
+        Leaf ports (依赖于其他的 ports，但不被依赖)
+        使用 -L 选项列出所有已安装的 ports 和查找存在更新的 ports
+         # portmaster -a 升级所有ports ； -af 修复ports ； -b 升级成功后不删除备份
+         # portmaster shells/bash
+
+make buildworld
+
+这步操作会联编新的编译器， 以及少量相关工具， 并在随后使用新的编译器来联编 world。 联编的结果会存放在 /usr/obj。
+
+make buildkernel
+
+与旧式的、 使用 config(8) 和 make(1) 的方法不同， 这种做法会使用存放于 /usr/obj 中的 新的 编译器。 这种做法使得您免去了由于编译器与内核源代码不一致导致的问题。
+
+make installkernel
+
+安装新的内核及其模块， 使系统能够以更新后的内核启动。
+
+重启系统并进入单用户模式。
+
+单用户模式使得更新正在运行的软件可能导致的问题减到最少。 此外， 它也使配合新内核运行旧 world 可能出现的问题减到最少。
+
+mergemaster -p
+
+这步操作会进行完成安装新的 world 所需的配置文件更新操作。 例如， 它可能会在系统的密码数据库中添加新的用户组或用户。 这些操作通常在上次更新之后增加了新的用户组或特殊系统用户之后是需要的， 因为 installworld 这步操作会需要这些用户或组才能顺利完成。
+
+make installworld
+
+从 /usr/obj 中复制 world。 这步操作之后， 您在盘上的系统， 包括内核和 world 就都是新的了。
+
+mergemaster
+
+更新余下的配置文件， 因为您的 world 已经更新完成了。
+
+重启系统。
+
+这步操作将加在新的内核， 以及新的 world 和更新过的配置文件。
+
+
+mount -t cd9660 /dev/cd0 /mnt
+给磁盘打上acls挂载选项
+pw groupadd |useradd |userdel
+packet filter + altq
+ipfirewall + dummynet
+IPFILTER， 提供状态式规则，在 NAT 的环境中要简单许多， 而且它内建了 ftp 代理， 这简化了使用外部 FTP 服务时所需的配置
+
+
+     /usr/ports/UPDATING
+	jail
+	
+
+pkg_info -W /path/to/file 只能查通过2进制安装的包产生的文件
+pkg_info wget-1.14_2
+pkg_info -L wget-1.14_2
+pkg_info 查看当前已安装的包
+
+
+
+netstat -an -p tcp
+pkg_add 不加-r就安装本地的二进制包
+
+
+
+type 命令显示命令属于哪种类型
+ls 
+	-n:列出uid gid
+	-i:inode
+	-r:反向排序
+	-R:递归
+	-S:按容量大小排序
+	-t：按mtime时间排序
+	-u:
+pwd -P 显示真实路径而非链接路径
+hard link与soft link
+rmdir -p 连同空的父目录也删除
+chage 修改密码期限
+/var/log/dmesg 开机过程中，核心侦测所产生的信息
+/var/log/lastlog 账户最后一次登录的信息
+/var/log/messages 几乎所有的系统错误信息
+
+新版vsftpd匿名根目录不能有写权限
+命令  摘要
+adduser(8)  在命令行添加新用户.
+rmuser(8) 在命令行删除用户.
+chpass(1) 一个灵活的用于修改用户数据库信息的工具.
+passwd(1) 一个用于修改用户口令的简单的命令行工具.
+pw(8) 一个强大灵活修改用户帐户的工具.
+
+visudo  ：用户名 ，登陆主机，可以转为用户，[不能]运行什么指令
+用户分组，命令分组
+fsck 
+	-C 显示进度
+	-a 自动修复
+badblock -sv /dev/sda5 检测坏道
+
+nscd：name service cache daemon
+rndc flush 
+ipconfig /displaydns  | /flushdns
+net stop | start dnscache 
+vgcreate 
+	-s：指定扩展块大小，扩展块必须是power of 2 ，至少1kB，默认4MB
+lvcreate 
+	-l：指定扩展块个数
+	-L：指定容量大小
+	-n：指定名字
+逻辑卷的扩展，缩小，快照
+路由相关，内部路由
+
+给1个主机添加多条A记录
+给一个主机添加多条cname
+
+http配置不同的I/O模型
+禁止ping
+echo 1 > /proc/sys/net/ipv4/icmp_echo_ignore_all
+禁止源路由包（防止源欺骗）
+echo 1 > /proc/sys/net/ipv4/conf/*/accept_source_route
+打开SYN cookie选项，禁止SYN攻击
+echo 1 > /proc/sys/net/ipv4/tcp_syncookies
+
+memcached-admin
+rockmongo
+xcache
+
+locate updatedb
+kill signal
+	1：sighup，hungup进程重读配置文件，重新打开日志
+	2：sigint，interrupt ^c 打断进程
+	9：sigkill，kill 强制杀死进程
+	15：sigterm：让进程有机会做一些事情再死
+
+iptables的日志（log）由syslogd纪录和管理	
+kern.=warn /var/log/kern-warn-log
+iptables -A INPUT -s 127.0.0.1 -p icmp -j LOG --log-prefix "iptables icmp-localhost "
+
+-m limit 可以调用 limit 模块，然后使用 --limit 设置平均速率，--limit-burst 设置初始迸发值
+layer7
+lilo
+nslookup  traceroot
+icmp：internet control message protocal
+
+mysqldump -uUSER -pPASSWORD --no-data DATABASE TABLE > table.sql //复制表结构
+5.6要加上--set-gtid-purged=OFF
+
+UEFI:unified extensible fireware interface,统一可扩展固件接口 可对启动过程进行加密
+gpt分区数目无最大值，取决于给gpt-mbr表分配的大小，每个分区有自己的PMBR，分区有UUID，有label如/dev/sda4
+fdisk不支持GPT,gdisk无损转换mbr分区到gpt分区
+
+
+有许多模块可以用来扩展 iptables，例如 connlimit, conntrack, limit 和 recent。这些模块增添了功能，可以进行更复杂的过滤。
+
+bsdlabel
+freebsd下磁盘会按IDE接口顺序命名，如/dev/ad0,/dev/ad1,整个磁盘会被分片如/dev/ad0s1,/dev/ad0s2 每片上又被会分区为/dev/ad0s1a
+/dev/ad0s1c ,默认a代表主分区，b代表swap，c代表整个
+
+iptables-save > /etc/iptables/iptables.rules
+at 
+crontab
+
+trap
+裸设备
+
+logrotat
+
+
+drbd故障时资源切换较长，不符合高可用
+
+tcp_conntrack
+
+机器码（汇编器）汇编码（编译器）高级语言
+不同的平台，实际上就是不同的cpu，区别cpu的就是其支持的指令集
+指令集是基础指令的很多集和
+编译环境 运行环境
+
+
+
+
+subslime输入问题 
+编译新模块给sublime使用
+
+每个应用都要有最佳实践
+mysql+drbd
+netstat -ntul
+awk printf "%.2f"
+binlog_checksum=none
+RedHat src格式的rpm包：
+
+http://ftp.redhat.com/redhat/linux/enterprise/6Server/en/os/SRPMS/
+
+mysql完全总结
+zsh read
+
+unix:IO多路复用--select；Poll （1024界限）
+NIC:network interface card
+
+rpmfind.net rpmpool
+
+对知识点了解4w1h:why what when where how
+
+如何查看当前正在使用的二进制日志,增量备份中日志位置
+
+mount quanxian 
+
+扩展正则表达式
+
+tcp报文封装.本机转发
+puppet
+mylvmbackup
+mariadb 翻译
+
+
+
+blog
+    mysql 备份
+    mysql命令
+    mariadb翻译
+
+time
+
+createrepo
+drbd
+nfs，用户，各项参数
+
+vim : vs +filename ; :qa全部退出
+
+linux NAT
+ccna
+热备与事务的关系
+备份2进制日志
+
+Ctrl+r搜索历史命令
+
+ip命令
+/usr意义
+多播
+
+nat原理
+10种算法
+4种模型
+
+memcached    mongodb
+
+mongodb分布式,主从复制，分片
+mongodb 
+  特点：c++编写，自动分片，动态查询，查询剖析，基于复制的故障转移
+  操作：无需创建，可直接使用数据库
+        面向collection，里面存储的是文档集合，bson格式文档
+
+
+
+mysql 备份的各种方式
+mysql日志格式
+
+root 以telnet 登录  /etc/pam.d/login
+
+保存重要文件至云
+
+事务级别:读提交(事务提交马上写入日志)
+
+查看某个表的存储引擎
+
+
+买相关书籍 
+
+找准方向,找准资料
+
+扩展正则表达式
+
+黑白屏电脑 
+
+裸设备，也叫裸分区（原始分区），是一种没有经过格式化，不被Unix通过文件系统来读取的特殊字符设备。它由应用程序负责对它进行读写操作。不经过文件系统的缓冲
+只有偏执狂才能生存
+21天可以养成一个习惯
+
+低头拉车,抬头看路
+
+google hack
+
+kerbrose简单原理
+xtraDB下载安装
+
+RAID
+SRPM
+
+
+自动化备份脚本
+
+允许mysql root用户远程登录
+
+
+web服务,awk,sed,grep,mysql
+
+
+存储引擎:种类和特点
+
+
+查看未安装包的信息
+rpm -pqi local_package
+
+每个服务必须找到一个靠谱的博客
+
+mail,dns,mysql备份,mysql优化,iptables,virnash
+
+提供机制，而非策略
+
+忘记历史只能重蹈覆辙
+
+想有多大成就，就得面临多大困难
+
+慎独，友善，谦逊
+不要尖酸刻薄
+
+情绪垃圾
+
+
+a=5 echo ${a}nd -> 5nd
+变量最好用双引号    
+shell的默认赋值是字符串赋值
+
+shell常见算法，排序，最大值
+
+freebsd相关
+
+修复系统引导：1.mbr损坏，2.boot分区丢失
+
+rpm -ivh *.rpm --root /mnt/sysimage --replacepkgs
+
+lsmod  modinfo  modprob [-r] ;  insmod /path/to ; rmmod; depmod
+mkinitrd  | dracut /path/ kernel_version
+
+linux启动必备：vmlinuz，initrd，module，init，bash
+echo到/proc/sys；sysctl  可修改内核参数
+sysctl -p net.ipv4.icmp_echo_ignore_all=1
+网络调优
+lspci lscpu lsusb lsblk tree
+dmesg
+mknod 
+udev：dynamic device management
+/etc/udev/rules.d/70-persistent-net.rules
+cat /proc/cpuinfo
+
+ls -i; find -inum -exec rm {} \;
+date +%F_%T
+
+filter表：input +forward+output :过滤包
+mangle表：prerouting + input +forward + output + postrouting：修改包
+raw表：prerouting+output : 追踪包
+NAT：prerouting+output+postrouting：地址转换
+
+
+sysctl net.inet.ip.forwarding=1
+录音笔
+关联数组
+
+
+缓冲区溢出攻击：覆盖不属于自己的内存
+java不需要手动管理内存，有gc（garbage collector）垃圾回收机制
+ios用object-c开发（具备面向对象能力的C语言）
+对应用程序来讲，操作系统相当于一个虚拟机
+应用程序可以脱离操作系统运行，但要面对太多的底层细节，而且是重复开发
+计算机并行多任务的原理
+新知识的获取,老知识的复习
+网易公开课
+
+加法器，微指令集，汇编，驱动程序，操作系统，glibc（或其他类库）
+
+一台服务器运行多个tomcat
+
+IOE分别是IBM、Oracle、EMC，更确切地说是IBM小型机、Oracle数据库与EMC存储设备的组合
+数据库sharding（scale up to scale out）
+make.conf  BATCH=yes
+
+web服务不能用root用户启动，用普通用户权限启动
+freebsd分区格式
+btx loader
+gpt分区
+zfs，ext4，硬盘相关
+NAT的实现：ip_forwad + route ,iptables rules
+cobbler
+mysql中间件（Atlas （360），cobar（阿里巴巴，部分开源），TDDL（淘宝））
+mysql是一个轻量级数据库,主流的INNODB引擎使用B+树和hash索引,hash索引是自适应的。由于INNODB是索引聚集表，如果当一个表的数据量达到上E，或者数据量达到几十个G的时候，性能就会下降的比较厉害。
+
+
+
+针对这种情况,比较主流的一种处理方法就是Sharding
+diff oldfile newfile >a.patch
+patch oldfile a.patch
+patch -pNUM path/to/patch 
+patch -R oldfile a.patch
+
+rsync 4种运行方式,几个重要参数,压缩传输,算法
+
+netfilter添加layer7组件,实现对特定通讯协议的控制
+内核编译,添加删除模块的具体步骤
+acct
+
+pg_hba.conf  修改可以连接到postgresql的主机地址，数据库，用户  
+
+make menuconfig
+make clean
+make bzImage
+make modules
+make modules_install
+make install 
+make SUBDIR=arch/
+
+
+watch -n1 cat /var/log/nginx.log
+
+shell特殊变量$_,$?,!$
+
+*inotify+rsync sersync+rsync
+?iptables相关的4张表,5条链
+
+?disable ipv6
+
+vbox webservice 开机自启动
+pstree
+
+dnsmasq = bind+dhcpd
+
+ps axu 显示所有进程
+ps axjf 显示进程树
+ps axms 显示线程
+ps axo 以用户制定的格式显示进程
+ps h 没有header
+ps -t pts/0 | -p pid | -u user | -g group | -C command
+
+
+
+inotify-tools+rsync--sersync+rsync-daemon
+写在crontab里的命令,要用绝对路径
+
+
+
+3.samba
+
+访问方式:win \\ ;linux //
+smbclient交互式访问相关命令
+win,lin 如何设置共享
+清除win缓存: net user del *
+smb.conf参数
+smbpasswd  testparm
+配置问题
+&swat:web配置samba
+&/etc/samba/smb.conf
+
+
+5.dialog
+bash -n  检查语法
+read timeout
+dialog 通用选项 窗体类型 窗体选项 --stdout进行编程
+
+
+rpm 查看某文件属于哪个包 :rpm -qif path/to/file
+rpm 查看某个包生成的文件:rpm -ql package
+开机挂载网络文件系统,必须在/etc/fstab defaults后添加_netdev
+
+
+速度不同加缓存,访问多种加抽象层
+
+
+
+网站用户登录
+
+gentoo
+read -p "" var
+
+改变机器码:不可行
+单反相机:单镜头反光
+vim整体缩进:Visual  > <
+
+如何查看rsync服务器开放的目录
+yum回滚,downgrade
+yum删除依赖 clean_requirements_on_remove
+单精度和双精度的区别
+浮点型在计算机怎么存储的
+
+映射ftp服务器
+wget下载中文文件会导致乱码
+--restrict-file-names=nocontrol
+
+
+
+
+《Linux服务器配置全程实录[张勤，杨章明]》，
+《linux企业集群》，
+《构建高性能WEB站点》，
+《互联网运营智慧 高可用可扩展网站技术实战 [田逸著]》
+《实战LINUX_SHELL编程与服务器管理》，
+《高性能linux服务器构建实战--运维监控，性能调优与集群应用[高俊峰著]》
+《构建高可用linux服务器[余春洪著]》
+
+
+
+记忆曲线
+学而时习之:记忆问题
+
+从原理上升华
+做好架构师必须具备的知识,硬件的选择,网络设备,系统架构,搭建,排错,容灾
+多讲话有助于思维速度
+贪多嚼不烂
+
+O'REILLY 图书
+网易公开课
+
+进程管理 ps jobs pgrep pkill 
+
+造车与开车,开车与开飞机
+
+搜索的技巧
+官方wiki和man
+学习方法:原理+细节
+
+花费时间与精力的东西能否创造价值
+
+
+1.逐行显示的小说,漫画
+2.分页多,连续性强的内容
+3.儿童教育领域
+4.中小电子商务
+5.事务管理
+
+
+优秀资源,最新资源
+网络工程师教程
+
+
+gentoo内核编译必备选项
+CONFIG_DEVTMPFS=y
+CONFIG_DEVTMPFS_MOUNT=y
+
+
+
+mysqladmin -uroot -p password 'new'
+
+iptables
+tpp
+netstat,iostat,vmstat
+screen
+lftp
+rsync
+curl
+wget axel arial
+
+quota
+ulimit
+logrotate,rsyslog,logwatch
+iscsi
+ssh-keygen;ssh-copy-id
+
+luks:linux unified key setup
+
+cryptsetup luksFormate /dev/sdb 
+cryptsetup luksOpen  /dev/sdb1 rhel
+cryptsetup luksClose rhel
+cryptsetup luksAddKey /dev/sdb1 /path/to/keyfile
+/etc/crypttab
+
+spliter-mapper-combier-partationer-reducer
+ 
+hub,switch,route
+
+mount -t cifs -o username=tom,password=tom //ip/smb /mnt
+smbclient -L ip [-U]
+smbclient //ip/share 
+setfacl [-b,-x,-m] ;getfacl
+autofs;nfs
+
+
+setsebool,getsebool,semanager
+
+filter,nat,mangle,raw
+
+dns:recurse request;iterate request
+
+ftp:anonymous,local,virtual user
+bond
+bridge
+
+ldap
+
+qemu-kvm libvirtd  
+
+netstat
+nmap tcpdump
+
+硬件级防火墙：juniper  sonicwall
+crontab -u tom -e
+
+费马小定理
+
+mysql索引：
+  b树索引：按照树的方式排列（查找需要很多步）
+    聚集索引（主索引，可以稀疏，辅助索引必须稠密）
+    非聚集索引
+  哈希索引：按照哈希值进行排列（平面hash表，效率最高，只支持精确查找，不支持范围查找）
+  全文索引：用来匹配字符串
+  r树索引：范围查找很强
+
+
+
+迪菲－赫尔曼密钥交换算法（DH） RSA是基于DH发明的
+
+一致哈希 是一种特殊的哈希算法。在使用一致哈希算法后，哈希表槽位数（大小）的改变平均只需要对K/n 个关键字重新映射，其中 K是关键字的数量，n是槽位数量。然而在传统的哈希表中，添加或删除一个槽位的几乎需要对所有关键字进行重新映射。
+
+atq atrm
+lscpu,lsblk,lsmod,lspci,lsinitcpio,lsattr
+sysctl:config kernel parameters at runtime 
+fdisk,parted
+lsmod,modprobe,rmmod
+systool -v -m mod_name
+options alias blacklist autoload
+lvm:pvs,pvcreate,vgs,vgcreate,lvs,lvcreate,lvextend,lvreduce,lvremove
+
+screen vim a.txt ;Ctrl+a d detache会话
+screen -S 给session命名
+-r 连接session
+-ls 显示存在的session
+-wipe 删除死掉的session
+-x 同用户多IP同时连接1个session
+
+ctrl+a  c 创建新窗口 
+ S 上下分屏  
+<tab> 进入下一个面板
+ p previous 
+ n next   
+ k kill
+ d detache
+ x 锁定会话,需用密码解锁
+ s 锁定会话
+ q 解锁会话
+
+rpmbuild
+
+cubieboard；
+
+umount -l|fuser -km /mnt
+
+名人演讲
+
+办公室整体linux化
+dhcp，dns，firewall,samba，thin client
+
+database server,服务器监测
+
+
+enconv,dos2unix
+
+bc:+ - * / % ^  scale=3
+
+varnish：防盗链
+if (req.http.referer ~ "http://.*") {
+#防盗链的定义,只容许本站点和google搜索引擎可以访问，其它站点不能访问
+  if ( !(req.http.referer ~ "http://.*jie\.com"
+      || req.http.referer ~ "http://.*google\.com.*"
+      ))
+      
+qemu -m 128 -hda /dev/sdb
+
+dnspod
+markdown
+zencoding
+
+pdo 与 odbc
+
+mail server：dovecot+postfix；ireadmail
+
+mysql 
+mysqli
+pdo
+ajax：asynchronous javascript and xml
+
+gvim菜单项无法显式
+cd /usr/share/vim/vim72/lang
+sudo ln -s menu_zh_cn.utf-8.vim menu_zh_cn.utf8.vim
+
+
+node.js coffee
+repl
+pecl pcre
+
+
+mpd+icecast
+
+smalltalk simula
+
+tcp标志位syn
+
+ansible安装本地包
+
+高可用集群必须具备的条件：stonith设备，仲裁盘
+
+
+route del -net 169.254.0.0 netmask 255.255.0.0 dev eth0
+route add -net 192.168.100.0  netmask 255.255.255.0 dev eth0
+route add -host 192.168.1.240 gw 192.168.1.1
+
+netstat -r |route -n
+
+ ip link {show|set}设备相关
+     ip link show eth0
+     ip link set eth0 up|down|mtu 1000
+     ip link set eth0 name vbird
+ip address 地址相关
+       ip address show
+       ip address add 192.168.50.50/24 broadcast + dev eth0 label eth0:vbird
+       ip address del 192.168.50.50/24 dev eth0
+ip route 路由相关
+         ip route show
+         ip route add 192.168.5.0/24 dev eth0
+         ip route add 192.168.10.0/24 via 192.168.5.100 dev eth0
+         ip route add default via 192.168.1.254 dev eth0
+         ip route del 192.168.10.0/24
+         ip route del 192.168.5.0/24
+
+
+webbench -c 1000 -2 -t 60 http://url
+ab
+http_load
+
+if-modified-since
+if-none-match
+
+curl -X (request method）自定义header
+
+jsp学习
+
+FastDFS is an open source high performance distributed file system. It's major functions include: file storing, file syncing and file accessing (file uploading and file downloading), and it can resolve the high capacity and load balancing problem. FastDFS should meet the requirement of the website whose service based on files such as photo sharing site and vidio sharing site.
+
+
+
+NIS：账号统一管理 OpenLDAP
+nginx检测多组后端：多个upstream显示在一起
+
+iptables要允许keepalive的组播地址
+
+rpmfind.net
+pkgs.org
+
+nginx特性：异步IO，事件驱动（libevent，边缘触发），内存映射（mmap），IO复用（epoll）
+haproxy :splice零复制转发
+
+nginx slow-start
+
+set sw=4 ts=4
+
+各项服务的性能调优，原理+经验+工具
+
+故障session转移：（共享session，session广播）
+
+HHVM安装
+      1.Install Centos 6.4 64-bit (minimal is preferred)
+
+      2.Install epel repository
+
+        sudo yum install http://ftp.riken.jp/Linux/fedora/epel/6/i386/epel-release-6-8.noarch.rpm
+      3.Download the hop5 repository configuration file
+     
+        sudo wget http://www.hop5.in/yum/el6/hop5.repo  -O /etc/yum.repos.d/
+      4.Install hiphop-php
+        sudo yum install hiphop-php
+
+
+1）先将测试机内核可以同时打开的文件描述符的最大值设置到65535。（ulimit -HSn 65532）
+2） 强制内核不要使用SWAP分区。（echo 0 > /proc/sys/vm/swappiness ）
+
+http1.1默认开启keepalive连接，因此支持服务端关闭将能处理更多的连接
+
+用/proc文件系统查看进程的内存使用情况
+
+更改nginx.conf在http定义区域加入：
+fastcgi_intercept_errors on;
+更改nginx.conf在server 区域加入：
+error_page 404 = /error/404.html
+
+
+transparent huge page 会导致varnish崩溃
+
+postfix+dovcot配置
+
+top -d 1 -p pid [,pid ...]  //设置为delay 1s，默认是delay 3s  
+如果想根据内存使用量进行排序，可以shift + m（Sort by memory usage）
+
+pmap pid
+
+
+测试php-fpm：
+    服务器开启ping
+    cgi-fcgi -bind -connect 172.16.251.12:9000
+    SCRIPT_NAME=/ping SCRIPT_FILENAME=/ping REQUEST_METHOD=GET 
+
+	
+
+
+  
+git简单使用
+
+  
+  log_format  access  '$remote_addr - $remote_user [$time_local] "$request" ' 
+              '$status $body_bytes_sent "$http_referer" ' 
+              '"$http_user_agent" $http_x_forwarded_for'; 
+    access_log  /usr/local/nginx/logs/access.log  access; 
+	
+nginx负载均衡方式:ip_hash,least_conn,round-robin,fair,url
+
+sysctl -w net.ipv4.ip_forwad = 1
+
+SNAT:iptables -t nat -A POSTROUTING -s 192.168.0.0/24 -o eth0 -j SNAT --to-source 172.16.23.11(eth0 真实IP)
+DNAT:iptables -t nat -A PREROUTING -d 172.16.23.11 --dport 80 -j DNAT --to-destination 192.168.10.11:8080
+NAT:iptables -t nat -A POSTROUTING -s 192.168.0.0/24 -o eth0 -j MASQUERADE(主机有多个ip)
+
+nginx_upstream_check_module 跟 nginx_tcp_proxy_module 冲突
+
+iptables -t nat  -j REDIRECT
+
+func  fabric 均为python程序
+rundeck（http api，java开发）
+chef （ruby开发，与puppet类似）
+
+puppet.pp会被编译成catalog
+puppet集群：1.mcollective+activmq 2.反向代理
+
+zabbix可与mysql或pgsql一起工作
+
+程序的运行有时间局部性和空间局部性，也解释了缓存的必要性，可行性
+
+调优：1.硬件架构：power、sparc
+2.操作系统
+3.linux相关调优：内核，进程，内存，IO，应用程序 
+
+高级调优工具：perf、tap
+ 
+选准方向，一直走下去
+跟对人比做对事更重要
+平台跟个人的价值
+整体到部分再到整体
+
+首选官方文档，再选一本好书深入研究，再写读书笔记，能讲给别人听
+
+拖延和借口
+充分准备
+知行合一
+岗位要求描述
+真心换真心
+
+自我评价：个人经验，经历
+个人能力：善于自学，英文阅读能力良好，
+项目经历：位置，框架问题，如何解决
+技术专长：
+  掌握，理解，了解
+获奖经历：
+  英语，证书，技术使用经历
+
+
+mongodb
+use data;
+db.coll.insert({'a':3})
+db.dropDatabase()
+
+
+db.addUser('name','passwd','true')
+db.auth('name','passwd')
+db.removeUser('name')
+
+use data
+show collections
+db.createCollection("name")
+db.mycollection.drop()
+db.mycollection.renameCollection('mycoll')
+db.mycoll.find()
+
+crud:insert() find() update() remove()
+字段操作：$rename $set $unset 
+
+
+GFS:HDFS BigTable:HBase MapReduce:hadoop  Chubby:zooKeeper
+
+/etc/security/limits.conf
+
+udp：ntp:123 syslog:514
+
+paxos算法就是基于消息传递且具有高度容错特性的一致性算法。
+
+chubby就是paxos算法的第一个具体实现
+
+hbase
+访问接口：Native java api；hbase shell；trift gateway（提供给其他语言的接口）
+1.jdk
+2.JAVA_HOME
+3.unpack hbase  /usr/local/hbase
+4./usr/local/hbase/bin/start-hbase.sh
+5.http://localhost:60010/ 管理界面
+6./usr/local/hbase/conf  -- hbase-env.sh | hbase-site.xml
+7.HBase shell提供了与HBase进行交互的命令行，方式分为交互式和批处理式。(注：HBase shell是包装在Java client API上的JRuby应用程序)
+shell>hbase shell
+8.create 'mytable' 'cf' 创建表和列集
+
+
+
+Infobright(使mysql可以列式存储）： 
+优点： 
+查询性能高：百万、千万、亿级记录数条件下，同等的SELECT查询语句，速度比MyISAM、InnoDB等普通的MySQL存储引擎快5～60倍 
+存储数据量大：TB级数据大小，几十亿条记录 
+高压缩比：在我们的项目中为23:1，极大地节省了数据存储空间 
+基于列存储：无需建索引，无需分区 
+适合复杂的分析性SQL查询：SUM, COUNT, AVG, GROUP BY
+缺点：
+不支持数据更新：社区版Infobright只能使用“LOAD DATA INFILE”的方式导入数据，不支持INSERT、UPDATE、DELETE 
+不支持高并发：只能支持10多个并发查询。 
+
+Toku：适用在在大量随机写操作的情况下
+
+
+TLB：transfer lookback buffer（转换后援缓冲）
+性能调优（内存，磁盘IO，网络IO，进程）
+
+
+已用百分比+swapiniss百分比>=100就使用swap
+
+IPC：内部进程间通信
+shmall：一次可以申请的共享内存最大值（字节）
+shmmax：单个片段的最大量（字节）
+shmmni：最多可以申请的共享内存片段个数
+
+进程间通信（IPC）的方法：消息，信号，共享内存
+msgmax：消息长度
+msgmnb：队列长度
+msgmni：队列个数
+
+
+vm.dirty_ratio(进程自己根据脏页比率启动pdflush)
+vm.dirty_background_ratio（系统根据脏页总量比率启动pdflush）
+vm.dirty_expire_centisecs(按时间间隔，百分秒，自动pdflush)
+vm.dirty_writeback_centisecs(根据脏页存活的时间决定是否pdflush)
+
+
+基于文档存储：mongodb，basex
+图形关系存储：FlockDB，可以描述复杂数据关系 
+对象数据库：versant
+列式存储：Hbase，Bigtable
+缓存数据库：memcache redis
+
+Nosql的数据存储模型
+  键值存储：
+    优点：查找速度快
+    缺点：数据无结构，通常只被当成字符串或2进制数据
+    应用场景：内容缓存
+    实例：Redis，Dynamo
+  列式模型：
+    优点：查找迅速，可扩展性强，易于实现分布式
+    缺点：功能相对SQL很有限
+    应用场景：分布式存储
+    实例：bigTable Hbase Hypertable
+  文档模型：（与键值模型类似，key可指向多个value，xml或json）
+    优点：无需事先定义结构
+    缺点：查询性能不高，缺乏统一查询语法
+    应用场景：web应用
+    实例：mongodb，couchdb
+  图式模型：
+    优点：利用图结构相关算法提高性能，满足特定应用场景的需求
+    缺点：很难实现分布式，功能有定向性
+    应用场景：社交网络，推荐系统，关系图谱
+    实例：Neo4J，FlockDB
+  对象模型：
+    应用场景：versant
+
+
+
+
+
+mogilefs工作在用户空间，只不过是ext4的进一步抽象
+
+ext：mbr+block group（superblock，inode-table，data-block）
+inode-table：属组属主，权限，扩展属性，atime，ctime，mtime
+
+strace  /bin/ls  追踪系统调用
+sar -R 1 
+sar -B 
+dstat -g -m -s
+
+
+vm.panic_on_oom=1(禁用oom-kill) （/etc/sysctl.conf)
+echo n > /proc/PID/oom_adj  (2的n次方 badniss score)
+oom-kill is not a fix for memory-lease
+
+vm.nr_hugepages=0(N表示开启)
+mkdir /hugepage
+mount -t hugetlbfs none /hugepage
+
+
+磁盘IO和文件系统优化
+读和写都要合并
+实时应用尽量满足读
+只合并相邻磁道的读和写，并且尽量避免读饥饿与写饥饿
+io-scheduler：（每个调度器都有自己的参数，在iosched/
+  1.cfq  completly fair queue（适用于交互式应用）
+  2.deadline（适用于服务器，每个读写请求都有一个倒计时）
+  3.anticipatory(预期)
+  4.Noop. no operation（先到先得）（SSD，RAID自带排序）
+
+/sys/block/<dev>/queue/
+scheduler：cfq deadline noop anticipatory
+nr_requests(队列长度)   read_ahead_kb(预读)
+fifo_expire_sync 
+fifo_expire_async 
+quantum(CFQ每次向存储发出的io数)
+需要在/etc/rc.local指定
+
+deadline：
+fifo-batch（一批中读取和写入的个数）
+writes_starved(1次写之前可处理多少次读)
+ 
+负载生成器 
+  aio-stress
+  iozone
+  fio
+
+logger -p local7.info "this is a test"
+磁盘活动状况
+  blktrace（记录）blkparse（分析）
+  gnuplot
+  dumpe2fs 查看磁盘碎片
+  filefrag :report on file fragment 查看单个文件是否碎片化存储
+  mount -o nodiratime
+
+  日志文件系统：（可加速文件系统一致性检查，查log）
+  1.write modified blocks to journal(一般只存inode)
+  2.write modified blocks to filesystem
+  3.discard blocks in journal
+
+  ext3提供3个日志mode
+  journal(同时把inode和data写入journal）
+  ordered（先写inode入journal，再写data，最后擦除journal-inode
+  writeback（先写block，再写inode入日志，最后批量同步inode至inode-table）
+
+  ext4优化思路
+  nobarrier(优化大量小文件创建删除的性能)
+  noatime，nodiratime
+  mount -o  data=<mode>
+
+  改变块设备物理级别预读大小，再改变调度器相关参数，再改变文件系统参数
+
+
+网络IO
+  非copy，流水线作业
+
+  c/s架构的程序必须支持服务端关闭
+  FIN_WAIT FIN_WAIT2(快速重用，超时时间)
+  网络的接受缓冲，发送缓冲
+
+  tcp的3次握手
+  tcp的有限状态机
+  sar -n SOCK 1 5
+  sar -n IP
+dstat --tcp --udp --socket
+
+syn flood攻击
+
+
+mount -t cpuset cpuset /cpusets
+numad numastat numactl 
+NUMA:非一致内存访问
+
+cpu及进程优化思路：降低上下文切换
+进程绑定：
+    taskset cpuset numa
+隔离cpu：
+    内核参数：isolcpus=，
+    把中断处理从隔离出来的cpu剥离掉
+    使用taskset绑定进程至其专用cpu
+
+
+systemtap
+oprofile
+valgrind
+perf
+
+性能调优
+1.cpu
+    进程管理
+2.Memory
+3.I/O
+    磁盘I/O
+          scheduler：cfq，deadline，anticipate，noop
+
+          filesystem：block nobarrier noatime
+              评估工具：io-zone，aio-stress，fio，blktrace，blkparse
+              观察活动：iostat，dstat
+     网络I/O
+
+调优框架：
+    硬件调优
+    os调优
+    应用调优
+
+
+virtualization虚拟化
+emulation模拟
+=============
+
+
+binary translator（加速命令执行）
+vmware可直接使用物理磁盘（直接映射）
+
+
+mmu（内存管理单元，负责装载内存映射表，将线性地址转换为物理地址，
+转换后的结果，可以放入TLB（转换后援缓冲））
+
+半虚拟化PV
+完全虚拟化
+
+虚拟机一般不能跨平台，qemu可以模拟不同架构的操作系统
+
+内存问题：tagged TLB+shadow MMU
+
+VMM：virtual machine manager
+
+binary translater：转换虚拟机的cpu指令
+
+IO设备（存储，网络）的半虚拟化：给虚拟机安装IO驱动frontend（能够调用hypercall），VMM提供backend，直接操作硬件IO（需要vm支持第三方模块）
+IO虚拟化：
+  完全虚拟化
+  半虚拟化
+  透传（IOMMU）（物理设备必须专用）
+
+
+wine ：库级别虚拟化
+jail：用户空间虚拟化
+kvm：kernel-base VM
+
+硬件虚拟化技术：
+  Intel：VT-x
+  AMD：AMD-V
+shadow MMU：
+  Intel：EPT
+  AMD：RVI
+IO：IOMMU
+
+xen
+xen-server
+xcp(xen cloud platform)
+
+
+hypervisor
+
+centos6.4使用xen
+需要具有backend的内核（需要安装内核（xen4），或自己编译）
+启动xen.xz将centos作为dom0启动
+安装xen xen-libs xen-runtime
+用xm来创建启动虚拟机，用xend迁移虚拟机
+
+losetup
+kpartx -a /dev/loop1
+
+
+同或：相同为1，不同为0
+异或：不同为1，相同为0
+
+忘记历史只能重蹈覆辙
+PCI：主板设备接口标准
+ 
+基本指令-指令集-汇编-编译器（不同平台）-高级语言
+cpu包括：寄存器，缓存（3个级别），MMU，TLB
+
+system V与BSD大战
+
+内核工作在ring0，可以执行任意指令，应用程序工作在ring4，只能执行
+部分指令，特权指令需要通过系统调用
+
+架构就相当于cpu的驱动程序
+
+只有逆境才能成才
+
+想有多大成就，得面对多大困难
+
+ruby mongrel，thin，webrick
+passenger
+
+
+rvm ：ruby version manager:可安装不同版本的ruby和对应的gem
+
+ruby gem
+python pip
+perl cpan
+chicken egg
+
+php fastcgi(mod_php)
+django uwsgi（mod_wsgi)
+tomcat ajp(mod_jk)
+ruby  passenger(mod_rails)
+
+互联网业务分类：
+  1.内容
+    社交，视频，音乐，搜索，电商
+  2.服务
+    游戏
+      页游，PC游戏
+    云计算
+      IaaS，PaaS，SaaS
+  3.存储
+    网盘
+  4.网络
+    加速器，vpn代理，CDN
+
+
+运维关注的层次：
+  1.架构
+  2.优化
+  3.监控
+  4.容灾
+  5.安全
+  6.自动化部署
+
+
+
+视图：复用SQL语句，简化SQL操作，仅暴露部分字段，格式化数据
+
+create view TEST as 
+select name，id（不能有歧义） from user，home
+where user.name = home.name
+and user,id=home.id
+
+视图会在当前数据库下生成一个表，可直接使用
+
+过程：简化复杂的查询，确保数据的一致性（都从相同的procedure创建），
+加快操作，书写复杂的块级操作
+create procedure test()
+begin
+  ...
+end
+call  test()
+show procedure stauts
+drop procedure test
+
+
+复制表结构
+create table back like origin
+create table back select * from origin limit 0;
+show create table origin
+
+复制全表
+create table back select * from origin；
+
+alter table|database
+add|change|modify|drop|rename to|order by
+
+ls /etc > /dev/pts/2
+
+超线程
+空白是有ascii码的，null没有任何对应的ascii码
+$RANDOM
+
+bash测试：
+  字符串测试
+  整数测试
+  权限测试
+  组合测试
+  类型测试
+
+：代表true
+
+求上居中，求中居下
+
+boot block;block group(super block;GDT;block bitmap;inode bitmap;inode table;data block)
+
+BSD风格的init
+sysv风格的upstart
+
+压缩是针对1个文件的，目录必须先打包
+-d 解压缩，指定压缩比 -#（1-9）
+
+保留源文件bzip2（-k）
+gzip -c message > message.gz
+
+
+gzip gunzip
+bzip2 bunzip2
+xz unxz
+
+
+setfacl -m u:test:rw- /path/to/file
+tune2fs -o [^]acl /dev/sda3
+mount -o acl /dev/sda3
+
+tungsten replicator(ruby java rsyncd mysqldump)
+extractor控件读取binlog生成THL(transaction history log) 
+从库通过applier控件写入
+
+支持高版本向低版本复制
+异构复制 mysql>pgsql mysql>mongodb
+多主复制
+
+bash
+select while until for if case read 数学运算 变量替换
+
+软硬链接的区别
+数学运算必须用let
+
+eval将字符串当作命令来使用 eval 'cat /etc/fstab'
+
+
+glusterfs与主机之间连接超时时间是42秒
+
+
+raid:提供高性能和冗余，自带控制芯片和内存
+独立存取和并行存取（每个数据块是否需要重新分割）
+raid0 条带
+raid1 镜像冗余
+raid2 校验冗余，对数据进行亦或运算，并行存取（3个以上）
+raid3 采用更小的块，并需要校验磁盘，并行存取
+raid5 独立存取，校验信息均匀分布（左对称）在各个磁盘（3个以上）
+raid6 是对raid5的扩展，校验信息分PQ，备份同时丢失仍可以恢复
+raid7 有独立的操作系统，相当于NAS
+
+md：multi devices；mdadm；mapper
+
+
+分布式系统理论：CAP，BASE
+
+nosql的特点
+  简单数据模型，元数据和应用数据分离，弱一致性
+  优势：避免不必要的复杂性，高吞吐量，高水平扩展能力和低端硬件集群
+  劣势：不支持ACID，功能简单，没有统一的数据查询模型
+
+nosql着眼点：分布式，可扩展，高吞吐量，只关注C，P
+newsql，力图糅合sql与nosql的特点，提供sql接口，同时又具备高吞吐
+
+
+分布式系统的3个难题：一致性，可用性，分区容忍性
+  C,A:SQL
+  C,P:NOSQL
+  A,P:DNS
+
+数据一致性模型：强一致性，弱一致性，最终一致性
+如何进行数据一致性？
+  1.quorum系统的NRW策略
+    N：总的副本数
+    R：完成读操作所需读取的最小节点数
+    W：完成写操作所需写入的最小节点数
+
+    强一致性：R+W>N
+    弱一致性：R+W<N
+    最佳读: r=1,w=n
+    最佳写：w=1,r=n
+
+  2.两段式提交：2PC（two phase commit protocal）
+    有两类节点：
+      一类为协调者
+      一类为事务参与者
+
+    两段：
+      第一阶段：请求阶段
+      第二阶段：提交阶段
+  3.时间戳策略
+  4.Paxos算法：基于消息传递的一致性算法
+  5.向量时钟
+
+
+resize disk of freebsd on vdi
+1.D:\Program Files\VirtualBox > VBoxManage.exe modifyhd    E:\VirtualBox\ untu10.4.vdi.vdi   --resize 61440
+
+2.Shut down the server
+  Grow the disk size
+  Boot FreeBSD in single user mode (number 4 at boot)
+  Check the partitions layout:
+  gpart show
+
+  Set the system in evil mode that will allow gpart to change live filesystem:
+  sysctl kern.geom.debugflags=16
+
+  Grow the whole disk – consumer. Number 1 is the consumer index shown with gpart show
+  gpart resize -i 1 da0
+
+  Grow desired provider – partition. Number 6 is the provider index shown with gpart show
+  gpart resize -i 6 da0s1
+
+  Now with partition resized you can growfs
+  growfs /dev/da0s1f
+
+  Reboot for a clean feeling and you’re done.
+
+
+
+lvm2：logical volum manager
+
+
+
+at -t [[CC]YY]MMDDhhmm[.SS]
+atq=at -l ; atrm=at -d
+
+mongodb sharding-key的选择很重要，不针对key的查询将会全shard 扫描
+
+shard追求的效果：读尽量集中，写尽量分布
+
+索引类型：顺序索引，随机索引（按照某个标准进行hash）
+
+分片可能无法恢复，RDB尽量不要分片
+
+
+命令行工具：
+mongodump，mongostore
+mongorestore，
+mongostat
+
+vpn:openvpn pptp l2tp
+vps:openvz 
+nis:network information system
+
+
+zpool create storage raidz ada0 ada1 ada2
+zfs create storage/home
+ # zfs set copies=2 storage/home
+ # zfs set compression=gzip storage/home
+ # zfs snapshot storage/home@08-30-08
+ # zfs rollback storage/home@08-30-08
+ # ls /storage/home/.zfs/snapshot
+ # zfs destroy storage/home@08-30-08
+ # zfs set mountpoint=/home storage/home
+ # zfs mount|umount storage/home
+
+ zpool storage status
+ zpool offline storage ada1 下线出问题的设备
+ zpool replace storage ada1  更换物理硬盘后，替换
+ zpool scrub storage 校验数据完整性（io很密集）
+
+ apache
+  白名单：order allow,deny;allow from 192.168.0;deny from all
+  黑名单：order deny,allow;deny from 192.168.0;allow from all
+
+主动模式（PORT）和被动模式（PASV）。主动模式是从服务器端向客户端发起连接；被动模式是客户端向服务器端发起连接。两者的共同点是都使用21端口进行用户验证及管理，差别在于传送数据的方式不同，PORT模式的FTP服务器数据端口固定在20，而PASV模式则在1025-65535之间随机
+
+tcp有限状态机
+
+prefork，worker，event
+
+XX:NewSize MaxNewSize PermSize MaxPermSize
+X:ms mx mn
+
+
+python framework:django turbogear tornado
+
+snmp udp 161,162
+
+/usr/share/doc/rsyslog-mysql/creatDB.sql
+
+因为线程共享内存空间，所以一个程式在运行时必须被系统识别为“每个线程都是安全的”
+
+rsync -nv测试 -e指定为ssh
+layer7：net.netfilter.nf_conntrack_acct=1   必须要加载nf_conntrack模块
+
+paxos算法解决的问题是一个分布式系统如何就某个值（决议）达成一致
+不仅只用在分布式系统，凡是多个过程需要达成某种一致性的都可以用到Paxos 算法。
+
+节点间一致性通过基于paxos算法的消息传递来实现
+进程间一致性通过共享内存和锁来实现
+
+
+索引不是在任何条件下都有意义，海量数据首先应该sharding
+高性能查询，必须保证索引能完全载入内存中
+索引的级别
+1.将相关的数据放在一起
+2.索引构建的顺序与查找标准的数据一致
+3.索引包含了想要查询的所有数据
+
+
+
+评估索引好坏的标准：
+  访问类型-等值查找（hash较好）范围查找（顺序索引较好）
+  访问时长
+  插入时长
+  删除时长
+  空间开销  
+
+
+主索引和辅助索引
+唯一索引
+稀疏索引
+索引优化：根据业务创建最合适的索引
+
+mongodb的复制模式
+  主从架构，无法实现自动故障转移
+  复制集架构，slave自动实现failover
+
+
+mongodb复制集
+1.安装配置，加入replSet=“” rest=true，所有结点配置信息都一样
+2.主节点rs.initiate() rs.isMaster() rs.status() rs.add("172.16.10.11:27017")(会自动同步数据)
+3.从节点rs.slaveOk() 明确说明自己是slave，然后才能查询数据
+4.rs.conf() 查看当前复制集配置信息
+5.必须在master结点执行 conf=rs.conf()  conf.members[0].priority=2 设定优先级
+
+结点在上线时，一定是slave，只有在master发现slave后才会触发选举，
+优先级为0的结点不会触发选举，仅参与选举,且永远不会成为主节点，可以设定某个节点的票数
+rs.remove()从复制集中删除一个结点
+rs.addArb()
+
+
+mongodb能在添加新shard时自动进行均衡
+shard的单位chunk
+
+为什么要shard
+  1.数据量太大，耗尽硬盘资源
+  2.查询操作太密集，耗尽cpu资源
+  3.查询进程耗尽RAM，只能swap
+
+分布式：要把元数据和数据分离
+可再加负载均衡器 Router(mongos)-ConfigServer-ShardNode(mongod)
+shard节点应该是副本集，不然挂掉会导致整个集群不可用
+mongos会将从config server得到的数据进行缓存，下次直接去data node取
+
+Nosql不支持事务，再不需要事务的地方，都可以使用Nosql
+Nosql一般都支持分布式
+
+
+sharding集群的构建顺序
+1.config server  （configsvr=true dbpath=/mongodb/data ）启动mongod，默认监听27019，管理端口28019
+2.mongos  （configdb=str1，str2  注释掉dbpath） mongos -f /etc/mongod.conf ,监听在27017端口
+3.mongod 配置dbpath，启动即可
+4.在mongos节点添加shard节点sh.addShard("ip:port") ,sh.status()
+5.必须明确指定对哪个db进行shard，因此sh.enableSharding("testdb")
+6.必须明确指定对哪个db的哪个collection进行shard，
+因此sh.shardCollection("db.collection",{Age:1,Name:"hashed"})
+
+如果发现shard不够用，可以继续添加shard  sh.addShard(),然后sh.setBalancerState(on)进行重新均衡
+会自动将相应chunk移动至合适节点
+
+
+sharding是collection级别的，有的collection可以不shard，存放此collection的shard-node叫主shard
+一般第一个添加的shard就是主shard
+必须要根据分区键来进行shard，分区键就是一个索引,在创建shard时指定sharding key
+
+Gridfs适合存储海量大文件，不适合存储少量小文件
+
+
+
+facebook：hive不是实时的，因为mapreduce不是实时的（分布式运行需要很长时间）
+yahoo：pig  过程性开发的脚本语言，最后可转化为mapreduce作业
+cloudera：impala 提供数据实时访问
+
+HDFS仅能通过API，简单地进行数据的增删查增，不提供数据的随机访问，
+HBASE解决了数据随机访问问题，并提供CRUD接口和简单的范围查询或全表扫描
+
+client jvm（Distribute Filesystem+FSdata-output-stream）----name node---data node
+存数据：pipeline  存多份
+取数据：仅从对应的data node取1份数据
+
+MapReduce又提供了数据的聚合分析功能
+
+hbase是跑在HDFS上，提供数据随机访问的工具
+mahout 御象者，跟R系的工具一样，提供大数据分析功能
+
+事务日志的存在可以将随机IO转换为顺序IO
+
+
+
+
+
+cmd:nslookup www.baidu.com
+nmap无法扫描到高位端口
+
+
+
+
+mysql编译安装
+
+1.链接头文件
+ln -sv /usr/local/mysql/include  /usr/include/mysql
+2.输出库文件
+echo '/usr/local/mysql/lib' > /etc/ld.so.conf.d/mysql.conf
+3.添加PATH
+echo 'PATH=/usr/local/mysql/bin:$PATH' > /etc/profile.d/mysql.sh
+4.添加启动脚本
+cp support-files/mysql.server  /etc/rc.d/init.d/mysqld
+5.添加配置脚本
+cp support-files/my-large.cnf  /etc/my.cnf
+6.初始化
+mysql_secure_install
+
+
+
+echo -e "\033[31m 红色字 \033[0m"
+
+ipython
+
+shell array 
+
+vboxheadless -s node1
+vboxmanager controlvm node1 savestate
+
+restructureText
+
+mysql 远程登录
+
+python-libvirt
+
+help() ;modules ；modules "key"
+
+MySQLdb.connect(unix_socket='/tmp/mysql.sock',host='localhost',user='root',passwd='1234',db='python',charset='utf8')
+
+
+
+PURGE MASTER LOGS BEFORE DATE_SUB(CURRENT_DATE, INTERVAL 10 DAY);
+#binlog_format="STATEMENT"
+#binlog_format="ROW"
+binlog_format="MIXED"
+
+mydumper xtrabackup mylvmbackup 
+
+
+blog
+
+
+redis
+
+# -*- coding: encoding -*-
+
+execfile('file')
+
+top : 1 M P T
+
+
+
+
+perl      python   ruby
+cpan    pip    gem
+perlbrew  pyenv    rvm
+
+
+
+/home/work  *(rw,sync,no_root_squash)
+showmount 192.168.0.4 -e
+
+# cd /net/fileserver/home/share
+
+
+Flask
+
+repoquery
+
+
+ldap_simple_bind_s(): Invalid credentials
+
+configure: You will need to customize sample.pam and install it as /etc/pam.d/sudo
+
+strace -arg command
+-f：除了跟踪当前进程外，还跟踪其子进程。
+-o file：将输出信息写到文件file中，而不是显示到标准错误输出（stderr）。
+-p pid：绑定到一个由pid对应的正在运行的进程，此参数常用来调试后台进程。
+
+费曼技巧：以给人教的目的去解释一个概念
+
+scp -P 指定远程sshd的端口
+
+mercurial  hg
+
+int 同样用%s替换
+
+show processlist;
+
+python -m pdb a.py
+
+
+commands  subprocess
+
+threading  Queue  zeromq
+nmap select socket
+logging
+
+
+将时间列DataType设为timestamp,设定其默认值为CURRENT_TIMESTAMP
+
+innodb_use_sys_malloc =0 
+pdb.run('module.function()')
+
+GNU Privacy Guard
+`update`
+
+easy_install MySQL-python
+pip install PyMySQL ; import pymysql
+pip　install oursql ; import oursql  
+
+export HISTTIMEFORMAT="[%F | %T ]"
+PROMPT_COMMAND="${PROMPT_COMMAND:-:} ; history -a"
+
+
+
+ipython
+
+%edit   ;export EDITOR=vim
+
+%%load_ext autoreload
+%autoreload 2
+
+
+mysqlshow  [OPTIONS] [database [table [column]]]
+mysqlslap
+
+
+GLib提供了多种高级的数据结构，如内存块、双向和单向链表、哈希表、动态字符串
+
+
+ mydumper编译错误    link.txt -lssl -lcrypto（ssl支持）  -lm(数学库)
+
+ mysql-utilities
+ mysql-mmm
+ mysql-proxy
+
+
+ 增量备份只能依靠二进制日志
+
+ paste -s -d  file1 file2 [file3]
+
+ nginx rsync  sed awk
+
+ show global variables like '' ;set variable=
+ show plugins;
+ log-warning = 2 will ensure auth failures go into mysql-error log
+
+ show binary logs; purge binary logs to 'mysql-bin.0000013';
+
+ google两步验证插件，必须使用dialog插件，不能用cleartext
+
+客户端登录pam验证的用户，本地必须支持dialog或mysql_clear_password插件
+
+
+import pprint
+pprint.pprint(list)
+
+from string import Template
+t=Template('$people send $money to $another')
+t.substitute(people='hehe',money='$10',another='gg')
+(变量不全会引发KeyError，safe_substitue()可避免这个问题)
+
+print textwrap.fill('doc',width=40)
+
+try:
+expect class,name:
+
+with open() as f:
+  f.read()
+
+
+dummy_thread dummy_threading mmap socket
+
+
+convmv  
+
+enconv 
+  enconv -L zh_CN -x UTF-8 filename
+for i in *.txt; do mv "$i" "`basename $i .txt`.html"; done
+
+========
+ipython 
+========
+%history　%run %edit %debug  %pastebin  !shell  %cd %timeit %reload  %alias
+
+
+pyenv rehash
+
+edit ;edit -p
+
+from IPython.external.mathjax import install_mathjax
+install_mathjax()
+
+epel  -->https -- http
+
+from IPython import embed;embed() 
+import IPython ;IPython.start_ipython()
+
+%rehashx
+自动补全括号,引号
+
+console qt-console  notebook
+
+scipy need openblas
+
+xrange  Like range(), but instead of returning a list, returns an object that
+generates the numbers in the range on demand.  For looping, this is 
+slightly faster than range() and more memory efficient.
+
+python -m SimpleHttpServer 8000
+cx_Oracle
+
+gcc -march=native
+
+cmath :It provides access to mathematical functions for complex numbers.
+
+list复制  a=b[:]
+dict复制  import copy a=copy.deepcopy(b)
+obj 复制
+
+zip map reduce filter
+
+random.choice(list)
+
+多重继承
+子类不会自动调用父类的构造函数
+会自动忽略同名继承
+
+__init__  __del__
+
+端口映射
+1.iptables
+2.ssh tunnel
+  ssh -C -f -N -g -L A的本地闲置端口:C的ip:C的端口 B的系统用户@B的ip
+  ssh -C -f -N -g -R B的本地闲置端口:C的ip:C的端口 B的系统用户@B的ip
+  ssh -C -f -N -g -D listen_port B的系 统用户@B的ip
+
+netstat -ano |findstr 1080
+
+python　pickle anydbm shelve 数据持久存储
+
+cookie json xml 
+
+python 内置聚合器staticmethod、classmethod和property
+作用分别是把类中定义的实例方法变成静态方法、类方法和类属性
+
+面向切面编程, Aspect Oriented Programming(AOP)。主要实现的是将业务逻辑处理过程以切面为维度进行提取，它所面对的是处理过程中的某个步骤或阶段，以获得逻辑过程中各部分之间低耦合性的隔离效果。也就是说，在不修改函数A的前提下，在函数A前后插入业务逻辑B, C, D..
+
+python有面向过程、面向对象、函数式编程,面向切面编程、泛型编程多种编程范式
+
+
+json.load('fd') json.loads('str') json.dumps('dic') json.dump
+
+files=!ls
+
+
+####zencoding####
+E
+元素名称(div, p);
+E#id
+使用id的元素(div#content, p#intro, span#error);
+E.class
+使用类的元素(div.header, p.error.critial). 你也可以联合使用class和idID: div#content.column.width;
+E>N
+子代元素(div>p, div#footer>p>span);
+E+N
+兄弟元素(h1+p, div#header+div#content+div#footer);
+E*N
+元素倍增(ul#nav>li*5>a);
+E$*N
+条目编号 (ul#nav>li.item-$*5);
+
+
+asm.js  mozillia研发的JavaScript编译器，加入了float32类型
+v8
+
+
+nodejs　webapp     express/firebase/end
+
+numpy自定义了数组类，存取非常快，是矩阵类的基础
+scipy是借助numpy进行科学计算的模块
+matploblib是
+
+ipython notebook --pylab inline
+from IPython.display import * 
+
+线程的状态可以分为四种，空闲、忙碌、挂起、终止(包括正常退出和非正常退出)
+
+3.0 默认基类为object
+
+IO复用 select，poll，epoll，kqueue
+
+
+有两种方式来创建线程：一种是通过继承Thread类，重写它的run方法；另一种是创建一个threading.Thread对象，在它的初始化函数（__init__）中将可调用对象作为参数传入
+
+
+metadata = os.stat('feed.xml') 
+metadata.st_mtime 
+time.localtime(metadata.st_mtime)
+
+nmap默认不扫描高位端口
+
+doc-string
+
+基于Hadoop的实时查询 Cloudera Impala
+
+gevent
+
+
+Python 不支持内嵌的赋值
+
+布尔值可以当做数值对待。True 为 1；False 为 0 
+
++ - * / // ** %  fractions(分数) math(三角函数)
+append() 方法只接受一个参数
+
+os.path  Common operations on Posix pathnames
+
+assert 2 + 2 == 5, "Only for very large values of 2"
+
+key = value1 if True else value2
+
+
+special function
+  __doc__
+  __init__
+  __del__
+
+error classes
+  ImportError
+  ValueError
+  NameError
+
+数据类型
+  number
+  string
+  boolean
+  list
+  tuple
+  set
+  dictionary
+  file
+  class
+  function
+  module
+  byte
+php:try catch throw 
+python:try expect raise finally
+A finally clause is always executed before leaving the try statement, whether an exception has occurred or not
+
+python中变量名其实是别名
+
+os.path
+glob
+re
+sys
+time
+
+序列生成器
+
+在替换域中，冒号(:)标示格式说明符的开始
+
+Zabbix requires UTF8 database character set. If database is not UTF8
+it can be converted by running: ALTER DATABASE NATIONAL CHARACTER SET UTF8;
+
+
+VBoxManage setextradata Mac CustomVideoMode1 1360x768x32
+"Graphics Mode"="1280x1024x32"
+
+Advanced Interactive eXecutive（AIX）
+
+:set ff=unix 
+
+select termios
+
+tiny os
+
+
+nc nmap tcpdump wireshark
+
+itanium 
+
+openvms   hp  smp
+
+
+ddos ;sql injection
+jmx
+
+
+
+hortonworks
+
+
+
+controller 做HA
+
+puppet 模块部署
+
+fuel 学习笔记
+
+role:
+  fuel master node(cobbler server & puppet server)
+
+Puppet组件是通过Cobbler送到各节点的，而packstack则是通过ssh的scp命令直接拷过去的。
+
+1.内核参数，规定IP、hostname
+2.post-installation script（ks config）
+3.config screen
+4.dnsmasq +nginx+cobblerd+httpd+postmaster+sshd+beam+epmd+nailgund+ostf-server
+
+
+虚拟化技术分类
+  1.完全虚拟化
+  2.半虚拟化
+  3.混合虚拟化
+  4.用户空间虚拟化
+
+  5.具体技术 
+     Intel (VT-x) and AMD (AMD-V)
+     内存虚拟，libvirt，virt-io，kvm，pass-through
+
+
+openstack kvm migration
+
+openstack只是实现虚拟化的一个项目，还有其他的项目
+
+
+
+测试环境搭建规划书
+
+1.cobbler 系统
+2.official install document
+
+
+1.intall centos 6.5 through cobbler
+2.create-repo
+3.official install openstack havana
+4.puppet
+
+
+问题：
+  1.lv  使用后出现问题，必须修复后才能用
+  fsck /dev/mapper/vg_root
+  2.负载压力测试软件
+
+
+
+LXC - Linux Containers
+  Userspace tools for the Linux kernel containers
+
+vmware docker
+
+freebsd  bhyve
+
+freebsd 网络模式
+  flat
+  flatdhcp
+  vlan
+
+网络架构设计
+  vpn
+  router
+  switch
+  firewall  
+
+linux   xorg|wayland + DE
+mac    xquartz (a version of xorg can run on Mac-os)    quartzx2d
+
+
+dig traceroot
+ip 
+
+
+服务器账号，密码， IP
+
+QML  : qt makeup language
+
+UML
+
+
+virt-install 
+libvirt
+
+
+hillstone
+
+REST是设计风格而不是标准,REST通常基于使用HTTP，URI，和XML以及HTML这些现有的广泛流行的协议和标准
+  资源是由URI来指定。
+  对资源的操作包括获取、创建、修改和删除资源，这些操作正好对应HTTP协议提供的GET、POST、PUT和DELETE方法。
+  通过操作资源的表现形式来操作资源。
+  资源的表现形式则是XML或者HTML，取决于读者是机器还是人，是消费web服务的客户软件还是web浏览器。当然也可以是任何其他的格式
+
+
+mail.99cloud.net
+jia.shuanxi@99cloud.net
+username:jia.shuanxi
+password:P@ssw0rd
+
+
+
+lsmod |grep 8021q        //查看系统内核是否支持802.1q协议（vlan）
+VLAN通常存在2种工作模式，分别为ACCESS模式和TRUNK模式
+
+
+ipconfig  /all
+
+vlan & gre
+
+1、不想在物理交换机上配置vlan；
+   （说明要选择vlan模式必须在物理交换机上先配置VLAN）
+2、vlan模式对vlan的数量有限制；
+3、两种方式不影响实例的通讯，只是对数据包封装不一样。
+
+
+GRE 是 L3 层的遂道技术，本质是在遂道的两端的 L4 层建立 UDP 连接传输重新包装的 L3 层包头，在目的地再取出包装后的包头进行解析。
+ Openvswitch，它可以自动创建 GRE 隧道来避免手动去为物理交换机配置 VLAN。”
+
+
+ taskflow   是OpenStack中的一个Python库， 它主要是可以使task的执行变得更加容易、一致和可靠
+ 它 执行flows,可以停止、重新开始和以安全的方式恢复flows。它与RDBMS动作保护有点类似。当一个flow被中断时，动作可以恢复，甚至可以自动回滚
+ flow是以类似SQL 事务的方式工作的
+
+
+GRE:Generic Routing encapsulation(通用路由封装) (GRE)是由思科系统开发的一种隧道协议，可以在虚拟点对点链路中封装多种网络层协议
+POC: proof of concept
+
+
+error: "net.bridge.bridge-nf-call-ip6tables" is an unknown key  
+error: "net.bridge.bridge-nf-call-iptables" is an unknown key  
+error: "net.bridge.bridge-nf-call-arptables" is an unknown key 
+
+ modprobe bridge  
+使用以上3个选项阻止桥接流量获得通过主机iptables规则，Netfilter是默认情况下启用了桥梁，如果不阻止会导致严重的混乱
+
+
+openflow是基于二层的通讯协议
+
+SDN包含三层：一是应用层，包括应用和服务提交，如交换/网络虚拟化、防火墙、流量均衡;二是物理层，这是网络最底层;三是SDN控制器，将控制功能从网络硬件剥离，改用软件方式进行控制，要求网络中所有物理和虚拟设备进行整合。OpenFlow协议/或设备公司的SDN解决方案也是软件的一部分。
+
+传统网络设备：黑盒子和cli及ASIC(application-specific integrated circuit)
+
+opendaylight (linux foundation collaborative projects)
+OpenDaylight's mission is to facilitate a community-led, industry-supported open source platform, including code and architecture, to accelerate adoption of Software-Defined Networking and Network Functions Virtualization.
+
+SDN and NFV enables users to program network layers to optimize network resources, increase network agility, service innovation, accelerate time-to-market, extract intelligence and enable dynamic, service-driven virtual networks.
+
+open networking foundation（openflow）
+
+VMware NSX构建在overlay（叠加网）基础上
+openflow需要专用的硬件架构，需要二次开发
+
+
+
+
+Juniper Networks Contrail 这是一种简单、开放、敏捷的软件定义网络解决方案，支持自动化和编排高可伸缩性虚拟网络的创建。 Contrail 使您可以大规模地迅速连接到云及其中的虚拟化资源，而无需更改底层物理网络
+
+埃森哲accenture是全球领先的管理咨询、信息技术及外包服务机构。凭借其在各个行业领域积累的丰富经验、广泛能力以及对全球最成功企业的深入研究，埃森哲与客户携手合作，帮助其成为卓越绩效的企业和政府。
+
+
+iproute (ip netns)
+
+LXC主要有namespace和cgroup两大模块构建而成
+
+
+Linux Resource Containers
+
+Linux Namespaces机制提供一种资源隔离方案。PID,IPC,Network等系统资源不再是全局性的，而是属于特定的Namespace。
+每个Namespace里面的资源对其他Namespace都是透明的。要创建新的Namespace，只需要在调用clone时指定相应的flag。Linux Namespaces机制为实现基于容器的虚拟化技术提供了很好的基础
+
+
+Linux Namespaces机制本身就是为了实现container based virtualizaiton开发的。它提供了一套轻量级、高效率的系统资源隔离方案，远比传统的虚拟化技术开销小，不过它也不是完美的，它为内核的开发带来了更多的复杂性，它在隔离性和容错性上跟传统的虚拟化技术比也还有差距。
+
+容器是一种内核虚拟化技术，可以提供轻量级的虚拟化，以便隔离进程和资源，而且不需要提供指令解释机制以及全虚拟化的其他复杂性。相当于C++中的NameSpace。容器有效地将由单个操作系统管理的资源划分到孤立的组中，以更好地在孤立的组之间平衡有冲突的资源使用需求。
+
+运行时环境： 需要支持cgroup内核
+
+iptables -A FORWARD -i eth0 -o nat -m state --state RELATED,ESTABLISHED -j ACCEPT
+
+LXC无法运行其他非Linux系统 ，你可以在同一个宿主机内核下的不同containers里面运行不同的Linux发行版
+
+视网膜屏幕（也称Retina显示屏），是指人眼在正常观察距离下，视网膜已经无法分辨单个像素，不再出现像素颗粒感
+
+
+
+flush tables with read lock;  unlock tables;
+change master to master_host='172.16.0.166',master_user='repluser',master_password='replpass';
+install plugin rpl_semi_sync_master SONAME 'semisync_master.so'
+show processlist;
+show global vairables like 'rpl%';
+倒入mysql数据库后，需要flush privileges;
+reset master;
+
+
+双向主从crash恢复问题
+grep -r --include='*.conf'  'pattern'   /path/to/dir
+
+mysqldump -uroot -hlocalhost -p123456 --all-databases --lock-all-tables --flush-logs --master-data=2 > /backup/alldatabase.sql
+
+
+runuser - run a shell with substitute user and group IDs
+
+
+
+############rabbitmq Clustering transcript
+  1.initial setup
+    Erlang nodes use a cookie to determine whether they are allowed to communicate with each other - for two nodes to be able to communicate they must have the same cookie.  
+     /var/lib/rabbitmq/.erlang.cookie
+  2.Starting independent nodes
+    rabbit1$ rabbitmq-server -detached
+    rabbit2$ rabbitmq-server -detached
+    rabbit3$ rabbitmq-server -detached
+
+  3.rabbit2$ rabbitmqctl stop_app
+
+     rabbit2$ rabbitmqctl force_cluster --ram rabbit@rabbit1
+
+     rabbit2$ rabbitmqctl start_app
+
+  4.Changing node types
+    rabbit2$ rabbitmqctl stop_app
+    Stopping node rabbit@rabbit2 ...done.
+  rabbit2$ rabbitmqctl change_cluster_node_type disc
+   Turning rabbit@rabbit2 into a disc node ...
+    ...done.
+  Starting node rabbit@rabbit2 ...done.
+
+  5.rabbitmq plugin
+
+# rabbitmq-plugins enable rabbitmq_stomp
+#############################
+
+screen COM1
+
+####
+
+numpy
+scipy
+scmpy
+
+
+sed 'patern action' file1 ...
+
+sed 's@<[^>]*>@@g' a.html
+sed 's/s/S/3g' my.txt
+sed '1,3s/my/your/g; 3,$s/This/That/g' my.txt
+sed -e '1,3s/my/your/g' -e '3,$s/This/That/g' my.txt
+sed 's/my/[&]/g' my.txt
+sed 's/This is my \([^,]*\),.*is \(.*\)/\1:\2/g' my.txt
+ sed 'N;s/my/your/' pets.txt
+          N:将下一行的内容纳入当前缓冲区，将两行作为1行进行操作
+sed 'N;s/\n/,/' pets.txt
+sed "1 i This is my monkey, my monkey's name is wukong" my.txt
+      i 表明在匹配到的某行上面添加内容
+sed "$ a This is my monkey, my monkey's name is wukong" my.txt
+      a 表明在匹配到的某行下面添加内容
+sed "2 c This is my monkey, my monkey's name is wukong" my.txt
+      c表明将匹配到的行替换为后面内容
+sed '/fish/d' my.txt
+      d表明删除匹配行
+sed -n '/fish/p' my.txt
+sed -n '/dog/,/fish/p' my.txt
+sed -n '1,/fish/p' my.txt
+
+sed '/dog/,+3s/^/# /g' pets.txt
+      可以使用相对位置进行匹配
+
+sed '3,6 {/This/{/fish/d}}' pets.txt
+    对3行到第6行，匹配/This/成功后，再匹配/fish/，成功后执行d命令
+sed '1,${/This/d;s/^ *//g}' pets.txt
+    从第一行到最后一行，如果匹配到This，则删除之；如果前面有空格，则去除空格
+
+
+
+gem uninstall rjb --version 1.1.9
+
+######### install mcollective ##############
+
+
+rabbitmq-plugins enable rabbitmq_management  
+    restart rabbitmq-server
+http://server:55672/ ?user=guest&password=guest
+
+
+
+
+apache  vhost
+
+      1.基于port
+      2.基于servername
+      3.基于ip
+
+
+
+
+生成树协议（STP, Spanning Tree Protocol），又称扩展树协议，是一基于OSI网络模型的数据链路层（第二层）通信协议，用作确保一个无循环的局域网络环境。
+
+
+ 端口镜像（port Mirroring)把交换机一个或多个端口（VLAN）的数据镜像到一个或多个端口的方法。 
+网卡并行
+
+
+
+yum deplist   pkg
+
+使用rsync调用ssh协议实现断点续传
+rsync -avzP XXX.tar.gz XXX@X.X.X.X:XXX.tar.gz
+
+
+select current_user();
+select current_date();

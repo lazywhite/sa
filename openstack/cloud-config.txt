@@ -1,0 +1,45 @@
+#cloud-config 
+bootcmd:
+ - echo "nice to meet you" > /tmp/bootcmd_test
+ - mount /dev/sr0 /mnt
+ - cat /mnt/openstack/latest/meta_data.json > /opt/meaaa
+runcmd:
+ - [ wget, "http://www.baidu.com", -O, /tmp/index.html ]
+packages:
+ - bash-completion
+ - vim
+ - puppet
+
+final_message: "The systeme is finally up,after $UPTIME seconds"
+
+groups:
+ - test: [user1,user2]
+
+users:
+ - default
+ - name: user1
+   password: $1$aCwLBNGo$wqZJKyZCofWQzAezbeXtY/
+
+write_files:
+ - encoding: b64
+   content: "this is a test"
+   owner: root:root
+   path: /test
+   permissions: '0644'
+
+yum_repos:
+ test_repo:
+  baseurl: http://www.kdfjlfja.com
+  enabled: false
+  gpgcheck: false
+  name: test_repo
+
+manage-resolve-conf: true
+resolve_conf:
+ nameservers: ['8.8.8.8', '8.8.4.4']
+ searchdomains: 
+  - foo.bar.com
+ option:
+  rotate: true
+  timeout: 1
+

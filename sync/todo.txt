@@ -1,0 +1,42 @@
+cinder-volume  lvm work-flow
+nova volume mount work-flow
+
+
+链路聚合
+级联 汇聚
+
+gem install sinatra
+
+$ gem sources --remove https://rubygems.org/
+$ gem sources -a http://ruby.taobao.org/
+
+zypper addrepo -f http://mirrors.ustc.edu.cn/opensuse/distribution/12.3/repo/oss/ 
+ustc.openSUSE-12.3-Oss
+
+
+dig
+kickstart
+docker
+openflow
+ovs-vsctl
+
+virsh
+virt-install
+
+
+Pow is a zero-config Rack server for Mac powered by Node.js.
+
+flask 插件加载
+
+
+heroku
+
+反向shell
+
+两条重合路由问题: 最大匹配
+tun0:openvpn
+
+
+git workflow
+mysql CRUD
+mongo CRUD

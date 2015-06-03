@@ -1,0 +1,196 @@
+arbitary随意的
+entity 实体
+robust 健壮
+collaboration 合作
+pasta 面食
+eliminate 消除
+trivial 无关紧要的
+brute  畜生
+penalty 惩罚
+hybrid 混合的
+fabric 组织结构
+eliminate 消除
+allocate 分配
+grid 网格
+imperial 皇冠
+arbiter 主宰者，仲裁者
+tenancy 租赁
+flavor 风味
+barrier 障碍物
+ratio 比率               
+perforce 强制的
+stall 停转，失速
+dimention 维度
+elastic 弹性的
+moan 痛苦地呻吟
+senator 议员
+dissect 剖析  
+spectrum 系列
+capacity 容量
+humongous 非常庞大的
+notation 表示法，标记法
+variant 变种
+mechanism 机制
+merge 合并
+reside 驻留
+surname 姓氏
+dept 部门
+conservancy 委员会，管理局
+mechanism 机制
+pallete 调色板
+allocate 分配
+omit 忽略
+premise 前提
+elite 精英
+replication 复制
+investment 投资
+surpass 超出，凌驾
+allocator 分配器
+razor 剃刀
+diploma 文凭
+span 小范围
+deliberate 深思熟虑
+slim 瘦小得
+terminology 术语
+QA QUALITY ASSURANCE
+hyphen 连字符
+intervention 干预
+ascending 上升
+curtain 窗帘
+scenario 剧本 方案
+descending 下降
+comprise 包含
+unprecedent  史无前例
+scope  范围
+suffice 满足
+axis 轴
+escalation 事件升级，自动电梯
+inventory 盘点，清点
+for the duration of 在。。期间
+synopsis 概要
+concatenate 连接
+trailing 小尾巴
+forge 熔炉
+manifest 明显的
+delimit 界定
+transaction 事物处理
+prior 早先的
+allocate 分配
+grant 授权
+lucid 透彻的
+compatible 兼容的
+capable 有能力的,能胜任
+tunable 可调的
+fragile 易碎的
+federate 联合
+wrap 掩护,遮蔽
+flush  必须有管理员权限 
+replication :主从复制
+routine:例行程序
+revoke:撤销
+vendor:厂商
+colocation:托管
+respawn 重生
+symmetrical 对称的
+scale 刻度
+interval 间隔
+quiescent 静默的
+nigotiate 协商
+monitor 监视
+directive 指令
+caption 标题
+migrate 迁移，移植
+pend 未定的
+demote 降级
+coliberation 校准
+consistent 一致的
+totem 图腾
+designate指定的
+coordinator 协调人
+deprecate 不支持
+beforehand 事先
+significant 显著的
+mandatory
+confrontation 遭遇
+fiber-optic光纤
+prohibit 禁止的
+inhibit  禁止,抑制
+capacity 容量
+component 元件
+rambling 漫步
+fundamental 基本的，重要的
+brick 积木，砖
+finite 有限的
+flaky 摇摇欲坠的
+saint 神圣的
+dissect 分析
+snippet 片段
+demonstrate 演示
+avenge 复仇
+inferior 低等的
+deflate 抽空，缩小
+skimpy 小气的
+subsequent 后续的
+machanism 手法，技巧
+seldom  很少
+impact 影响到
+comet 彗星
+stale 腐朽，不新鲜，过期的
+grace 优美的
+gratuitous 免费的
+preempt 抢占
+hierachy层次结构
+scalable 可扩展
+dramatically 显著地
+granularity 粒度
+significantly 有效的
+simultaneous 同时的
+realm领域
+probe 探测
+parallel 并行的
+variant 变体
+flexible 弹性的
+ecosystem 生态系统
+criteria 基准
+transient 转瞬即逝的
+approximate 大约的，近乎精确的
+correspond 与--保持一致
+purge 清除
+merge 合并
+topology 拓扑图
+machinery 机械，引擎
+SOP:Standard Operating Procedure
+brew 混合物
+SMP:Symmetric Multi-Processor
+IPI:inter-process interrupt
+TOS:type of service
+disambiguation:不模棱两可
+fancy 花哨的
+be comprised of 由 构成
+comprehensive 缜密的
+diploma 毕业
+thesis 论文
+vice versa 反之亦然
+concise 简明的
+digress 离题，跑题
+prohibit禁止
+pinch 夹
+complication disease 并发症
+intense 激烈的
+courtesy 礼貌
+imposed a fine of 10 thousand dollar 征收
+decorator 装饰物
+Odds and Ends 零碎的东西
+plot 故事情节，布局，绘图
+dominate 制霸，统治
+substitute　替代物
+evasion 逃逸，闪避
+non-profit corporation
+convention  惯例
+Likewise 同时
+callee 被调用者
+suppress 抑制
+respect 尊敬
+respectively 个别的
+subsequent 随后的
+trivially  平凡的

@@ -1,0 +1,583 @@
+# store image into Redis
+import redis
+r =  redis.StrictRedis()
+img = open("/path/to/img.jpeg","rb").read()
+r.set("bild1",img)
+
+
+# msgpack exchange data just like json but faster and smaller
+pip install msgpack-python
+
+
+built_in module
+    /System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7
+third_party module
+    /Library/Python/2.7/site-packages
+dynamic loaded
+    /Library/Frameworks/Python.framework/Versions/3.4/lib/python3.4/lib-dynload
+
+bson and Mongodb
+    BSON is a binary-encoded serialization of JSON-like documents. BSON is designed to be lightweight, traversable, and efficient.
+
+brew formula
+
+os.walk('dir') --> (root, dirs, files)
+
+
+import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
+
+pinject
+nose
+unittest
+
+
+requests.get(url, params=<dict>, headers=<dict>, data=<string>)
+
+django middleware
+django.conf.setting 
+
+
+r=requests.get()
+r.request.headers
+r.json()
+
+
+netstat -anL
+data gram and stream
+
+alias vim='/Applications/MacVim.app/Contents/MacOS/Vim'
+
+youcompleteme ./install.sh --clang-completer
+hash -r
+
+iterm2 profile
+mac network profile
+
+# path shortcut
+echo 'CDPATH=~/.paths' >> ~/.bashrc
+
+
+"Bad marshal data" when importing python module
+    delete the pyo, pyc file of that file
+
+%reload_ext autoreload
+%autoreload 2
+
+
+you can import a decorator then apply it to a function declaration
+
+decorator chain
+multi_level inherance
+
+
+from test.a import * 
+(定义__all__) 只会导入定义的属性
+(没定义__all__)只会导入__init__.py
+__all__ ,__file__ 需要显式定义
+
+
+# how to test if multiple item in same container
+item_set = set(item_list)
+container_set = set(container)
+if item_set.issubset(container_set): 
+    return True
+
+
+# set
+#
+a | b : 并集
+a & b : 交集
+a ^ b : 对称差集
+a - b : b相对于a的差集
+
+
+Exception.args
+
+a._A__private()
+
+random.seed(a=None)
+# initialize  internal state from hashable object
+a  = 10 if True else 100
+
+from module import * :
+# will not be imported
+    _a 
+    __a 
+
+import module:
+    module._a
+    module.__a
+
+
+# what information stored in special attribute
+__dict__ : only store private attribute, no method
+
+svn:
+    lock : only the locker of a file could change that file
+    unlock
+    revert: checkout a file from local svn repo
+    checkout(co): file:///absolute/path
+    resolve:  conflict
+
+
+svnadmin
+    create <target>
+    dump: dump the repo to standard output
+
+svn log --limit 10
+svn copy http://host/trunk http://host/branches/branch_one
+svn copy http://host/trunk http://host/tags/v1.0.01
+<trunk> svn merge http://host/branches/branch_one
+svn mergeinfo
+svn info file_path
+
+svn revert -R .
+
+svn remove branches/jia_dev  ;svn ci
+
+
+django template
+    {% with var=value %} {% endwith %}
+
+<td align="center">
+
+
+networksetup -listallnetworkservices
+networksetup -setv6off Ethernet
+
+
+new_list = sorted(a_dict.iteritems(), key=lambda d:d[0]) 
+    dict to sorted list
+
+string.punctation : 所有的标点符号
+
+mac ports
+
+ssh tunnel
+    ssh -fN -L 4321:remote_host:22 bridge_user@bridge_host
+
+
+tcp_wrapper 匹配规则
+mysql 限定用户登录IP
+
+
+tail -f |grep -v 
+
+svn diff -r 64222:64212 trunk/apps/admin/views/tool.py
+
+bytes解码过后成为string,string编码后成为bytes
+unicode 为python的内部编码
+s = '中文' , 解释器会用默认编码存储一串bytes
+
+m  = hashlib.md5()
+m.update('hello')
+m.update(' world')
+m.hexdigest()
+--> '5eb63bbbe01eeed093cb22bb8f5acdc3'
+hashlib.md5('hello world').hexdigest()
+--> '5eb63bbbe01eeed093cb22bb8f5acdc3'
+
+
+from shutil import make_archive
+name = os.path.expanduser(os.path.join('~', 'myarch'))
+root_dir = os.path.expanduser(os.path.join('~','.ssh'))
+make_archive(name, 'gztar', root_dir)
+
+
+
+from cStringIO import StringIO
+# python3  from io import StringIO
+a = StringIO()
+a.write('first line\n')
+# a.seek(0)
+print >>a, 'second line\n')
+print a.getvalue()
+a.close()
+
+
+create table test (str varchar(32), ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
+mongodb default timestamp
+
+
+shelve module  不一致问题
+
+brew install libmemcached
+pip install pylibmc --install-option="--with-libmemcached=/usr/local"
+
+zip is a bytes -> bytes encoding
+
+python venv
+    2.7
+        virtualenv -p /usr/bin/python2.7 <path>
+    3.x
+        pyvenv <path>
+    source <path/bin/active>
+    deactivate
+
+SocketIO
+Socket.IO 是一个面向实时 web 应用的 JavaScript 库。它使得服务器和客户端之间实时
+双向的通信成为可能。他有两个部分：在浏览器中运行的客户端库，和一个面向Node.js的
+服务端库。两者有着几乎一样的API。像Node.js一样，它也是事件驱动的.
+
+
+
+brew tap gapple/services
+
+
+import gc 
+del a
+gc.collect()
+
+route add(delete) 192.168.183.0 mask 255.255.255.0 192.168.255.10
+
+cent 7 
+	firewalld : 动态防火墙, netfilter
+	systemd
+	xfs
+	iscsi in kernel space
+
+
+ansible-doc module
+
+switch: 
+    trunk mode
+        native vlan
+    access mode
+
+iozone
+iperf
+
+time + command
+
+kpartx: Partition device manager for device-mapper devices
+
+
+cisco 2960 设置密码
+
+console：
+   conf t=> line console 0
+   conf t=> password switch
+   conf t=> end
+
+telnet:
+   conf t=> line vty 0 4
+            password switch
+            login
+            end
+enable
+   conf t=> enable password switch
+            end
+
+
+
+/dev/ttyUSB0
+minicom -s   => device ,9600
+
+
+ignoredisk --only-use=sda
+
+pxelinux.cfg/default | mac
+
+puppet variables can't be capitalize
+
+galera cluster datetime must be same
+
+npm install -g mongo-hacker
+
+
+netstat -an -f inet -p tcp
+netstat -r -f inet
+
+
+argument 实参
+parameter 形参
+
+
+object has attribute and method 
+
+command not found : glibtoolize
+    brew install libtool
+command not found : aclocal
+    brew install automake
+
+
+
+for i in (range(10), range(20))
+
+'string'.format()
+
+finally will always executed before return
+'return' must be in a function
+
+weakref table, callback
+metaclass example __prepare__
+
+functools.singledispatch(泛型编程, 根据传入的单个参数的类型调用不同函数处理)
+
+use 'dmesg' to detect inserted device 
+
+'module'.__spec__
+'module'.__path__
+
+
+configparse
+argparse
+
+deque(双向队列)
+heapq(优先级队列)
+bisect(排序)
+
+
+
+Python is a framework on Mac OS X so you need to
+1. include <Python/Python.h>
+2. gcc -shared -o sample.so sample.c -framework Python
+
+
+bson.Code(just install 'pymongo' module, not 'bson' module)
+
+
+#mongodb add user
+db.createUser({
+... user: "plague",
+... pwd: "plague",
+... roles:[
+... {role:"readWrite", db:"plague"}]})
+
+
+exception __cause__ = None
+raise Exception() from None
+
+
+gunicorn -b ip:port | unix://path
+
+
+Gunicorn 'Green Unicorn' is a Python WSGI HTTP Server for UNIX. It's a pre-fork worker model ported from Ruby's Unicorn project. The Gunicorn server is broadly compatible with various web frameworks, simply implemented, light on server resources, and fairly speedy.
+
+
+brew install libxml2
+brew install libxslt
+brew link libxml2 --force
+brew link libxslt --force
+sudo C_INCLUDE_PATH=/usr/local/include/libxml2 pip install lxml
+
+
+a.__class__ = b.__class__
+
+
+
+
+# linux lvm
+partprobe
+pvcreate /dev/sda3; pvs
+vgreate vg1 /dev/sda3;vgs
+lvcreate -L 100M -n lv1 vg1;lvs
+mkfs -t ext3 /dev/vg1/lv1
+vgextend; lvextend; resize2fs
+
+
+sudo python3 (command not found)
+visudo: secure_path
+
+poster: multipart_encode({"image1":open("a.jpg", "rb")})
+
+
+mount -t cifs -o username=guest,password= //192.168.1.124/public /mnt
+smbclient -L //192.168.1.124/public 
+
+
+pip install pyreadline
+
+#Jira installation
+JIRA_HOME = /var/jira 
+download mysql jdbc drive and put it in lib/
+
+docker -d --registry-mirror=http://daocloud.io
+
+cat /dev/urandom | md5sum
+# Mac dd 过慢问题
+dd if=Downloads/FreeBSD-10.1-RELEASE-amd64-memstick.img of=/dev/rdisk2 bs=1024000
+
+
+
+
+iozone -a -i 0 -i 1 -f /var/lib/iozone.temp -Rab /root/read.xls -g 8G -n 4G -C
+
+xtrabackup  socat 
+
+for i in {1..5};do rsync --delete --exclude=database.php --exclude=start.php --exclude=check -vr hrcf/ web$i:/var/www/hrcf/ ;done
+
+
+
+
+
+yum groupinstall "X Window System" xorg-x11-xauth dejavu-lgc-sans-fonts
+dbus-uuidgen > /var/lib/dbus/machine-id
+
+
+
+read a b c
+a, b, c = sys.stdin.read().splite()
+
+
+centos6.6 安装支持netns的iproute
+[openstack-juno]
+name=OpenStack Juno Repository
+baseurl=http://repos.fedorapeople.org/repos/openstack/openstack-icehouse/epel-6/
+enabled=1
+skip_if_unavailable=0
+gpgcheck=0
+
+yum upgrade iproute
+
+ls -l /sys/class/net/
+
+virsh net-destroy default
+virsh net-undefine default
+
+
+docker run -t -i -v /root:/mnt:rw cppking/local_cent65 /bin/bash
+
+主动模式的FTP是指服务器主动连接客户端的数据端口，被动模式的FTP是指服务器被动地等待客户端连接自己的数据端口
+
+awk 'NR==5{print substr($0,2,3)}'
+
+# compile python3
+yum install tk-devel sqlite-devel readline-devel gdbm-devel xz-devel bzip2-devel openssl-devel; make -j
+
+
+
+
+proxy_set_header        X-Real-IP       $remote_addr;
+proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+
+php_value[error_reporting] = 32767
+php_flag[display_errors] = on
+
+makewhatis
+
+hostnamectl set-hostname 
+
+ipcalc -cs x.x.x.x && echo 'IP Right' || echo 'IP Error'  
+
+/etc/yum.conf proxy=http://proxysvr.yourdom.com:3128
+
+
+vmstat: virtual memory statistics
+sar: system activity report 
+pmap: process memory usage 
+top 1 z
+
+
+uptime
+w
+pstree -np
+ps aux
+pmap -d PID
+sar 1 5
+
+
+
+
+
+mininet
+
+
+filebucket [rollback]
+hiera
+
+
+puppet 变量作用域
+	根据请求的host自动设置配置参数
+
+
+
+
+openflow switch
+
+VM auto-migration
+
+
+
+
+
+
+
+noVNC
+	VNC client using HTML5 (websocket + canvas) with encryption(wss://)support
+
+
+oVirt
+	a virtual datacenter managment platform
+
+
+
+
+# ELK
+curl localhost:9200/_nodes/process?pretty
+curl 'localhost:9200/_cat/indices?v'
+curl 'localhost:9200/_cat/nodes?v'
+curl -XPUT 'localhost:9200/customer?pretty'
+curl 'localhost:9200/_cat/indices?v'
+curl -XPUT 'localhost:9200/customer/external/1?pretty' -d '
+{
+  "name": "John Doe"
+}
+curl -XDELETE 'localhost:9200/customer?pretty'
+curl -XPUT 'localhost:9200/customer/external/1?pretty' -d '
+{
+  "name": "John Doe"
+}'
+ulimit -l unlimited(es cant start)
+bootstrap.mlockall: true
+vm.max_map_count=262144
+vm.swappiness = 0
+
+virsh storage pool
+
+Max number of nodes = Number of shards * (number of replicas +1)
+换句话说，如果你计划用10个分片和2个分片副本，那么最大的节点数是30。
+
+
+bin/plugin -install karmi/elasticsearch-paramedic
+bin/plugin --install mobz/elasticsearch-head
+bin/plugin --install lukas-vlcek/bigdesk
+bin/plugin --install lmenezes/elasticsearch-kopf/1.5.3
+
+
+If you do not explicitly set underscores_in_headers on;, nginx will silently drop HTTP headers with underscores (which are perfectly valid according to the HTTP standard). This is done in order to prevent ambiguities when mapping headers to CGI variables, as both dashes and underscores are mapped to underscores during that process.
+
+
+
+logstash forwarder: 加密传输
+
+
+logstash -e 'input { stdin { } } output { stdout {} }'
+
+
+ipconfig /all
+
+
+ClientAliveInterval 15
+ClientAliveCountMax 4
+
+<<<<<<< HEAD
+mongodump --host mongodb1.example.net --port 37017 --username user --password pass /opt/backup/mongodump-2011-10-24
+
+
+/usr/src/redis/src/redis-cli -h 192.168.0.42 -p 9303 -n 16 -a mmbang@redis2015
+
+redis:MISCONF
+config set stop-writes-on-bgsave-error no
+
+
+
+STOP SLAVE;
+SET GLOBAL SQL_SLAVE_SKIP_COUNTER = 1;
+START SLAVE;
+
+before, require
+notify, subscribe
+

@@ -1,0 +1,39 @@
+show databases;
+show tables;
+show variables;
+show global status;
+show columns from db.user;
+show grants for User;
+show index from db.table;
+show [full] processlist;
+show table status [like 'tb']\G;
+show privileges;
+show create database DBname
+show create table TBname;
+show [storage] engines;
+show innodb status;
+show warnings;
+truncate table 清空表内容
+
+
+ 一、对mysql bin-log的操作
+1、手动删除mysql bin文件:
+purge master logs to 'mysql-bin.xxx'; 
+2、修改配置文件my.conf
+expire-logs-days=5
+3、删除所有bin-log(慎用,清空日志同时会清空主的授权信息)：
+reset master;
+4、删除mysql-bin.000099之前的bin-log:
+purge binary logs to 'mysql-bin.000099';
+ 
+二、常用mysql master/slave的sql语句:
+show master status; 查看主的状态
+show slave status\G; 查看从的状态
+show processlist; 查看mysql的进程状态信息
+show master logs; 查看主的日志
+reset slave;(慎用，清除日志同时会清空从的配置信息)
+
+key_buffer_size
+max_used_connection  过去一段时间的最大连接数
+max_connections 最大连接数
+计算索引未命中缓存的概率：key_cache_miss_rate = Key_reads / Key_read_requests * 100%

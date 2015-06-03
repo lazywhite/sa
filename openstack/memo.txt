@@ -1,0 +1,76 @@
+openshift
+nebula
+netapp
+hp cloud
+rakespace
+
+trove
+opendaylight
+ironic
+swift
+
+manila
+cloud-init
+heat
+tripleO
+sahara
+
+
+NFV/SDN
+
+
+
+provision
+	tripleO
+	cobbler
+	foreman	
+	razor
+configuration
+	puppet
+	salt
+
+
+AD LDAP integration
+
+ssh -D 8080 -C -N username@example.com
+
+hive
+spark
+
+hadoop
+	hdfs name-node data-node
+	map/reduce job-tracker task-tracker
+
+
+
+docker lxc openvz openshift container 
+kvm bhyve xen hyperv esxi
+
+
+1111 1111 1110 0000
+192 168 0010 0001 
+	0011 1110
+192.168.2.1 192.168.3.254
+
+puppet module for provision
+puppet module for openstack deployment
+main developer of 'animbus' (duplexing RAID card, auto deployment, HA)
+integration of glusterfs and openstack
+usage of openstack in multi-hypervisor environment(xen kvm)
+usage of docker,opendaylight,openshift in openstack
+deployment of openstack in multiple customer projects (trystack.cn, iflytek.com)
+
+
+
+xm/xend
+xl
+xe/xapi
+
+
+spice
+	remote-viewer
+	win-spice
+	arm
+	andriod
+
+

@@ -1,0 +1,219 @@
+sql 对大小写不敏感
+
+TRIM(字串): 将所有字串起头或结尾的空白移除
+LTRIM(字串): 将所有字串起头的空白移除.
+RTRIM(字串): 将所有字串结尾的空白移除.
+
+表,列,行,数据类型,Null,
+主键primary key,可以有多个主键,Unique,Not Null
+
+engine=innodb|memory|myisam|aria
+Datatype:
+1.string:
+char:fixed-length 1-256 characters
+enum:up to 64K string
+text:max size 64K text 
+mediumtext:max size 16K text;
+longtext:up to 4G text;
+tinytext:up to 255 byte;
+set:up to 64 strings;
+varchar:same as char
+2.number
+bit:1-64 byte
+int:
+bigint:
+mediumint:
+Real:4-byte floating values;
+float:single-precision floating point 
+double:double-precision floating point
+decimal:可变精度浮点数
+3.boolean:0 or 1
+smallint:0-32767
+tinyint:-128 127 or 256
+4.data and time 
+date:YYY-MM-DD
+datetime:combination of date and time
+time:HH-MM-SS
+year:
+5.binary datatype
+blob:max length 64k
+mediumblob:max length 16MB
+longblob:max length 4GB
+tinyblob:max length 256 bytes;
+
+
+通配符: *  % _
+REGEXP: . * + ? \\ | [123] [a-z] {n} {n,} {n,m}
+fully qualified name;
+注释:-- ,#
+mariadb>\. filename 在交互模式下运行脚本
+
+从show status输出的表查找信息
+use database;
+show tables;
+describe table|show columns from table;
+
+show status;show variables;
+show create database mysql;show create table user;show grants
+show errors;show warnings;
+
+select column1,column2... from table;select * from table;
+select distinct  :唯一的
+select column1 from table limit 5;默认第一行为row0
+select column1 from table limit 5,5;从第6行开始的持续5行
+select column1 from table order by column1 desc;
+select column1 from table where column2='sth'
+select column1 from table where column2 between A and B
+select column1 from table where column2 IS NULL
+select column1 from table where column2='A' and|or column3='B'
+select columns from table where column1 IN (start,end) | NOT IN
+select columns from table where column1 like 'jet%'
+select columns from table where column1 REGEXP 'string'
+like 后跟的规则不加通配符的话表示完全匹配
+
+
+1.text manipulation function
+rtrim() ltrim() trim() upper() lower() left() length() locate() soundex()
+substring() 
+2.date and time manipulation funciton
+adddate() addtime() curdate() curtime() date() datediff() date_add()
+date_format() day() dayofweek() hour() minute() month() now() second() time()
+year()
+3.numeric manipulation funcitons
+abs() cos() exp() mod() pi() rand() sin() sqrt() tan()
+4.aggregate functions 集合,聚集
+avg() count() max() min() sum()
+
+
+data grouping
+select id,count(*) from table group by id;
+
+
+subquery
+
+
+
+left join ;wright join ;full join ;inner join
+
+combined query: union
+
+full-text search 
+boolean-text search  
+
+--------------------------------------
+Insert:
+full-insert,partial-insert,multiple-insert,insert a result of a query;
+partial-insert 表的列必须允许NULL或者有默认值,否则不能部分插入
+多插入insert into table values (1,2,3,4),(5,6,7,8)
+将查询结果插入表,insert into table1 (column1,column2....)
+select column1,column2... from table2
+---------------------------------------
+update
+update table set column1='A' where column2='B'
+
+------------------
+delete
+delete from table where column1='A'
+一定以主键为选择标准,删之前可以用select看一下
+
+mariaDB无法undo
+
+auto_increment  相当于一个会变化的默认值,可不手动赋值
+
+create table Table (
+id int(8),name varchar(24) NOT NULL,
+quality int(8) NOT NULL DEFAULT 1,
+PRIMARY KEY (id));
+
+DEFAULT 不能为函数,只能为常量->数字或字符串
+
+在支持事物管理的引擎下创建的表,创建外键才有意义
+a table using one engine cannot have a foreign key referring to a
+table that uses another engine
+
+------------------------
+alter table :update the defination of table
+
+Alter Table table Add column3 varchar(20)
+Alter Table table Drop Column column1;
+Alter 添加 Foreign Key
+-----------------------------
+Drop Table table; 与 Delete * from table的区别
+------------------------
+Rename Table table1 TO table1_backup,table2 TO table2_backup;
+
+-----------------------
+create index [type] on table(column)
+---------------------
+VIEW :其实只是一个query command,返回一个虚拟的表
+new view 不能与table或其他view重名
+Create View name;
+Show Create View name;显示创建view的语句
+Drop View name;
+Create OR Replace View name;更新一个view
+
+create view ST AS select Concat(RTrim(vend_name),'(',RTrim(vend_country),')')
+AS vend_title From vendors Order By vend_name;
+------------------------------
+Stored Procedure
+
+create procedure pro()
+BEGEIN
+select columns as name from table;
+END;
+delimiter //   声明界定符,delimiter ; 恢复默认
+---------------
+cursor
+Declare name Cursor For select column from table;
+open name;close name;
+---------------
+Trigger
+
+trigger of Insert Delete Update
+-----------
+transaction : could only be used for Insert Delete Update
+Transaction processing is used to maintain database integrity by ensuring that
+batches of MariaDB SQL operations execute completely or not at all
+
+MariaDB SQL statements are usually executed and written directly to the data-
+base tables. This is known as an implicit commit—the commit (write or save)
+operation happens automatically.
+Within a transaction block, however, commits do not occur implicitly. To
+force an explicit commit, the COMMIT statement is used
+
+savepoint name;rollback to name;
+
+
+set autocommite=0
+----------------------
+create user name;
+drop user name;
+Rename User name To another
+Show Grants For name;
+Set Password For name=Password('1234')
+Set Password=Password("some");修改用户自己的密码
+-------------------------
+DataBase Maintaince
+
+Analyze Table table;
+Check Table table;
+
+Diagnose startup problems;
+Review Log Files;
+------------------------
+Improving performance
+
+show processlist;Kill ID;
+
+------------------
+store engine
+1.Innodb:支持事务处理,不支持full-text searching
+2.Memory 等价于MyISAM,但数据存储在内存中,速度快,适合操作临时产生的表
+3.MyISAM:支持full-text searching,性能高,但不支持事务处理
+4.ARIA:支持事务处理,支持full-text searching,支持灾难恢复
+
+不同的表可以有不同的存储引擎,但有外键的表必须存储引擎相同
+
+show engine;查看支持的引擎
+show table status like 'user';
+

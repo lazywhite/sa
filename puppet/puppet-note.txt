@@ -1,0 +1,104 @@
+docs.puppetlabs.com
+
+puppet agent --test
+puppet apply  --noop
+puppet apply xx.pp
+puppet resource user root
+puppet help resource
+
+备份mastar CA 和 Cert 主机名不能改变
+
+bacula
+
+  puppet describe -l：例如puppet支持的所有资源类型及其描述信息；
+  puppet describe -s <TYPE>：列出指定资源的简要说明；
+  puppet describe <TYPE>：显示指定资源的详细说明；
+
+
+ENC  External Node Classifiers 
+
+razor
+	inventory auto registry
+foreman
+	another web gui tool for puppet master
+puppet forge
+	puppet module [action]
+	puppet module list --tree
+
+
+mcollective
+	批量命令执行程序，安装插件实现对应的功能（shell，facter，puppet）
+	mco
+
+puppet内置函数
+	template/notice
+
+puppet fail()
+
+
+before require
+notify subscribe
+
+The stdlib module adds extra functions, an easier way to write custom facts, and more.
+For Puppet 2.6 and 2.7, the Hiera data lookup tool can help you separate your data from your Puppet manifests and write cleaner code.
+
+
+unless : 除非命令失败了，才会执行exec；成功了就不执行
+
+puppet cert list
+puppet cert sign  'FQDN'
+puppet cert list -all
+
+
+puppet config print all
+
+puppet kick
+	服务端[agent]添加
+		listen = true
+	auth.conf 添加
+		path /run
+		method save
+		allow pmaster
+
+puppet 证书		
+	puppet cert list
+	puppet cert clean 'host'
+	rm -rf /var/lib/puppet/ssl/*
+
+
+template 语法
+	<%=    @var  %>
+
+
+####### puppet server install ##############
+
+puppet master --genconfig --verbose > /etc/puppet /puppet.conf
+
+rundir = /var/run/puppet
+pidfile = $rundir/master.pid
+
+###### puppet dashboard #############
+
+yum install puppet-dashboard
+
+add" host: localhost " in  /usr/share/puppet-dashboard/conf.yml
+cd /usr/share/puppet-dashboard 
+rake gem:refresh_specs
+rake RAILS_ENV = production  db:create 
+rake RAILS_ENV = production  db:migrate
+
+scripts/server -e production   (test)
+service puppet-dashboard start
+
+export FACTER_fqdn='xx'
+
+给class赋值可覆盖client端的facter变量
+
+
+
+# Install procedure
+
+确保/etc/hosts 跟 /etc/sysconfig/network 的hostname 是a.domain.com
+重启机器
+puppet master --genconfig --verbose >> /etc/puppet/puppet.conf
+

@@ -1,0 +1,9 @@
+virt-clone
+iptables
+
+ovs-vsctl add-br br-ex
+ovs-vsctl add-port br-ex ex1 --set interface ex1 type=vxlan  options:remote_ip=1.1.1.2
+
+ovs-vsctl add-port br-ex vxlan01 --set interface vxlan01 type=internal
+
+ifconfig vxlan01 1.1.1.1

@@ -1,0 +1,35 @@
+# fork workflow
+git remote add upstream
+
+
+git repack -a -d (直接删除)
+git repack -A -d (不直接删除)
+
+git config push.default=simple
+
+stash: store all information of work dir  and stage, checkout from HEAD
+git stash [save <name>]
+git stash apply [default stash:{0}] 
+git merge --no-ff (no fast-forward)
+
+
+
+git blame: Show what revision and author last modified each line of a file
+git show :Show various types of objects
+git revert:Undo commit but All commits have been pushed 
+
+git submodule add url
+
+
+git bisect start
+git bisect good
+git bisect bad
+git bisect visualize
+
+
+git cat-file -t 532c : commit
+git cat-file commit 532c : tree, author, committer
+git ls-tree tree-hash
+git cat-file -t blob-hash : blob
+git cat-file blob  blob-hash
+

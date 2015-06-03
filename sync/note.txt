@@ -1,0 +1,74 @@
+ss闭包
+自省
+
+
+acid
+fuser
+
+/proc  meaning
+
+vmstat  
+proxy long connection
+nginx img cache
+
+bash history
+send nginx log
+
+
+tcp nopush
+server close
+
+salt doc
+
+salt rollback
+nginx 合并请求
+transmac
+
+
+
+GeoIP
+mediumblob
+vim tcp connection
+smtplib zabbix 
+
+ovs-vsctl
+
+bash history redirect
+
+
+
+面试题
+
+pychecker
+rst
+flask uwsgi
+
+mysql fabric
+
+cgroup
+
+pydoc
+unitest
+doctest
+mork
+nose
+pinject
+
+kqueue,epoll
+zerocopy
+mmap
+
+subprocess.atexit
+
+ast
+内网穿透
+computer science
+
+癌症，能通过反血管增生药物来治疗
+
+
+
+
+RedHat src格式的rpm包：
+
+http://ftp.redhat.com/redhat/linux/enterprise/6Server/en/os/SRPMS/
