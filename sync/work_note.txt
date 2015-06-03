@@ -563,7 +563,6 @@ ipconfig /all
 ClientAliveInterval 15
 ClientAliveCountMax 4
 
-<<<<<<< HEAD
 mongodump --host mongodb1.example.net --port 37017 --username user --password pass /opt/backup/mongodump-2011-10-24
 
 
@@ -581,3 +580,8 @@ START SLAVE;
 before, require
 notify, subscribe
 
+
+mysqldump -w
+
+
+git submodule
