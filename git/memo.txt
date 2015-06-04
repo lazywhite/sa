@@ -1,6 +1,3 @@
-# fork workflow
-git remote add upstream
-
 
 git repack -a -d (直接删除)
 git repack -A -d (不直接删除)
@@ -35,12 +32,15 @@ git cat-file blob  blob-hash
 
 git workflow
 fork workflow
-git merge --no-ff
+    git remote add upstream
 
 
-git fetch origin;;git branch -[a|r]
+git fetch origin;;git branch -[a|r|v]
 
 
 git tag 'name' 
 git tag -l (list)
 git tag -v 'name' (information)
+
+git rebase -i
+git rebase 'branch' on 'master'
