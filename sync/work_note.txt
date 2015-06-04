@@ -581,3 +581,41 @@ START SLAVE;
 before, require
 notify, subscribe
 
+
+
+Error: database disk image is malformed -> yum clean dbcache
+
+
+
+grep -H(with file name)
+
+iptables -L -n --line-numbers
+iptables -R INPUT(chain name) 1(line number) -p tcp --dport 22 -j accept
+
+当iptables的policy为DROP时， iptables -F 会导致阻止任何连接
+
+iptables -I INPUT 3 -p tcp -m tcp --dport 20 -j ACCEPT
+iptables -D INPUT 3
+iptables -t nat -D POSTROUTING 1
+
+
+ansible localhost -m setup  [ -a 'filter=*network*' ]
+
+
+grep '^[^#]' /etc/sysconfig/nfs
+RQUOTAD_PORT=875
+LOCKD_TCPPORT=32803
+LOCKD_UDPPORT=32803
+MOUNTD_PORT=892
+STATD_PORT=662
+STATD_OUTGOING_PORT=663
+
+
+mongo replset  election priority 
+ 
+
+I/O Error with PHP5-FPM, ptrace(PEEKDATA) failed
+disable 'request_slowlog_timeout'
+set 'max_execution_time' in php.ini
+
+想明白应该问什么样的问题，而一旦你抓准了问题，剩下的就很容易解决了

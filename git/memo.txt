@@ -33,3 +33,14 @@ git ls-tree tree-hash
 git cat-file -t blob-hash : blob
 git cat-file blob  blob-hash
 
+git workflow
+fork workflow
+git merge --no-ff
+
+
+git fetch origin;;git branch -[a|r]
+
+
+git tag 'name' 
+git tag -l (list)
+git tag -v 'name' (information)
