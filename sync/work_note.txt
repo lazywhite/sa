@@ -1,47 +1,13 @@
-# store image into Redis
-import redis
-r =  redis.StrictRedis()
-img = open("/path/to/img.jpeg","rb").read()
-r.set("bild1",img)
 
 
 # msgpack exchange data just like json but faster and smaller
 pip install msgpack-python
-
-
-built_in module
-    /System/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7
-third_party module
-    /Library/Python/2.7/site-packages
-dynamic loaded
-    /Library/Frameworks/Python.framework/Versions/3.4/lib/python3.4/lib-dynload
 
 bson and Mongodb
     BSON is a binary-encoded serialization of JSON-like documents. BSON is designed to be lightweight, traversable, and efficient.
 
 brew formula
 
-os.walk('dir') --> (root, dirs, files)
-
-
-import sys
-reload(sys)
-sys.setdefaultencoding('utf-8')
-
-pinject
-nose
-unittest
-
-
-requests.get(url, params=<dict>, headers=<dict>, data=<string>)
-
-django middleware
-django.conf.setting 
-
-
-r=requests.get()
-r.request.headers
-r.json()
 
 
 netstat -anL
@@ -62,64 +28,8 @@ echo 'CDPATH=~/.paths' >> ~/.bashrc
 "Bad marshal data" when importing python module
     delete the pyo, pyc file of that file
 
-%reload_ext autoreload
-%autoreload 2
 
 
-you can import a decorator then apply it to a function declaration
-
-decorator chain
-multi_level inherance
-
-
-from test.a import * 
-(定义__all__) 只会导入定义的属性
-(没定义__all__)只会导入__init__.py
-__all__ ,__file__ 需要显式定义
-
-
-# how to test if multiple item in same container
-item_set = set(item_list)
-container_set = set(container)
-if item_set.issubset(container_set): 
-    return True
-
-
-# set
-#
-a | b : 并集
-a & b : 交集
-a ^ b : 对称差集
-a - b : b相对于a的差集
-
-
-Exception.args
-
-a._A__private()
-
-random.seed(a=None)
-# initialize  internal state from hashable object
-a  = 10 if True else 100
-
-from module import * :
-# will not be imported
-    _a 
-    __a 
-
-import module:
-    module._a
-    module.__a
-
-
-# what information stored in special attribute
-__dict__ : only store private attribute, no method
-
-svn:
-    lock : only the locker of a file could change that file
-    unlock
-    revert: checkout a file from local svn repo
-    checkout(co): file:///absolute/path
-    resolve:  conflict
 
 
 svnadmin
@@ -134,7 +44,7 @@ svn mergeinfo
 svn info file_path
 
 svn revert -R .
-
+svn diff -r 64222:64212 trunk/apps/admin/views/tool.py
 svn remove branches/jia_dev  ;svn ci
 
 
@@ -148,11 +58,6 @@ networksetup -listallnetworkservices
 networksetup -setv6off Ethernet
 
 
-new_list = sorted(a_dict.iteritems(), key=lambda d:d[0]) 
-    dict to sorted list
-
-string.punctation : 所有的标点符号
-
 mac ports
 
 ssh tunnel
@@ -160,48 +65,17 @@ ssh tunnel
 
 
 tcp_wrapper 匹配规则
+    /etc/hosts.allow --> /etc/hosts.deny --> permited
 mysql 限定用户登录IP
+    grant user@'ip'
 
 
 tail -f |grep -v 
-
-svn diff -r 64222:64212 trunk/apps/admin/views/tool.py
-
-bytes解码过后成为string,string编码后成为bytes
-unicode 为python的内部编码
-s = '中文' , 解释器会用默认编码存储一串bytes
-
-m  = hashlib.md5()
-m.update('hello')
-m.update(' world')
-m.hexdigest()
---> '5eb63bbbe01eeed093cb22bb8f5acdc3'
-hashlib.md5('hello world').hexdigest()
---> '5eb63bbbe01eeed093cb22bb8f5acdc3'
-
-
-from shutil import make_archive
-name = os.path.expanduser(os.path.join('~', 'myarch'))
-root_dir = os.path.expanduser(os.path.join('~','.ssh'))
-make_archive(name, 'gztar', root_dir)
-
-
-
-from cStringIO import StringIO
-# python3  from io import StringIO
-a = StringIO()
-a.write('first line\n')
-# a.seek(0)
-print >>a, 'second line\n')
-print a.getvalue()
-a.close()
 
 
 create table test (str varchar(32), ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
 mongodb default timestamp
 
-
-shelve module  不一致问题
 
 brew install libmemcached
 pip install pylibmc --install-option="--with-libmemcached=/usr/local"
@@ -504,7 +378,6 @@ VM auto-migration
 
 
 
-
 noVNC
 	VNC client using HTML5 (websocket + canvas) with encryption(wss://)support
 
@@ -583,5 +456,3 @@ notify, subscribe
 
 mysqldump -w
 
-
-git submodule

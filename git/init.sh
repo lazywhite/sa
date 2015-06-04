@@ -1,5 +1,3 @@
-git config --global user.name rock
-git config --global user.email rock@domain.com
 git config --global alias.st status
 git config --global alias.co checkout
 git config --global alias.ci commit
