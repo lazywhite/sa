@@ -113,7 +113,6 @@ cent 7
 	iscsi in kernel space
 
 
-ansible-doc module
 
 switch: 
     trunk mode
@@ -178,57 +177,12 @@ command not found : aclocal
 
 
 
-for i in (range(10), range(20))
-
-'string'.format()
-
-finally will always executed before return
-'return' must be in a function
-
-weakref table, callback
-metaclass example __prepare__
-
-functools.singledispatch(泛型编程, 根据传入的单个参数的类型调用不同函数处理)
 
 use 'dmesg' to detect inserted device 
 
-'module'.__spec__
-'module'.__path__
-
-
-configparse
-argparse
-
-deque(双向队列)
-heapq(优先级队列)
-bisect(排序)
 
 
 
-Python is a framework on Mac OS X so you need to
-1. include <Python/Python.h>
-2. gcc -shared -o sample.so sample.c -framework Python
-
-
-bson.Code(just install 'pymongo' module, not 'bson' module)
-
-
-#mongodb add user
-db.createUser({
-... user: "plague",
-... pwd: "plague",
-... roles:[
-... {role:"readWrite", db:"plague"}]})
-
-
-exception __cause__ = None
-raise Exception() from None
-
-
-gunicorn -b ip:port | unix://path
-
-
-Gunicorn 'Green Unicorn' is a Python WSGI HTTP Server for UNIX. It's a pre-fork worker model ported from Ruby's Unicorn project. The Gunicorn server is broadly compatible with various web frameworks, simply implemented, light on server resources, and fairly speedy.
 
 
 brew install libxml2
@@ -238,7 +192,6 @@ brew link libxslt --force
 sudo C_INCLUDE_PATH=/usr/local/include/libxml2 pip install lxml
 
 
-a.__class__ = b.__class__
 
 
 
@@ -276,15 +229,11 @@ dd if=Downloads/FreeBSD-10.1-RELEASE-amd64-memstick.img of=/dev/rdisk2 bs=102400
 
 
 
-
 iozone -a -i 0 -i 1 -f /var/lib/iozone.temp -Rab /root/read.xls -g 8G -n 4G -C
 
 xtrabackup  socat 
 
 for i in {1..5};do rsync --delete --exclude=database.php --exclude=start.php --exclude=check -vr hrcf/ web$i:/var/www/hrcf/ ;done
-
-
-
 
 
 yum groupinstall "X Window System" xorg-x11-xauth dejavu-lgc-sans-fonts
@@ -320,7 +269,6 @@ awk 'NR==5{print substr($0,2,3)}'
 
 # compile python3
 yum install tk-devel sqlite-devel readline-devel gdbm-devel xz-devel bzip2-devel openssl-devel; make -j
-
 
 
 
@@ -368,14 +316,9 @@ puppet 变量作用域
 
 
 
-
 openflow switch
 
 VM auto-migration
-
-
-
-
 
 
 noVNC
@@ -433,13 +376,9 @@ logstash -e 'input { stdin { } } output { stdout {} }'
 ipconfig /all
 
 
-ClientAliveInterval 15
-ClientAliveCountMax 4
-
 mongodump --host mongodb1.example.net --port 37017 --username user --password pass /opt/backup/mongodump-2011-10-24
 
 
-/usr/src/redis/src/redis-cli -h 192.168.0.42 -p 9303 -n 16 -a mmbang@redis2015
 
 redis:MISCONF
 config set stop-writes-on-bgsave-error no
@@ -454,5 +393,27 @@ before, require
 notify, subscribe
 
 
-mysqldump -w
 
+Error: database disk image is malformed -> yum clean dbcache
+
+grep -H(with file name)
+
+
+
+grep '^[^#]' /etc/sysconfig/nfs
+RQUOTAD_PORT=875
+LOCKD_TCPPORT=32803
+LOCKD_UDPPORT=32803
+MOUNTD_PORT=892
+STATD_PORT=662
+STATD_OUTGOING_PORT=663
+
+
+mongo replset  election priority 
+ 
+
+I/O Error with PHP5-FPM, ptrace(PEEKDATA) failed
+disable 'request_slowlog_timeout'
+set 'max_execution_time' in php.ini
+
+mysqldump -w

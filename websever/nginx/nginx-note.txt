@@ -1,0 +1,5 @@
+rewrite
+
+location /somedir {
+     autoindex on;
+}
