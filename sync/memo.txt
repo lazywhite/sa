@@ -1,0 +1,106 @@
+- colorful PS1
+		export PS1="\[\e[31;1m\][\u@\h \w]\\$\[\e[m\]"
+- enforced synchronous history
+		export PROMPT_COMMAND='history -a'
+- Detailed timestamp
+		export HISTTIMEFORMAT="[%F %T]"
+- assign user-data for nova instance on boot
+		nova boot --image 5efbc1eb-f462-4468-9680-4fe4cf11a5ff --flavor 1 --availability-zone nova:compute1 --user-data ./user-data.yaml --nic net-id=6439f537-8277-4267-800c-a7c32ebacfab  user-data
+		
+		curl http://169.254.169.254/latest/user-data
+- switch backlight of Thinkpad running lxde
+		echo 976 > /sys/class/backlight/intel_backlight/brightness
+- vga screen expand mode
+		xrandr --output VGA1 --right-of LVDS1
+- use qemu to test if usb is bootable
+		qemu-kvm -hdb /dev/sdb
+- failed to initialize KVM: Device or resource busy
+		shutdown virtualbox or vmware
+- can't open remote display using xshell-enterprise
+		yum groupinstall "X Window System" 
+		yum install xorg-x11-xauth dejavu-lgc-sans-fonts
+- see disk usage in general
+		du -h --max-depth=1
+- create a file with specified size
+		truancate --size 10G /path/to/file
+- create a file with random name
+		mktemp XXXX-file
+- what is "reverse route"
+		pass
+- forced reboot of linux server when get "Input/Output error"
+		echo 1 > /proc/sys/kernel/sysrq
+		echo b > /proc/sysrq-trigger (reboot)
+		echo o > /proc/sysrq-trigger (shutdown)
+- mount nfs using tcp protocol
+RHEL support mount nfs with tcp protocol,so we can mount it with this command  
+		mount -o tcp nfs:/path  /local/path
+		
+- vim modeline
+1. set modeline  
+		# vim: set nu nobackup ts=4 
+2. enable modeline support	
+		:set modeline
+
+- dig +trace www.baidu.com
+- ping 192.168.1.1 ; arp -n
+- zfs send snap@date |ssh IP zfs receive snap@date
+- scp -v file dst:path   (debug mode)
+- rsync should be installed both on src and dst 
+- puppet master [bindaddress]
+- yum install stopped at "running transaction test...""
+		nfs server  not respond 
+		umount -lf /nfs/share
+- can't mount windows guestfs
+		yum install libguestfs-winsupport
+- youtube display
+		*://*.ytimg.com/*
+- unpack rpm package
+		rpm2cpio a.rpm|cpio -idmv
+- mailing list
+- python -m SimpleHTTPServer 9000
+- date MMDDhhmmYYYY[.ss]
+- ntp use local time
+		server 127.127.1.0
+		fudge 127.127.1.0 stratum 10
+- append lines to another file in vim
+		:w >> /path/to/file
+- youtube can't display image
+		add *.ytimg.com to proxy list
+- svp
+		senior vice president
+- OLTP
+		online transaction processing
+- OLAP
+		online analytical processing
+- puppet schedule
+- set tab to 4 spaces in vim
+		set ts=4
+		set sw=4
+		set expandtab
+		set smarttab
+		set backspace=indent,eol,start
+- ORM
+		object relational mapping
+- pyvenv
+		pyvenv3.4 /dir/to/venv
+- software raid
+		mdadm dmraid
+- package dependence list 
+        yum deplist package
+- how to generate random password
+    1. 'string' | md5sum | head -c 10; echo 
+    2. openssl rand [-base64 32] [-hex 10]
+- seq start stop increment
+- bhyve don't have vga ,only serial, so can't run windows
+- guestmount
+- puppet variables can't be capitalize
+- module.exports.repl.ignoreUndefined=true
+- grep -I (exclude binary-files)
+- resize vbox disk
+    VBoxManager.exe modifyhd path\to\vd --resize 20000(MB)
+    cfdisk /dev/sda   new sda3 then reboot
+    pvcreate /dev/sda3
+    vgextent VolGroup /dev/sda3
+    lvextent -r -l +100%FREE /dev/VolGroup/lv_root
+- compile py-gunreadline
+    yum install readline-devel patch

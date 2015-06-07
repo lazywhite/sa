@@ -841,4 +841,377 @@ a.close()
 shelve module  不一致问题
 -------- 
 
+3. nova 命令系统实现
+4. 如何为openstack贡献代码
+5. 日志
+8. relative import
+
+## pdb使用
+
+python -m pdb sr.py
+pdb.set_strace（）
+
+b 设置断点  
+c 继续执行程序    
+l 查看当前行的代码段  
+s 进入函数  
+r 执行代码直到从当前函数返回  
+q 中止并退出  
+n 执行下一行  
+p（p） 打印变量的值  
+h 帮助  
+
+
+## argparse
+
+```python
+#!/usr/bin/env python
+import argparse
+import os
+
+parser = argparse.ArgumentParser()
+group = parser.add_mutually_exclusive_group()
+group.add_argument('-v','--verbose',help='turn verbosity on',
+						action='store_true')
+group.add_argument('-q','--quit',help='turn verbosity off',
+						action='store_true')
+parser.add_argument('-d','--debug',help='turn debug on',
+						action='store_true')
+parser.add_argument('-m',help='display mode',
+							type=int)
+parser.add_argument('dir',help='directory you want to list')
+			
+args = parser.parse_args()
+if args.verbose :
+	print 'verbose display is turned on'
+if args.debug:
+	print 'debug mode is turned on'
+
+directory = args.dir
+result = os.listdir(directory)
+for i in result:
+	print i
+```
+
+## urllib3
+
+###advantages to urllib and urllib2    
+1. connection re-using/pooling  
+2. file posting
+
+###components
+1. PoolManager:The PoolManager will take care of reusing connections for you whenever you request the same host. This should cover most scenarios without significant loss of efficiency, but you can always drop down to a lower level component for more granular control.  
+2. ProxyManager:The ProxyManager is an HTTP proxy-aware subclass of PoolManager. It produces a single HTTPConnectionPool instance for all HTTP connections and individual per-server:port HTTPSConnectionPool instances for tunnelled HTTPS connections  
+3. ConnectionPool:The HTTPConnectionPool and HTTPSConnectionPool classes allow you to define a pool of connections to a single host and make requests against this pool with automatic connection reusing and thread safety.
+
+---
+问题
+1. yield  
+2. 自建错误类型，并捕获  
+3. with 语句中 __enter__(),__exit__() contextlib  
+4. super是一个内建数据类型，有同名内建函数，用来访问超类attribute  
+5. class private attribute "name mangling",会被解释器立即重命名  
+用来避免继承带来的命名冲突
+6. random.seed()用来生成random.random()的种子，相同的seed生成相同的随机数，默认使用current date
+```python
+a=10
+issubclass(a.__class__,object) --> True
+issubclass(a.__class__,type) --False
+issubclass(type.__class__,object) --> True
+内建数据类型都是type生成的，所有类的基类都是object
+
+```python
+## list comprehension
+[i for i in range(10) if i % 2 == 0]
+## enumerate
+for k,v in enumerate([1,2,3]):
+	print k,v
+## iterator
+iter(collection) -> iterator
+iter(callable, sentinel) -> iterator
+
+Get an iterator from an object.  In the first form, the argument must
+supply its own iterator, or be a sequence.
+In the second form, the callable is called until it returns the sentinel.
+类可以通过编写自己的__iter__描述符和next()方法，使自己的元素能够迭代
+
+```
+## some tips of using python
+- source code encoding
+	\#-*- coding: utf-8 -*-
+- pip
+	python package index
+- get value from input
+	var = raw_input('some prompt ')
+- zen of python
+	import this
+- usefull function
+	len max min enumerate locals globals
+- xrange() is faster than range() and takes less memory
+- import __builtin__: python builtin funciton reference
+	__buitin__.*
+- import keyword: python keyword list
+	keyword.kwlist
+- in interactive mode "_" means the value of the latest output
+- 'str'.join(list) the member of list must be strings
+- function are first class of objects,functions is object of 'function' which can be called by name
+- issubclass(type,object)  True
+	issubclass(foo.__class__,object)
+  
+## data types
+int str float list set dictionary tuple file module class generator iterator
+## decorator
+	@
+## class attribute
+	arg:   public
+	_arg:  protected
+	__arg: private
+## inheritance
+	single inherit
+	multiple inherit
+## generator 
+## convention
+- use CameCase for classes
+- use lower_case_with_underscores for functions and methods
+- use self as the name for the first method argument
+- use docstrings
+- put comments on a line of their own
+- use 4-space indentation and no tabs
+- wrap lines so that they don't exceed 79 characters
+- use blank lines to seperate functions and classes and larger blocks of code inside functions
+- 7 is an instance of int, int class is an instance of type 
+- difference between instance and subclass
+  
+## list functions
+- zip
+- map
+- reduce
+- filter
+  
+## standard library
+os
+sys.path sys.argv sys.stderr.write()
+re
+math
+random.choice()
+urllib2
+smtplib
+datetime.date.today()
+zlib.compress zlib.decompress
+timeit.Timer('express').timeit()
+doctest.testmod()
+unittest
+repr.repr(str) abbreviatly display some large or nested containers
+pprint--pretty print    support to pretty-print lists,tuples,dictionaries recursively
+textwrap
+local
+string.Template
+
+---
+##tips
+1. python的内建基类:int str list dict function type super code module
+2. 所有对象均为object的实例  
+3. type生成了所有的基类  
+4. type 继承于object,所有的基类也继承于object  
+5. locals()可打印出所有局部变量，globals()可打印全局变量  
+6. 无法生成与类名相同的实例  
+7. 修饰器，接受一个function,返回一个function  
+8. vim中设置tab为4空格 set ts=4 sw=4 sts=4 et  
+9. range(start,stop,pace),xrange is faster than range
+10. 集合必须用set()来生成
+11. python-kombu: python rabbitmq driver
+12. python没有真正意义的protect 和 private,只能模拟，但不真正起作用
+
+##问题
+1. is 与 '==' 是否相同
+2. a=5,b=5; a == b true; a is b false
+3. 被修饰器修饰的函数，无法打印其doc string
+4. pyenv的使用
+## 5,int,type,object之间的关系
+```python
+a=5; isinstance(a,int) True
+int.__class__  type
+isinstance(int,type) True
+type.__class__ type
+issubclass(type,type) True
+issubclass(type,object) True
+issubclass(int,object) True
+isinstance(type,object) True
+isinstance(int,object) True
+```
+
+##python 语法规则
+```python
+1. 函数设置默认参数
+def func(x,y=None)
+2. 函数接受任意参数
+def func(x,*argl); def func(x,**argd)
+3. 匿名函数
+(lambda x,y: x+y)(1,2)
+4. 修饰器
+def outer(func):
+	def inner(x):
+		return func(x) + 1
+	return inner
+
+@outer
+def a(x):
+	""" do nothing
+	but document it"""
+	return x
+```
+
+## list的常用methods
+```python
+append(element)
+extend(list)
+insert(i,x)
+remove(x)
+pop(i)
+index(x) return the index of the first item with value 'x'
+count(x) return the number of times 'x' appears in list
+sort(cmp=None,key=None,reverse=False)
+reverse()
+```
+## dict的常用methods
+```python
+D.clear() remove all items from d
+D.get(k[,d]) -> D[k] if k in D, else d.  d defaults to None
+D.iteritems() -> an iterator over the (key, value) items of D
+D.keys() -> list of D's keys 
+D.values() -> list of D's values
+D.setdefault(k[,d]) -> D.get(k,d), also set D[k]=d if k not in D
+D.copy() -> a shallow copy of D
+D.has_key(k) -> True if D has a key k, else False
+D.iterkeys()
+D.itervalues()
+D.pop()
+```
+## filter,map,reduce,zip  
+```python
+### filter
+def f(x):
+    if  x % 2 != 0 and x % 3 != 0:
+        return x
+filter(f,range(2,15))
+#### map
+a=[1,2,3]
+b=[4,5,6]
+def add(x,y):
+     return x+y
+
+map(add,a,b) -->[5, 7, 9]
+
+### reduce
+def add(x,y):
+     return x+y
+reduce(add,range(10)) --> 45
+
+### zip 
+a=[1,2,3]
+b=[4,5,6]
+zip(a,b) --> [(1, 4), (2, 5), (3, 6)]
+```
+---
+## python language reference
+###notation (BNF grammer notation) 
+[巴科斯范式](http://baike.baidu.com/view/1137652.htm)
+   
+### lexical analysis
+```python
+a python program is read by a parser, Input to the parser is a stream of tokens, generated by the lexical analyzer. 
+   
+a python program is divided into a number of logical lines
+the end of a logical line is represented by the token NEWLINE,statements can  not cross logical line boundaries 
+where NEWLINE is allowed by syntax(e.g., between statements in compound statements), A logical line   
+is constructed from one or more physical lines by following the explicit or implicit line joining rules
+  
+physical line is a sequence of characters terminated by an end-of-line sequence  
+  
+a comment starts with a hash character(#), is ignored by the syntax
+  
+encoding declarations  
+# -*- coding: <encoding-name> -*-  
+# vim:fileencoding=<encoding-name>
+
+explicit line joining: \n; 
+  
+implicit line joining: expressions in parentheses,square brackets or curly braces can be split over more  
+than one physical line without using backslashes.  
+  
+implicit continued line can carry comments, the indentation of the continuation lines is not important,  
+blank continution lines are allowed, there is no NEWLINE token between implicit continuation lines.  
+Implicited continued lines can also occur within triple-quoted strings, in that case they can not carry comments
+  
+tabs are replaced by one to eight spaces  
+  
+TOKENS: NEWLINE INDENT DEDENT　identifiers,keywords,literals,operators,delimiters,(whitespace are not token,  
+but serve to delimit tokens , a token comprises the longest possible string that forms a legal token.
+    
+identifiers are unlimited in length, Case is significant
+
+keywords:  
+and, del, from, not, while, as, elif, global, or, with, assert, else, if, pass, yield, break, except  
+import, print, class, exec, in, raise, continue, finally, is, return, def, for, lambda, try 
+  
+reserved classes of identifiers
+certain classes of identifiers (besides keywords) have special meanings,these classes are identified by the  
+pattern of leading and trailing underscore characters.
+_*　 __*__   __*
+
+literial:
+string and bytes
+number
+    integer
+        0b 0o 0x
+    float
+    imaginary
+
+operator:
+delimiter:
+
+```
+  
+### Data model
+```python
+objects are abstraction for data,all data in a Python program is represented by objects or by relations
+between objects, code is also represented by object.  
+  
+every object has an identity, type and value; value of an object never changes once it has been created, 
+you may think of it as the address in memory, The 'is' operator compare the identity of two objects. The id() 
+function returns an integer representing its identity(currently implemented as its address),the type of an 
+object is also unchangeable,type of an object determines the operations that object supports, the type() functions return the  
+type of an object, the value of some objects can change said to be mutable,opposite immutable,  
+objects are never explicitly destroyed, when they become unreachable they may be garbage-collected.  
+  
+since garbage collection is not guaranteed to happen, try...finally provides a convenient way to do this.
+some objects contain references to other objects,this are called containers. Example of containers are tuple  
+lists, and dictionaries. the references are part of a container's value . In most cases, when we talk about   
+container , we imply the values, not the identities of the contained objects, however when we talk about the  
+mutablity of a container, only the identities of the immediately contained objects are implied, So if an immutable  
+container (like a tuple) contains a reference to a mutable object,its value change if the mutable object changed.  
+    
+Types affect almost all aspects of object behavior, Even the importance of object identity is affected in some sense.  
+```
+# the standard type hierarchy
+```python
+None: it's true value is false
+NotImplemented: it's true value is true
+Ellipsis: it's true value is true
+
+# new-style and classic classes
+the concept of (old-style) class is unrelated to the concept of type: if x is an instances of an old-style class  
+then x.__class__ designates the class of x ,but the type(x) is always instance. This reflects the fact that all  
+old-style instances, independently of their class, are implemented with a single built-in type : instance
+the major motivation for introducing new-style classes is to provide a unified object model with a full meta-module  
+It also has a number of practical benefits, like the ability to subclass most built-in types, or the introdction  
+of "descriptors", which enable computed properties.  
+New style classes are created by specifying another new-style class (type|object) as a parent class.  
+old-style classes are removed in Python3.x
+
+#special method 
+a class can implement certain operations that are invoked by special syntax by defining methods with special names.  
+This is python's approach to *operator overloading* , allowing classes to define their own behavior with respect  
+to language operators. (e.g., type(x).__getitem__(x,i) --> x.i )
+```
 

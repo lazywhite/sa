@@ -417,3 +417,56 @@ disable 'request_slowlog_timeout'
 set 'max_execution_time' in php.ini
 
 mysqldump -w
+
+
+
+
+#2014-3-6
+- solved metadata service  
+		use independent nova-metadata-api service
+- solved spicehtml5 service
+		pkill -9 nova-spicehtml5
+- solved snapshot problem
+		glance --is-public  
+- ZFS usage
+
+#2014-3-7
+- solved linux injection
+		metadata
+		userdata
+		file
+		configuration drive
+- windows injection
+		cloud init
+  
+#2014-4-9
+- cloud-init
+- HA-document
+- rabbitmq-cluster
+- userdoc
+
+#2014-4-30
+- zfs backup script
+- puppet module rewrite
+- iscsi & multipath
+
+#2014-5-4
+- remote support for iflytek
+- vmha service & nova evacuate
+- sed learning
+- puppet provision module
+
+#2014-5-5
+- mail server
+- git review
+- remote support for iflytek
+- puppet provision module
+- structured editor
+
+#2014-5-6
+- meta programming|DSL development environment
+- completed puppet provision module
+
+#2014-8-4
+- razor work flow
+- nailgun work flow
