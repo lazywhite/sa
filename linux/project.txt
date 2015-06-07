@@ -1,0 +1,798 @@
+
+项目的配置文档
+==================================
+#keepalived+haproxy：的配置
+ haproxy的ip  172.16.22.1
+              172.16.22.2
+		  vip 172.16.22.100
+=================================={
+
+haproxy1：
+#ip地址
+[root@jie1 ~]# ifconfig eth0 | grep "inet addr" |awk  '{print $2}'
+addr:172.16.22.1
+#软件安装
+[root@jie1 ~]# yum -y install keepalived haproxy
+#keepalived的配置文件
+[root@jie1 ~]# grep -v "#" /etc/keepalived/keepalived.conf | grep -v "^$"
+
+! Configuration File for keepalived
+global_defs {
+   notification_email {
+     root@localhost
+   }
+   notification_email_from admin@localhost 
+   smtp_server 127.0.0.1
+   smtp_connect_timeout 30
+   router_id LVS_DEVEL
+}
+vrrp_script chk_haproxy {
+  script "killall -0 haproxy"
+  interval 1
+  weight -2
+  fall 2
+  rise 1
+}
+vrrp_instance VI_1 {
+    state MASTER
+    interface eth0
+    virtual_router_id 22
+    priority 100
+    advert_int 1
+    authentication {
+        auth_type PASS
+        auth_pass 2222
+    }
+    virtual_ipaddress {
+        172.16.22.100
+    }
+   track_script {
+     chk_haproxy
+   }
+}
+[root@jie1 ~]#service keepalived restart
+#haproxy的配置文件
+[root@jie1 ~]# grep -v "#" /etc/haproxy/haproxy.cfg | grep -v "^$"
+global
+    log         127.0.0.1 local2
+    chroot      /var/lib/haproxy
+    pidfile     /var/run/haproxy.pid
+    maxconn     4000
+    user        haproxy
+    group       haproxy
+    daemon
+    stats socket /var/lib/haproxy/stats
+defaults
+    mode                    http
+    log                     global
+    option                  httplog
+    option                  dontlognull
+    option http-server-close
+    option forwardfor       except 127.0.0.0/8
+    option                  redispatch
+    retries                 3
+    timeout http-request    10s
+    timeout queue           1m
+    timeout connect         10s
+    timeout client          1m
+    timeout server          1m
+    timeout http-keep-alive 10s
+    timeout check           10s
+    maxconn                 3000
+frontend  cacheserver
+    bind *:80
+    option httpclose
+    default_backend             cache
+backend cache
+    balance     uri
+    server  varnish1 172.16.14.1:80 check  fall 2 rise 1
+    server  varnish2 172.16.14.2:80 check  fall 2 rise 1
+[root@jie1 ~]#service haproxy restart	
+#修改日志文件	
+[root@jie1 ~]# grep -v "#" /etc/rsyslog.conf | grep -v "^$"
+$ModLoad imudp
+$UDPServerRun 514
+$ModLoad imtcp
+$InputTCPServerRun 514
+$ActionFileDefaultTemplate RSYSLOG_TraditionalFileFormat
+$IncludeConfig /etc/rsyslog.d/*.conf
+*.info;mail.none;authpriv.none;cron.none;local2.none                /var/log/messages
+authpriv.*                                              /var/log/secure
+mail.*                                                  -/var/log/maillog
+cron.*                                                  /var/log/cron
+*.emerg                                                 *
+uucp,news.crit                                          /var/log/spooler
+local7.*                                                /var/log/boot.log
+local2.*                                                /var/log/haproxy.log
+[root@jie1 ~]#service  rsyslog  restart	
+	
+	
+haproxy2：
+#ip地址
+[root@jie2 ~]# ifconfig eth0 | grep "inet addr" |awk  '{print $2}'
+addr:172.16.22.2
+#软件安装
+[root@jie2 ~]# yum -y install keepalived haproxy
+#keepalived的配置文件
+[root@jie2 ~]# grep -v "#" /etc/keepalived/keepalived.conf | grep -v "^$"
+! Configuration File for keepalived
+global_defs {
+   notification_email {
+     root@localhost
+   }
+   notification_email_from admin@localhost 
+   smtp_server 127.0.0.1
+   smtp_connect_timeout 30
+   router_id LVS_DEVEL
+}
+vrrp_script chk_haproxy {
+  script "killall -0 haproxy"
+  interval 1
+  weight -2
+  fall 2
+  rise 1
+}
+vrrp_instance VI_1 {
+    state BACKUP
+    interface eth0
+    virtual_router_id 22
+    priority 99
+    advert_int 1
+    authentication {
+        auth_type PASS
+        auth_pass 2222
+    }
+    virtual_ipaddress {
+        172.16.22.100
+    }
+   track_script {
+     chk_haproxy
+   }
+}
+[root@jie2 ~]#service keepalived restart
+#haproxy的配置文件
+[root@jie2 ~]# grep -v "#" /etc/haproxy/haproxy.cfg | grep -v "^$"
+global
+    log         127.0.0.1 local2
+    chroot      /var/lib/haproxy
+    pidfile     /var/run/haproxy.pid
+    maxconn     4000
+    user        haproxy
+    group       haproxy
+    daemon
+    stats socket /var/lib/haproxy/stats
+defaults
+    mode                    http
+    log                     global
+    option                  httplog
+    option                  dontlognull
+    option http-server-close
+    option forwardfor       except 127.0.0.0/8
+    option                  redispatch
+    retries                 3
+    timeout http-request    10s
+    timeout queue           1m
+    timeout connect         10s
+    timeout client          1m
+    timeout server          1m
+    timeout http-keep-alive 10s
+    timeout check           10s
+    maxconn                 3000
+frontend  cacheserver
+    bind *:80
+    option httpclose
+    default_backend             cache
+backend cache
+    balance     uri
+    server  varnish1 172.16.14.1:80 check  fall 2 rise 1
+    server  varnish2 172.16.14.2:80 check  fall 2 rise 1
+[root@jie2 ~]#service haproxy restart
+#修改日志文件	
+[root@jie2 ~]# grep -v "#" /etc/rsyslog.conf | grep -v "^$"
+$ModLoad imudp
+$UDPServerRun 514
+$ModLoad imtcp
+$InputTCPServerRun 514
+$ActionFileDefaultTemplate RSYSLOG_TraditionalFileFormat
+$IncludeConfig /etc/rsyslog.d/*.conf
+*.info;mail.none;authpriv.none;cron.none;local2.none                /var/log/messages
+authpriv.*                                              /var/log/secure
+mail.*                                                  -/var/log/maillog
+cron.*                                                  /var/log/cron
+*.emerg                                                 *
+uucp,news.crit                                          /var/log/spooler
+local7.*                                                /var/log/boot.log
+local2.*                                                /var/log/haproxy.log
+[root@jie2 ~]#service  rsyslog  restart	
+	
+========================================}	
+	
+	
+==================================	
+#varnish服务器的配置的配置文件
+varnish的IP 172.16.14.1
+            172.16.14.2
+=================================={
+yum -y install varnish
+[root@varnish ~]#cat /etc/varnish/test.vcl
+acl purgers {
+    "127.0.0.1";
+    "172.16.0.0"/16;
+}
+#probe dynamic {
+#    .url = "/index.html";
+#    .interval = 10s;
+#    .timeout = 20s;
+#    .expected_response = 200;
+#}
+#probe static {
+#    .url = "/index.html";
+#    .interval = 5s;
+#    .timeout = 1s;
+#    .expected_response = 200;
+#}
+backend app1 {
+    .host = "172.16.19.2";
+    .port = "80";
+#    .probe = dynamic;
+}
+
+backend app2 {
+    .host = "172.16.20.1";
+    .port = "80";
+#    .probe = dynamic;
+}
+backend web {
+    .host = "172.16.15.14";
+    .port = "80";
+#    .probe = static;
+}
+
+director apps round-robin {
+    {
+         .backend = app1;
+#	 .weight = 2;
+    }
+    {
+	 .backend = app2;
+#	 .weight = 2;
+    }
+}
+
+sub vcl_recv {
+    if (req.url ~ "\.(jsp|css)(\?|\.*)") {
+	set req.backend = apps;
+    } 
+else {
+	set req.backend = web;
+    }
+    return(lookup);
+    if (req.request == "PURGE") {
+        if (!client.ip ~ purgers) {
+	    error 405 "Method not allowed";
+	}
+	    return(lookup);
+	}
+        if (req.restarts == 0) {
+            if (req.http.x-forwarded-for) {
+               set req.http.X-Forwarded-For =
+               req.http.X-Forwarded-For + ", " + client.ip;
+            } else {
+                 set req.http.X-Forwarded-For = client.ip;
+            }
+         }
+    if (req.request != "GET" &&
+        req.request != "HEAD" &&
+        req.request != "PUT" &&
+        req.request != "POST" &&
+        req.request != "TRACE" &&
+        req.request != "OPTIONS" &&
+        req.request != "DELETE") {
+        return (pipe);
+    }
+    if (req.request != "GET" && req.request != "HEAD") {
+        return (pass);
+    }
+    if (req.http.Authorization || req.http.Cookie) {
+        return (pass);
+    }
+    if (req.http.Accept-Enconding) {
+       if (req.url ~ "\.(jpg|jpeg|gif|bmp|png|flv|gz|tgz|tbz|mp3)$") {
+           remove req.http.Accept-Encoding;
+	   remove req.http.Cookie;
+       } else if (req.http.Accept-Encoding ~ "gzip") {
+	   set req.http.Accept-Encoding = "gzip";
+       } else if (req.http.Accept-Encoding ~ "deflate") {
+	   set req.http.Accept-Encoding = "deflate";
+       } else { remove req.http.Accept-Encoding;
+       }
+    }
+    if (req.request == "GET" && req.url ~ "\.(jpeg|jpg|gif|png|bmp|swf)$") {
+	unset req.http.cookie;
+    }
+}
+
+sub vcl_hash {
+    hash_data(req.url);
+    if (req.http.host) {
+        hash_data(req.http.host);
+    } else {
+        hash_data(server.ip);
+    }
+    return(hash);
+}
+
+sub vcl_hit {
+    if (req.request == "PURGE") {
+       purge;
+       error 200 "Purged.";
+    }
+    return(deliver);
+}
+
+sub vcl_miss {
+    if (req.request == "PURGE") {
+	purge;
+	error 404 "Not In Cache.";
+    }
+    return(fetch);
+}
+
+sub vcl_pass {
+    if (req.request == "PURGE") {
+       error 502 "Purged On A Passed Object.";
+    }
+    return(pass);
+}
+
+#sub vcl_fetch {
+#    if (req.request == "GET" && req.url ~ "\.(html|jpg|png|bmp|jpeg|gif|js|ico|swf|css)$") {
+#       set beresp.ttl = 1d;
+#       set beresp.http.expires = beresp.ttl;
+#    } else {
+#       set beresp.ttl = 1h;
+#    }
+#    return(deliver);
+#}
+sub vcl_deliver {
+    if (obj.hits > 0) {
+       set resp.http.X-Cache = "HIT";
+    } else {
+       set resp.http.X-Cache = "MISS";
+    }
+}	
+
+
+====================================}
+
+
+
+==================================
+#nginx服务器的配置
+nginx的ip 172.16.15.14
+=================================={
+一、安装nginx
+yum -y install nginx
+ 修改配置文件：
+        location / {
+           root /web/jsprun;  
+            index  index.html index.htm;
+          proxy_set_header  X-Real-IP $remote_addr;
+        }
+ 开启日志：
+ error_log  /var/log/nginx/error.log;
+ access_log  /var/log/nginx/host.access.log  combined;
+ 开启缓存：
+    client_max_body_size 20m;
+    client_header_buffer_size 16k;
+    large_client_header_buffers 4 16k;
+    tcp_nopush     on;
+    gzip  on;
+    gzip_min_length 1k;
+    gzip_buffers 4 16k;
+    gzip_proxied   any;
+    gzip_http_version 1.1;
+    gzip_comp_level 3;
+    gzip_types text/plain application/x-javascript text/css application/xml;
+    gzip_vary on;
+
+    proxy_temp_path   /tmp/proxy_temp;
+    proxy_cache_path  /tmp/proxy_cache levels=1:2 keys_zone=cache_one:500m inactive=1d max_size=3g;
+    proxy_connect_timeout    50;
+    proxy_read_timeout       600;
+    proxy_send_timeout       600;
+    proxy_buffer_size        128k;
+    proxy_buffers           16 256k;
+    proxy_busy_buffers_size 512k;
+    proxy_temp_file_write_size 1024m;
+二、ISCIS
+  安装iscsi客户端：
+      yum install -y iscsi-initiator-utils
+# echo "InitiatorName=`iscsi-iname -p iqn.2013-10.com.xiong:server.share`" > /etc/iscsi/initiatorname.iscsi
+# echo "InitiatorAlias=initiator1" >> /etc/iscsi/initiatorname.iscsi
+查找iscsi设备：
+  iscsiadm -m discovery -t st -p 172.16.21.1
+登录
+ iscsiadm -m node -T iqn.2013-10.com.xiong:server.share -p  172.16.21.1:3260 -l
+fdisk -l
+分区
+fdisk /dev/sdb
+格式化
+mke2fs -t ext4 /dev/sdb1
+挂载
+mount /dev/sdb1 /web/jsprun/attachments 
+
+=======================================}
+
+
+
+======================================
+#tomcat服务器的配置
+  tomcat1 172.16.19.2
+  tomcat2 172.16.20.1
+======================================{
+安装jdk
+安装tomcat
+安装jsprun
+
+mkdir /usr/local/tomcat/webapps/jsprun
+  安装iscsi客户端：
+      yum install -y iscsi-initiator-utils
+# echo "InitiatorName=`iscsi-iname -p iqn.2013-10.com.xiong:server.share`" > /etc/iscsi/initiatorname.iscsi
+# echo "InitiatorAlias=initiator1" >> /etc/iscsi/initiatorname.iscsi
+查找iscsi设备：
+  iscsiadm -m discovery -t st -p 172.16.21.1
+登录
+ iscsiadm -m node -T iqn.2013-10.com.xiong:server.share -p  172.16.21.1:3260 -l
+
+mount  /dev/sdb1  /usr/local/tomcat/webapps/jsprun/attachments  #此目录用于用户上传图片的目录
+
+=======================================}
+
+======================================
+#iscsi服务器的配置
+iscsi的IP 172.16.21.1
+======================================{
+yum -y install scsi-target-utils
+vim /etc/tgt/targets.conf
+<target iqn.2013-10.com.xiong:server.share>
+    backing-store /dev/sdb
+</target>
+service tgtd start
+======================================}
+
+
+
+======================================
+#amoeba 读写分离器的配置
+amoeba的ip  172.16.23.1
+            172.16.23.2
+		vip 172.16.23.100
+======================================{
+1.version
+keepalived 1.4.22
+amoeba-mysql-3.0.5-RC
+
+keepalived提供vip 172.16.23.100和故障转移
+amoeba管理后台 172.16.18.1 ；172.16.18.2；并实现读写分离
+后台两台主从复制mysql，172.16.18.1为可读写的主节点，172.16.18.2为只读从节点
+amoeba提供账号 amoeba：1234
+
+
+2.master haproxy.cfg
+
+global_defs {  
+   notification_email {  
+	root@localhost
+   }  
+   notification_email_from keepalived@localhost 
+   smtp_connect_timeout 3  
+   smtp_server 127.0.0.1  
+   router_id LVS_DEVEL  
+}  
+
+vrrp_script chk_java {  
+    script /etc/keepalived/check.sh
+    interval 1  
+    weight 2  
+}  
+
+
+vrrp_instance VI_1 {  
+    interface eth0  
+    state MASTER  # BACKUP for slave routers
+    priority 101  # 100 for BACKUP
+    virtual_router_id 81 
+    garp_master_delay 1 
+  
+    authentication {  
+        auth_type PASS  
+        auth_pass password  
+    }  
+    virtual_ipaddress {  
+        172.16.23.100
+    }  
+    track_script {  
+        chk_java  
+    }  
+  
+ 
+    notify_master "/etc/keepalived/notify.sh master"  
+    notify_backup "/etc/keepalived/notify.sh backup"  
+    notify_fault "/etc/keepalived/notify.sh fault"  
+} 
+
+3.check.sh
+
+#!/bin/bash
+killall -0 java
+if [ $? -ne 0 ];then
+	/etc/init.d/keepalived stop
+fi
+
+4.notify.sh
+
+#!/bin/bash
+
+export JAVA_HOME=/usr/java/latest
+vip=172.16.23.100
+contact='root@localhost'
+prog=/usr/local/amoeba/bin/launcher
+notify() {
+    mailsubject="`hostname` to be $1: $vip floating"
+    mailbody="`date '+%F %H:%M:%S'`: vrrp transition, `hostname` changed to be $1"
+    echo $mailbody | mail -s "$mailsubject" $contact
+}
+
+case "$1" in
+    master)
+        notify master
+		$prog
+        exit 0
+    ;;
+    backup)
+        notify backup
+		killall java 	
+        exit 0
+    ;;
+    fault)
+        notify fault
+        exit 0
+    ;;
+    *)
+        echo 'Usage: `basename $0` {master|backup|fault}'
+        exit 1
+    ;;
+esac
+
+
+
+5.amoeba.xml
+<?xml version="1.0" encoding="gbk"?>
+  2 
+  3 <!DOCTYPE amoeba:configuration SYSTEM "amoeba.dtd">
+  4 <amoeba:configuration xmlns:amoeba="http://amoeba.meidusa.com/">
+  5 
+  6     <proxy>
+ 10             <!-- port -->
+ 11             <property name="port">3306</property>
+ 12 
+ 17 
+ 18             <property name="connectionFactory">
+ 20                     <property name="sendBufferSize">128</property>
+ 21                     <property name="receiveBufferSize">64</property>
+ 22                 </bean>
+ 23             </property>
+ 24 
+ 25             <property name="authenticateProvider">
+ 27 
+ 28                     <property name="user">amoeba</property>
+ 29 
+ 30                     <property name="password">1234</property>
+ 31 
+ 32                     <property name="filter">
+ 35                         </bean>
+ 36                     </property>
+ 37                 </bean>
+ 38             </property>
+ 39 
+ 40         </service>
+ 41 
+ 46 
+ 47             <!-- per connection cache prepared statement size  -->
+ 48             <property name="statementCacheSize">500</property>
+ 49 
+ 50             <!-- default charset -->
+ 51             <property name="serverCharset">utf8</property>
+ 52 
+ 53             <!-- query timeout( default: 60 second , TimeUnit:second) -->
+ 54             <property name="queryTimeout">60</property>
+ 55         </runtime>
+ 56 
+ 61         manager responsible for the Connection IO read , Death Detection
+ 62     -->
+ 66         </connectionManager>
+ 67     </connectionManagerList>
+ 68 
+ 69         <!-- default using file loader -->
+ 70     <dbServerLoader class="com.meidusa.amoeba.context.DBServerConfigFileLoader">
+ 71         <property name="configFile">${amoeba.home}/conf/dbServers.xml</property>
+ 72     </dbServerLoader>
+ 73 
+ 74     <queryRouter class="com.meidusa.amoeba.mysql.parser.MysqlQueryRouter">
+ 75         <property name="ruleLoader">
+ 76             <bean class="com.meidusa.amoeba.route.TableRuleFileLoader">
+ 77                 <property name="ruleFile">${amoeba.home}/conf/rule.xml</property
+    >
+ 78                 <property name="functionFile">${amoeba.home}/conf/ruleFunctionMa
+    p.xml</property>
+ 79             </bean>
+ 80         </property>
+ 81         <property name="sqlFunctionFile">${amoeba.home}/conf/functionMap.xml</pr
+    operty>
+ 82         <property name="LRUMapSize">1500</property>
+ 83         <property name="defaultPool">server1</property>
+ 84 
+ 85         <property name="writePool">server1</property>
+ 86         <property name="readPool">multiPool</property>
+ 87         <property name="needParse">true</property>
+ 88     </queryRouter>
+ 89 </amoeba:configuration>
+                                        
+
+
+ 6.dbServer.xml
+
+ <?xml version="1.0" encoding="gbk"?>
+  2 
+  3 <!DOCTYPE amoeba:dbServers SYSTEM "dbserver.dtd">
+  4 <amoeba:dbServers xmlns:amoeba="http://amoeba.meidusa.com/">
+  5 
+  6         <!-- 
+  7             Each dbServer needs to be configured into a Pool,
+ 12 
+ 13     <dbServer name="abstractServer" abstractive="true">
+ 15             <property name="connectionManager">${defaultManager}</property>
+ 16             <property name="sendBufferSize">64</property>
+ 17             <property name="receiveBufferSize">128</property>
+ 18 
+ 19             <!-- mysql port -->
+ 20             <property name="port">3306</property>
+ 21 
+ 22             <!-- mysql schema -->
+ 23             <property name="schema">test</property>
+ 24 
+ 25             <!-- mysql user -->
+ 26             <property name="user">root</property>
+ 27 
+ 28             <property name="password">mypass</property>
+ 29         </factoryConfig>
+ 30 
+ 32             <property name="maxActive">500</property>
+ 33             <property name="maxIdle">500</property>
+ 34             <property name="minIdle">1</property>
+ 35             <property name="minEvictableIdleTimeMillis">600000</property>
+ 36             <property name="timeBetweenEvictionRunsMillis">600000</property>
+ 37             <property name="testOnBorrow">true</property>
+ 38             <property name="testOnReturn">true</property>
+ 39             <property name="testWhileIdle">true</property>
+ 40         </poolConfig>
+ 41     </dbServer>
+ 42 
+ 43     <dbServer name="server1"  parent="abstractServer">
+ 44         <factoryConfig>
+ 45             <!-- mysql ip -->
+ 46             <property name="ipAddress">172.16.18.1</property>
+ 47         </factoryConfig>
+ 48     </dbServer>
+ 49 
+ 50     <dbServer name="server2"  parent="abstractServer">
+ 51         <factoryConfig>
+ 52             <!-- mysql ip -->
+ 53             <property name="ipAddress">172.16.18.2</property>
+ 54         </factoryConfig>
+ 55     </dbServer>
+ 56 
+ 57     <dbServer name="multiPool" virtual="true">
+ 58         <poolConfig class="com.meidusa.amoeba.server.MultipleServerPool">
+ 59             <!-- Load balancing strategy: 1=ROUNDROBIN , 2=WEIGHTBASED , 3=HA-->
+ 60             <property name="loadbalance">1</property>
+ 61 
+ 62             <!-- Separated by commas,such as: server1,server2,server1 -->
+ 63             <property name="poolNames">server1,server2</property>
+ 64         </poolConfig>
+ 65     </dbServer>
+ 66 
+ 67 </amoeba:dbServers>
+
+=======================================}
+
+
+
+========================================
+#mysql服务的配置
+mysql主ip 172.16.18.1
+mysql从ip 172.16.18.2
+======================================={
+
+主节点安装mysql：
+[root@node1 ~]#tar xf mysql-5.6.13-linux-glibc2.5-x86_64.tar.gz -C /usr/local
+[root@node1 ~]#cd /usr/local
+[root@node1 ~]#ln -sv mysql-5.6.13-linux-glibc2.5-x86_64 mysql
+[root@node1 ~]#cd mysql
+[root@node1 ~]#useradd mysql -r
+[root@node1 ~]#chown root.mysql *
+[root@node1 ~]#mkdir /mydata/data -pv
+[root@node1 ~]#chown mysql.mysql /mydata/data
+[root@node1 ~]#scp /etc/my.cnf 172.16.18.1:/etc/my.cnf    此命令在安装mysql-5.5.33的服务器执行的
+[root@node1 ~]#scripts/mysql_install_db --user=mysql --datadir=/mydata/data
+[root@node1 ~]#cp support-files/mysql.server /etc/rc.d/init.d/mysqld
+[root@node1 ~]#chmod +x /etc/rc.d/init.d/mysqld
+[root@node1 ~]#vim /etc/my.cnf
+  datadir = /mydata/data
+[root@node1 ~]#vim /etc/profile.d/mysql.sh
+    export PATH=/usr/local/mysql/bin:$PATH
+[root@node1 ~]#. /etc/profile.d/mysql.sh
+[root@node1 ~]#chkconfig --add mysqld    
+[root@node1 ~][root@node1 ~]#service mysql start
+从节点：
+[root@node2 ~]#tar xf mysql-5.6.13-linux-glibc2.5-x86_64.tar.gz -C /usr/local
+[root@node2 ~]#cd /usr/local
+[root@node2 ~]#ln -sv mysql-5.6.13-linux-glibc2.5-x86_64 mysql
+[root@node2 ~]#cd mysql
+[root@node2 ~]#useradd mysql -r
+[root@node2 ~]#chown root.mysql *
+[root@node2 ~]#mkdir /mydata/data -pv
+[root@node2 ~]#chown mysql.mysql /mydata/data
+[root@node2 ~]#scripts/mysql_install_db --user=mysql --datadir=/mydata/data
+[root@node2 ~]#cp support-files/mysql.server /etc/rc.d/init.d/mysqld
+[root@node2 ~]#chmod +x /etc/rc.d/init.d/mysqld
+[root@node2 ~]#vim /etc/my.cnf
+  datadir = /mydata/data
+[root@node2 ~]#vim /etc/profile.d/mysql.sh
+    export PATH=/usr/local/mysql/bin:$PATH
+[root@node2 ~]#. /etc/profile.d/mysql.sh
+[root@node2 ~]#chkconfig --add mysqld    
+[root@node2 ~]#service mysql start
+实现主从复制：
+主节点：
+[root@node1 ~]#vim /etc/my.cnf
+   binlog_format=row
+   server-id       = 1
+   log-slave-updates=true
+   gtid-mode=on
+   enforce-gtid-consistency=true
+   master-info-repository=TABLE
+   relay-log-info-repository=TABLE
+   sync-master-info=1
+   slave-parallel-workers=4
+   binlog-checksum=CRC32
+   master-verify-checksum=1
+   slave-sql-verify-checksum=1
+   binlog-rows-query-log_events=1
+   report-port=3306
+   report-host=node1.magedu.com
+保存退出重启
+[root@node1 ~]#scp /etc/my.cnf 172.16.18.2:/etc/my.cnf
+创建复制用户：
+mysql> GRANT REPLICATION CLIENT,REPLICATION SLAVE ON *.* TO rpuser@'%' IDENTIFIED BY 'rppass';  
+mysql> FLUSH PRIVILEGES;
+
+从节点：
+[root@node2 ~]#vim /etc/my.cnf
+   server-id       = 10    改动
+   report-host=node2.magedu.com
+保存退出重启
+mysql> CHANGE MASTER TO MASTER_HOST='172.16.18.1', MASTER_USER='rpuser', MASTER_PASSWORD='rppass', MASTER_AUTO_POSITION=1;
+mysql> start slave;
+mysql> show slave status\G
+测试：
+
+创建访问用户：
+mysql> GRANT ALL ON *.* TO 'rpuser'@'%' IDENTIFIED BY 'rpuser';
+mysql> GRANT ALL ON *.* TO 'root'@'%' IDENTIFIED BY 'mypass';
+
+
+=========================================}
+
+

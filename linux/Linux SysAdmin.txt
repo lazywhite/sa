@@ -1,0 +1,4622 @@
+
+磁盘分区格式化：
+
+/
+/bin, /sbin: 二进制程序，操作系统自身运行就需要用到的程序
+	/usr/bin, /usr/sbin: 二进制程序，基本的系统工具；
+	/usr/local/bin, /usr/local/sbin：第三方程序；
+/lib
+	/usr/lib
+	/usr/local/lib
+/etc
+/tmp
+/var
+	log
+	mail
+	cache
+/proc: 内核映像
+/sys：硬件信息
+
+/media
+/mnt
+
+/opt:
+
+/boot: 引导目录，内核
+
+/home/USERNAME, /root:
+
+/dev:
+	设备类型：
+		b: 随机设备
+		c：线性设备
+
+硬盘设备：随机存取设备
+	I/O, I/O Controller
+		 I/O Adapter
+
+	IDE, ATA: 并行, 133MB/s
+	SCSI: Small Computer System Interface, UltraSCSI 320MB/s
+		10000, 15000RPM
+
+	SATA：Serail, 300MB/s, 600MB/s, 6Gb/s
+	SAS: 
+	USB: (1.1, 2.0, 3.0)
+
+	SSD: Solid-State Disk
+
+Linux, /dev/
+	IDE, ATA: /dev/hd[a-z]
+		IDE: Master, Slave
+		第一个IDE控制接硬盘：
+		第二个IDE控制接光驱：hdc
+	SCSI, SAS, SATA, USB: /dev/sd[a-z]
+		/dev/sda, /dev/sdb
+
+	文件系统：通常由内核提供
+		Windows:
+			NTFS
+			FAT32
+		Linux:
+			ext2
+			ext3
+			ext4
+			xfs
+			reiserfs
+			nfs
+			iso9600
+			jfs
+			brtfs
+
+对分区格式化，就是创建文件系统
+
+RAW：裸设备
+
+低级格式化：创建磁盘
+
+高级格式化：创建文件系统
+
+
+MBR: Master Boot Record
+	512bytes:
+		446bytes: bootloader
+		64: 分区表, 其中每16bytes标示一个分表，最多4主分区;
+		2：5A
+
+		扩展分区：
+			再次划分为逻辑分区
+
+	Linux:
+		sda[1-]
+		sda1:
+		sda2
+		sda3
+		sda4
+		sda5: 第一个逻辑分区
+
+
+
+fdisk, sfdisk, part
+
+fdisk <= 15分区
+
+fdisk -l [DEVICE]
+
+fdisk [DEVICE]
+	交互式命令：
+		d: 删除一个分区
+		n: 新建一个分区
+		p: 显示当前的分区信息
+		w: 保存退出
+		q: 不保存退出
+		l: 各分区类型所对应的System ID; 
+			83：Linux
+			82：Linux Swap，交换分区
+			8e: LVM
+			fd: Soft Raid
+		t: 修改指定分区的System ID; 
+
+查看内核识别的分区信息：
+	cat /proc/partitions
+
+RHEL5让内核重新读取硬盘分区表：
+	partprobe [DEVICE]
+
+RHEL6让内核重新读取硬盘分区表：
+	partx -a [PARTITION] DEVICE
+
+
+下一步：格式化分区，用于创建文件系统
+
+Linux, mkfs
+	mkfs -t fstype /dev/part
+
+
+	RHEL5:ext3
+	RHEL6:ext4
+
+	mkfs -t ext4 = mkfs.ext4 = mke2fs -t ext4
+	mkfs -t ext3 = mkfs.ext3 = mke2fs -j = mke2fs -t ext3
+	mkfs -t ext2 = mkfs.ext2 = mke2fs = mke2fs -t ext2
+
+
+	配置文件：/etc/mke2fs.conf，用于设定默认特性，及各文件系统的特有的特性；
+
+	mke2fs -t {ext2|ext3|ext4}
+		-b {1024|2048|4096}：块大小
+			块大小取决CPU对内存页框大小的支持，x86系统默认页框大小为4K；
+		-L label: 设定卷标
+		-m #: 预留给管理使用的块所占据总体空间的比例；
+		-r #:  预留给管理使用的块的个数；
+		-E: 设定文件系统的扩展属性；
+
+
+	tune2fs 
+		-l: 显示文件系统超级块信息；
+		-L label：重新设定卷标；
+		-m #: 调整预留给管理使用的块所占据总体空间的比例；
+		-r #: 调整预留给管理使用的块个数；
+		-o：设定挂载默认选项
+		-O: 设定文件系统默认特性
+		-E: 调整文件系统的扩展属性
+
+	e2label: 显示或设定卷标；
+		e2label DEVICE [Volume_label]
+
+
+要显示块大小：
+	tune2fs -l DEVICE | grep "Block size"
+
+
+	blkid DEVICE: 显示设备的UUID、文件系统类型及卷标；
+
+挂载：mount
+	mount [-t fstype] DEVICE MOUNT_POINT
+	mount [-t fstype] LABEL="卷标"  MOUNT_POINT
+	mount [-t fstype] UUID="UUID"  MOUNT_POINT
+
+	mount: 当前系统挂载的所有设备；
+
+	umount DEVICE
+	umount MOUNT_POINT
+
+	挂载之后，原有数据的会被隐藏，因此不能挂载到系统常用目录上；
+	卸载之时，要确保没有进程正在访问挂载的设备；否则，无法卸载；
+
+/etc/fstab: 系统开机会自动挂载的文件系统；
+
+
+fdisk -l [/dev/sda]
+	globbing, 
+
+	fdisk -l /dev/[hs]d[a-z]
+
+mount: 将某文件系统关联至根文件系统上来
+	
+FileSystem: 一个软件，内核中实现
+
+Windows:
+	NTFS, FAT32
+
+
+Linux: VFS (Virtual File System)
+	ext, xfs, 
+
+iso9660
+nfs, cifs
+ext2, ext3, ext4, xfs, jfs, reiserfs, vfat
+GFS, GFS2, OCFS2
+
+mount -t fstype [options] DEVICE MOUNT_POINT
+	DEVICE:
+		设备文件：/dev/sda1, /dev/hdb2
+		卷标：LABEL=“label”
+		UUID: UUID="uuid"
+	MOUNT_POINT：
+
+blkid PARTITION
+
+mkfs -t [fstype] PARTITION
+	要点：
+		1、文件系统必须被内核支持才能使用，即内核有相应的内核模块，或者已经将之整合进内核；
+		2、要有相应文件系统创建工具，这通常是mkfs.fstype
+
+		mkfs -t ext2 = mkfs.ext2 = mke2fs
+		mkfs -t ext3 = mkfs.ext3 = mke2fs -j = mke2fs -t ext3
+		mkfs -t ext4 = mkfs.ext4 = mke2fs -t ext4
+
+		mkfs -t xfs = mkfs.xfs
+
+	mke2fs 
+		-t
+		-L
+		-m
+		-b
+		-E
+
+	tune2fs 
+		-l
+
+	e2label
+
+	umount 
+
+mount 
+	-o: 用于指定挂载选项，常用的挂载选项
+		ro: 只读挂载;
+		rw: 读写，默认即为读写;
+		noatime: 关闭 更新 访问时间；
+		auto: 是否能够由“mount -a”挂载；
+		defaults：相当于rw, suid, dev, exec, auto, nouser, async, and relatime
+		sync: 同步写入
+		async：异步写入
+		dev: 
+		remount: 重新挂载
+		loop: 本地回环设备；
+
+	mount -o remount,other_options DEVICE
+
+	cdrom --> sr0
+	cdrom --> hdc
+
+	mount -o loop,other_options DEVICE MOUNT_POINT: 用于挂载回环设备;
+
+	-n: 挂载文件系统时，不更新/etc/mtab文件; 
+	-r: 相当于“-o ro”, 只读挂载；
+
+fuser [MOUNT_POINT]:查看正在访问某挂载点的进程；
+fuser -km [MOUNT_POINT]: 强行杀死正在访问此挂载点的进程；
+
+
+
+/etc/fstab
+	挂载的设备：
+		设备文件、卷标、UUID
+	挂载点：
+	文件系统类型：ext2, ext3, ...
+	挂载选项：defaults表示使用默认选项，多个选项彼此间逗号分隔；
+	转储频率：
+		0：从不备份；
+		1：每日备份；
+		2：
+	自检次序：
+		0：不检测；
+		1：第一个检测；一般只有根文件系统被第一个检测；
+		
+	mount -a: 挂载 /etc/fstab所有支持auto挂载选择的文件系统
+
+Linux的交换分区：swap
+
+	必须是独立分区，独立文件系统；
+
+交换分区多大？
+	科学计算类的服务器：交换内存可以尽可能大，比如为物理内存的2倍；
+	应用程序类的服务器：交换内存尽可能小，比如只给1G；
+
+	物理内存小于等于2G, swap=memory*2
+	2G<memory<4G, swap=memory*1.5
+	memory>4G, swap=4G
+
+如何查看内存大小：
+	free 
+		-m: 空间大小换算为MB
+		-g: 空间大小换算为GB
+			shared: 共享内存
+			buffer: 缓冲
+			cached: 缓存
+
+	创建交换分区：
+		mkswap DEVICE
+			-L label
+
+	启用交换分区：
+		swapon DEVICE：启用指定交换分区；
+		swapon -a: 启用所有交换分区
+
+	禁用交换分区：
+		swapoff DEVICE
+		swapoff -a
+
+开机自动启用交换分区，可定义于/etc/fstab
+	DEVICE  swap   swap   defaults 0 0
+	挂载点：swap
+	文件系统类型：swap
+
+---------------------------------------
+脚本编程：
+	
+面向过程：
+	顺序执行
+	选择执行: if, case，select
+	循环执行: for, while, until
+
+
+	
+	bash的变量类型：
+		本地变量
+		局部变量
+		环境变量
+		位置变量
+		特殊变量：
+			$?: 用于保存刚刚执行的命令的状态返回值；
+				0：成功执行；
+				1-255：失败，1,2,127
+				可以使用exit命令在脚本中自定义脚本执行状态返回值；如果不定义，脚本执行状态返回值取决于脚本执行结束前最后执行的那个语句的状态；
+			$@, $*: 所有位置参数；
+			$#: 位置参数的个数；
+
+判断：
+例子1：写一个脚本，实现如下功能：
+	如果用户存在，就说明其存在；
+
+#!/bin/bash
+#
+UserName=user1
+
+if grep "^$UserName\>" /etc/passwd &> /dev/null; then
+  echo "$UserName exists."
+fi
+
+
+#!/bin/bash
+
+UserName=user1
+
+if id $UserName &> /dev/null; then
+  echo "$UserName exists."
+fi
+
+
+练习：写一个脚本，实现如下功能：
+	如果用存在，就显示其UID和SHELL；
+#!/bin/bash
+#
+UserName=user1
+if id $UserName &> /dev/null; then
+  grep "^$UserName\>" /etc/passwd | cut -d: -f3,7
+fi
+
+练习：写一个脚本，实现如下功能：
+	如果设备/dev/sda3已经挂载，就显示其挂载点；
+#!/bin/bash
+#
+Device='/dev/sda3'
+
+if mount | grep "^$Device" &> /dev/null; then
+  mount | grep "/dev/sda3" | cut -d' ' -f3
+fi
+
+
+练习：写一个脚本，实现如下功能：
+	如果/etc/rc.d/rc.sysinit中有空白行，就显示其空白行数；
+#!/bin/bash
+#
+File='/etc/rc.d/rc.sysinit'
+
+if grep "^$" $File &> /dev/null; then
+  grep "^$" $File | wc -l
+fi	
+
+
+例子：写一个脚本：
+	如果指定的用户存，先说明其已经存在，并显示其ID号和SHELL；否则，就添加用户，并显示其ID号；
+
+练习：写一个脚本，实现如下功能：
+	如果设备/dev/sda3已经挂载，就显示其挂载点；否则，就说明其未挂载或设备不存在；
+
+#!/bin/bash
+#
+Device='/dev/sda3'
+
+if mount | grep "^$Device" &> /dev/null; then
+  mount | grep "/dev/sda3" | cut -d' ' -f3
+else
+  echo "$Device not mounted or not exist."
+fi
+
+
+bash条件测试：
+	[ expression ]
+	[[ expression ]]
+	test expression
+
+	整数测试
+	字符测试
+	文件测试
+
+例子：写一个脚本，生成两个随机数，比较其大小；显示大数；
+	bash有个内置变量：$RANDOM
+
+#!/bin/bash
+#
+A=$RANDOM
+B=$RANDOM
+
+if [ $A -ge $B ]; then
+  echo "Max number is $A."
+else
+  echo "Max number is $B."
+fi
+
+练习：写一脚本，随机生成一个整数，判定，显示其奇偶性；
+#!/bin/bash
+#
+A=$RANDOM
+
+if [ $[$A%2] -eq 0 ]; then
+  echo "$A: Even"
+else
+  echo "$A: Odd"
+fi
+
+练习：给定一个用户，如果其ID号大于499，就说明其是普通用户，否则，就说明其是管理员或系统用户；
+#!/bin/bash
+#
+UserName=daemon
+
+Uid=`id -u $UserName`
+
+if [ $Uid -gt 499 ]; then
+  echo "A common user: $UserName."
+else
+  echo "admin user or system user: $UserName."
+fi
+
+
+练习：求200以内所有为3的整数倍的整数之和；
+#!/bin/bash
+#
+Sum=0
+
+for I in {1..200}; do
+  if [ $[$I%3] -eq 0 ]; then
+    Sum=$[$Sum+$I]
+  fi
+done
+
+echo "Sum: $Sum."
+
+
+练习：给定一个用户，如果其UID等于GID，就说明这是个“good guy”，否则，“Bad guy.”
+#!/bin/bash
+#
+UserName=user1
+
+if [ `id -u $UserName` -eq `id -g $UserName` ]; then
+  echo "Good Guy."
+else
+  echo "Bad Guy."
+fi
+
+
+写一个脚本：
+计算100以内所有奇数的和以及所有偶数的和；分别显示之；
+
+#!/bin/bash
+#
+EvenSum=0
+OddSum=0
+
+for I in {1..100}; do
+  if [ $[$I%2] -eq 0 ]; then
+    EvenSum=$[$EvenSum+$I]
+  else
+    OddSum=$[$OddSum+$I]
+  fi
+done
+
+echo "EvenSum is: $EvenSum. OddSum is: $OddSum."
+
+
+
+bash编程: 位置变量
+	$1, $2, $3, $4, ...
+
+
+写一个脚本：
+计算N以内所有奇数的和以及所有偶数的和；分别显示之；N是通过参数传递过来的正整数；
+
+#!/bin/bash
+#
+EvenSum=0
+OddSum=0
+
+for I in `seq 1 $1`;do
+  if [ $[$I%2] -eq 1 ]; then
+    OddSum=$[$OddSum+$I]
+  else
+    EvenSum=$[$EvenSum+$I]
+  fi
+done
+
+echo "EvenSum: $EvenSum."
+echo "OddSUm: $OddSum."
+
+echo "Sum: $[$EvenSum+$OddSum]"
+
+
+
+
+shift [n]：实现位置参数轮替；
+
+
+例子：通过参数传递n个正整数给脚本，求其和；
+#!/bin/bash
+#
+Sum=0
+for I in `seq 1 $#`; do
+  Sum=$[$Sum+$1]
+  shift
+done
+
+echo $Sum
+
+
+
+练习，写一个脚本，完成以下要求：
+1、添加10个用户user1, user2, ..., user10；但要先判断用户是否存在，不存在而后再添加；
+2、添加完成后，显示一共添加了几个用户；当然，不能包括因为事先存在而没有添加的；
+3、最后显示当前系统上共有多少个用户；
+#!/bin/bash
+#
+Count=0
+
+for I in {1..10}; do
+  if id user$I &> /dev/null; then
+    echo "user$I exists."
+  else
+    useradd user$I
+    echo "Add user$I successfully."
+    Count=$[$Count+1]
+  fi
+done
+
+echo "Add $Count new users."
+echo "Total users: `wc -l /etc/passwd | cut -d' ' -f1`."
+
+
+练习，写一个脚本，完成以下要求：
+1、通过参数传递一系列用户名给脚本，让脚本添加这些用户；但要先判断用户是否存在，不存在而后再添加；
+2、添加完成后，显示一共添加了几个用户；当然，不能包括因为事先存在而没有添加的；
+#!/bin/bash
+#
+Count=0
+
+for UserName in $@; do
+  if id $UserName &> /dev/null; then
+    echo "$UserName exists."
+  else
+    useradd $UserName
+    echo "Add $UserName successfully."
+    Count=$[$Count+1]
+  fi
+done
+
+echo "Add $Count new users."
+
+练习，写一个脚本，完成以下要求：
+给定一个用户：
+	1、如果其UID为0，就显示此为管理员；
+	2、否则，就显示其为普通用户；
+
+练习：写一个脚本，完成以下要求：
+通过参数传递一个磁盘设备文件给脚本，让脚本来判断其是否有扩展分区；有则显示有，否则显示为无；
+
+
+练习：写一个脚本
+给定一个文件，比如/etc/inittab
+判断这个文件中是否有空白行；
+如果有，则显示其空白行数；否则，显示没有空白行。
+
+
+
+练习：写一个脚本；（要求：不使用id命令获得其id号；）
+给定一个用户，判断其UID与GID是否一样
+如果一样，就显示此用户为“good guy”；否则，就显示此用户为“bad guy”。
+
+
+练习：写一个脚本
+给脚本传递两个参数(整数)；
+显示此两者之和，之乘积；
+
+
+
+
+bash脚本知识点：
+	条件测试方式：
+		bash命令；
+		[ expression ]
+		[[ expression ]]
+		test expression
+
+	条件测试：
+		整数测试：
+			大于：-gt
+			小于：-lt
+			等于：-eq
+			大等：-ge
+			小等：-le
+			不等：-ne
+		字符测试：
+			>: 大于
+			<: 小于
+			==: 等于
+			=~: 判断左边的字符串是否能够被右边的模式所匹配；通常用于[[]]；
+			[[ $opt1 =~ $opt2 ]]
+			一般做行首、行尾锚定；不要加引号；
+			-z $STRING: 为空则为真，不空则为假；
+			-n $STRING: 为空则为假，不空则真；
+		文件测试：
+			-f: 测试其是否为普通文件，即ls -l时文件类型为-的文件；
+			-d: 测试其是否为目录文件，即ls -l时文件类型为d的文件；
+			-e: 测试文件是否存在；存在为真，否则为假；
+			-r: 测试文件对当前用户来说是否可读； 
+			-w: 测试文件对当前用户来说是否可写；
+			-x: 测试文件对当前用户来说是否可执行；
+			-s: 测试文件大小是否不空，不空则真，空则假；
+
+bash字符测试：
+		
+        
+        例子：写一个脚本，判定用户的shell是否为bash；
+        	[ "$Shell" == "/bin/bash" ]
+
+
+        	#!/bin/bash
+			#
+
+			Shell=`grep "^$1:" /etc/passwd | cut -d: -f7`
+
+			if [ "$Shell" == "/bin/bash" ]; then
+			  echo "Bash User."
+			  Ret=0
+			else
+			  echo "Not Bash User."
+			  Ret=9
+			fi
+
+			exit $Ret
+
+			改进版：
+			#!/bin/bash
+			#
+
+			Shell=`grep "^$1:" /etc/passwd | cut -d: -f7`
+
+			if [ -z $Shell ]; then
+			  echo "No such user or User's shell is null."
+			  exit 10
+			fi
+
+			if [ "$Shell" == "/bin/bash" ]; then
+			  echo "Bash User."
+			  Ret=0
+			else
+			  echo "Not Bash User."
+			  Ret=9
+			fi
+
+			exit $Ret
+
+		例子：根据用户shell的结束符是否为sh来判定其是否为登录用户：
+			#!/bin/bash
+			#
+
+			Shell=`grep "^$1:" /etc/passwd | cut -d: -f7`
+
+			if [ -z $Shell ]; then
+			  echo "No shell." 
+			  exit 3
+			fi
+
+			if [[ "$Shell" =~ sh$ ]]; then
+			  echo "Login User."
+			  Ret=0
+			else
+			  echo "None Login User." 
+			  Ret=4
+			fi
+
+			exit $Ret
+
+
+写一个脚本：
+判断当前主机的CPU生产商，其信息在/proc/cpuinfo文件中vendor id一行中。
+如果其生产商为GenuineIntel，就显示其为Intel公司；
+否则，就显示其为AMD公司；
+
+#!/bin/bash
+#
+Vendor=`grep "vendor_id" /proc/cpuinfo  | uniq | cut -d: -f2`
+
+if [[ "$Vendor" =~ [[:space:]]*GenuineIntel$ ]]; then
+  echo "Intel"
+else
+  echo "AMD"
+fi
+
+练习：写一个脚本
+通过参数传递一个字符串给脚本，如果传递的字符串为“memory”或“Memory”，就以MB为单位显示当前主机的内存信息；
+否则，就显示/proc/uptime文件的内容。
+#!/bin/bash
+#
+if [[ $1 =~ [Mm]emory$ ]]; then
+  free -m
+else
+  cat /proc/uptime
+fi
+
+
+bash知识点：组合条件测试
+	-a: 与
+	-o: 或
+	!: 非，单目操作符
+
+	A=3
+	UID>=1, UID<=499
+
+bash测试：
+	bash命令
+	[]
+	[[]]
+	test
+
+bash命令组合测试：
+	&&: 与
+	||: 或
+	!: 非
+
+写一脚本，给定用户，如果其不存在，就退出脚本。
+if ! id $1 &> /dev/null; then
+  echo "No such user."
+  exit 6
+fi
+
+if [ `id -u $1` -eq `id -g $1` ]; then
+  echo "Good Guy"
+else 
+  echo "Bad Guy"
+fi
+
+练习：写一个脚本
+通过参数传递一个字符串给脚本，如果传递的字符串为“memory”或“Memory”，就以MB为单位显示当前主机的内存信息；
+否则，就显示/proc/uptime文件的内容。
+[ $1 == "memory" -o $1 == "Memory" ]
+
+
+bash条件判断之多分支if语句：
+语法格式：
+	if 条件1; then
+	  语句1
+	  语句2
+	  ...
+	elif 条件2; then
+	  语句1
+	  语句2
+	  ...
+	elif 条件3; then
+	  语句1
+	  语句2
+	  ...
+	else
+	  语句1
+	  语句2
+	  ...
+	fi	  
+
+写一个脚本：
+判断当前主机的CPU生产商，其信息在/proc/cpuinfo文件中vendor id一行中。
+如果其生产商为GenuineIntel，就显示其为Intel公司；
+如果其生产商为AuthenticAMD，就显示其为AMD公司；
+否则，就显示无法识别；
+#!/bin/bash
+#
+Vendor=`grep "vendor_id" /proc/cpuinfo | uniq | cut -d: -f2`
+
+if [[ $Vendor =~ [[:space:]]*GenuineIntel$ ]]; then
+  echo "intel"
+elif [[ $Vendor =~ [[:space:]]*AuthenticAMD$ ]]; then
+  echo "AMD"
+else
+  echo "Unknown"
+fi
+
+练习：通过参数传递给脚本一个字符串，如Fedora, Gentoo, Redhat,判断Linux发行版所处理主流发行系列：
+	如果为fedora, centos, redhat，就显示RedHat；
+		[ $1 == fedora -o $1 == centos -o $1 == redhat ]
+	如果为suse, opensuse，就显示为SUSE;
+	如果为ubuntu, mint, debian，就显示为Debian；
+	否则，显示为其它或无法识别；
+
+写一个脚本，其可以接受三个参数，最后一个参数为文件名，但参数可变化，形如：
+	script.sh  -a MageEdu  /magedu.com/scripts/test1.sh
+	script.sh  -d 2013-07-19  /magedu.com/scripts/test1.sh
+	script.sh  -D 'some infomation'  /magedu.com/scripts/test1.sh
+此脚本能够创建/magedu.com/scripts/test1.sh文件，并且，如果给出了-a MageEdu，则文件前两行为：
+#!/bin/bash
+# Author: MageEdu
+如果给出了-d 2013-07-19，则文件前两行为：
+#!/bin/bash
+# Date: 2013-07-19
+如果给出了-D "some infomation"，则文件前两行为：
+#!/bin/bash
+# Description: some infomation
+其它任何参数，均提示错误并退出；
+
+进一步：如果没有退出，则使用vim打开此文件，并使用光标默认处于最后一行；
+
+再进一步：保存退出后，如果文件有语法错误提示用户有错误；
+
+更进一步：如果没有语法错误，则给些文件赋予执行权限；
+
+a.sh -a mageedu /tmp/test.sh
+#!/bin/bash
+# Author: mageedu
+
+a.sh -d 2013-07-19 /tmp/test.sh
+#!/bin/bash
+# Date: 2013-07-19
+
+a.sh -D "test script" /tmp/test.sh
+#!/bin/bash
+# Description: test script
+
+mkscript
+
+
+
+
+#!/bin/bash
+
+if [ $# -ne 3 ]; then
+  echo "the number of arguements is wrong."
+  exit 4
+fi
+
+echo '#!/bin/bash' >> $3
+
+if [ $1 == '-a' ]; then
+  echo "# Author: $2" >> $3
+elif [ $1 == '-d' ]; then
+  echo "# Date: $2" >> $3
+elif [ $1 == '-D' ]; then
+  echo "# Description: $2" >> $3
+else 
+  echo "Unknown option, ignore it."
+  rm -f $3
+  exit 5
+fi
+
+vim + $3
+
+if bash -n $3 &> /dev/null; then
+  chmod +x $3
+else
+  echo "Syntax wrong in $3."
+fi
+
+
+
+bash测试之文件测试：
+
+
+如果/tmp/test10不存在，就创建之；
+if [ ! -e /tmp/test10 ]; then
+  mkdir /tmp/test10
+fi
+
+
+短路操作：只要前半段已经可以决定最终结果，后半段就不再运算；
+	与运算：
+		真 && 真 =  真
+		真 && 假 =  假
+		假 && {真|假} = 假 
+
+	或运算：
+		假 || 0 = 0
+		假 || 1 = 1
+
+		真 ||   =1
+
+
+
+[ -e /tmp/test10 ] || mkdir /tmp/test10
+
+
+id $UserName &> /dev/null || useradd $UserName
+
+! id $UserName &> /dev/null && useradd $UserName || echo "$UserName exists."
+id $UserName &> /dev/null && echo "$UserName exists." || useradd $UserName
+
+
+例子：给定一个路径，判断
+	如果为普通文件，显示之；
+	如果为目录，显示之；
+	否则，说无法识别；
+
+#!/bin/bash
+#
+if [ ! -e $1 ]; then
+  echo "No such file."
+  exit 7
+fi
+
+if [ -f $1 ]; then
+  echo "Common file."
+elif [ -d $1 ]; then
+  echo "Directory."
+else
+  echo "Unknown file."
+fi
+
+bash的特殊参数：$0: 脚本名称；
+
+/tmp/script.sh 
+
+basename $0
+
+
+写一个脚本：可以接受一个参数，其使用形式如下：
+	script.sh {start|stop|restart|status}
+如果参数为start，创建空文件/var/lock/subsys/script，并显示“Starting script successfully.”；
+如果参数为stop，则删除文件/var/lock/subsys/script，并显示“Stop script finished.”；
+如果参数为restart，则删除文件/var/lock/subsys/script后重新创建，并显示“Restarting script successfully.”；
+如果参数为status，那么：
+	如果/var/lock/subsys/script文件存在，则显示为“script is running.”
+	否则，则显示为“script is stopped.”
+其它任何参数：则显示“script.sh {start|stop|restart|status}”
+
+进一步：修改start的机制为：
+	如果参数为start，且/var/lock/subsys/script文件不存在，则创建空文件/var/lock/subsys/script，并显示“Starting script successfully.”；
+	否则，显示“script is already running.”
+
+进一步：修改stop的机制为：
+	如果参数为stop，且/var/lock/subsys/script文件存在，则删除文件/var/lock/subsys/script，并显示“Stop script finished.”；
+	否则，显示“script is stopped yet.”
+
+
+SysV网络服务脚本:
+# service network restart
+
+# /etc/rc.d/init.d/network start
+
+# /etc/init.d/network start
+
+
+
+#!/bin/bash
+#
+SvcName=`basename $0`
+LockFile="/var/lock/subsys/$SvcName"
+
+if [ $# -lt 1 ]; then
+  echo "Usage: $SvcName {start|stop|restart|status}"
+  exit 3
+fi
+
+if [ $1 == 'start' ]; then
+  if [ -e $LockFile ]; then
+    echo "$SvcName is running."
+  else
+    touch $LockFile &> /dev/null
+    echo "Starting $SvcName successfully."
+  fi
+elif [ $1 == 'stop' ]; then
+  if [ -e $LockFile ];then 
+    rm -f $LockFile &> /dev/null
+    echo "Stopping $SvcName finished."
+  else
+    echo "$SvcName is stopped yet."
+  fi
+elif [ $1 == 'restart' ]; then
+  rm -f $LockFile &> /dev/null
+  touch $LockFile &> /dev/null
+  echo "Restarting $SvcName successfully."
+elif [ $1 == 'status' ]; then
+  if [ -e $LockFile ]; then
+    echo "$SvcName is running."
+  else
+    echo "$SvcName is stopped."
+  fi
+else
+  echo "Usage: $SvcName {start|stop|restart|status}"
+  exit 4
+fi
+
+
+字符串测试：
+	>
+	<
+	==
+	!=
+	-z
+	-n
+	=~：模式匹配检测；
+文件测试:
+	-e
+	-f
+	-d
+	-r
+	-w
+	-x
+	-s
+
+测试条件的逻辑组合：组合测试
+	与：-a
+	或：-o
+	非：!
+
+	与：&&
+	或：||
+	非：!
+
+if [ $# -gt 1 -a $# -lt 10 ]
+
+if id $UserName &> /dev/null && [ `id -u $UserName` -ge 500 ]; then
+
+
+
+练习：写一个脚本
+给定一个文件：
+如果是一个普通文件，就显示之；
+如果是一个目录，亦显示之；
+否则，此为无法识别之文件；
+File=
+if [ -f $File ]; then
+  echo
+elif [ -d $File ]; then
+  echo
+else
+  echo 
+fi
+
+判断某目录中所有文件的类型：
+for File in /var/log/*; do
+	if [ -f $File ]; then
+	  echo
+	elif [ -d $File ]; then
+	  echo
+	else
+	  echo 
+	fi
+done
+
+
+练习：写一脚本
+能接受一个参数(文件路径)
+判定：此参数如果是一个存在的文件，就显示“OK.”；否则就显示"No such file."
+
+
+
+练习：写一个脚本，完成以下任务
+1、使用一个变量保存一个用户名；
+2、删除此变量中的用户，且一并删除其家目录；
+3、显示“用户删除完成”类的信息；
+
+
+
+
+
+写一个脚本：
+1、添加10个用户user1到user10，密码同用户名；但要求只有用户不存在的情况下才能添加；
+
+
+文件系统：
+	rootfs: 根文件系统
+		/var/log/messages
+		叶子结点：文件
+
+	挂载：
+
+	分区：mkfs, mke2fs
+		mkfs -t xfs
+
+	高级格式化：创建文件系统；
+	文件系统：管理文件，实现文件的按名存取；
+		文件系统：位于内核当中；
+			系统调用
+				open(), close, read, write, create, delete
+
+	MBR: Master Boot Record
+		446: bootloader
+		64: 16*4
+		2: 5A
+
+
+block bitmap
+inode bitmap
+
+block group: 块组
+	100W: 5W，20组；
+
+GDT: Group Description Table：块组描述表
+	
+tune2fs -l 
+	显示超级块信息；
+
+dumpe2fs: 输出ext文件系统信息；
+	-h：显示超级块相关信息；
+
+du: disk usage
+	-s: summary，显示某指定路径下所有文件的大小之和； 
+	-h：human-readale
+
+	/var/*
+
+df: disk free
+	-l: 只显示本地文件系统的相关信息
+	-h: human-readable
+	-P: posix兼容的风格显示；
+	-i: 显示inode使用信息，而非1k块
+
+
+删除，移动，复制
+
+链接文件：
+	硬链接：
+		ls -l第二段显示出的数字指文件被硬链接的次数；
+		特性：
+			不能跨分区使用；
+			不能对目录创建硬链接（会造成循环引用）；
+			删除原文件路径，不影响链接文件的使用；
+			所有文件指向同一个inode，因此，为它们是同一个文件；
+	软链接，符号链接, symbolic link
+		ls -l: 显示文件类型为l的文件；
+			bash中测试文件是否为符号链接文件，使用
+				-L或-h
+		特性：
+			不受分区限制；
+			能够对目录创建；
+			删除原文件，链接文件将无法使用；
+			链接文件与原文件指向不同的inode，所以，并非同一个文件；
+
+
+
+ln [-s] SRC_FILE LINK_FILE
+	-v: verbose：显示详细过程
+
+
+/var/tmp/hi --> /var/log/messages
+
+hi: inode --> /var/log/messages
+
+
+ext文件系统：扩展属性
+	lsattr
+	chattr
+		+-=
+
+
+
+文件压缩、解压缩、归档
+
+压缩：abcdef abc def mnabc, mndef
+		abcdef 1 2 mn1, 32
+		abcdef abc def mnabc, mndef
+
+compress, FileName.Z
+uncompress
+
+zip
+
+gzip/bzip2/xz
+
+600MB, 80MB, 72MB, 60MB; 
+
+压缩比: 1-9，默认为6
+
+gzip:
+	-#: 指定压缩比
+	.gz
+gunzip = gzip -d
+zcat
+
+bzip2:
+	.bz2
+	-#
+	-k: 保留原文件；
+bunzip2 = bzip2 -d
+bzcat
+
+xz:
+	.xz
+unxz = xz -d
+xzcat
+
+归档：archive
+tar 
+	-c: 创建归档
+	-x: 展开归档
+	-f filename: 指定归档后文件名称，一般以.tar作为文件名后缀；
+	-t: 不用展开归档，查看文件列表；
+	-C: 指定展开位置；
+	-z: 调用gzip
+	-j: 调用bzip2
+	-J: 调用xz
+
+zip	: 压缩后的文件名后缀.zip
+unzip 
+
+
+IDE或SATA硬盘属性管理工具：
+# hdparm
+
+补充命令：
+dd
+	if=/path/to/src_file
+	of=/path/to/dst_file
+	bs=512
+	count=2
+
+	dd if=/dev/sda of=/root/sda_mbr.backup bs=512 count=1
+
+	dd if=/root/sda_mbr.backup of=/dev/sda bs=512 count=1
+
+	dd if=/dev/zero of=/root/testfile bs=4K count=1024
+
+	/dev/zero: 0生成器；
+	/dev/null: 位桶；
+
+	dd if=/dev/zero of=/dev/sda bs=64 count=1
+
+badblocks
+
+
+练习：
+1、将/etc/备份至/backup目录中，文件名称形为etc-2013-07-22.tar.xz；
+# mkdir /backup
+# tar -Jcf /backup/etc-`date +%F`.tar.xz /etc/*
+
+2、将备份出的etc解压至/var/tmp目录中；
+# tar xf /backup/etc-2013-07-22.tar.xz -C /var/tmp/
+
+3、写一个脚本，能接受参数gzip、bzip2或xz，而后能将/etc/目录归档备份至/backup目录，并以参数指定的形式压缩存放；文件名称包含脚本执行时刻的时间；
+#!/bin/bash
+#
+
+Com=$1
+
+if [ -z $Com ]; then
+  Com=gzip
+fi
+
+[ -d /backup ] || mkdir /backup
+
+if [ $Com == 'gzip' ]; then
+  tar zcf /backup/etc-`date +%F-%H-%M-%S`.tar.gz /etc/*
+  [ $? -eq 0 ] && echo "Backup etc finished.(gzip)."
+elif [ $Com == 'bzip2' ]; then
+  tar jcf /backup/etc-`date +%F-%H-%M-%S`.tar.bz2 /etc/*
+  [ $? -eq 0 ] && echo "Backup etc finished.(bzip2)."
+elif [ $Com == 'xz' ]; then
+  tar Jcf /backup/etc-`date +%F-%H-%M-%S`.tar.xz /etc/*
+  [ $? -eq 0 ] && echo "Backup etc finished.(xz)."
+else
+  echo "Usage: `basename $0` {[gzip|bzip2|xz]}"
+  exit 6
+fi
+
+
+bash的编程之case语句：用法格式
+
+	case 变量引用(${}) in
+	value1)
+		语句1
+		语句2
+		...
+		;;
+	value2)
+	 	语句1
+	 	语句2
+	 	...
+	 	;;
+	value3)
+		语句1
+		语句2
+		...
+		;;
+	*)
+		语句1
+		语句2
+		...
+		;;
+	esac
+
+#!/bin/bash
+#
+
+Com=$1
+
+if [ -z $Com ]; then
+  Com=gzip
+fi
+
+[ -d /backup ] || mkdir /backup
+
+case $Com in
+gzip)
+  tar zcf /backup/etc-`date +%F-%H-%M-%S`.tar.gz /etc/* 
+  RetVal=$?
+  ;;
+bzip2)
+  tar jcf /backup/etc-`date +%F-%H-%M-%S`.tar.bz2 /etc/*
+  RetVal=$?
+  ;;
+xz)
+  tar Jcf /backup/etc-`date +%F-%H-%M-%S`.tar.xz /etc/*
+  RetVal=$?
+  ;;		
+*)
+  echo "Usage: `basename $0` {[gzip|bzip2|xz]}"
+  exit 6
+  ;;
+esac  
+
+[ $RetVal -eq 0 ] && echo "Backup etc finished.($Com)."
+
+
+case语句解决上一个服务脚本的问题：
+#!/bin/bash
+#
+SvcName=`basename $0`
+LockFile=/var/lock/subsys/$SvcName
+
+if [ $# -lt 1 ]; then
+  echo "Usage: $SvcName {start|restart|stop|status}"
+  exit 5
+fi
+
+case $1 in
+start)
+  touch $LockFile
+  echo "Starting $SvcName finished." ;;
+stop)
+  rm -f $LockFile
+  echo "Stopping $SvcName finished." ;;
+restart)
+  rm -f $LockFile
+  touch $LockFile
+  echo "Restarting $SvcName finished." ;;
+status)
+  if [ -e $LockFile ]; then
+    echo "$SvcName is running..."
+  else
+    echo "$SvcName is stopped..."
+  fi
+  ;;
+*)
+  echo "Usage: $SvcName {start|restart|stop|status}"
+  exit 6
+esac
+
+
+练习：判断当前Linux发行版是RedHat, Fedora, CentOS还是其它。
+方法：取得/etc/issue文件第一行的第一个单词后进行比较；
+
+
+bash如何与用户交互：bash内置命令, read
+	-p "prompt"：提示信息
+	-t #: 超时秒数
+
+例子：
+#!/bin/bash
+#
+
+read -p "Do you agree [yes|no]?: " YesNo
+
+case $YesNo in
+y|Y|[Yy]es)
+  echo "Agreed, proceed." ;;
+n|N|[nN]o)
+  echo "Disagreed, can't proceed." ;;
+*)
+  echo "Invalid input." ;;
+esac
+
+
+例子：写一个脚本
+1、显示如下菜单给用户：
+m|M) show memory usages;
+d|D) show disk usages;
+q|Q) quit
+2、如果用户选择了第一项，则显示内存使用信息；
+   如果选择了第二项，则显示磁盘挂载及使用相关信息；
+   如果是第三项，退出，并显示选择退出；
+   其它任何内容，均说明错误选项；
+
+#!/bin/bash
+cat << EOF 
+m|M) show memory usages;
+d|D) show disk usages;
+q|Q) quit
+EOF
+
+read -p "Your choice: " Choice
+
+case $Choice in
+m|M)
+	free -m ;;
+d|D)
+	df -lh ;;
+q|Q)
+  	echo "Quit..."
+  	exit 0
+  	;;
+*)
+	echo "Invalid input."
+	exit 5
+	;;
+esac
+
+
+
+特殊权限、ACL、定时任务；
+
+
+安全上下文：
+cat --> /bin/cat
+
+	openstack: /bin/cat /etc/fstab
+
+	/etc/shadow
+	openstack, passwd, /etc/shadow
+
+	s: suid, set uid，属主有s权限，意味着用户在执行此程序时，其进程的属主不再是发起者本人，而是这个程序文件的属主；
+		s:属主原有执行权限
+		S:属主无执行权限
+		chmod u+|-s /path/to/somefile
+		chmod 4644 /path/to/somefile
+	s: sgid, set gid，属组有s权限，意味着执行此程序时，其进程的属组不再是运行者本人所属的基本组，而是此程序文件的属组；
+		chmod g+|-s /path/to/somefile
+
+	t: sticky, 粘贴位，附加other的权限上，表现为t
+		t:
+		T:
+		chmod o+|-t /path/to/somefile
+
+	u:s
+	g:s
+	o:t
+
+	suid,sgid,sticky
+
+         000
+	ugt: 001
+	     010
+	     100
+	     011
+	     101
+	     110: 6
+	     111
+
+	chmod 6664 /tmp/a.txt
+		umask: 0022
+
+	/tmp/test
+	chmod g+s,o+t /tmp/test
+	775
+	chmod 3775 /tmp/test
+	chown :mygrp /tmp/test
+
+练习1：
+1、复制/bin/cat为/tmp/cat；
+2、复制/etc/rc.d/rc.sysinit为/tmp/hello
+3、设定hello文件的其它用户权限为无权限；
+4、切换至普通用户，执行/tmp/cat，查看/tmp/hello；验正是否可查看；
+5、以root用户身份设定/tmp/cat/具有suid权限；而后切换至普通用户，执行/tmp/cat，查看/tmp/hello；验正是否可查看；
+
+练习2：
+1、创建组magedu;
+2、添加用户hadoop和hive，均以magedu为额外组；
+3、创建目录/tmp/test，并设定其改组为magedu;
+4、分别使用两个普通用户在/tmp/test目录创建文件，看是否有权限；
+5、设定/tmp/test目录的属组具有写权限；
+6、再次分别使用两个普通用户在/tmp/test目录创建文件，看是否有权限；如果能创建，查看文件属组；
+7、以root用户身份设定/tmp/test的属组上具有sgid；而后再次使用两个普通用户分别于/tmp/test目录中创建文件，查看文件的属组；并验正能否删除对方文件；
+8、以root用户身份设定/tmp/test具有sticky；而后再次使用两个普通用户分别于/tmp/test目录中创建文件，查看文件的属组；并验正能否删除对方文件；
+
+练习3：
+1、复制文件/etc/issue为/tmp/issue；
+2、修改/tmp/issue的权限为属主读写执行、属组读写、其它用户只读，且具有suid;
+3、复制文件/etc/fstab为/tmp/fstab，修改/tmp/fstab权限为属主读写执行、属组只读、其它用户只读，且具有sgid和sticky;
+
+
+
+FACL: 文件访问控制列表
+
+hadoop: /var/tmp/test.txt
+	hadoop, hadoop
+	664: 其它，只读
+
+	hadoop希望能够让hive写此文件，他该如何进行？只能修改other的权限有写权限；
+
+	acl: 用于实现在原有的访问控制机制之外补充一种文件访问控制机制
+
+	用户访问文件：
+		1、用户是否为文件属主？
+		2、用户是否有特定的访问控制条目？
+		3、用户是否属于文件属组？
+		4、用户所属的组是否有特定的访问控制条目？
+		5、其它。
+
+	getfacl /path/to/somewhere: 查看文件或目录的访问控制列表；
+
+	setfacl -m u:USERNAME:MODE /path/to/somewhere: 为USERNAME指定的用户设定对文件/path/to/somewhere具有MODE访问权限；
+
+	setfacl -m g:GROUPNAME:MODE  /path/to/somewhere: 为GROUPNAME指定的组设定对文件/path/to/somewhere具有MODE访问权限；
+
+	setfacl -x u:USERNAME /patn/to/somewhere
+	setfacl -x g:GROUPNAME /path/to/somewhere
+
+	额外挂载的文件系统默认不支持acl，如果要支持，
+	方法1：
+		mount -o acl DEVICE MOUNT_POINT
+		永久有效：需要编辑/etc/fstab，在挂载选项后附加acl选项；
+
+	方法2：设定分区的默认挂载选项中有acl，则挂载时无须再指定acl；
+		tune2fs -o acl DEVICE
+		取消此默认挂载选项：
+		tune2fs -o ^acl DEVICE
+
+hadoop: 文件/var/tmp/hadoop.txt， 664
+	拒绝hive用户对此的任何访问；
+	setfacl -m u:hive:--- /var/tmp/hadoop.txt
+
+
+复制文件/var/log/messages至/data目录， 其属主为root用户，且有读写权限，属组为root组，且有读写权限；可以被任何人读取，可以被gentoo用户和magedu组读写，但centos用户没有任何访问权限；
+
+# mkdir /data
+# cp /var/log/messages /data
+# chmod 664 /data/mesages
+# setfacl -m u:gentoo:rw /data/mesages
+# setfacl -m g:magedu:rw /data/mesages
+# setfacl -m u:centos:--- /data/mesages
+
+
+case语句：多分支if一种替代形式
+
+for 变量名
+
+case 变量替换 in
+value1)
+	;;
+value2)
+	;;
+*)
+	;;
+esac
+
+*, ?, [], |
+
+文件系统：ext
+	superblock
+	inode table
+	inode
+	inode bitmap
+	block bitmap
+
+	tune2fs -l
+	dumpe2fs -h
+
+	dumpe2fs 
+
+	SATA/IDE: hdparm、badblocks
+
+特殊权限：
+	suid, sgid, sticky
+	s,S   s,S   t,T
+
+FACL
+	getfacl
+	setfacl
+		-m
+			u:USERNAME:MODE
+			g:GROUPNAME:MODE
+		-x
+			u:USERNAME
+			g:GROUPNAME
+
+	mount -o acl
+	tune2fs -o acl
+
+	acl
+
+	-R
+
+
+磁盘管理：RAID
+
+IDE, SCSI
+
+Redundent Aarry of Inexpensive Disks
+
+RAID
+
+Redundent Aarry of Indepedent Disks
+
+目的：高性能(读、写)、可靠(冗余)
+
+级别：Level，用于描述磁盘不同组合逻辑
+
+Raid0: 条带
+Raid1: 镜像
+
+1 0 = 1
+1 1 = 0
+
+校验冗余
+
+
+Raid0, ..., Raid7
+Raid10, Raid50
+
+JBOD
+
+Linux: md(Multi Devices)
+	/dev
+		sdb1, sdc1, sdd1
+
+		md: 模拟成为一个Raid, 软Raid
+
+		/dev/md0, /dev/md1, /dev/md2, ...
+
+			/proc, /sys
+
+		mdadm 
+
+软Raid的实现：
+
+	程序, md(依赖于CPU)
+
+		md: 基于任何块设备
+			/dev/sda5, /dev/sda6: Raid1
+
+			mdadm: 模式化的命令
+				-C: 创建
+				-A：装配
+				-F：监控
+
+		大小为10G Raid0:
+			-C /dev/md
+				-a {yes|no}: 是否为新建的raid设备自动创建设备文件/dev/md#；
+				-l #: 指定Raid级别；
+				-n #: 指定用于Raid的块设备的个数；不包括备盘；
+				-c 
+				-x #: 指定用于备盘的块设备个数；
+				DEVICE ...
+
+			-D, --detail: 详细信息
+			用法示例：mdadm -D /dev/md0
+
+		设备文件：
+			major：主设备号，用于区分设备类别；
+			minor: 次设备号，用于区分同一种类别下不同的具体设备；
+
+
+		大小为10G的Raid1, 
+			mdadm -C /dev/md1 -a yes -l 1 -n 2 /dev/sd{b,c}2
+
+			cat /proc/mdstat
+
+			watch -n # 'COMMAND'
+
+			watch -n 1 'cat /proc/mdstat'
+
+
+		阵列中磁盘管理的命令
+			mdadm /dev/md# option /dev/sd##
+				-f: 把指定设备模拟损坏
+				-r: 把损坏的设备移除
+				-a: 新增一个设备到阵列中
+
+		sdb2, sdc2, sdd2: 10G
+
+			mdadm -C /dev/md2 -a yes -l 1 -n 2 -x 1 /dev/sd{b,c,d}2
+
+		大小为10G的Raid5:
+			3, 5G
+
+			大小为20G的RAID
+
+		-A: 
+			host1: Raid5, /dev/md7, /dev/sd{b,c,d}2
+			host2: /dev/sdd, sde, sdf
+				mdadm -A /dev/md2 -a yes -l 5 -n 3 /dev/sd{d,e,f}2
+
+	JBOD: 500g
+
+练习1：创建一个空间大小为10G的RAID5设备；其chuck大小为256k；要求此设备开机时可以自动挂载至/backup目录，并且支持facl；
+练习2：创建一个可用空间大小为10G的的Raid1设备，其chuck大小为128K，要求其具有一个热备磁盘；此设备开机可自动挂载至/users目录；
+
+
+
+关于fdisk -l警告“Partition 1 does not end on cylinder boundary.”类的信息，只需要使用fdisk -cul即可。
+
+
+Raid: 
+	raid5: 3, (n-1)/n, 读
+	raid10: 4, 50%, 读，写
+	raid0, 2
+
+mdadm	
+	-C
+		-x, 
+		-c
+		-n
+		-l
+	-A
+
+
+md: 逻辑设备，抽象设备、元设备；
+	mdadm
+
+dm: device mapper
+	dm: raid
+		条带，镜像
+
+lvm: Logical Volume Manager
+lvm2
+
+snapshot: 
+
+	数据备份：
+
+	LVM2：
+		便捷地调整文件系统大小；
+		快照；
+
+1、逻辑卷创建
+	PV-->VG-->LV
+
+	10G: VG
+
+	pvcreate /dev/sdb5
+	pvdisplay /dev/sdb5
+	pvs
+
+	vgcreate VGNAME /dev/sdb5 ...
+		-s PE
+	vgdisplay
+	vgs
+
+	lvcreate -L SIZE -n LV_NAME VG_NAME
+			 -l PE的个数
+	lvdisplay
+	lvs
+
+	逻辑卷的设备文件：/dev/VG_NAME/LV_NAME
+					  /dev/mapper/VG_NAME-LV_NAME
+					  /dev/mapper/testvg-mylv
+
+2、扩展VG
+	首先准备好一个PV；
+	使用vgextend命令即可完成扩展；
+	vgextend VG_NAME /PATH/TO/PV
+
+3、缩减VG
+	确定要移除的PV；
+	将此PV上的数据转移至其它PV；
+		pvmove /path/to/pv
+	从卷组中将此PV移除；
+		vgreduce VG_NAME /PATH/TO/PV
+
+4、扩展逻辑卷
+	确定扩展多大？
+		5G：-->8G
+	确定当前逻辑卷所在的卷组有足够的空闲空间；
+	扩展：
+		1、物理边界
+			lvextend -L [+]SIZE /path/to/lv
+		2、逻辑边界
+			resize2fs /path/to/device
+
+文件系统检测：
+	fsck
+	e2fsck [-t fs_type] [-f] [-p] /path/to/device
+
+5、缩减逻辑卷
+	确定缩减为多大？前提是：至少能容纳原有的所有数据。
+		8G --> 3G
+	缩减：
+		1、卸载并强行检测文件系统；
+			e2fsck -f 
+		2、逻辑边界
+			resize2fs /path/to/device SIZE
+		3、物理边界
+			lvreduce -L [-]SIZE /path/to/lv
+
+6、快照卷：
+1) 生命周期为整个数据时长；在这段时长内，数据的增长量不能超出快照卷大小；
+2) 快照卷应该是只读的；
+3) 跟原卷在同一卷组内；
+	lvcreate 
+		-s : 快照卷；
+		-p r: 限制快照卷为只读访问
+
+	lvcreate -L SIZE -s -p r -n LV_NAME /path/to/lv
+
+7、移除逻辑卷：
+	lvremove /path/to/lv
+
+8、移除卷组：
+	vgremove VG_NAME
+
+
+
+如果使用RAID1存储数据，还要不要备份数据？
+	RAID1: rm -rf
+
+练习1：创建一个由两个物理卷组成的大小为20G的卷组myvg，要求其PE大小为16M；而后在此卷组中创建一个大小为8G的逻辑卷lv1，此逻辑卷要能在开机后自动挂载至/users目录；
+练习2：新建用户suse，其家目录为/users/suse，并切换至用户suse后复制/etc/hosts, /etc/resolv.conf和/etc/issue三个文件至自己的家目录；
+练习3：使用root用户对lv1创建快照卷lv1-snap；而后再新建用户；
+练习4：缩减lv1的大小至5G，并确保其数据不会丢失；
+
+
+
+bash编程的循环：while和until
+
+while 测试条件; do
+  语句1
+  语句2
+  ...
+done
+
+Count=2
+
+if [ $Count -le 5 ]; then
+
+fi
+
+while [ $Count -le 5 ]; do
+
+	let Count++
+done
+
+条件满足时就循环，直到条件不再满足，则退出循环；
+
+for如何退出循环？遍历列表中的元素完成；
+while循环呢？在循环体改变测试条件相应变量等的值。
+
+补充：算术运算符
+	Sum=$[$Sum+$I]
+	Sum+=$I
+		+=
+		-=
+		*=
+		/=
+		%=
+
+	Sum=$[$Sum+1]
+		Sum+=1 
+		let Sum++
+		let Count--
+
+
+
+and --> AND
+exit --> EXIT
+quit 
+
+
+
+计算100以内所有正整数的和；
+Sum=0
+for I in {1..100}; do
+  Sum+=$I
+done
+echo $Sum
+
+#!/bin/bash
+Sum=0
+Count=1
+
+while [ $Count -le 100 ]; do
+  let Sum+=$Count
+  let Count++
+done
+
+echo $Sum
+
+
+计算100以内所有偶数的和；
+#!/bin/bash
+#
+EvenSum=0
+Count=0
+
+while [ $Count -le 100 ]; do
+  let Sum+=$Count
+  let Count+=2
+done
+
+while [ $Count -le 100 ]; do
+  if [ $[$Count%2] -eq 0 ]; then
+    Sum+=$Count
+  fi
+  let Count++
+done
+
+while循环遍历文件的每一行：
+	while read LINE; do 
+	  statement1
+	  statement2
+	  ...
+	done < /path/to/somefile
+
+练习：如果用户的ID号为偶数，则显示其名称和shell；对所有用户执行此操作；
+
+while read LINE; do
+  Uid=`echo $LINE | cut -d: -f3`
+  if [ $[$Uid%2] -eq 0 ]; then
+    echo $LINE | cut -d: -f1,7
+  fi
+done < /etc/passwd
+
+
+练习：转换用户输入的字符为大写，除了quit（遇见quit退出）；
+
+read -p "A string: " String
+
+while [ "$String" != 'quit' ]; do
+  echo $String | tr 'a-z' 'A-Z'
+  read -p "Next [quit for quiting]: " String
+done
+
+
+until 测试条件; do
+  语句1
+  语句2
+  ...
+done
+
+条件不满足就循环，直到满足时，退出循环；
+
+例子：计算100以内所有正整数的和；
+Sum=0
+Count=1
+
+until [ $Count -gt 100 ]; do
+  let Sum+=$Count
+  let Count++
+done
+
+echo $Sum
+
+练习：转换用户输入的字符为大写，除了quit（遇见quit退出）；
+
+read -p "A string: " String
+
+until [ "$String" == 'quit' ]; do
+  echo $String | tr 'a-z' 'A-Z'
+  read -p "Next [quit for quiting]: " String
+done  
+
+
+
+练习：每隔5秒查看hadoop用户是否登录，如果登录，显示其登录并退出；否则，显示当前时间，并说明hadoop尚未登录：
+
+who | grep "^hadoop" &> /dev/null
+RetVal=$?
+
+until [ $RetVal -eq 0 ]; do
+  date
+  sleep 5
+  who | grep "^hadoop" &> /dev/null
+  RetVal=$?
+done
+
+echo "hadoop is here."
+
+
+
+
+until who | grep "^hadoop" &> /dev/null; do
+  date
+  sleep 5
+done
+
+echo "hadoop is here."
+
+
+
+
+who | grep "^hadoop" &> /dev/null
+RetVal=$?
+
+while [ $RetVal -ne 0 ]; do
+  date
+  sleep 5
+  who | grep "^hadoop" &> /dev/null
+  RetVal=$?
+done
+
+echo "hadoop is here."
+
+练习：使用while循环统计/etc/rc.d/init.d/functions中#开头的行数；
+
+let Count=0
+declare -i Count=0
+
+#!/bin/bash
+Count=0
+while read LINE ; do
+if echo $LINE | grep "^[[:space:]]*#" &> /dev/null ; then
+	let Count++
+fi
+done < /etc/rc.d/init.d/functions
+echo -e  "\n\ttotal $Count lines start with #.\n"
+
+#!/bin/bash
+#
+Num=0
+while read LINE; do
+echo $LINE |grep "^#.*"  &> /dev/null && let Num++
+done < /etc/rc.d/init.d/functions
+echo "#Number: $Num"
+
+
+计算100以内所有偶数的和以及奇数的和；在一个循环中实现；
+要求：分别使用while和until各自独立实现。
+
+#!/bin/bash
+  Evensum=0
+  Oddsum=0
+  Count=0
+  while [ $Count -le 100 ];do
+    if [ $[$Count%2] -eq 0 ];then
+     let Evensum+=$Count
+    else
+     let Oddsum+=$Count
+    fi
+    let Count++
+  done
+  echo "The Evensum is : $Evensum"
+  echo "The Oddsum is : $Oddsum"
+
+ #!/bin/bash
+  Evensum=0
+  Oddsum=0
+  Count=0
+  until [ $Count -gt 100 ]; do
+  if [ $[$Count%2] -eq 0 ];then
+    let Evensum+=$Count
+  else
+    let Oddsum+=$Count
+   fi
+   let Count++
+  done
+  echo "The Evensum is : $Evensum"
+  echo "The Oddsum is : $Oddsum"
+
+   
+练习：写一个脚本：
+1) 显示一个菜单给用户：
+d|D) show disk usages.
+m|M) show memory usages.
+s|S) show swap usages.
+*) quit.
+2) 当用户给定选项后显示相应的内容；
+   
+扩展：
+	当用户选择完成，显示相应信息后，不退出；而让用户再一次选择，再次显示相应内容；除了用户使用quit；
+
+
+#!/bin/bash
+#
+
+vim
+
+用于创建脚本的脚本的进一步要求：
+1、判断语法错误后，如果发现有语法错误，则提示用户q或Q退出，其它任意键则使用vim重新打开进行编辑；
+2、没有语法错误时，给脚本以执行权限；
+3、要判断文件是否为已经为有效的bash脚本；
+
+
+
+${VAR_NAME}: 变量替换。
+
+bash编程之变量替换进阶：
+
+read -p "A string" -t 5 String
+
+String=${String:-word}
+
+
+
+
+${parameter:-word}
+    Use  Default  Values.  If parameter is unset or null, the expansion of word is substituted.  Otherwise, the value of parameter is substituted.
+${parameter:=word}
+    Assign Default Values.  If parameter is unset or null, the expansion of word is assigned to parameter.  The value of parameter is then substituted.  Positional parameters and special parameters may not be assigned to in this way.
+${parameter:?word}
+    Display Error if Null or Unset.  If parameter is null or unset, the expansion of word (or a message to that effect if word is not present) is written to the standard error and the shell, if it is not interactive, exits.  Otherwise, the value of  parameter  is substituted.
+${parameter:+word}
+    Use Alternate Value.  If parameter is null or unset, nothing is substituted, otherwise the expansion of word is substituted.
+
+
+Linux软件包安装：
+
+Linux
+
+静态语言：
+	
+	系统调用：库
+		动态库
+
+	程序：Windows, Linux
+		Windows, Linux
+
+API: Posix
+ABI: Application Binary Interface
+
+Linux, GNU
+
+Vendor: 
+	32bit: 
+	x86_64:
+
+kernel, GNU
+
+Debian: dpt
+RedHat: rpm, Redhat Package Manager
+
+glibc: 系统核心库
+
+openssl: 
+
+软件包的组成部分：
+	二进制程序：/bin, /sbin, /usr/bin, /usr/sbin, /usr/local/bin, /usr/local/sbin
+	库文件：/lib, /usr/lib, /usr/local/lib
+	配置文件：/etc
+	帮助文件：手册, README, INSTALL (/usr/share/doc/)
+
+软件包管理工具：
+	文件清单
+	文件放置路径
+	提供的功能说明
+	依赖关系
+
+数据库：
+
+	X, Y-0.3.1
+
+软件包库：
+
+dpt, rpm  --> apt-get X
+
+rpm: suse
+
+RPM: RPM is Package Manager
+
+rpm: 打包、安装、查询、升级、校验、卸载
+
+	X-->Y-->M,N-->O,P
+
+	update
+
+YellowDog: YUM
+
+rpm --> yum
+
+编译安装：源代码
+
+编译器：gcc, g++
+	提供编译环境：开发环境
+		二进制：
+		库：/etc/ld.so.conf, /etc/ld.so.conf.d/*.conf
+		帮助手册：/etc/man.config, man -M 
+		头文件：/usr/include
+
+include stdio.h
+
+安装程序的方式：
+	通用二进制格式
+	软件包管理器
+	软件包管理器的前端工具
+	源代码编译
+
+
+Linux: 编译
+	64bit -- 32bit
+	CPU, 64bit
+
+
+	x86_64
+	powerpc
+
+	java, JVM
+
+rpm: 打包、安裝、查詢、升級、卸載、校驗、数据库管理（重建）
+
+源程序：name-version.tar.{gz|bz2|xz}
+	版本号：major.minor.release
+
+	bash-4.3.1.tar.xz
+
+rpm包：name-version-release.arch.rpm
+	发行号：用于标识rpm包本身的发行号，可还包含所适用的操作系统
+		el6: rhel6
+		centos6:
+		el5
+		suse11
+	arch: 主机平台
+		i686、x86_64、amd64、ppc、noarch
+
+	bash-4.3.2-5.el6.x86_64.rpm
+
+
+rpm分包：
+	主包：核心包
+	分包：支包
+		bind
+		bind-devel
+
+
+OS: 安装程序
+
+	fedora-epel
+		http://mirrors.sohu.com
+	http://rpmfind.net
+	http://rpm.pbone.net/
+
+rpm包有验正机制：来源的合法性、软件包的完整性
+	gpg --> pgp
+		非对称加密：p, s
+			数字签名：
+
+	RedHat系列官方公钥：
+		/etc/pki/rpm-gpg/
+			RPM-GPG-KEY-CentOS-6
+
+		rpm 
+			-K
+			--checksig 
+
+安装：rpm -i /PATH/TO/RPM_FILE
+	-i|--install
+	-v, -vv, -vvv
+	-h: 以#显示安装进度，一个#表示2%的进度；
+	-ivh 
+
+	忽略依赖关系：
+		--nodeps
+
+	测试安装：
+		--test
+
+	重新安装：
+		--replacepkgs
+
+	warning: /etc/sysconfig/named created as /etc/sysconfig/named.rpmnew
+
+卸载：rpm -e 包名
+	--nodeps
+
+	warning: /etc/sysconfig/named saved as /etc/sysconfig/named.rpmsave
+
+查询：rpm -q|--query 包名
+	
+	查询所有已经安装包:
+		rpm -qa
+		rpm -qa | grep 'pattern'
+
+	查询包的摘要信息：
+		rpm -qi 包名
+
+	查询包安装生成的文件清单：
+		rpm -ql 包名
+
+	查询某文件是由哪个rpm安装生成的：
+		rpm -qf /path/to/some_file
+
+	查询包安装生成的配置文件：
+		rpm -qc 包名
+
+	查询包安装生成的帮助文档：
+		rpm -qd 包名
+
+	查询包相关的脚本：
+		rpm -q --scripts 包名
+
+		preinstall: 安装前脚本
+		postinstall: 安装后脚本
+		preuninstall: 卸载前脚本
+		postuninstall: 卸载后脚本
+
+查询尚未安装的包的相关信息：
+	rpm -qpi /path/to/rpm_file
+		-i
+		-l
+		-d
+		-c
+		--scripts
+
+升级：
+	-U: 升级+安装 
+	-F：升级
+
+	-Uvh
+	-Fvh
+
+	--force
+	--nodeps
+
+	注意：内核不应该升级，应该尽可能安装，它允许多版本并存；
+
+校验：rpm -V 包名
+	
+
+rpm包的数据库：
+	/var/lib/rpm
+
+	数据库重建：
+		--initdb: 新建
+		--rebuilddb: 重建
+
+
+源码格式的rpm包：
+
+
+打包：rpm的包制作过程是根据spec文件来完成的。
+
+rpmbuild
+
+http://172.16.0.1/cobbler/
+
+
+rpm: 软件包管理器
+
+RPM：
+
+yum: RPM前端工具
+
+
+yum repository
+	ftp, http, file
+		路径：存放了rpm包；
+	createrepo: 
+		repodata
+
+http://172.16.0.1/cobbler/ks_mirror/centos-6.4-x86_64/
+
+客户端：
+	yum install|reinstall|remove
+	/etc/yum.conf
+		/etc/yum.repos.d/*.repo
+
+		section:
+		[main]
+
+		[repository_ID]
+		name=
+		baseurl=
+		enabled={1|0}
+		gpgcheck={1|0}
+		gpgkey=
+
+[base]
+name=CentOS 6.4 x86_64
+baseurl=http://172.16.0.1/cobbler/ks_mirror/centos-6.4-x86_64/
+enabled=1
+gpgcheck=0
+
+
+yum客户端：
+	yum SUBCOMMAND:	
+		list {all|installed|available}
+		repolist [all|enabled|disabled]
+		info package_name
+		groupinfo "group_name"
+
+		clean [ packages | metadata | expire-cache | rpmdb | plugins | all ]
+		makecache
+
+		install package_name ... 
+			yum -y : 自动回答为yes; 
+		reinstall package_name ...
+
+		check-update
+		update package_name ...
+		update-to 
+			y-0.2.1, y-0.2.2, y-0.3.0
+
+		remove package_name ...
+
+		provides | whatprovides
+
+		groupinstall
+			开发组：
+				RHEL6，CentOS6: "Development tools"、"Server Platform Development" "Desktop Platform Development"
+				RHEL5, CentOS5: "Development tools"、"Development Libraries"
+		groupupdate
+		groupremove
+
+		localinstall
+		localupdate
+
+		history: 查看此前安装卸载等操作历史；
+
+	yum localinstall 
+		--nogpgcheck
+
+
+yum仓库的创建：
+
+
+lftp:
+	get,
+	mget
+	mirror
+	bye
+	cd
+	pwd
+
+baseurl=http://mirrors.sohu.com/centos/6.4/os/x86_64/
+
+
+gpg: 检查rpm签名
+
+
+
+http://mirror.sohu.com/centos/$relasever/os/$basearch/
+
+
+
+Every [repository] section must contain the following minimum directives:
+	[repository_ID]
+		The repository ID is a unique, one-word (no spaces; underscores are allowed) string of characters (enclosed by brackets) that serves as a repository identifier.
+	name=A Repository Name
+		This is a human-readable string describing the repository.
+	baseurl=http://path/to/repo, ftp://path/to/repo, file:///path/to/local/repo
+		This is a URL to the directory where the repodata directory of a repository is located. Usually this URL is an HTTP link, such as:
+		baseurl=http://path/to/repo/releases/$releasever/server/$basearch/os/
+enabled=value
+	...where value is one of:
+	0 — do not include this repository as a package source when performing updates and installs. This is an easy way of quickly turning repositories on and off, which is useful when you desire a single package from a repository that you do not want to enable for updates or installs.
+	1 — include this repository as a package source.
+
+
+
+
+$releasever
+This is replaced with the package's version, as listed in distroverpkg. This defaults to the version of the redhat-release package.
+
+$arch
+This is replaced with your system's architecture, as listed by os.uname() in Python.
+
+$basearch
+This is replaced with your base architecture. For example, if $arch=i686 then $basearch=i386.
+
+$YUM0-9
+This is replaced with the value of the shell environment variable of the same name. If the shell environment variable does not exist, then the configuration file variable will not be replaced.
+
+
+
+# python -c 'import yum, pprint; yb = yum.YumBase(); pprint.pprint(yb.conf.yumvar, width=1)'
+{'arch': 'ia32e',
+ 'basearch': 'x86_64',
+ 'releasever': '6',
+ 'uuid': '9dda0d9c-16a9-4186-9605-c33754133949'}
+
+
+web, apache, httpd
+
+
+make <-- Makefile
+
+autoconf --> configure脚本 + Makefile.in = makefile
+automake --> Makefile.in
+
+
+make install
+
+
+编译安装步骤：
+	# cd SOURCE_CODE
+	# ./configure  
+		检查编译环境
+		让用用户定制编译配置（通过脚本选项）
+			--help
+			--prefix=/usr/local/apache
+			--sysconfdir=
+	# make
+	# make install
+
+PATH环境变量
+/usr/local/apache/bin
+/usr/local/apache/sbin
+
+库文件搜索路径：/etc/ld.so.conf, /etc/ld.so.conf.d/*.conf
+/usr/local/apache/lib
+
+# ldconfig -v: 重新搜索当前系统上所有库文件搜索路径下的库文件，并生成缓存/etc/ld.so.cache；
+
+
+/usr/local/apache/conf
+
+/etc/man.config, MANPATH=
+/usr/local/apache/share/man
+
+头文件：
+ln -s
+
+网络：
+
+
+
+
+
+
+写一个脚本：
+1、通过ping命令测试192.168.0.151到192.168.0.254之间的所有主机是否在线，
+	如果在线，就显示"ip is up."，其中的IP要换为真正的IP地址，且以绿色显示；
+	如果不在线，就显示"ip is down."，其中的IP要换为真正的IP地址，且以红色显示；
+
+要求：分别使用while，until和for(两种形式)循环实现。
+ping
+	-c
+	-W
+
+
+
+
+
+写一个脚本(前提：请为虚拟机新增一块硬盘，假设它为/dev/sdb)，为指定的硬盘创建分区：
+1、列出当前系统上所有的磁盘，让用户选择，如果选择quit则退出脚本；如果用户选择错误，就让用户重新选择；
+2、当用户选择后，提醒用户确认接下来的操作可能会损坏数据，并请用户确认；如果用户选择y就继续，n就退出；否则，让用户重新选择；
+3、抹除那块硬盘上的所有分区(提示，抹除所有分区后执行sync命令，并让脚本睡眠3秒钟后再分区)；并为其创建三个主分区，第一个为20M，第二个为512M, 第三个为128M，且第三个为swap分区类型；(提示：将分区命令通过echo传送给fdisk即可实现)
+
+fdisk -l |grep "
+
+dd if=/dev/zero of=/dev/sdb bs=512 count=1
+sync
+sleep 3
+
+
+RAID
+LVM：
+	逻辑卷的缩减
+	扩展
+	快照卷
+
+while CONDITION; do
+  循环体
+done
+
+while [ $VAR != 'quit' ];do  
+	
+done
+	
+
+
+
+网络及网络配置
+
+0000 0001 . 0000 0001
+1111 1111 . 0000 0000
+
+0000 0001 . 0000 0010
+
+0000 0001 . 0000 0000
+1.0
+
+
+
+1.1 --> 2.1
+1.0 
+
+1.1 --> 1.2
+1.0  1.0
+
+
+IPv4点分十进制：
+0000 0000 - 1111 1111
+0-255
+
+221.34.23.12
+网络地址：
+主机地址：
+
+
+32位二进制
+
+
+A类: 255.0.0.0， 8：
+	0 000 0001 - 0 111 1111 
+	127个A类，127用于回环，1-126
+	2^7-1个A类
+	容纳多少个主机：2^24-2
+	主机位全0：网络地址
+	主机位全1：广播地址
+B类：255.255.0.0， 16
+	10 00 0000- 10 11 1111
+	128-191
+	129.1.0.0.
+	130.1.0.0
+	64个B类，2^14个B类网
+	容纳多少个主机:2^16-2
+C类：255.255.255.0， 24
+	110 0 0000 - 110 1 1111
+	192-223
+	32个C类, 2^21个C类网
+	容纳多个少个主机：2^8-2
+
+私有地址：
+	A类：10.0.0.0/8
+	B类：172.16.0.0/16-172.31.0.0/16
+	C类：192.168.0.0/24-192.168.255.0/24
+	
+路由：选路
+	
+	
+ICANN, IANA
+	
+D类：
+	1110 0000 - 1110 1111
+	224-239
+E类：
+
+
+主机接入网络：
+
+IP
+NETMASK
+GATEWAY
+HOSTNAME
+DNS1
+DNS2
+DNS3
+	手动指定
+	DHCP：Dynamic Host Configuration Protocol
+		169.254.
+
+
+路由
+
+Linux: 网络属于内核的功能
+
+
+RHEL5: /etc/modprobe.conf
+alias
+
+RHEL6: /etc/udev/rules.d/70-persistent-net.rules
+
+
+
+以太网：ethX
+
+
+ifconfig [ethX] 
+	-a: 显示所有接口的配置住处
+	
+ifconfig ethX IP/MASK [up|down] 
+	配置的地址立即生效，但重启网络服务或主机，都会失效；
+	
+网络服务：
+RHEL5:	/etc/init.d/network {start|stop|restart|status}
+RHEL6: /etc/init.d/NetworkManager {start|stop|restart|status}
+
+网关：
+route 
+	add: 添加
+		-host: 主机路由
+		-net：网络路由
+			-net 0.0.0.0
+	route add -net|-host DEST gw NEXTHOP
+	route add default gw NEXTHOP
+
+
+del：删除
+	-host
+	-net 
+	
+	route del -net 10.0.0.0/8 
+	route del -net 0.0.0.0
+	route del default
+
+	所做出的改动重启网络服务或主机后失效；
+
+查看：
+	route -n: 以数字方式显示各主机或端口等相关信息
+	
+
+网络配置文件：
+/etc/sysconfig/network
+
+网络接口配置文件：
+/etc/sysconfig/network-scripts/ifcfg-INTERFACE_NAME
+DEVICE=: 关联的设备名称，要与文件名的后半部“INTERFACE_NAME”保持一致; 
+BOOTPROTO={static|none|dhcp|bootp}: 引导协议；要使用静态地址，使用static或none；dhcp表示使用DHCP服务器获取地址；
+IPADDR=: IP地址
+NETMASK=：子网掩码
+GATEWAY=：设定默认网关；
+ONBOOT=：开机时是否自动激活此网络接口；
+HWADDR=： 硬件地址，要与硬件中的地址保持一致；可省；
+USERCTL={yes|no}: 是否允许普通用户控制此接口；
+PEERDNS={yes|no}: 是否在BOOTPROTO为dhcp时接受由DHCP服务器指定的DNS地址；
+
+不会立即生效，但重启网络服务或主机都会生效；
+
+路由：
+/etc/sysconfig/network-scripts/route-ethX
+添加格式一：
+DEST	via 	NEXTHOP
+
+添加格式二：
+ADDRESS0=
+NETMASK0=
+GATEWAY0=
+
+
+DNS服务器指定方法只有一种：
+/etc/resolv.conf
+nameserver DNS_IP_1
+nameserver DNS_IP_2
+
+指定本地解析：
+/etc/hosts
+主机IP	主机名	主机别名
+172.16.0.1		www.magedu.com		www
+
+DNS-->/etc/hosts-->DNS
+
+
+配置主机名：
+hostname HOSTNAME
+
+立即生效，但不是永久有效；
+
+/etc/sysconfig/network
+HOSTNAME=
+
+
+RHEL5：
+	setup: system-config-network-tui
+	system-config-network-gui
+
+	
+ifconfig, 老旧
+
+iproute2
+	ip
+		link: 网络接口属性
+		addr: 协议地址
+		route: 路由
+
+	link
+		show
+			ip -s link show
+		set
+			ip link set DEV {up|down}
+			
+	addr
+		add
+			ip addr add ADDRESS dev DEV
+		del
+			ip addr del ADDRESS dev DEV
+		show
+			ip addr show dev DEV to PREFIX
+		flush
+			ip addr flush dev DEV to PREFIX
+		
+		
+一块网卡可以使用多个地址：
+网络设备可以别名：
+eth0
+	ethX:X, eth0:0, eth0:1, ...
+	
+配置方法：
+	ifconfig ethX:X IP/NETMASK
+	
+	/etc/sysconfig/network-scripts/ifcfg-ethX:X
+	DEVICE=ethX:X
+
+	非主要地址不能使用DHCP动态获取; 
+
+ip
+	eth1, 添加个地址192.168.100.1
+	
+ip addr add 192.168.100.1/24 dev eth1 label eth1:0
+primary address
+secondary adress
+
+192.168.100.6
+
+10.0.1.0/24, 192.168.100.6
+
+路由:
+route add -net 10.0.1.0/24 gw 192.168.100.6
+
+ip route add to 10.0.1.0/24 dev eth1 via 192.168.100.6
+	add, change, show, flush, replace
+	
+ifconfig eth0, 172.16.200.33/16
+
+ifconfig eth0:0 172.16.200.33/16
+
+TCP:
+	URG 
+	SYN
+	ACK
+	PSH
+	RST
+	FIN
+
+如何定义IP：
+/etc/init.d/network
+1、修改配置文件
+	/etc/sysconfig/network-scripts/ifcfg-XXX
+		eth{0,1,2,...}
+		ppp{0,1,2,...}
+
+	eth0:{0,1,2,...}, 例如，eth0:0
+
+2、ifconfig 接口 IP/netmask
+
+3、ip addr 
+	iproute2：
+		ip, tc, ss
+
+4、 setup
+		system-config-network-tui: 直接修改配置文件
+	system-config-network-gui
+
+静态IP：
+
+BOOTPROTO={none|static|bootp|dhcp}
+IPADDR=
+NETMASK=
+GATEWAY=
+PEERDNS=no
+	默认路由
+	网络路由
+	主机路由
+		route add {-net|-host} TARGET gw nexthop
+		route add default gw GATEWAY
+
+		/etc/sysconfig/network-scripts/route-XXX
+
+/etc/hosts
+
+
+/etc/resolv.conf
+nameserver IP1
+nameserver IP2
+nameserver IP3
+
+www.magedu.com
+
+
+NetworkManager: 桥接
+chkconfig NetworkManager off
+chkconfig network on
+
+init --> upstart --> systemd
+
+
+
+Linux中任务计划：
+	一次性：
+		at, batch
+	周期性：
+		vixie cron: crontab
+
+	一次性任务执行：
+	at now+3min
+	at 11:30
+		noon, midnight, teatime
+
+	at TIME
+	at>
+	Ctrl+d: 提交任务
+
+	at -l = atq
+
+	执行结果以邮件方式发送给任务发起者；
+	查看邮件：
+	# mail
+		& #
+		& q
+
+	删除尚未执行的任务：
+		at -d JOB_ID = atrm JOB_ID
+
+	任务队列：
+		多个
+		a
+
+	at -f /PATH/TO/AT_SCRIPT TIME
+
+
+	周期性任务：
+		vixie cron
+		crond: daemon
+			守护进程: daemon
+				/etc/init.d/
+
+		uptime
+
+
+	crond: 配置文件
+		crontab：
+			系统cron：/etc/crontab
+
+			用户cron: /var/spool/cron/USERNAME
+
+		1、运行者身份；
+			用户cron: 定义者
+				6个字段，与系统cron相比，无需指定用户身份
+			系统cron: 在配置文件指定
+				7个字段
+
+# Example of job definition:
+# .---------------- minute (0 - 59)
+# |  .------------- hour (0 - 23)
+# |  |  .---------- day of month (1 - 31)
+# |  |  |  .------- month (1 - 12) OR jan,feb,mar,apr ...
+# |  |  |  |  .---- day of week (0 - 6) (Sunday=0 or 7) OR sun,mon,tue,wed,thu,fri,sat
+# |  |  |  |  |
+# *  *  *  *  * user-name command to be executed
+
+				3 4 * * * root cat /etc/fstab
+				通配符：
+					*：相应时间点的所有有效取值
+					,: 离散取值,   3,18,33,48 * * * * root cat /etc/fstab
+					/: 定义指定取值范围内的频率, 例如：*/3 * * * * root cat /etc/fstab     17 */3 * * * root cat /etc/fstab
+					-: 连续取值：17 8-20/3 * * * root cat /etc/fstab
+
+					3 18 * * 2,5 
+					7 2 */2 * * root tar -Jcf /backup/etc-`date '+%F'`.tar.xz /etc/*
+
+					2,32 8-18/3 * * 1-5 
+
+
+		2、PATH
+			/bin:/sbin:/usr/bin:/usr/sbin
+				如果是命令：使用绝对路径
+				如果是脚本：在脚本自行定义PATH=
+
+		3、拒收邮件
+			方法一：
+				MAILTO=‘’
+			方法二：
+				&> /dev/null
+
+
+
+
+	用户cron的定义：
+		crontab 
+			-e
+			-r: 移除配置文件，会删除所有任务；
+			-l: 列出周期性任务
+			-u USERNAME
+				crontab -e -u hadoop
+
+
+
+crontab, process, function, sed, awk, boot, grub, kernel
+
+
+
+以秒单位执行任务计划：
+方法1：
+* * * * * /usr/bin/unison webdata
+* * * * * sleep 30 && /usr/bin/unison webdata
+
+方法2：
+* * * * * for i in 0 1 2; do some_job && sleep 15; done; some_job
+	0: 15, 
+	15:30
+	30: 45
+	45:
+
+* * * * * for i in {1..5}; do some_job && sleep 10; done; some_job
+
+
+注意：使用%时要加反斜线。例如：
+1 2 3 * * touch ~/file_$(date +\%Y\%m\%d).txt
+
+但使用单引号后也可以不再使用反斜线，例如:
+1 2 3 * * touch ~/file_$(date '+%Y%m%d').txt
+
+
+禁止在自动任务执行后发送电子邮件：
+
+将输出结果重定向至/dev/null:
+>/dev/null 2>&1   或
+&> /dev/null
+
+在文件的开始部分加入命令来关闭所有命令的邮件输出：
+MAILTO=""
+
+
+anacron: cron
+
+cronie: 
+
+练习：
+1、每5分钟执行一次cat /etc/inittab命令；
+2、每周1，3，5执行备份/etc目录；
+3、每30秒取得一次eth0网卡的报文发送量，保存至/stats/interface.txt文件中；保存格式形如：
+	11：30：15  33
+	11：30：45  76
+4、每天中午12、13、14点，每5分钟查看一次当前系统挂载的所有文件系统，将信息保存至/stats/mounts.txt文件中；
+5、每周末上午9点至下午18点，每30分钟取得一次当前系统的内存使用信息，并将其保存至/stats/memory.txt文件中；
+
+1：*/5 * * * *
+2: 2 3 * * 1,3,5 
+3: * * * * * /root/txpackets.sh; sleep 30; /root/txpackets.sh
+4: */5 12-14 * * * mount >> /stats/mounts.txt
+5: 2,32 9-18 * * 6,7 free >> /stats/memory.txt
+
+
+
+网络管理命令：
+ping：测试网络连通性；
+	-c #: 发送探测报文的个数；
+	-W seconds: 超时时长，单位为秒；
+
+
+写一个脚本：探测172.16.251.11-172.16.251.110内的主机是否在线。
+#!/bin/bash
+#
+NET=172.16.251
+for I in {11..110}; do
+  if ping -c 1 -W 1 $NET.$I &> /dev/null; then
+    echo $NET.$I is up.
+  else
+    echo $NET.$I is down.
+  fi
+done
+
+ping -c 1 -W 1 $NET.$I  &> /dev/null && echo "$NET.$I is up." || echo "$NET.$I is down."
+
+
+
+traceroute 
+
+
+
+netstat:
+	OSI: tcp, udp
+		tcp: 
+
+		http --> tcp
+
+netstat 
+	-t
+	-u
+	-tu
+	-tl
+	-n
+	-p: 显示进程名和PID
+	-r: 显示路由信息；
+	-c : 批量显示， 此时可以在命令后跟一个数字，表延迟时长；
+	-e: 显示扩展
+
+ss
+	-t: tcp
+	-u: udp
+	-a: all, 相关协议所有连接；
+	-l: 监听的套接字；
+	-e: 显示扩展信息；
+	-m: 显示套接字连接使用的内存信息；
+	-p: 进程及进程号
+
+	FILTER := [ state TCP-STATE ] [ EXPRESSION ]
+
+	ss -ta state established '( dport = :22 )'
+		dport: 目标端口；
+		sport: 源端口；
+		src: 源IP；
+		dst: 目标IP；
+
+		# ss -tan state established '( dport = :22 or sport = :22 )'
+
+bash编程之变量替换：
+${VAR_NAME}
+${VAR:-word}
+${VAR:=word}
+
+
+
+${parameter#*word}
+${parameter##*word}
+              The word is expanded to produce a pattern just as in pathname expansion.  If the pattern matches the beginning of the value of
+              parameter, then the result of the expansion is the expanded value of parameter with the shortest matching pattern  (the  ?..?.
+              case)  or  the  longest  matching pattern (the ?..#?..case) deleted.  If parameter is @ or *, the pattern removal operation is
+              applied to each positional parameter in turn, and the expansion is the resultant list.  If parameter is an array variable sub-
+              scripted  with  @ or *, the pattern removal operation is applied to each member of the array in turn, and the expansion is the
+              resultant list.
+
+FILE=/usr/local/src
+${FILE#*/}: usr/local/src
+${FILE##*/}: src
+
+${FILE%/*}: /usr/local
+${FILE%%/*}:
+
+
+
+${parameter%word*}
+${parameter%%word*}
+              The word is expanded to produce a pattern just as in pathname expansion.  If the pattern matches a  trailing  portion  of  the
+              expanded  value  of  parameter, then the result of the expansion is the expanded value of parameter with the shortest matching
+              pattern (the ?..?..case) or the longest matching pattern (the ?..%?..case) deleted.  If parameter  is  @  or  *,  the  pattern
+              removal  operation  is applied to each positional parameter in turn, and the expansion is the resultant list.  If parameter is
+              an array variable subscripted with @ or *, the pattern removal operation is applied to each member of the array in  turn,  and
+              the expansion is the resultant list.
+
+
+练习：
+1、取出root用户的shell；
+User=`grep "^root:" /etc/passwd`
+echo ${User##*:}
+2、取出以组mygrp为附加组的用户；
+3、
+
+练习：复制一个命令及其依赖的库文件至目标目录下的目录结构中；例如，如果我们要复制cat程序至目标目录/mnt/sysroot，则先查找cat程序文件的位置，假设为/bin/cat，于是复制/bin/cat至/mnt/sysroot/bin目录下，且文件名称依然为cat；
+提示：获取一个命令所依赖的库文件的命令为ldd
+
+/lib64/libc.so.6 --> /mnt/sysroot/lib64/libc.so.6
+/lib64/ld-linux-x86-64.so.2 --> /mnt/sysroot/lib64/ld-linux-x86-64.so.2
+
+
+
+useradd, /usr/sbin/useradd
+/mnt/sysroot/usr/sbin/useradd
+
+
+
+
+复制一个程序至目标目录下：/mnt/sysroot
+cat, /bin/cat, /mnt/sysroot
+
+cp /bin/cat /mnt/sysroot/bin/cat
+
+useradd, /usr/sbin/useradd
+cp /usr/sbin/useradd /mnt/sysroot/
+
+
+which cat 
+	/bin/cat
+	cat, /bin
+	/mnt/sysroot/
+
+echo "abc"
+
+echo -e "\033[31mabc\033[0m"
+
+
+\033[3#;4#;#
+
+\033[0m
+
+
+
+bash脚本编程之函数：
+	function: 功能， 库
+
+	代码重用：结构化编程
+
+	功能：不能独立执行，可以被调用，在调用的时刻执行；
+
+	C：main();
+
+	bash如何定义函数：
+		function FUNC_NAME {
+			函数体
+		}
+
+		FUNCTION: 
+
+		FUNC_NAME() {
+			函数体
+		}
+
+	bash函数可以接受参数，在调用函数时直接向其传递即可，例如：
+		FUNC_NAME argu1 argu2 ...
+
+	bash函数的返回值：
+		1、执行结果，通常使用echo或print输出；
+		2、状态返回值：0, 1-255
+			自定义：函数在函数体执行的任何位置遇到return语句，函数就结束执行，并且返回执行状态码；
+
+
+练习：写一个脚本，判定172.16.251.11-172.16.251.110之间的主机哪些在线。要求：
+1、使用函数来实现一台主机的判定过程；
+2、在主程序中来调用此函数判定指定范围内的所有主机的在线情况。
+
+
+写一个脚本：使用函数完成
+1、函数能够接受一个参数，参数为用户名；
+   判断一个用户是否存在
+   如果存在，就返回此用户的shell和UID；并返回正常状态值；
+   如果不存在，就说此用户不存在；并返回错误状态值；
+2、在主程序中调用函数；
+
+扩展1：在主程序中，让用户自己输入用户名后，传递给函数来进行判断；
+扩展2：在主程序中，输入用户名判断后不退出脚本，而是提示用户继续输入下一个用户名；如果用户输入的用户不存在，请用户重新输入；但如果用户输入的是q或Q就退出；
+
+
+
+写一个脚本，完成以下功能：
+1、提示用户输入一个用户名；
+2、显示一个菜单给用户，形如：
+U|u  show UID
+G|g  show GID
+S|s  show SHELL
+Q|q  quit
+3、提醒用户选择一个选项，并显示其所选择的内容；
+
+如果用户给的是一个非上述所提示的选项，则提醒用户给出的选项错误，并请其重新选择后执行；
+
+
+练习：
+1、将系统安装光盘挂载至/media/yum目录，用其实现yum仓库；
+2、配置使用http://172.16.0.1/yum/为可用yum仓库；
+
+
+写一个脚本，完成以下功能：
+说明：此脚本能于同一个repo文件中创建多个Yum源的指向；
+1、接受一个文件名做为参数，此文件存放至/etc/yum.repos.d目录中，且文件名以.repo为后缀；要求，此文件不能事先存，否则，报错；
+2、在脚本中，提醒用户输入repo id；如果为quit，则退出脚本；否则，继续完成下面的步骤；
+3、repo name以及baseurl的路径，而后以repo文件的格式将其保存至指定的文件中；
+4、enabled默认为1，而gpgcheck默认设定为0；
+5、此脚本会循环执行多次，除非用户为repo id指定为quit；
+
+/etc/yum.repos.d/test.repo
+[repo_id]
+name=
+baseurl=
+enabled=1
+gpgcheck=0
+
+
+
+写一个脚本，完成如下功能：
+说明：此脚本能够为指定网卡创建别名，指定地址；使用格式如：mkethalias.sh -v|--verbose -i ethX
+1、-i选项用于指定网卡；指定完成后，要判断其是否存在，如果不存在，就退出；
+2、如果用户指定的网卡存在，则让用户为其指定一个别名，此别名可以为空；如果不空，请确保其事先不存在，否则，要报错，并让用户重新输入；
+3、在用户输入了一个正确的别名后，请用户输入地址和掩码；并将其配置在指定的别名上；
+4、如果用户使用了-v选项，则在配置完成后，显示其配置结果信息；否则，将不显示；
+
+
+
+mkethalias.sh -i eth1
+
+eth1:2 
+
+Linux文件查找：
+	locate: 非实时查找，根据数据库（速度快）；模糊查找；
+	find：实时查找，精确匹配；速度慢；
+
+	find [查找位置] [查找标准] [处理动作]
+		查找位置：默认为当前目录；
+		查找标准：默认为查找指定目录下的所有文件；
+		处理动作：显示到标准输出；
+
+	查找标准：
+		-name "文件名称": 根据文件名查找
+			支持glob, *, [], ?
+		-iname "文件名称"：根据文件名查找，不区分字符大小写；
+
+		-user USERNAME: 根据属主查找；
+		-group GRPNAME: 根据属组查找；
+
+		-uid UID;
+		-gid GID;
+
+		-nouser：查找没属主的文件；
+		-nogroup: 查找没有属组的文件；
+
+		组合查找条件：
+			-a: 与
+			-o：或
+			-not, !： 非
+			例如：查找/tmp目录下没有属主，并且文件名以一个字符.test文件；
+			# find /tmp -name "?.test" -nouser -ls
+
+		-type 
+			f: 普通文件
+			d: 目录
+			b: 块设备
+			c: 字符设备
+			l: 符号链接
+			p: 命名管道
+			s: 套接字文件
+
+		-size 
+			12MB (11.,12)MB
+			-size [+|-]2MB
+			常用单位：
+				k
+				M
+				G
+
+		-atime [+|-]#
+		-mtime [+|-]#
+		-ctime [+|-]#
+
+		-amin [+|-]
+		-mmin [+|-]
+		-cmin [+|-]
+
+		-perm [+|-]MODE
+			没有[+|-]表示精确权限匹配；
+			+MODE: 任何一类用户的任何一位权限匹配即可；
+			-MODE: 每类用户的每位权限都匹配；
+
+
+	处理动作：
+		-print: 显示
+		-ls: 显示查找到的文件的详细信息；
+		-exec COMMAND \;
+			find /tmp -atime +30 -exec mv {} {}.old \;
+		-ok COMMAND \;
+
+练习：
+1、查找/var目录下属主为root并且属组为mail的所有文件；
+find /var -user root -group mail
+
+2、查找/usr目录下不属于root,bin,或student的文件；
+find /usr -not \( -user root -o -user bin -o -user student \)
+find /usr -not -user root -a -not -user bin -a -not -user student
+
+3、查找/etc目录下最近一周内内容修改过且不属于root及student用户的文件；
+find /etc -mtime -7 -a -not -user root -a -not -user student
+find /etc -mtime -7 -a -not \( -user root -o -user student \)
+
+4、查找当前系统上没有属主或属组且最近1天内曾被访问过的文件，并将其属主属组均修改为root；
+find / \( -nouser -o -nogroup \) -a -atime -1 -exec chown root:root {} \;
+
+5、查找/etc目录下大于1M的文件，并将其文件名写入/tmp/etc.largefiles文件中；
+find /etc -size +1M -exec echo {} >> /tmp/etc.largefiles \;
+find /etc -size +1M >> /tmp/etc.largefiles
+
+6、查找/etc目录下所有用户都没有写权限的文件，显示出其详细信息；
+find /etc -not -perm +222
+
+
+find / \( -nouser -o -nogroup \) -a -atime -1 | xargs -i chown root:root {} 
+
+
+类型不是目录，而且没有属主的文件；
+find / -not -type d -a -nouser -exec rm -f {} \;
+find / -not -type d -a -nouser | xargs -i rm -f {}
+
+
+find / -size +10M -a -atime +10 -exec mv {} {}.old \;
+
+结构化编程，代码重用；
+
+1、被调用时执行；
+2、如何调用函数：函数名
+	$1, $2, ...
+	$*, $@, $#
+3、return
+4、函数可以嵌套；
+
+bincp.sh
+
+进程：process, 过程
+
+MMU: Memory Management Unit
+	内存保护
+	虚拟化：
+		CPU 32bit: 2^32=4GB
+			线性地址空间
+
+		物理地址空间：RAM+ROM
+
+
+进程：init(1) --> fork() --> 
+
+进程间通信：IPC, Inter Process Communication
+	signal, shm, semerphor
+
+
+进程分为两类：
+	CPU-Bound: CPU密集型进程
+	IO-Bound：IO密集型进程
+
+进程分为三类：
+	批处理进程
+	实时进程
+	交互式进程
+
+调度器：
+	进程优先级：
+		动态优先级：
+			惩罚措施：
+		静态优先级：用户类进程
+			100-139：数字越小，优先级越高；
+			nice值:-20, 19
+			       100, 139
+		实时优先级：内核类线程
+			1-99：数字越大，优先级越高；
+
+Linux 2.6： O(1)
+
+进程切换：Context Switch, 上下文切换
+
+内核模式，用户模式
+
+内核空间，用户空间
+	
+	ring0: 特权指令，敏感指令 
+
+	ring3：普通指令 --> 系统调用
+
+IO：
+	poll: 轮询, 忙等待;
+	interupt: 中断, 中断的上半部和下半部
+	DMA:
+
+进程的状态：
+	Ready: 
+	Running:
+		5ms, 2ms, 
+	Sleeping
+		Interruptable Sleeping
+		Uninterruptable Sleeping
+	Stopped:
+	Zombie: 僵死态
+
+	COW: Copy On Write: 写时复制；
+
+
+进程管理类的命令：
+	pstree, ps, top, vmstat, htop, pmap
+
+	pstree: 查看进程树; 
+
+	ps: 显示系统向前进程状态的命令；
+		进程：
+			跟终端相关的进程
+			跟终端无关的进程
+
+			a: 所有跟终端相关的进程
+			x: 所有跟终端无关的进程
+				STAT: 
+					S：可中断睡眠
+					D：不可中断睡眠
+					R：运行或可运行；
+					T：停止
+					Z：僵死
+					s: session leader
+					l: 多线程进程；
+					+: 前台进程；
+					N: 低优先级进程；
+					<: 高优先级进程；
+			u: 以用户为中心显示进程相关信息
+				%CPU: cputime/realtime
+				%MEM: 
+				VSZ： Virtual memory SiZe
+				RSS: 常驻内存集; 
+
+			-ef:
+				-e: 显示所有进程；
+				-f: 完整格式列表；
+			-eFH
+				-F：显示额外信息； 
+				-H: 显示进程层次关系；
+
+			-o 要显示的字段: 自定义显示格式
+				ps axo pid,command
+
+		pgrep pattern:
+			例如：pgrep bash
+			选项： 
+			-U USERNAME：显示相关用户的进程；
+			-G GROUPNAME：相关组的进程；
+
+		pidof: 
+
+	top：
+		M: 按内存空间占用大小排序；
+		P：按CPU时间占用大小排序；
+		T：按累计时间排序；
+
+		k: 杀死一个进程；
+		m: 是否显示内存摘要信息；
+		t: 是否显示CPU和进程的统计信息；
+		l: 是否显示负载信息
+
+		q: 退出
+
+		选项：
+			-d #: 刷新延迟；
+			-b : 批次显示；
+			-n #: 指定批次显示时显示的批数；
+
+	htop: 
+
+	ps、pstree、pidof、pgrep、top、htop
+
+	vmstat
+		procs
+			r: 运行或等待CPU时间片的进程的个数；
+			b: 被阻塞（通常为等待IO完成）的进程队列的长度；
+		memory
+			swpd: 从物理内存交换至交换分区的数据量；
+			free: 未使用的物理内存空间；
+			buff: buffer cache的空间大小；通常是缓存写操作相关的数据；
+			cache: page cache的空间大小；通常是缓存读操作的相关数据；
+		swap:
+			si: swap in, 数据进入交换分区数据量，即从内存至交换分区中去；(kb/s)
+			so: swap out, 数据离开交换分区数据量，即从交换分区至内存；
+		io:
+			bi: block in，从块设备读入的数据量, (kb/s)
+			bo: block out，保存至块设备的数据量, (kb/s)
+		system:
+			in: interrupt，中断发生的速率，通常意为每秒多个次中断请求发生；
+			cs: context switch, 上下文切换的速率；
+		cpu:
+			us: 用户进程所占用CPU时间的百分比；
+			sy: 内核
+			id: CPU空闲百分比；
+			wa: CPU用于等待IO完成的时间百分比；
+			st: 被虚拟化占去的时间百分比；
+
+	sar -u
+	sar -P ALL
+
+	iostat -c
+
+	dstat -c
+	dstat -C 0,3
+
+进程间通信：IPC
+	共享内存，shm
+	信号：signal
+
+	信号：
+		1：SIGHUP, 让进程不用终止，而重读其配置文件；
+		2: SIGINT, 中断正在运行的进程, 相当于Ctrl+c; 
+		9：SIGKILL, 杀死; 
+		15: SIGTERM, 终止;
+		19: SIGSTOP, 停止; 
+		18：SIGCONT
+
+	向其它进程传递信号，使用kill
+		kill -信号 PID
+
+		killall -信号 进程名
+
+		killall5
+
+		kill -l
+
+调整进程nice值：
+	普通用户：调大数字，调低优先级；
+		-20, 19
+		100, 139
+
+	nice -n # COMMAND
+	renice # PID
+
+Linux作业控制：
+	前台：占用着终端；前台作业
+	后台：无须占用终端；
+
+	前台-->后台：Ctrl+z
+	后台-->前台：fg %JOB_ID
+
+	bg [[%]JOB_ID]：让其在后台运行；
+
+	启动时，让作业直接运行于后台：
+		# COMMAND &
+		# nohup COMMAND &
+
+	作业也可被终止：
+		kill [%JOB_ID]
+
+	axel -n 5 -o ./ http://a.b.c.d/abc.iso
+
+	screen:
+		screen
+		screen -ls
+		screen -r SCREEN_ID
+		exit
+
+Linux终端：
+	控制台：/dev/console
+	物理终端：
+	虚拟终端：/dev/tty[1-6]
+	模拟终端: /dev/pts/#
+	串行终端: /dev/ttyS#
+
+练习：
+1、如何获取当前系统上下文切换的次数？sar、iostat或dstat是否可以？
+
+/proc：内核映射，伪文件系统;
+	PID
+	# cat /proc/PID/maps
+	# pmap PID: 查看进程运行的物理地址空间映射； 
+
+多处理器：
+mpstat 
+
+
+补充资料：关于mmap
+
+系统调用mmap()可以将某文件映射至内存(进程空间)，如此可以把对文件的操作转为对内存的操作，以此避免更多的lseek()与read()、write()操作，这点对于大文件或者频繁访问的文件而言尤其受益。
+
+1、 Linux采用了投机取巧的分配策略，用到时，才分配物理内存。也就是说进程调用brk()或mmap()时，只是占用了虚拟地址空间，并没有真正占用物理内存。这也正是free –m中used并不意味着消耗的全都是物理内存。
+2、 mmap()通过指定标志(flag) MAP_ANONYMOUS来表明该映射是匿名内存映射，此时可以忽略fd，可将它设置为-1。如果不支持MAP_ANONYMOUS标志的类unix系统，可以映射至特殊设备文件/dev/zero实现匿名内存映射。
+3、 调用mmap()时就决定了映射大小，不能再增加。换句话说，映射不能改变文件的大小。反过来，由文件被映射部分，而不是由文件大小来决定进程可访问内存空间范围(映射时，指定offset最好是内存页面大小的整数倍)。
+4、通常使用mmap()的三种情况.提高I/O效率、匿名内存映射、共享内存进程通信。
+
+
+mmap将一个文件或者其它对象映射进内存。文件被映射到多个页上，如果文件的大小不是所有页的大小之和，最后一个页不被使用的空间将会清零。
+
+当使用mmap映射文件到进程后,就可以直接操作这段虚拟地址进行文件的读写等操作,不必再调用read,write等系统调用.但需注意,直接对该段内存写时不会写入超过当前文件大小的内容.
+
+
+采用共享内存通信的一个显而易见的好处是效率高，因为进程可以直接读写内存，而不需要任何数据的拷贝。对于像管道和消息队列等通信方式，则需要在内核和用户空间进行四次的数据拷贝，而共享内存则只拷贝两次数据：一次从输入文件到共享内存区，另一次从共享内存区到输出文件。
+
+
+
+进程：
+
+使用命令 pmap -x <pid> 可以查看进程的内存占用信息； lsof -a -p <pid> 可以查看一个进程打开的文件信息。ps -Lf <pid> 可以查看进程的线程数。
+
+另外procfs也是一个分析进程结构的好地方。procfs是一个虚拟的文件系统，它把系统中正在运行的进程都显现在/proc/<pid>目录下。
+
+
+
+
+
+bash编程之sed:
+	grep, sed, awk
+
+sed: Stream EDitor，行编辑器
+
+sed /pattern/
+	p:print
+
+	sed [options] "script" FILE1 ...
+
+	例子：sed -n "/^#/p" /etc/fstab
+
+	选项：
+		-n: 静默模式，即不输出模式空间中的内容；
+		-e: 指定在一个sed命令中使用多个script，格式为-e 'script1' -e 'script2' ...
+		-i: 直接修改原文件；
+		-r: 支持使用扩展正则表达式元字符；
+		-f /path/to/sed_script: 从文件中读取处理脚本，并执行； 
+
+	sed地址定界：
+		start_line,end_line: 例如1,7
+		start_line,/pattern/: 例如3,/^#/
+		/pattern/: 仅匹配被模式到的行；
+
+	基本正则表达式：
+		.
+		[]: 
+			[0-9], [[:digit:]]
+			[a-z], [[:lower:]]
+			[A-Z], [[:upper:]]
+			[a-zA-Z], [[:alpha:]]
+			[a-zA-Z0-9], [[:alnum:]]
+			[[:space:]], [[:punct:]]
+		[^]
+		\{m,n\}
+		\{m\}
+		\{m,\}
+		\{0,n\}
+		*
+		\?
+
+		^
+		$
+
+		\<, \b
+		\>, \b
+
+		\(\), \1, \2, ...
+
+	扩展正则表达式：
+		.
+		[]: 
+			[0-9], [[:digit:]]
+			[a-z], [[:lower:]]
+			[A-Z], [[:upper:]]
+			[a-zA-Z], [[:alpha:]]
+			[a-zA-Z0-9], [[:alnum:]]
+			[[:space:]], [[:punct:]]
+		[^]
+		{m,n}
+		*
+		?
+		+
+		|
+
+		(), \1, \2
+
+		^
+		$
+
+		\<, \b
+		\>, \b				
+		
+
+
+
+	sed的常用编辑命令：
+		p: 打印
+		d: 删除
+		a \text：在符合条件的行后面添加指定的内容；在的添加的内容中间使用“\n”能够完成多行附加；
+		i \text：在符合条件的行前面添加指定的内容；在的添加的内容中间使用“\n”能够完成多行附加；
+		c \text: 将符合条件的行替换为指定的文本；
+		r /path/to/somefile: 在符合条件的位置读入指定的文件；
+		w /path/to/somefile: 将符合条件的行保存至指定文件中；
+		=: 显示匹配到的行的行号；
+
+		s@要查找的内容@替换为的内容@：
+			要查找的内容：可以使用模式
+			替换为的内容：不可以使用模式，但可以引用, &
+
+		标志位：
+			i: 忽略大小写
+			g：全局替换
+
+
+t, T, n, N, x, h, H, g, G
+
+
+
+He like his liker.
+He like his lover.
+She love her liker.
+She love her lover.
+
+1、删除上述内容中l..e前后一致的行；
+2、将上述内容中l..e前后一致的后而的l改为大写L；
+
+
+
+
+sed练习：
+1、删除/etc/grub.conf文件中行首的空白符；
+
+2、替换/etc/inittab文件中"id:3:initdefault:"一行中的数字为5；
+
+3、删除/etc/inittab文件中的空白行；
+
+4、删除/etc/inittab文件中开头的#号; 
+
+5、删除某文件中开头的#号及后面的空白字符，但要求#号后面必须有空白字符;
+
+6、删除某文件中以空白字符后面跟#类的行中的开头的空白字符及#
+
+7、取出一个文件路径的目录名称;例如，/etc/sysconfig/的目录名称为/etc；
+
+
+
+
+awk的基本用法：nawk
+	报告生成工具
+
+GNU: gawk
+
+awk [options] '/pattern/{action}'
+	
+	模式：
+		pat1,pat2
+		/pattern/
+		expression
+			>, <, >=, <=, ==, !=, ~
+		BEGIN
+		END
+
+	action:
+		print 
+		printf
+
+	选项：
+		-F:
+
+内置变量，
+	NF: Number of Field
+	NF=7
+	$NF=$7
+
+练习：
+1、显示GID小于500的组；
+2、显示默认shell为nologin的用户；
+3、显示eth0网卡配置文件的配置信息，注意，只显示等号后面的值；
+4、显示/etc/sysctl.conf文件中以net开头的行，以等号为分隔符的第二个字段；
+5、显示eth0的ip地址；通过过滤ifconfig的结果来实现；
+
+
+
+sed: 
+	-i
+	-e
+	-f
+	-r
+	-n
+
+	a \
+	i \
+
+	r /path/to/somefile
+	w
+
+	p
+	d
+
+	s@@@
+
+	sed [options] 'script' FILE ...
+
+awk [options] '/pattern/{action}' FILE
+
+	-F
+
+	pat1,pat2
+	expression
+	/pattern/
+	BEGIN
+	END
+
+	print "text"
+	print $1,...
+
+
+
+
+boot, grub, kernel, trouble shooting, kickstart, pxe
+
+Linux启动流程：
+	
+内核：
+	进程管理
+	内存管理
+	IO管理
+	文件系统
+	驱动程序
+	安全相关
+
+内核设计流派
+	微内核：
+		Windows
+		Solaris
+	单内核：(模块)
+		Linux
+			ko: Kernel Object
+
+System Call
+库：标准库, glibc
+
+init: /sbin/init
+
+	运行级别：0-6
+
+init: 
+
+进程：
+	守护进程：服务
+		A-->B
+	用户进程
+
+RHEL5: init
+RHEL6: upstart
+	d-bus
+
+Fedora 9: upstart
+Fedora 15: systemd
+
+
+POST: ROM+RAM
+	CMOS: BIOS
+		Boot Squence: 
+			MBR: 
+				446: boot loader
+				64: 分区表，16
+				2：5A
+			kernel:
+				外围硬件初始化
+				装载根文件系统
+				/sbin/init
+			init: /etc/inittab
+			upstart: /etc/init/*.conf
+
+			rhel5: /etc/inittab
+
+
+ntloader
+LILO: LInux LOader
+GRUB: GRand Unified Bootloader
+	1st stage --> 1.5 stage --> 2nd stage
+
+
+
+	
+Linux的运行级别：
+	0：halt
+	6: reboot
+
+	1: single user
+		绝大数服务都不会被启动；修复系统之用；
+	s,S, single
+	emergency: 不会执行/etc/rc.d/rc.sysinit
+
+	2：无NFS的多用户模式；
+
+	3：正常级别，文本模式；
+
+	4：保留，未使用；
+
+	5：正常级别，图形模式；
+
+切换级别：
+	init #
+
+查看级别：
+	who -r 
+	runlevel
+
+
+inittab:
+	id
+	runlevels
+	action
+		initdefault
+		sysinit：指定系统初始化脚本
+		wait：等待切换进此级别时执行；
+		ctrlaltdel：
+		powerfail：
+		powerokwait：
+		respawn：
+
+/etc/rc.d/rc.sysinit:
+	激活selinux和udev
+	根据/etc/sysctl.conf文件设置内核参数
+	设置系统时钟
+	装载键映射
+	启用交换分区
+	设置主机名
+	根文件系统检测并重新挂载其为读写；
+	激活RAID和LVM；
+	检查和挂载其它文件系统；/etc/fstab中定义；
+	清理操作；
+
+
+# chkconfig: 2345 90 60
+	2345：默认在2345级别下为S开头的链接；S后的数字为90；
+	非2345(0,1,6)级别下，默认为K开头的链接，K后的数字为60;
+
+chkconfig
+	--add
+	--del
+	--level 
+		chkconfig --level LLLL service_name {on|off}
+	--list [service_name]
+
+
+总结系统启动流程：
+	POST-->BootLoader(MBR)-->Kernel(硬件探测、加载驱动、挂载根文件系统、/sbin/init)-->init(/etc/inittab:设定默认级别、系统初始化脚本、启动及关闭对应级别的服务、启动终端)
+
+内核：ko
+
+kernel
+	modules: /lib/modules/`uname -r`/
+		ext3.ko
+
+	ram disk = initrd 
+	ram fs = initramfs
+
+/boot/vmliunz-`uname -r`
+rhel5: /boot/initrd-`uname -r`.img
+rhel6: /boot/initramfs-`uname -r`.img
+
+
+dd if=/dev/sda of=/backup/mbr.bak count=1 bs=512
+
+LILO, GRUB
+
+
+GRUB: 
+1st stage: MBR, 446
+2nd stage: /boot/grub/
+
+功能：
+1、选择启动的内核映像或操作系统；
+2、传递参数：
+	e: 编辑模式;
+	b: 引导;
+3、基于密码保护
+	启用内核映像;
+	传递参数;
+
+GRUB识别分区：
+	各类硬盘都是hd
+		不同的硬盘hd#：如hd0, hd1
+		同一个硬盘上的不同分区：(hd0,1)
+
+	title:
+		内核参数：
+			root=/path/to/somefile ：真正的根文件系统设备文件路径
+			ro: 以只读方式挂载根；
+			quiet: 静默模式；
+			selinux=0: 禁用内核中的selinux；
+
+password --md5 密码
+
+# grub-md5-crypt			
+
+安装grub：
+grub> root (hd#,#)
+grub> setup (hd#)
+grub> quit
+
+方法2：安装grub
+1、创建一个名为boot的目录，例如/mnt/boot
+2、确保目标硬盘分区已经存在，否则，请自行分区格式化；
+3、挂载目标硬盘上要安装grub的分区至新建的boot目录;
+3、grub-install --root-directory=/mnt/boot /dev/sdb
+
+内核探测硬件的信息：记录进日志文件/var/log/dmesg
+# cat /var/log/dmesg
+# dmesg
+
+
+
+tservice 
+
+# chkconfig: 35 90 60
+
+X(65) --> Y (60)
+X(60) --> Y(70)
+
+
+chkconfig --add 
+
+# chkconfig: <runlevels> <SS> <KK>
+
+
+#!/bin/bash
+# chkconfig: 35 90 60
+# description: Test Service
+# config: /etc/tservice.conf
+
+Service=`basename $0`
+LockFile=/var/lock/subsys/$Service
+
+start() {
+	if [ -e $LockFile ]; then
+	  echo "$Service is already running..."
+	  return 5
+    else
+      touch $LockFile
+      echo "Starting $Service finished..."
+      return 0
+    fi
+}
+
+stop() {
+	if [ -e $LockFile ]; then
+	  rm -f $LockFile
+	  echo "Stop $Service finished..."
+	  return 0
+	else
+	  echo "$Service is stopped."
+	  return 6
+	fi
+}
+
+status() {
+	if [ -e $LockFile ]; then
+	  echo "$Service is running..."
+	else
+	  echo "$Service is stopped..."
+	fi
+    return 0
+}
+
+usage() {
+	echo "Usage: $Service {start|stop|restart|status}"
+}
+
+case $1 in
+start)
+	start ;;
+stop)
+	stop ;;
+restart)
+	stop
+	start ;;
+status)
+	status ;;
+*)
+	usage 
+	exit 1 ;; 
+esac
+
+
+
+
+
+Jump='\033[60G'
+Green='\033[32m'
+Red='\033[31m'
+Normal='\033[0m'
+
+success() {
+        echo -e "Start $1 successfully...$Jump[  ${Green}OK${Normal}  ]"
+}
+
+failure() {
+        echo -e "$1 is already runing...$Jump[${Red}Failure${Normal}]"
+}
+
+
+
+守护进程的类型：
+	独立守护进程：
+		超级守护进程：xinetd
+			瞬时守护进程
+				/etc/xinetd.d/
+
+	service xinetd start
+	chkconfig xinetd on
+
+
+Linux: 单内核
+	模块, .ko
+	/lib/modules/`uname -r`/
+
+	内核的组成部分：
+		/boot/vmlinuz
+			/boot/initrd
+			/boot/initramfs
+		/lib/modules/
+
+	lsmod：显示被装载的内核模块；
+	modinfo: 查看指定模块的详细信息；
+	modprobe MOD_NAME: 装载指定模块；
+		-r: 卸载指定模块；
+	insmod /path/to/module_file
+	rmmod MOD_NAME
+
+	depmod
+
+ram disk 或 ram fs如何生成：
+	# mkinitrd
+	# dracut </path/to/image_file> <kernel_version>
+
+Linux: 
+	vmlinuz, modules, initramfs
+	init, bash
+
+	initctl, telinit
+
+	initctl tty1
+
+busybox
+
+
+kernel, /proc
+
+/proc/#: 
+
+通过/proc/sys修改内核的工作特性
+	文件：但它们是内核参数，文件的内容即为参数的值；
+
+		凡具有写权限的文件，通过可以通过修改其内容来改变内核工作特性：
+			echo NEW_VALUE > /proc/sys/to/some_file
+			sysctl -w to.some_file=NEW_VALUE
+		例如：
+			/proc/sys/net/ipv4/ip_forward
+				echo 1 > /proc/sys/net/ipv4/ip_forward
+				sysctl -w net.ipv4.ip_forward=1
+
+			/proc/sys/kernel/hostname
+
+		sysctl -a: 查看所有内核参数
+
+	sysctl的配置文件：/etc/sysctl.conf
+		设置完成后使用sysctl -p 使其生效；
+
+
+cpuinfo: CPU
+meminfo: memory
+
+lspci: 查看PCI控制器及相关设备信息；
+lsusb: 查看USB控制器相关信息；
+lscpu：显示CPU相关信息；
+lsblk: 显示块设备相关信息；
+
+hal-device
+x86info
+dmesg
+
+dmidecode
+
+ls /dev
+	b: 随机设备
+	c: 线性设备
+
+	mknod, udev
+
+	mknod /dev/dev_file 类型 major minor
+		-m MODE
+
+	udev: /etc/udev/rules.d/*.rule
+
+
+内核编译：
+5.0,5.9
+6.0,6.4
+
+"Development tools"
+"Server Platform Development"
+
+源码：/usr/src/linux
+
+make menuconfig: 文本窗口；
+make gconfig: GNome开发环境中使用; 
+make kconfig: KDE开发环境中使用; 
+
+
+make oldconfig:
+make config
+
+
+make randconfig
+make allyesconfig
+make allnoconfig
+
+内核功能选择：
+	*：编译进内核，即编译成内核一部分
+	M: 编译成模块
+	N: 不启用此功能
+
+
+将配置保存为隐藏文件.config
+
+# make
+# make modules_install
+# make install
+
+kernel panic: 内核恐慌
+
+
+回顾：
+
+POST-->BootLoader(MBR:446, stage2:/boot/grub/)-->Kernel+initrd(initramfs)(硬件探测、装载驱动、只读方式挂载rootfs、/sbin/init)-->init(/etc/inittab, /etc/init/*.conf)(设置默认运行级别、执行系统初始化脚本/etc/rc.d/rc.sysinit、按需启用及停止对应级别下的服务、启动终端)
+
+/etc/fstab
+/etc/sysctl.conf
+	sysctl -p
+
+sysctl -w net.ipv4.ip_forward={0|1}
+echo 1 > /proc/sys/net/ipv4/ip_forward
+
+RHEL6: kernel、initramfs、/lib/modules/、init、bash
+
+RHEL5: kerenl、initrd、/lib/modules/、init、bash
+
+kernel+busybox
+
+LFS: Linux From Scratch
+ALFS:
+BLFS:
+
+http://youbest.cublog.cn
+
+内核编译：
+	1、.config: 
+		make menuconfig
+		make gconfig
+		make kconfig
+		make oldconfig
+		make config
+	2、make
+	3、make modules_install
+	4、make install
+
+清理源代码树：
+# make clean: 只删除编译生成的文件，不删除配置文件.config
+# make mrproper：删除编译生成的文件和配置文件;
+# make distclean: 重置源代码；
+
+
+
+./configure --ksource=/usr/src/linux 
+
+
+
+如何实现内核的部分编译：
+1、只编译某子目录下的相关代码：
+make dir/
+
+make SUBDIR=arch/
+make drivers/net/
+
+2、只编译部分模块
+make M=drivers/net/
+
+3、只编译某一模块
+make drivers/net/pcnet32.ko
+
+4、将编译完成的结果放置于别的目录中
+make O=/tmp/kernel 
+
+5、交叉编译
+make ARCH=
+
+6、并行编译
+make -j #
+
+
+
+获取RedHat官方提供的源码：
+http://ftp.redhat.com/pub/redhat/linux/enterprise/
+
+mockbuild
+
+
+
+
+trouble shooting, kickstart, pxe
+
+
+
+livecd
+isolinux/
+
+
+anaconda, kickstart
+
+POST-->MBR(cdrom, grub.conf)-->isolinux.bin(isolinux.cfg)-->vmlinuz(initrd)-->anaconda
+
+
+GPT
+MBR
+
+
+kickstart文件组成：
+	命令段：用于配置系统;
+		install
+		firewall
+	软件包段：选择要安装的软件包组及软件包；
+		@Base
+		lftp
+		-zsh
+	脚本段：
+		%pre: 安装过程开始之前执行的脚本；
+			所能够执行的操作较小，因为是简洁版的shell环境；
+		%post: 所有软件包安装完成之后执行的脚本; 
+			是完整意义上的shell环境；
+
+
+
+# system-config-kickstart
+# ksvalidator /PATH/TO/KS_FILE
+
+
+
+POST-->cdrom(MBR)-->isolinux.bin(isolinux.cfg)-->vlinuz+initrd(anaconda)
+
+GUI: 安装
+boot: 在提示符下可以提供一些配置信息，自定义如何启动安装过程
+
+
+Linux的引导选项，即boot:提示符后可以使用的选项：
+
+boot: linux ks=http://172.16.0.1/rhel6.x86_64.cfg
+
+ip=
+netmask=
+gateway=
+dns=
+ks=
+
+
+Kickstart 资​源​	 选​项​格​式​
+DVD 驱​动​器​	ks=cdrom:/directory/ks.cfg
+硬​盘​驱​动​器​	ks=hd:/device/directory/ks.cfg
+其​它​设​备​	ks=file:/device/directory/ks.cfg
+HTTP服​务​器​	ks=http://server.mydomain.com/directory/ks.cfg
+HTTPS服​务​器​	ks=https://server.mydomain.com/directory/ks.cfg
+FTP服​务​器​	ks=ftp://server.mydomain.com/directory/ks.cfg
+NFS服​务​器​	ks=nfs:server.mydomain.com:/directory/ks.cfg
+
+
+1、制作引导光盘
+
+# mkisofs -R -J -T -v -no-emul-boot -boot-load-size 4 -boot-info-table -V "MageEdu Testing Image" -b isolinux/isolinux.bin -c isolinux/boot.cat -o /tmp/boot.iso boot/
+
+
+2、ftp服务器
+
+# yum install vsfptd
+# service vsftpd start
+# chkconfig vsftpd on
+
+文件存放路径：/var/ftp/
+
+
+
+系统故障排除：
+
+1、grub配置文件损坏；
+grub> find (hd#,#)/     找到内核文件所在设备
+grub> root (hd#,#)
+grub> kernel /vmlunuz-VERSION ro root=/path/to/rootfs
+grub> initrd /initramfs-VERSION.img
+grub> boot
+
+2、紧急救援安装:
+
+启动光盘上的精简Linux系统，将其作为用于修复硬盘上系统的系统。
+
+/mnt/sysimage
+
+3、bash损坏，重装rpm包 
+rpm --root /mnt/sysimage -ivh      --replacepkgs
+
+
+
+kernel --> init ()
+	启动或停止对应级别下的服务。
+
+
+
+
+
+
+
+安装：引导介质
+	cdrom
+	USB
+	network: 网卡 dhcp, tftp server, isolinux.bin, isolinux.cfg
+
+	CentOS: cdrom iso
+		images/
+			pxe/{vmlinuz,initrd}
+		isolinux/
+			isolinux.bin
+			isolinux.cfg
+			boot.cat
+			boot.msg
+			vmlinuz
+			initrd
+		Packages/
+			OS
+
+	POST-->cdrom(MBR, bootloader, isolinux.bin)-->isolinux.cfg-->vmlinuz+initrd-->anaconda
+
+
+
+bash编程之循环控制、数组、信号捕捉
+
+	for 变量 in 列表; do
+	  循环体
+	done
+
+	while 条件; do
+	  循环体
+	done
+
+	until 条件; do
+	  循环体
+	done
+
+	continue: 结束本轮循环提前进入下一轮；
+	break: 跳出循环
+
+练习：求100以内所有偶数的和：
+
+#!/bin/bash
+#
+declare -i Sum=0
+for I in {1..100}; do
+  if [ $[$I%2] -eq 1 ]; then
+    continue
+  fi
+  let Sum+=$I
+done
+
+
+#!/bin/bash
+#
+declare -i Sum=0
+declare -i Count=0
+while true; do
+  if [ $Count -gt 100 ]; then
+    break
+  fi
+  let Sum+=$Count
+  let Count+=2
+done
+
+echo $Sum
+
+
+每隔5秒探测一次当前系统上指定用户是否登录；直到登录，说明其已经登录，而后结束脚本；
+
+#!/bin/bash
+#
+read -p "Which user: " UserName
+UserName=${UserName:-root}
+
+while true; do
+  who | grep "^$UserName[[:space:]]" &> /dev/null
+  [ $? -eq 0 ] && break
+  sleep 5
+done
+
+echo "$UserName is logged."
+
+
+
+信号捕捉：
+	1: SIGHUP
+	2: SIGINT
+	9: SIGKILL
+	15: SIGTERM
+
+	trap 'COMMAND' 信号
+
+
+例子：
+
+#!/bin/bash
+#
+
+Network=172.16.251
+
+Exit() {
+  echo "interrup..."
+  exit 3
+}
+
+trap "Exit" INT
+
+for I in {11..110};do
+  if ping -c1 -W1 $Network.$I &> /dev/null; then
+    echo "$Network.$I is up."
+  else
+    echo "$Network.$I is down."
+  fi
+done
+
+
+练习：写一个脚本，完成如下功能
+前提：有两个下载点可以提供相应的软件包：http://172.16.0.1/cobbler/ks_mirror/centos-6.4-x86_64/Packages/和http://172.16.0.1/fedora-epel/6/x86_64；
+1、install.log文件中每一个以Installing开头的行后面后的均为一个包名，其后被.rpm即为软件包文件名；请从如上两个位置中的某一个下载相应的文件；
+2、下载完成后保存至目标目录，如iso/Packages/，
+3、所有包都下载完成后，使用createrepo命令将目标目录创建为yum repository；注意，如果createrepo命令不存在，需要事先安装之；安装不成，则要报错；
+4、将http://172.16.0.1/cobbler/ks_mirror/centos-6.4-x86_64/isolinux/下的所有文件下载至前面Packages的父目录下的isolinux目录中，如iso/isolinux/；
+5、使用mkisofs命令将iso目录制作成可引导的iso镜像；
+6、如果中途用户使用ctrl+c组合键退出脚本，则需要清除下载的所有文件；
+
+
+#!/bin/bash
+#
+Target=/root/Packages
+File=/root/install.log
+URL=http://172.16.0.1/cobbler/ks_mirror/centos-6.4-x86_64/Packages
+
+trap "rm -rf $Target; exit 4" INT
+
+[ -d $Target ] || mkdir $Target
+
+while read Line; do
+  if [[ $Line =~ ^Installing ]]; then
+    RpmFile=`echo $Line | awk '{print $2}'`
+  else
+    continue
+  fi
+
+  wget -q -P $Target/ $URL/${RpmFile}.rpm
+  [ $? -ne 0 ] && echo "$RpmFile not download."
+done < $File
+
+

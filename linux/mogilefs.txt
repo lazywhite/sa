@@ -1,0 +1,433 @@
+
+
+# yum -y install make gcc unzip perl-DBD-MySQL perl perl-CPAN perl-YAML perl-Time-HiRes
+
+# cpan 
+App::cpanminus 
+MogileFS::Server 
+MogileFS::Utils 
+IO::AIO 
+IO::WrapTie 
+Danga::Socket
+
+所有的perl程序可以编译运行：
+	# perl Makefile.PL
+	# make
+	# make test
+	# make install 
+
+
+# cpan -i App::cpanminus
+cpan> install App:cpanminus
+
+
+# cpan MogileFS::Server
+
+conf: 
+	/etc/mogilefs/{mogifsd.conf, mogstored.conf}
+
+
+
+
+
+
+
+
+
+
+
+
+mogilefs的各种客户端工具：
+http://code.google.com/p/mogilefs/wiki/Clients
+
+
+设定数据库：
+mogdbsetup --dbhost=127.0.0.1 --dbpass=mogpass
+
+用户名默认为：mogile
+
+useradd -r mogilefs
+
+mkdir /var/run/mogilefsd/
+chown -R mogilefs.mogilefs /var/run/mogilefsd
+
+修改主配置文件：/etc/mogilefs/mogilefsd.conf
+
+
+
+存储节点：
+
+解决依赖关系，需要安装perl-IO-AIO
+
+启动：
+mogstored -c /etc/mogilefs/mogstored.conf -daemon
+
+
+#通知Trackers有什么host需要添加 有什么Storage需要添加
+mogadm host add 192.168.0.203 –ip=192.168.0.203 –port=7500 –status=alive
+
+
+
+
+
+
+mogilefsd服务脚本：
+#!/bin/bash
+#
+# mogilefsd - Startup script for the MogileFS tracker
+#
+# chkconfig: - 85 15
+# description: MogileFS tracker 
+# processname: mogilefsd
+# config: /etc/mogilefs/mogilefsd.conf 
+# pidfile: /var/run/mogilefsd/mogilefsd.pid
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+# Path to the apachectl script, server binary, and short-form for messages.
+lockfile=${LOCKFILE-/var/lock/subsys/mogilefsd} 
+RETVAL=0
+
+prog=$(which mogilefsd)
+
+start() { 
+	ulimit -n 65535
+	echo -n $"Starting mogilefsd"
+	su - mogilefs -c "$prog -c /etc/mogilefs/mogilefsd.conf --daemon" 
+	RETVAL=$?
+	[ $RETVAL = 0 ] && success && touch ${lockfile} || failure
+	echo
+	return $RETVAL
+}
+
+stop() {
+	echo -n $"Stopping mogilefsd" 
+	netstat -nlp|grep "mogilefsd"|grep -v grep|awk '{print $7}'|awk -F"/" '{print $1}'|xargs kill -9 
+	RETVAL=$?
+	[ $RETVAL = 0 ] && success && rm -f ${lockfile} || failure
+	echo
+}
+
+reload() {
+	echo -n $"Reloading mogilefsd: " 
+	killall mogilefsd -HUP 
+	RETVAL=$?
+	[ $RETVAL = 0 ] && success || failure
+	echo
+}
+
+case "$1" in
+	start) 
+		start
+		;; 
+	stop)
+		stop
+		;; 
+	status) 
+		status mogilefsd 
+		RETVAL=$?
+		;;
+	restart)
+		stop
+		sleep 1
+		start
+		;;
+	reload)
+		reload
+		;; 
+	*) 
+		echo $"Usage: mogilefsd {start|stop|restart|reload|status}" 
+		exit 1
+esac
+exit $RETVAL
+
+
+
+mogstored服务脚本：
+#!/bin/bash
+#
+# mogstored - Startup script for the MogileFS storage
+#
+# chkconfig: - 86 14
+# description: MogileFS storage 
+# processname: mogstored
+# config: /etc/mogilefs/mogstored.conf 
+# pidfile: /var/run/mogilefsd/mogstored.pid
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+# Path to the apachectl script, server binary, and short-form for messages.
+lockfile=${LOCKFILE-/var/lock/subsys/mogstored} 
+RETVAL=0
+
+configfile='/etc/mogilefs/mogstored.conf'
+
+prog=$(which mogstored)
+
+start() { 
+	ulimit -n 65535
+	echo -n $"Starting mogstored"
+	su - mogilefs -c "$prog -c $configfile --daemon"  &> /dev/null
+	RETVAL=$?
+	[ $RETVAL = 0 ] && success && touch ${lockfile} || failure
+	echo
+	return $RETVAL
+}
+
+stop() {
+	echo -n $"Stopping mogstored" 
+	netstat -nlp|grep "mogstored"|grep -v grep|awk '{print $7}'|awk -F"/" '{print $1}'|xargs kill -9 
+	RETVAL=$?
+	[ $RETVAL = 0 ] && success && rm -f ${lockfile} || failure
+	echo
+}
+
+reload() {
+	echo -n $"Reloading mogstored: " 
+	killall mogstored -HUP 
+	RETVAL=$?
+	[ $RETVAL = 0 ] && success || failure
+	echo
+}
+
+case "$1" in
+	start) 
+		start
+		;; 
+	stop)
+		stop
+		;; 
+	status) 
+		status mogstored 
+		RETVAL=$?
+		;;
+	restart)
+		stop
+		sleep 1
+		start
+		;;
+	reload)
+		reload
+		;; 
+	*) 
+		echo $"Usage: mogstored {start|stop|restart|reload|status}" 
+		exit 1
+esac
+exit $RETVAL
+
+
+
+
+
+
+
+
+
+
+Nginx 做为 MogileFS 的前端客户端
+
+我们使用 Nginx 来吐文件,做前端的查询代理时,我们需要使用到 mogilefs 的这个模块.可以下载这个模块编译进 Nginx 就行了.直接使用 ./configure –add-module= 这个参数就可以了.
+最新的这个模块的下载地址是:https://github.com/vkholodkov/nginx-mogilefs-module
+使用这个需要考虑到网站原来的 url 是什么样的.比如:
+
+http://www.a.com/uploads/front_page/A6B00135E24AB17E043B9B5453762438.png
+这个 URL 中的 UUID 是 A6B00135E24AB17E043B9B5453762438.png.这时我们使用这个做 key 来存成 MogileFS 中就行.
+再结合 rewrite,只要 key 在 url 里有,就能直接代理到后端的 mogilefs.象如下的写法,会直接取 A6B00135E24AB17E043B9B5453762438.png 来做查询用的 key.
+
+location  ~ ([^\/]+)$ {
+        mogilefs_tracker 192.168.1.xxx:7001;
+        mogilefs_domain img;
+        mogilefs_methods GET;
+        mogilefs_noverify on;
+ 
+        mogilefs_pass {
+                proxy_pass $mogilefs_path;
+                proxy_hide_header Content-Type;
+                proxy_buffering off;
+        }
+}
+如果使用了多个 tracker 的话,要配置使用多个 tracker 来进行负载均衡和备份.可以直接配置 tracker 为 upstrame:
+
+
+upstream online_mogilefs {
+  server 10.0.0.1:7001;
+  server 10.0.0.2:7001;
+}
+然后后面配置 tracker 的连接时,直接加上就行了
+
+mogilefs_tracker online_mogilefs;
+如果你还想配置使用 mogilefs 的 Nginx 上传,使用其中的 put 功能然后就不要安装客户端上传送,就需要打个补丁.
+上面的配置其实也是一样,关键对于上传的配置,需要给方法修改为
+
+mogilefs_methods PUT DETEL;
+
+
+
+
+
+
+
+某网友的一个完整的配置文件：
+
+#user  nobody;
+worker_processes  4;
+
+error_log  logs/error.log  notice;
+
+worker_rlimit_nofile 10240;
+
+events {
+    use epoll;
+    worker_connections  10240;
+}
+
+
+http {
+    include       mime.types;
+    default_type  application/octet-stream;
+
+    server_names_hash_bucket_size 128;
+    client_header_buffer_size 32k;
+    large_client_header_buffers 4 32k;
+
+    client_max_body_size 8m;
+    client_body_buffer_size 128k;
+
+    proxy_connect_timeout 600;
+    proxy_read_timeout 600;
+    proxy_send_timeout 600;
+    proxy_buffer_size 16k;
+    proxy_buffers 4 32k;
+    proxy_busy_buffers_size 64k;
+    proxy_temp_file_write_size 64k;
+
+    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                      '$status $body_bytes_sent "$http_referer" '
+                      '"$http_user_agent" "$http_x_forwarded_for"';
+
+    access_log  logs/access.log  main;
+
+    sendfile        on;
+    #tcp_nopush     on;
+
+    #keepalive_timeout  0;
+    keepalive_timeout  65;
+
+    gzip on;
+    gzip_min_length 1k;
+    gzip_buffers 4 16k;
+    gzip_http_version 1.1;
+    gzip_comp_level 2;
+    gzip_types text/plain application/x-javascript text/css application/xml image/jpg image/jpeg image/gif image/png image/x-xbitmap image/pjpeg application/vnd.ms-excel application/vnd.ms-powerpoint application/msword application/x-shockwave-flash application/octet-stream;
+    gzip_vary on;
+
+    tcp_nodelay on;
+
+    server {
+        listen       80;
+        server_name  yourdomain.com;
+
+        location / {
+        mogilefs_tracker 192.168.33.2:6001;
+        mogilefs_domain test;
+        mogilefs_methods get;
+    
+        mogilefs_pass {
+        proxy_pass $mogilefs_path;
+        proxy_hide_header Content-Type;
+        proxy_buffering off;
+        }
+        expires 1h;
+        }
+
+        error_page   500 502 503 504  /50x.html;
+        location = /50x.html {
+            root   html;
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+nginx 的mogilefs模块的官方文档地址：
+
+http://www.grid.net.ru/nginx/mogilefs.en.html
+
+
+
+
+
+使用 Nginx 来替换 storage nodes 上 mogstored 中的 Perlbal
+我们可能想使用 Nginx 来替换 Perlbal 来做上传和写入,我们可以使用 Nginx 的 dav 模块来实现这个.只要编译 Nginx 时使用 –with-http_dav_module 就行了.目前这个模块好象是默认的.
+
+server {
+    listen   7500;
+    charset utf-8;
+ 
+    location / {
+            autoindex    on;
+            root     /var/mogdata/;
+            dav_methods put delete mkcol copy move;
+            client_max_body_size            200m;
+            client_body_temp_path           /data/temp;
+            create_full_put_path               on;
+            dav_access user:rw group:rw all:r;
+    }
+ 
+    error_page 500 502 503 504 /50x.html;
+location /50x.html {
+    root html;
+}
+}
+
+在上面配置:
+
+autoindex :   一定需要设置,不然 mogadm check 时会显示出错.不然需要放一个 index.html 的文件到/var/mogdata. 使用 mogadm 来检查时 Nginx 才会返回 200 OK.
+client_max_body_size  如果要上传比较大的文件时,一定要设置这个.象我用来存视频文件,这个需要修改得非常大.
+注意,上面这个 Nginx 是使用 nginx 的用户来进行操作的,所以你需要给你的 /var/mogdata/ 目录修改成 nginx 的用户才行.另外还有一点要非常注意 client_body_temp_path 的这个参数.建议给上面每个 dav 的设备都设置一个.不然会复制二份文件.然后在 copy 会影响性能,如果单独配置就不会 .象我不喜欢配置这么多,就给这个 temp 写到了 ssd 上面,没有你也可以直接写内存中(感谢Daniel Leaberry<leaberry@gmail.com>的建议).
+
+然后修改你的 mogstored.conf 这个文件.关掉原来的 Perlbal 的监听,但注意了 mogstored 这个服务还是必须启动的.因为他会监控硬盘的好坏和 IO 的性能.只要给 server=none 就行了.就不会启动了.
+
+
+server=none
+mgmtlisten=0.0.0.0:7501
+docroot=/var/mogdata
+
+这个可以打开 Nginx 的日志来进行 debug .可以观查下列状态代码：
+
+　　201 (Created)：源资源被成功移动,在目标上创建了一个新资源.这个使用 Nginx 后日志中会常常见到.
+　　204 (No Content)：源资源被成功地移动到一个预先存在的目标资源上.
+　　403 (Forbidden)：这个错误表明至少出现以下两种情况之一：
+
+1) 服务器不允许在其名称空间中的给定位置上创建集合,或者
+2) Uniform Resource Indicator (URI) 请求的父集合存在,但是不接受成员.
+　　405 (Method Not Allowed)： mkcol() 方法只能在被删除或不存在的资源上执行,所以文件夹存在使用这个时会报这个.
+　　409 (Conflict)：只有在创建了一个或多个中间集合之后才能在目标上建立集合.
+　　412 (Precondition Failed)：服务器不能维持 propertybehavior XML 属性中列出的属性的存活,或者 Overwrite 的头是 F,目标资源的状态不为 null.
+　　415 (Unsupported Media Type)：服务器不支持主体的请求类型.
+　　423 (Locked)：源资源或目标资源被锁.
+　　502 (Bad Gateway)：当目标在另一台服务器上,且目标服务器拒绝接受资源时,将出现这种错误.
+　　507 (Insufficient Storage)：在执行该方法后资源没有足够的空间来记录资源的状态.
+
+ FQA: 如果 Nginx 的错误日志报如下错误:
+2012/03/12 17:51:05 [error] 7090#0: *299695 mkdir() "/var/mogdata/dev16/0/000/081" failed (17: File exists), client: 192.168.1.233, server: , request: "MKCOL /dev16/0/000/081/ HTTP/1.0"
+可以直接到配置文件中给
+
+dav_methods put delete mkcol copy move;
+修改成
+
+dav_methods put delete copy move;
+这时就不会报这个错了,记得 create_full_put_path 这个参数一定要打开才行.这样性能也会好些.然后直接在
