@@ -771,7 +771,7 @@ mysql从ip 172.16.18.2
    slave-sql-verify-checksum=1
    binlog-rows-query-log_events=1
    report-port=3306
-   report-host=node1.magedu.com
+   report-host=node1.test.com
 保存退出重启
 [root@node1 ~]#scp /etc/my.cnf 172.16.18.2:/etc/my.cnf
 创建复制用户：
@@ -781,7 +781,7 @@ mysql> FLUSH PRIVILEGES;
 从节点：
 [root@node2 ~]#vim /etc/my.cnf
    server-id       = 10    改动
-   report-host=node2.magedu.com
+   report-host=node2.test.com
 保存退出重启
 mysql> CHANGE MASTER TO MASTER_HOST='172.16.18.1', MASTER_USER='rpuser', MASTER_PASSWORD='rppass', MASTER_AUTO_POSITION=1;
 mysql> start slave;

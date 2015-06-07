@@ -803,9 +803,9 @@ mapred.queue.queue-name.acl-administer-jobs：可以查看作业详情的用户�
 本安装示例将使用三台主机(RHEL 5.8 32bit)来实现，其规划如下所示：
 
 	IP地址				主机名			运行的进程或扮演的角色
-172.16.100.11 	master.magedu.com		NameNode,JobTracker
-172.16.100.12	datanode.magedu.com		DataNode,TaskTracker
-172.16.100.13	snn.magedu.com			SecondaryNameNode
+172.16.100.11 	master.test.com		NameNode,JobTracker
+172.16.100.12	datanode.test.com		DataNode,TaskTracker
+172.16.100.13	snn.test.com			SecondaryNameNode
 
 用到的应用程序：
 JDK: jdk-7u5-linux-i586.rpm
@@ -816,9 +816,9 @@ Hadoop：hadoop-0.20.2-cdh3u5.tar.gz
 # echo "password" | passwd --stdin hadoop 
 
 设置集群各节点的/etc/hosts文件内容如下：
-172.16.100.11	master.magedu.com	master
-172.16.100.12	datanode.magedu.com		datanode
-172.16.100.13	snn.magedu.com		snn
+172.16.100.11	master.test.com	master
+172.16.100.12	datanode.test.com		datanode
+172.16.100.13	snn.test.com		snn
 
 而后配置master节点的hadoop用户能够以基于密钥的验正方式登录其它各节点，以便启动进程并执行监控等额外的管理工作。以下命令在master节点上执行即可。
 [root@master ~]# su - hadoop
@@ -876,7 +876,7 @@ From source with checksum de1770d69aa93107a133657faa8ef467
 <configuration>
     <property>
         <name>fs.default.name</name>
-        <value>hdfs://master.magedu.com:8020</value>
+        <value>hdfs://master.test.com:8020</value>
         <final>true</final>
         <description>The name of the default file system. A URI whose scheme and authority determine the FileSystem implimentation.</description>
     </property>
@@ -891,7 +891,7 @@ From source with checksum de1770d69aa93107a133657faa8ef467
 <configuration>
     <property>
         <name>mapred.job.tracker</name>
-        <value>master.magedu.com:8021</value>
+        <value>master.test.com:8021</value>
         <final>true</final>
         <description>The host and port that the MapReduce JobTracker runs at. </description>
     </property>
@@ -936,10 +936,10 @@ From source with checksum de1770d69aa93107a133657faa8ef467
 说明：根据此配置，需要事先在各节点上创建/hadoop/，并让hadoop用户对其具有全部权限。也可以不指定最后三个属性，让Hadoop为其使用默认位置。
 
 (4)修改/usr/local/hadoop/conf/masters文件，指定SecondaryNameNode节点的主机名或IP地址，本示例中为如下内容：
-snn.magedu.com
+snn.test.com
 
 (5)修改/usr/local/hadoop/conf/slaves文件，指定各DataNode节点的主机名或IP地址，本示例中只有一个DataNode：
-datanode.magedu.com
+datanode.test.com
 
 (6)初始化数据节点，在master上执行如下命令
 $ hadoop namenode -format
@@ -949,11 +949,11 @@ $ hadoop namenode -format
 在master节点上执行Hadoop的start-all.sh脚本即可实现启动整个集群。
 [hadoop@master ~]$ start-all.sh
 其输出内容如下所示：
-starting namenode, logging to /usr/local/hadoop/logs/hadoop-hadoop-namenode-master.magedu.com.out
-datanode.magedu.com: starting datanode, logging to /usr/local/hadoop/logs/hadoop-hadoop-datanode-datanode.magedu.com.out
-snn.magedu.com: starting secondarynamenode, logging to /usr/local/hadoop/logs/hadoop-hadoop-secondarynamenode-node3.magedu.com.out
-starting jobtracker, logging to /usr/local/hadoop/logs/hadoop-hadoop-jobtracker-master.magedu.com.out
-datanode.magedu.com: starting tasktracker, logging to /usr/local/hadoop/logs/hadoop-hadoop-tasktracker-datanode.magedu.com.out
+starting namenode, logging to /usr/local/hadoop/logs/hadoop-hadoop-namenode-master.test.com.out
+datanode.test.com: starting datanode, logging to /usr/local/hadoop/logs/hadoop-hadoop-datanode-datanode.test.com.out
+snn.test.com: starting secondarynamenode, logging to /usr/local/hadoop/logs/hadoop-hadoop-secondarynamenode-node3.test.com.out
+starting jobtracker, logging to /usr/local/hadoop/logs/hadoop-hadoop-jobtracker-master.test.com.out
+datanode.test.com: starting tasktracker, logging to /usr/local/hadoop/logs/hadoop-hadoop-tasktracker-datanode.test.com.out
 
 如果要停止Hadoop的各进程，则使用stop-all.sh脚本即可。
 
@@ -977,7 +977,7 @@ Hadoop的系统日志默认存放于其安装目录中的logs子目录，如果�
 
 大多数应用的日志住处均发送至.log类的文件中，因此在故障排查时其也是最需要关注的日志文件。然后，Hadoop为log4j提供的默认配置中，其每天会自动做一次日志滚动，并且永远不会删除日志文件，因此，管理员需要手动归档并删除老旧的日志文件。.out类的日志文件中很少出现信息，而且，Hadoop的每次重启都会导致日志自动滚动，并只会保存最至5次的滚动日志文件版本。
 
-除了后缀不同之外，这两种日志文件的名称格式是一样的，默认均为hadoop-<username>-<processname>-<hostname>，比如hadoop-hadoop-namenode-master.magedu.com.log。可以在hadoop-env.sh文件中使用HADOOP_IDENT_STRING变量将日志文件名称格式中的<username>限制为所需要的字符串。
+除了后缀不同之外，这两种日志文件的名称格式是一样的，默认均为hadoop-<username>-<processname>-<hostname>，比如hadoop-hadoop-namenode-master.test.com.log。可以在hadoop-env.sh文件中使用HADOOP_IDENT_STRING变量将日志文件名称格式中的<username>限制为所需要的字符串。
 
 5.4.3 SSH相关的设定
 

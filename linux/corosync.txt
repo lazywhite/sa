@@ -1,7 +1,7 @@
 
 
 前提：
-1）本配置共有两个测试节点，分别node1.magedu.com和node2.magedu.com，相的IP地址分别为172.16.100.11和172.16.100.12；
+1）本配置共有两个测试节点，分别node1.test.com和node2.test.com，相的IP地址分别为172.16.100.11和172.16.100.12；
 2）集群服务为apache的httpd服务；
 3）提供web服务的地址为172.16.100.1；
 4）系统为rhel5.8 32bits
@@ -11,18 +11,18 @@
 为了配置一台Linux主机成为HA的节点，通常需要做出如下的准备工作：
 
 1）所有节点的主机名称和对应的IP地址解析服务可以正常工作，且每个节点的主机名称需要跟"uname -n“命令的结果保持一致；因此，需要保证两个节点上的/etc/hosts文件均为下面的内容：
-172.16.100.11   node1.magedu.com node1
-172.16.100.12   node2.magedu.com node2
+172.16.100.11   node1.test.com node1
+172.16.100.12   node2.test.com node2
 
 为了使得重新启动系统后仍能保持如上的主机名称，还分别需要在各节点执行类似如下的命令：
 
 Node1:
-# sed -i 's@\(HOSTNAME=\).*@\1node1.magedu.com@g'  /etc/sysconfig/network
-# hostname node1.magedu.com
+# sed -i 's@\(HOSTNAME=\).*@\1node1.test.com@g'  /etc/sysconfig/network
+# hostname node1.test.com
 
 Node2：
-# sed -i 's@\(HOSTNAME=\).*@\1node2.magedu.com@g' /etc/sysconfig/network
-# hostname node2.magedu.com
+# sed -i 's@\(HOSTNAME=\).*@\1node2.test.com@g' /etc/sysconfig/network
+# hostname node2.test.com
 
 2）设定两个节点可以基于密钥进行ssh通信，这可以通过类似如下的命令实现：
 Node1:
@@ -57,7 +57,7 @@ pacemaker-libs
 # cd /root/cluster
 # yum -y --nogpgcheck localinstall *.rpm
 
-4、配置corosync，（以下命令在node1.magedu.com上执行）
+4、配置corosync，（以下命令在node1.test.com上执行）
 
 # cd /etc/corosync
 # cp corosync.conf.example corosync.conf
@@ -115,7 +115,7 @@ Jun 14 19:03:50 node1 corosync[5120]:   [pcmk  ] info: pcmk_startup: CRM: Initia
 Jun 14 19:03:50 node1 corosync[5120]:   [pcmk  ] Logging: Initialized pcmk_startup
 Jun 14 19:03:50 node1 corosync[5120]:   [pcmk  ] info: pcmk_startup: Maximum core file size is: 4294967295
 Jun 14 19:03:50 node1 corosync[5120]:   [pcmk  ] info: pcmk_startup: Service: 9
-Jun 14 19:03:50 node1 corosync[5120]:   [pcmk  ] info: pcmk_startup: Local hostname: node1.magedu.com
+Jun 14 19:03:50 node1 corosync[5120]:   [pcmk  ] info: pcmk_startup: Local hostname: node1.test.com
 
 如果上面命令执行均没有问题，接着可以执行如下命令启动node2上的corosync
 # ssh node2 -- /etc/init.d/corosync start
@@ -127,13 +127,13 @@ Jun 14 19:03:50 node1 corosync[5120]:   [pcmk  ] info: pcmk_startup: Local hostn
 ============
 Last updated: Tue Jun 14 19:07:06 2011
 Stack: openais
-Current DC: node1.magedu.com - partition with quorum
+Current DC: node1.test.com - partition with quorum
 Version: 1.0.11-1554a83db0d3c3e546cfd3aaff6af1184f79ee87
 2 Nodes configured, 2 expected votes
 0 Resources configured.
 ============
 
-Online: [ node1.magedu.com node2.magedu.com ]
+Online: [ node1.test.com node2.test.com ]
 
 从上面的信息可以看出两个节点都已经正常启动，并且集群已经处于正常工作状态。
 
@@ -163,8 +163,8 @@ Errors found during check: config not valid
 
 使用如下命令查看当前的配置信息：
 # crm configure show
-node node1.magedu.com
-node node2.magedu.com
+node node1.test.com
+node node2.test.com
 property $id="cib-bootstrap-options" \
   dc-version="1.0.11-1554a83db0d3c3e546cfd3aaff6af1184f79ee87" \
   cluster-infrastructure="openais" \
@@ -216,20 +216,20 @@ op_type :: start | stop | monitor
 应用：
 # crm configure primitive WebIP ocf:heartbeat:IPaddr params ip=172.16.100.1
 
-通过如下的命令执行结果可以看出此资源已经在node1.magedu.com上启动：
+通过如下的命令执行结果可以看出此资源已经在node1.test.com上启动：
 # crm status
 ============
 Last updated: Tue Jun 14 19:31:05 2011
 Stack: openais
-Current DC: node1.magedu.com - partition with quorum
+Current DC: node1.test.com - partition with quorum
 Version: 1.0.11-1554a83db0d3c3e546cfd3aaff6af1184f79ee87
 2 Nodes configured, 2 expected votes
 1 Resources configured.
 ============
 
-Online: [ node1.magedu.com node2.magedu.com ]
+Online: [ node1.test.com node2.test.com ]
 
- WebIP  (ocf::heartbeat:IPaddr):  Started node1.magedu.com
+ WebIP  (ocf::heartbeat:IPaddr):  Started node1.test.com
 
 当然，也可以在node1上执行ifconfig命令看到此地址已经在eth0的别名上生效：
 # ifconfig 
@@ -246,16 +246,16 @@ eth0:0    Link encap:Ethernet  HWaddr 00:0C:29:AA:DD:CF
 ============
 Last updated: Tue Jun 14 19:37:23 2011
 Stack: openais
-Current DC: node2.magedu.com - partition WITHOUT quorum
+Current DC: node2.test.com - partition WITHOUT quorum
 Version: 1.0.11-1554a83db0d3c3e546cfd3aaff6af1184f79ee87
 2 Nodes configured, 2 expected votes
 1 Resources configured.
 ============
 
-Online: [ node2.magedu.com ]
-OFFLINE: [ node1.magedu.com ]
+Online: [ node2.test.com ]
+OFFLINE: [ node1.test.com ]
 
-上面的信息显示node1.magedu.com已经离线，但资源WebIP却没能在node2.magedu.com上启动。这是因为此时的集群状态为"WITHOUT quorum"，即已经失去了quorum，此时集群服务本身已经不满足正常运行的条件，这对于只有两节点的集群来讲是不合理的。因此，我们可以通过如下的命令来修改忽略quorum不能满足的集群状态检查：
+上面的信息显示node1.test.com已经离线，但资源WebIP却没能在node2.test.com上启动。这是因为此时的集群状态为"WITHOUT quorum"，即已经失去了quorum，此时集群服务本身已经不满足正常运行的条件，这对于只有两节点的集群来讲是不合理的。因此，我们可以通过如下的命令来修改忽略quorum不能满足的集群状态检查：
 
 # crm configure property no-quorum-policy=ignore
 
@@ -264,21 +264,21 @@ OFFLINE: [ node1.magedu.com ]
 ============
 Last updated: Tue Jun 14 19:43:42 2011
 Stack: openais
-Current DC: node2.magedu.com - partition WITHOUT quorum
+Current DC: node2.test.com - partition WITHOUT quorum
 Version: 1.0.11-1554a83db0d3c3e546cfd3aaff6af1184f79ee87
 2 Nodes configured, 2 expected votes
 1 Resources configured.
 ============
 
-Online: [ node2.magedu.com ]
-OFFLINE: [ node1.magedu.com ]
+Online: [ node2.test.com ]
+OFFLINE: [ node1.test.com ]
 
- WebIP  (ocf::heartbeat:IPaddr):  Started node2.magedu.com
+ WebIP  (ocf::heartbeat:IPaddr):  Started node2.test.com
  
-好了，验正完成后，我们正常启动node1.magedu.com:
+好了，验正完成后，我们正常启动node1.test.com:
 # ssh node1 -- /etc/init.d/corosync start
 
-正常启动node1.magedu.com后，集群资源WebIP很可能会重新从node2.magedu.com转移回node1.magedu.com。资源的这种在节点间每一次的来回流动都会造成那段时间内其无法正常被访问，所以，我们有时候需要在资源因为节点故障转移到其它节点后，即便原来的节点恢复正常也禁止资源再次流转回来。这可以通过定义资源的黏性(stickiness)来实现。在创建资源时或在创建资源后，都可以指定指定资源黏性。
+正常启动node1.test.com后，集群资源WebIP很可能会重新从node2.test.com转移回node1.test.com。资源的这种在节点间每一次的来回流动都会造成那段时间内其无法正常被访问，所以，我们有时候需要在资源因为节点故障转移到其它节点后，即便原来的节点恢复正常也禁止资源再次流转回来。这可以通过定义资源的黏性(stickiness)来实现。在创建资源时或在创建资源后，都可以指定指定资源黏性。
 
 资源黏性值范围及其作用：
 0：这是默认选项。资源放置在系统中的最适合位置。这意味着当负载能力“较好”或较差的节点变得可用时才转移资源。此选项的作用基本等同于自动故障回复，只是资源可能会转移到非之前活动的节点上；
@@ -296,11 +296,11 @@ INFINITY：如果不是因节点不适合运行资源（节点关机、节点待
 
 Node1:
 # yum -y install httpd
-# echo "<h1>Node1.magedu.com</h1>" > /var/www/html/index.html
+# echo "<h1>Node1.test.com</h1>" > /var/www/html/index.html
 
 Node2:
 # yum -y install httpd
-# echo "<h1>Node2.magedu.com</h1>" > /var/www/html/index.html
+# echo "<h1>Node2.test.com</h1>" > /var/www/html/index.html
 
 而后在各节点手动启动httpd服务，并确认其可以正常提供服务。接着使用下面的命令停止httpd服务，并确保其不会自动启动（在两个节点各执行一遍）：
 # /etc/init.d/httpd stop
@@ -329,8 +329,8 @@ Operations' defaults (advisory minimum):
 # crm configure primitive WebSite lsb:httpd
 
 查看配置文件中生成的定义：
-node node1.magedu.com
-node node2.magedu.com
+node node1.test.com
+node node2.test.com
 primitive WebIP ocf:heartbeat:IPaddr \
   params ip="172.16.100.1"
 primitive WebSite lsb:httpd
@@ -346,16 +346,16 @@ property $id="cib-bootstrap-options" \
 ============
 Last updated: Tue Jun 14 19:57:31 2011
 Stack: openais
-Current DC: node2.magedu.com - partition with quorum
+Current DC: node2.test.com - partition with quorum
 Version: 1.0.11-1554a83db0d3c3e546cfd3aaff6af1184f79ee87
 2 Nodes configured, 2 expected votes
 2 Resources configured.
 ============
 
-Online: [ node1.magedu.com node2.magedu.com ]
+Online: [ node1.test.com node2.test.com ]
 
- WebIP  (ocf::heartbeat:IPaddr):  Started node1.magedu.com
- WebSite  (lsb:httpd):  Started node2.magedu.com
+ WebIP  (ocf::heartbeat:IPaddr):  Started node1.test.com
+ WebSite  (lsb:httpd):  Started node2.test.com
  
 从上面的信息中可以看出WebIP和WebSite有可能会分别运行于两个节点上，这对于通过此IP提供Web服务的应用来说是不成立的，即此两者资源必须同时运行在某节点上。
 

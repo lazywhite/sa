@@ -829,10 +829,10 @@ fi
 	否则，显示为其它或无法识别；
 
 写一个脚本，其可以接受三个参数，最后一个参数为文件名，但参数可变化，形如：
-	script.sh  -a MageEdu  /magedu.com/scripts/test1.sh
-	script.sh  -d 2013-07-19  /magedu.com/scripts/test1.sh
-	script.sh  -D 'some infomation'  /magedu.com/scripts/test1.sh
-此脚本能够创建/magedu.com/scripts/test1.sh文件，并且，如果给出了-a MageEdu，则文件前两行为：
+	script.sh  -a MageEdu  /test.com/scripts/test1.sh
+	script.sh  -d 2013-07-19  /test.com/scripts/test1.sh
+	script.sh  -D 'some infomation'  /test.com/scripts/test1.sh
+此脚本能够创建/test.com/scripts/test1.sh文件，并且，如果给出了-a MageEdu，则文件前两行为：
 #!/bin/bash
 # Author: MageEdu
 如果给出了-d 2013-07-19，则文件前两行为：
@@ -1506,9 +1506,9 @@ cat --> /bin/cat
 5、以root用户身份设定/tmp/cat/具有suid权限；而后切换至普通用户，执行/tmp/cat，查看/tmp/hello；验正是否可查看；
 
 练习2：
-1、创建组magedu;
-2、添加用户hadoop和hive，均以magedu为额外组；
-3、创建目录/tmp/test，并设定其改组为magedu;
+1、创建组test;
+2、添加用户hadoop和hive，均以test为额外组；
+3、创建目录/tmp/test，并设定其改组为test;
 4、分别使用两个普通用户在/tmp/test目录创建文件，看是否有权限；
 5、设定/tmp/test目录的属组具有写权限；
 6、再次分别使用两个普通用户在/tmp/test目录创建文件，看是否有权限；如果能创建，查看文件属组；
@@ -1563,13 +1563,13 @@ hadoop: 文件/var/tmp/hadoop.txt， 664
 	setfacl -m u:hive:--- /var/tmp/hadoop.txt
 
 
-复制文件/var/log/messages至/data目录， 其属主为root用户，且有读写权限，属组为root组，且有读写权限；可以被任何人读取，可以被gentoo用户和magedu组读写，但centos用户没有任何访问权限；
+复制文件/var/log/messages至/data目录， 其属主为root用户，且有读写权限，属组为root组，且有读写权限；可以被任何人读取，可以被gentoo用户和test组读写，但centos用户没有任何访问权限；
 
 # mkdir /data
 # cp /var/log/messages /data
 # chmod 664 /data/mesages
 # setfacl -m u:gentoo:rw /data/mesages
-# setfacl -m g:magedu:rw /data/mesages
+# setfacl -m g:test:rw /data/mesages
 # setfacl -m u:centos:--- /data/mesages
 
 
@@ -2756,7 +2756,7 @@ nameserver DNS_IP_2
 指定本地解析：
 /etc/hosts
 主机IP	主机名	主机别名
-172.16.0.1		www.magedu.com		www
+172.16.0.1		www.test.com		www
 
 DNS-->/etc/hosts-->DNS
 
@@ -2884,7 +2884,7 @@ nameserver IP1
 nameserver IP2
 nameserver IP3
 
-www.magedu.com
+www.test.com
 
 
 NetworkManager: 桥接

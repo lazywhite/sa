@@ -121,7 +121,7 @@ SOA：
 	)	
 	  				IN 		NS 	 ns1.magelinux.com.
 
-	@  				nsadmin@magedu.com: nsadmin.magedu.com.
+	@  				nsadmin@test.com: nsadmin.test.com.
 
 
 
@@ -135,18 +135,18 @@ slave --> master
 	增量区域传送：IXFR
 
 
-P, magedu.com.
-X:dep1.magedu.com.
-Y：dep2.magedu.com.
+P, test.com.
+X:dep1.test.com.
+Y：dep2.test.com.
 
 
-www.magedu.com
-www.dep1.magedu.com.
+www.test.com
+www.dep1.test.com.
 
 子域授权记录：.com
 
-magedu.com.		IN 		NS  	ns.magedu.com.
-ns.magedu.com.   IN  	A       1.1.1.1
+test.com.		IN 		NS  	ns.test.com.
+ns.test.com.   IN  	A       1.1.1.1
 
 
 
@@ -230,7 +230,7 @@ DNS服务器类型：
 	主DNS服务器
 	从DNS服务器
 
-bind: magedu.com
+bind: test.com
 
 bind: 
 	主配置文件：named.conf，每个语句都要使用分号结尾；
@@ -252,13 +252,13 @@ dig命令：
 host命令：
 	host -t 资源记录类型 名称
 
-magedu.com. 
+test.com. 
 	172.16.100.X
 
-www.magedu.com	172.16.100.6
-dns.magedu.com  172.16.100.1
-ftp.magedu.com  www.magedu.com
-mail.magedu.com 172.16.100.2
+www.test.com	172.16.100.6
+dns.test.com  172.16.100.1
+ftp.test.com  www.test.com
+mail.test.com 172.16.100.2
 
 
 
@@ -326,7 +326,7 @@ allow-transfer { IP; };
 
 
 
-magedu.com.
+test.com.
 
 .com: 服务器：
 
@@ -409,16 +409,16 @@ DNS子域授权：
 	划分子域
 	完成授权
 
-	magedu.com: 
-		dep1.magedu.com
-		dep2.magedu.com
+	test.com: 
+		dep1.test.com
+		dep2.test.com
 
 
-	dep1.magedu.com.  	IN  NS 		dns.dep1.magedu.com.
-	dns.dep1.magedu.com. 	IN  A   192.168.1.17
+	dep1.test.com.  	IN  NS 		dns.dep1.test.com.
+	dns.dep1.test.com. 	IN  A   192.168.1.17
 
-	dep2.magedu.com.	IN   NS     dns.dep2.magedu.com.
-	dns.dep2.magedu.com.  IN   A    192.168.0.19
+	dep2.test.com.	IN   NS     dns.dep2.test.com.
+	dns.dep2.test.com.  IN   A    192.168.0.19
 
 
 
@@ -440,9 +440,9 @@ zone
 项目案例：
 以组为单位：
 1、其中一位同学实现根域服务器，并完成对.com, .net, .org三个子域的授权；不允许递归；
-2、第二位同学实现一级域.com, .net, .org的正向及反向解析；并完成magedu.com, test.net, magelinux.org三个子域的授权；不允许递归；
+2、第二位同学实现一级域.com, .net, .org的正向及反向解析；并完成test.com, test.net, magelinux.org三个子域的授权；不允许递归；
 3、第三位同学实现对第二位同学的DNS服务器进行辅助；
-4、余下的同学分别实现magedu.com, test.net和magelinux.com域的解析；给本地客户端递归；
+4、余下的同学分别实现test.com, test.net和magelinux.com域的解析；给本地客户端递归；
 
 要求：给出规划拓扑图
 1、每位同学的根服务器named.ca文件的内容中，根要指向第一位同学建立的服务器；
@@ -456,7 +456,7 @@ bind view: 视图
 
 view "" {
 	match-clients { 172.16.0.0/16; };
-	zone "magedu.com" IN {
+	zone "test.com" IN {
 		type master;
 		file "internal"
 	}
@@ -466,7 +466,7 @@ view "" {
 
 view VIEW_NAME {
 	match-clients { any; }
-	zone "magedu.com" IN {
+	zone "test.com" IN {
 		type master;
 		file "external";
 	}
@@ -474,9 +474,9 @@ view VIEW_NAME {
 }
 
 
-172.16.0.0/16 www.magedu.com 172.16.100.3
+172.16.0.0/16 www.test.com 172.16.100.3
 
-192.168.1.0/24 www.magedu.com 192.168.1.3
+192.168.1.0/24 www.test.com 192.168.1.3
 
 bind: 
 
@@ -750,8 +750,8 @@ DNS：子域授权
 	2、A：glue record
 
 DNS: view
-	magedu.com: 
-		www.magedu.com:
+	test.com: 
+		www.test.com:
 			Unicom: 
 			Telecom:
 
@@ -1763,7 +1763,7 @@ web:
 	URI: Uniform Resource Identifier
 		URL：Uniform Resource Locator
 			scheme://[username:password@]HOST:port/path/to/source
-				http://www.magedu.com/downloads/nginx-1.5.tar.gz
+				http://www.test.com/downloads/nginx-1.5.tar.gz
 					网页文件：文件系统有一个存放位置，假如/www/html
 		URN：
 
@@ -1800,7 +1800,7 @@ web:
 
 	HTTP报文格式：
 		起始行
-		首部：Host: www.magedu.com
+		首部：Host: www.test.com
 		主体
 
 		request: 
@@ -2000,7 +2000,7 @@ httpd的相关信息：
 		</Location>
 
 		/var/www/html/images/logo.jpg
-		http://www.magedu.com/images/logo.jpg
+		http://www.test.com/images/logo.jpg
 
 	6、配置页面文件访问属性
 		<Directory "FS_PATH">
@@ -2045,7 +2045,7 @@ httpd的相关信息：
 
 	12、路径别名
 		DocumentRoot "/web/htdocs"
-		http://www.magedu.com/images/logo.gif  ==> /web/htdocs/images/logo.gif
+		http://www.test.com/images/logo.gif  ==> /web/htdocs/images/logo.gif
 
 			/www/static/
 				/www/static/logo.gif
@@ -2166,9 +2166,9 @@ httpd-2.2: NameVirtualHost
 
 
 测试命令：
-#openssl s_client -connect www.magedu.com:443 -CAfile /etc/pki/CA/cacert.pem
+#openssl s_client -connect www.test.com:443 -CAfile /etc/pki/CA/cacert.pem
 
-www.magedu.com
+www.test.com
 
 URL rewrite
 
@@ -2272,7 +2272,7 @@ curl的常用选项：
 		DocumentRoot
 	</VirtualHost>
 
-	http://www.magedu.com/downloads/
+	http://www.test.com/downloads/
 		Alias ALIAS FS_PATH
 
 
@@ -2358,8 +2358,8 @@ Require not host HOSTNAME
 	HOSTNAME
 	DOMAIN
 	
-	www.magedu.com
-	.magedu.com
+	www.test.com
+	.test.com
 	
 	允许所有主机访问：
 	Require all granted
@@ -2371,16 +2371,16 @@ Require not host HOSTNAME
 练习：
 建立httpd服务器(基于编译的方式进行)，要求：
 	1)提供两个基于名称的虚拟主机:
-		(a)www1.magedu.com，页面文件目录为/web/vhosts/www1；错误日志为/var/log/httpd/www1.err，访问日志为/var/log/httpd/www1.access；
-		(b)www2.magedu.com，页面文件目录为/web/vhosts/www2；错误日志为/var/log/httpd/www2.err，访问日志为/var/log/httpd/www2.access；
+		(a)www1.test.com，页面文件目录为/web/vhosts/www1；错误日志为/var/log/httpd/www1.err，访问日志为/var/log/httpd/www1.access；
+		(b)www2.test.com，页面文件目录为/web/vhosts/www2；错误日志为/var/log/httpd/www2.err，访问日志为/var/log/httpd/www2.access；
 		(c)为两个虚拟主机建立各自的主页文件index.html，内容分别为其对应的主机名；
-		(d)通过www1.magedu.com/status输出httpd工作状态相关信息，且只允许提供帐号密码才能访问(status:status)；
+		(d)通过www1.test.com/status输出httpd工作状态相关信息，且只允许提供帐号密码才能访问(status:status)；
 	2)www1主机仅允许172.16.0.0/16网络中的客户机访问；www2主机可以被所有主机访问；
 
 
 为上题中的第2个虚拟主机提供https服务，使得用户可以通过https安全的访问此web站点；
 	(1)要求使用证书认证，证书中要求使用的国家(CN)、州(Henan)、城市(Zhengzhou)和组织(MageEdu)；
-	(2)设置部门为TECH，主机名为www2.magedu.com，邮件为admin@magedu.com；
+	(2)设置部门为TECH，主机名为www2.test.com，邮件为admin@test.com；
 	(3)此服务禁止来自于192.168.1.0/24网络中的主机访问；
 
 
@@ -2861,7 +2861,7 @@ ClassID Class
 
 
 作业：
-前提：通过DNS为www.magedu.com设定两个A记录，分别指定两台web服务器，实现并思考：
+前提：通过DNS为www.test.com设定两个A记录，分别指定两台web服务器，实现并思考：
 1、部署一台主机通过MySQL提供数据服务；两台服务器提供httpd+php(假设为ServA和ServB)，且安装phpwind论坛；但要求，通过两台服务器访问的站点同相同的；
 思考并验正：(1)一个用户通过ServA上的论坛发贴后，其它用户或同一用户通过另外一台web服务器ServB是否能访问到相同的内容？
 	        (2)一个用户通过ServA上的论坛发贴并上传附件后，其它用户或同一用户通过另外一台web服务器ServB是否能访问到相同的内容？
@@ -3109,7 +3109,7 @@ load runner
 
 ulimit: 
 
-ab -c 100 -n 10000 http://pma.magedu.com/index.php
+ab -c 100 -n 10000 http://pma.test.com/index.php
 
 	-c: 模拟的并发数
 	-n: 总的请求数

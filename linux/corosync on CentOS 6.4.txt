@@ -1,7 +1,7 @@
 
 
 前提：
-1）本配置共有两个测试节点，分别node1.magedu.com和node2.magedu.com，相的IP地址分别为172.16.100.15和172.16.100.16；
+1）本配置共有两个测试节点，分别node1.test.com和node2.test.com，相的IP地址分别为172.16.100.15和172.16.100.16；
 2）集群服务为apache的httpd服务；
 3）提供web服务的地址为172.16.100.11，即vip；
 4）系统为CentOS 6.4 64bits
@@ -11,18 +11,18 @@
 为了配置一台Linux主机成为HA的节点，通常需要做出如下的准备工作：
 
 1）所有节点的主机名称和对应的IP地址解析服务可以正常工作，且每个节点的主机名称需要跟"uname -n“命令的结果保持一致；因此，需要保证两个节点上的/etc/hosts文件均为下面的内容：
-172.16.100.16   node1.magedu.com node1
-172.16.100.17   node2.magedu.com node2
+172.16.100.16   node1.test.com node1
+172.16.100.17   node2.test.com node2
 
 为了使得重新启动系统后仍能保持如上的主机名称，还分别需要在各节点执行类似如下的命令：
 
 Node1:
-# sed -i 's@\(HOSTNAME=\).*@\1node1.magedu.com@g'  /etc/sysconfig/network
-# hostname node1.magedu.com
+# sed -i 's@\(HOSTNAME=\).*@\1node1.test.com@g'  /etc/sysconfig/network
+# hostname node1.test.com
 
 Node2：
-# sed -i 's@\(HOSTNAME=\).*@\1node2.magedu.com@g' /etc/sysconfig/network
-# hostname node2.magedu.com
+# sed -i 's@\(HOSTNAME=\).*@\1node2.test.com@g' /etc/sysconfig/network
+# hostname node2.test.com
 
 2）设定两个节点可以基于密钥进行ssh通信，这可以通过类似如下的命令实现：
 Node1:
@@ -33,7 +33,7 @@ Node2:
 # ssh-keygen -t rsa
 # ssh-copy-id -i ~/.ssh/id_rsa.pub root@node1
 
-2、配置corosync，（以下命令在node1.magedu.com上执行）
+2、配置corosync，（以下命令在node1.test.com上执行）
 
 # cd /etc/corosync
 # cp corosync.conf.example corosync.conf
@@ -99,36 +99,36 @@ Sep 15 11:37:39 corosync [pcmk  ] info: pcmk_startup: CRM: Initialized
 Sep 15 11:37:39 corosync [pcmk  ] Logging: Initialized pcmk_startup
 Sep 15 11:37:39 corosync [pcmk  ] info: pcmk_startup: Maximum core file size is: 18446744073709551615
 Sep 15 11:37:39 corosync [pcmk  ] info: pcmk_startup: Service: 9
-Sep 15 11:37:39 corosync [pcmk  ] info: pcmk_startup: Local hostname: node1.magedu.com
+Sep 15 11:37:39 corosync [pcmk  ] info: pcmk_startup: Local hostname: node1.test.com
 
 如果上面命令执行均没有问题，接着可以执行如下命令启动node2上的corosync
 # ssh node2 -- /etc/init.d/corosync start
 
 注意：启动node2需要在node1上使用如上命令进行，不要在node2节点上直接启动。下面是node1上的相关日志。
 # tail /var/log/cluster/corosync.log 
-Sep 15 12:10:00 [2688] node1.magedu.com       crmd:     info: do_te_control:  Transitioner is now inactive
-Sep 15 12:10:00 [2688] node1.magedu.com       crmd:     info: update_dc:  Set DC to node2.magedu.com (3.0.7)
-Sep 15 12:10:00 [2683] node1.magedu.com        cib:     info: cib_process_replace:  Digest matched on replace from node2.magedu.com: a221b8ae3386d35b263633d8b1fe213f
-Sep 15 12:10:00 [2683] node1.magedu.com        cib:     info: cib_process_replace:  Replaced 0.8.7 with 0.8.7 from node2.magedu.com
-Sep 15 12:10:00 [2688] node1.magedu.com       crmd:     info: erase_status_tag:   Deleting xpath: //node_state[@uname='node1.magedu.com']/transient_attributes
-Sep 15 12:10:00 [2688] node1.magedu.com       crmd:     info: update_attrd:   Connecting to attrd... 5 retries remaining
-Sep 15 12:10:00 [2688] node1.magedu.com       crmd:   notice: do_state_transition:  State transition S_PENDING -> S_NOT_DC [ input=I_NOT_DC cause=C_HA_MESSAGE origin=do_cl_join_finalize_respond ]
-Sep 15 12:10:00 [2686] node1.magedu.com      attrd:   notice: attrd_local_callback:   Sending full refresh (origin=crmd)
-Sep 15 12:10:01 [2686] node1.magedu.com      attrd:   notice: attrd_trigger_update:   Sending flush op to all hosts for: probe_complete (true)
-Sep 15 12:10:01 [2686] node1.magedu.com      attrd:   notice: attrd_perform_update:   Sent update 5: probe_complete=true
+Sep 15 12:10:00 [2688] node1.test.com       crmd:     info: do_te_control:  Transitioner is now inactive
+Sep 15 12:10:00 [2688] node1.test.com       crmd:     info: update_dc:  Set DC to node2.test.com (3.0.7)
+Sep 15 12:10:00 [2683] node1.test.com        cib:     info: cib_process_replace:  Digest matched on replace from node2.test.com: a221b8ae3386d35b263633d8b1fe213f
+Sep 15 12:10:00 [2683] node1.test.com        cib:     info: cib_process_replace:  Replaced 0.8.7 with 0.8.7 from node2.test.com
+Sep 15 12:10:00 [2688] node1.test.com       crmd:     info: erase_status_tag:   Deleting xpath: //node_state[@uname='node1.test.com']/transient_attributes
+Sep 15 12:10:00 [2688] node1.test.com       crmd:     info: update_attrd:   Connecting to attrd... 5 retries remaining
+Sep 15 12:10:00 [2688] node1.test.com       crmd:   notice: do_state_transition:  State transition S_PENDING -> S_NOT_DC [ input=I_NOT_DC cause=C_HA_MESSAGE origin=do_cl_join_finalize_respond ]
+Sep 15 12:10:00 [2686] node1.test.com      attrd:   notice: attrd_local_callback:   Sending full refresh (origin=crmd)
+Sep 15 12:10:01 [2686] node1.test.com      attrd:   notice: attrd_trigger_update:   Sending flush op to all hosts for: probe_complete (true)
+Sep 15 12:10:01 [2686] node1.test.com      attrd:   notice: attrd_perform_update:   Sent update 5: probe_complete=true
 
 如果安装了crmsh，可使用如下命令查看集群节点的启动状态：
 # crm status
 Last updated: Sun Sep 15 12:12:25 2013
-Last change: Sun Sep 15 12:12:18 2013 via cibadmin on node1.magedu.com
+Last change: Sun Sep 15 12:12:18 2013 via cibadmin on node1.test.com
 Stack: classic openais (with plugin)
-Current DC: node2.magedu.com - partition with quorum
+Current DC: node2.test.com - partition with quorum
 Version: 1.1.8-7.el6-394e906
 2 Nodes configured, 3 expected votes
 0 Resources configured.
 
 
-Online: [ node1.magedu.com node2.magedu.com ]
+Online: [ node1.test.com node2.test.com ]
 
 从上面的信息可以看出两个节点都已经正常启动，并且集群已经处于正常工作状态。
 
@@ -158,8 +158,8 @@ Errors found during check: config not valid
 
 使用如下命令查看当前的配置信息：
 # crm configure show
-node node1.magedu.com
-node node2.magedu.com
+node node1.test.com
+node node2.test.com
 property $id="cib-bootstrap-options" \
   dc-version="1.1.8-7.el6-394e906" \
   cluster-infrastructure="classic openais (with plugin)" \
@@ -211,20 +211,20 @@ op_type :: start | stop | monitor
 应用：
 # crm configure primitive WebIP ocf:heartbeat:IPaddr params ip=172.16.100.11
 
-通过如下的命令执行结果可以看出此资源已经在node1.magedu.com上启动：
+通过如下的命令执行结果可以看出此资源已经在node1.test.com上启动：
 # crm status
 Last updated: Sun Sep 15 12:25:54 2013
-Last change: Sun Sep 15 12:25:50 2013 via cibadmin on node1.magedu.com
+Last change: Sun Sep 15 12:25:50 2013 via cibadmin on node1.test.com
 Stack: classic openais (with plugin)
-Current DC: node2.magedu.com - partition with quorum
+Current DC: node2.test.com - partition with quorum
 Version: 1.1.8-7.el6-394e906
 2 Nodes configured, 2 expected votes
 1 Resources configured.
 
 
-Online: [ node1.magedu.com node2.magedu.com ]
+Online: [ node1.test.com node2.test.com ]
 
- WebIP  (ocf::heartbeat:IPaddr):  Started node1.magedu.com
+ WebIP  (ocf::heartbeat:IPaddr):  Started node1.test.com
 
 当然，也可以在node1上执行ifconfig命令看到此地址已经在eth0的别名上生效：
 # ifconfig 
@@ -238,40 +238,40 @@ eth0:0    Link encap:Ethernet  HWaddr 00:0C:29:62:DE:4C
 查看集群工作状态：
 # crm status
 Last updated: Sun Sep 15 12:32:10 2013
-Last change: Sun Sep 15 12:31:46 2013 via cibadmin on node1.magedu.com
+Last change: Sun Sep 15 12:31:46 2013 via cibadmin on node1.test.com
 Stack: classic openais (with plugin)
-Current DC: node2.magedu.com - partition WITHOUT quorum
+Current DC: node2.test.com - partition WITHOUT quorum
 Version: 1.1.8-7.el6-394e906
 2 Nodes configured, 2 expected votes
 1 Resources configured.
 
 
-Online: [ node2.magedu.com ]
-OFFLINE: [ node1.magedu.com ]
+Online: [ node2.test.com ]
+OFFLINE: [ node1.test.com ]
 
-上面的信息显示node1.magedu.com已经离线，但资源WebIP却没能在node2.magedu.com上启动。这是因为此时的集群状态为"WITHOUT quorum"，即已经失去了quorum，此时集群服务本身已经不满足正常运行的条件，这对于只有两节点的集群来讲是不合理的。因此，我们可以通过如下的命令来修改忽略quorum不能满足的集群状态检查：
+上面的信息显示node1.test.com已经离线，但资源WebIP却没能在node2.test.com上启动。这是因为此时的集群状态为"WITHOUT quorum"，即已经失去了quorum，此时集群服务本身已经不满足正常运行的条件，这对于只有两节点的集群来讲是不合理的。因此，我们可以通过如下的命令来修改忽略quorum不能满足的集群状态检查：
 
 # crm configure property no-quorum-policy=ignore
 
 片刻之后，集群就会在目前仍在运行中的节点node2上启动此资源了，如下所示：
 # crm status
 Last updated: Mon Jul  8 19:14:30 2013
-Last change: Sun Sep 15 15:16:37 2013 via cibadmin on node2.magedu.com
+Last change: Sun Sep 15 15:16:37 2013 via cibadmin on node2.test.com
 Stack: classic openais (with plugin)
-Current DC: node1.magedu.com - partition with quorum
+Current DC: node1.test.com - partition with quorum
 Version: 1.1.8-7.el6-394e906
 2 Nodes configured, 2 expected votes
 1 Resources configured.
 
 
-Online: [ node1.magedu.com node2.magedu.com ]
+Online: [ node1.test.com node2.test.com ]
 
- WebIP  (ocf::heartbeat:IPaddr):  Started node2.magedu.com
+ WebIP  (ocf::heartbeat:IPaddr):  Started node2.test.com
  
-好了，验正完成后，我们正常启动node1.magedu.com:
+好了，验正完成后，我们正常启动node1.test.com:
 # ssh node1 -- /etc/init.d/corosync start
 
-正常启动node1.magedu.com后，集群资源WebIP很可能会重新从node2.magedu.com转移回node1.magedu.com。资源的这种在节点间每一次的来回流动都会造成那段时间内其无法正常被访问，所以，我们有时候需要在资源因为节点故障转移到其它节点后，即便原来的节点恢复正常也禁止资源再次流转回来。这可以通过定义资源的黏性(stickiness)来实现。在创建资源时或在创建资源后，都可以指定指定资源黏性。
+正常启动node1.test.com后，集群资源WebIP很可能会重新从node2.test.com转移回node1.test.com。资源的这种在节点间每一次的来回流动都会造成那段时间内其无法正常被访问，所以，我们有时候需要在资源因为节点故障转移到其它节点后，即便原来的节点恢复正常也禁止资源再次流转回来。这可以通过定义资源的黏性(stickiness)来实现。在创建资源时或在创建资源后，都可以指定指定资源黏性。
 
 资源黏性值范围及其作用：
 0：这是默认选项。资源放置在系统中的最适合位置。这意味着当负载能力“较好”或较差的节点变得可用时才转移资源。此选项的作用基本等同于自动故障回复，只是资源可能会转移到非之前活动的节点上；
@@ -289,11 +289,11 @@ INFINITY：如果不是因节点不适合运行资源（节点关机、节点待
 
 Node1:
 # yum -y install httpd
-# echo "<h1>Node1.magedu.com</h1>" > /var/www/html/index.html
+# echo "<h1>Node1.test.com</h1>" > /var/www/html/index.html
 
 Node2:
 # yum -y install httpd
-# echo "<h1>Node2.magedu.com</h1>" > /var/www/html/index.html
+# echo "<h1>Node2.test.com</h1>" > /var/www/html/index.html
 
 而后在各节点手动启动httpd服务，并确认其可以正常提供服务。接着使用下面的命令停止httpd服务，并确保其不会自动启动（在两个节点各执行一遍）：
 # /etc/init.d/httpd stop
@@ -322,8 +322,8 @@ Operations' defaults (advisory minimum):
 # crm configure primitive WebServer lsb:httpd
 
 查看配置文件中生成的定义：
-node node1.magedu.com
-node node2.magedu.com 
+node node1.test.com
+node node2.test.com 
 primitive WebIP ocf:heartbeat:IPaddr \
   params ip="172.16.100.11"
 primitive WebServer lsb:httpd
@@ -340,18 +340,18 @@ rsc_defaults $id="rsc-options" \
 查看资源的启用状态：
 # crm status
 Last updated: Mon Jul  8 19:21:29 2013
-Last change: Sun Sep 15 15:22:13 2013 via cibadmin on node2.magedu.com
+Last change: Sun Sep 15 15:22:13 2013 via cibadmin on node2.test.com
 Stack: classic openais (with plugin)
-Current DC: node1.magedu.com - partition with quorum
+Current DC: node1.test.com - partition with quorum
 Version: 1.1.8-7.el6-394e906
 2 Nodes configured, 2 expected votes
 2 Resources configured.
 
 
-Online: [ node1.magedu.com node2.magedu.com ]
+Online: [ node1.test.com node2.test.com ]
 
- WebIP  (ocf::heartbeat:IPaddr):  Started node1.magedu.com
- WebServer  (lsb:httpd):  Started node2.magedu.com
+ WebIP  (ocf::heartbeat:IPaddr):  Started node1.test.com
+ WebServer  (lsb:httpd):  Started node2.test.com
  
 从上面的信息中可以看出WebIP和WebServer有可能会分别运行于两个节点上，这对于通过此IP提供Web服务的应用来说是不成立的，即此两者资源必须同时运行在某节点上。
 
@@ -373,36 +373,36 @@ Online: [ node1.magedu.com node2.magedu.com ]
 如下的状态信息显示，两个资源已然运行于同一个节点。
 # crm status
 Last updated: Mon Jul  8 19:27:47 2013
-Last change: Sun Sep 15 15:29:55 2013 via cibadmin on node2.magedu.com
+Last change: Sun Sep 15 15:29:55 2013 via cibadmin on node2.test.com
 Stack: classic openais (with plugin)
-Current DC: node1.magedu.com - partition with quorum
+Current DC: node1.test.com - partition with quorum
 Version: 1.1.8-7.el6-394e906
 2 Nodes configured, 2 expected votes
 2 Resources configured.
 
 
-Online: [ node1.magedu.com node2.magedu.com ]
+Online: [ node1.test.com node2.test.com ]
 
- WebIP  (ocf::heartbeat:IPaddr):  Started node1.magedu.com
- WebServer  (lsb:httpd):  Started node1.magedu.com
+ WebIP  (ocf::heartbeat:IPaddr):  Started node1.test.com
+ WebServer  (lsb:httpd):  Started node1.test.com
 
 接着，我们还得确保WebSite在某节点启动之前得先启动WebIP，这可以使用如下命令实现：
 # crm configure order webip_before_webserver mandatory: WebIP WebServer
 
 此外，由于HA集群本身并不强制每个节点的性能相同或相近，所以，某些时候我们可能希望在正常时服务总能在某个性能较强的节点上运行，这可以通过位置约束来实现：
-# crm configure location prefer-node1 WebServer 200: node1.magedu.com
+# crm configure location prefer-node1 WebServer 200: node1.test.com
 这条命令实现了将WebSite约束在node1上，且指定其分数为200；
 
 最终的配置结果如下所示：
 # crm configure show
-node node1.magedu.com
-node node2.magedu.com \
+node node1.test.com
+node node2.test.com \
   attributes standby="off"
 primitive WebIP ocf:heartbeat:IPaddr \
   params ip="172.16.100.11"
 primitive WebServer lsb:httpd
 location prefer-node1 WebServer \
-  rule $id="prefer-node1-rule" 200: #uname eq node1.magedu.com
+  rule $id="prefer-node1-rule" 200: #uname eq node1.test.com
 colocation websserver-with-webip inf: WebServer WebIP
 order webserver-after-webip inf: WebIP WebServer
 property $id="cib-bootstrap-options" \

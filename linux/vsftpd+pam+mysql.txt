@@ -27,8 +27,8 @@
 
 mysql> create database vsftpd;
 
-mysql> grant select on vsftpd.* to vsftpd@localhost identified by 'www.magedu.com';
-mysql> grant select on vsftpd.* to vsftpd@127.0.0.1 identified by 'www.magedu.com';
+mysql> grant select on vsftpd.* to vsftpd@localhost identified by 'www.test.com';
+mysql> grant select on vsftpd.* to vsftpd@127.0.0.1 identified by 'www.test.com';
 mysql> flush privileges;
 
 mysql> use vsftpd;
@@ -43,8 +43,8 @@ mysql> create table users (
 
 根据需要添加所需要的用户，需要说明的是，这里将其密码采用明文格式存储，原因是pam_mysql的password()函数与MySQL的password()函数可能会有所不同。
 
-mysql> insert into users(name,password) values('tom','magedu');
-mysql> insert into users(name,password) values('jerry','magedu');
+mysql> insert into users(name,password) values('tom','test');
+mysql> insert into users(name,password) values('jerry','test');
 
 
 三、配置vsftpd
@@ -53,8 +53,8 @@ mysql> insert into users(name,password) values('jerry','magedu');
 
 #vi /etc/pam.d/vsftpd.mysql
 添加如下两行
-auth required /lib/security/pam_mysql.so user=vsftpd passwd=www.magedu.com host=localhost db=vsftpd table=users usercolumn=name passwdcolumn=password crypt=0
-account required /lib/security/pam_mysql.so user=vsftpd passwd=www.magedu.com host=localhost db=vsftpd table=users usercolumn=name passwdcolumn=password crypt=0
+auth required /lib/security/pam_mysql.so user=vsftpd passwd=www.test.com host=localhost db=vsftpd table=users usercolumn=name passwdcolumn=password crypt=0
+account required /lib/security/pam_mysql.so user=vsftpd passwd=www.test.com host=localhost db=vsftpd table=users usercolumn=name passwdcolumn=password crypt=0
 
 2.修改vsftpd的配置文件，使其适应mysql认证
 

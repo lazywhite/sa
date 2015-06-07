@@ -373,7 +373,7 @@ BOOTPROTO="dhcp"
 在/etc/hosts文件中为本机的主机名及IP地址建立解析
 127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4
 ::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
-192.168.1.7	virtlab.magedu.com	virtlab
+192.168.1.7	virtlab.test.com	virtlab
 
 禁用SELinux。
 

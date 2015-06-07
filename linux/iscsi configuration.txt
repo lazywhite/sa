@@ -69,7 +69,7 @@ tgtadm --lld [driver] --op [operation] --mode [mode] [OPTION]...
 例如：
 
 (1)创建一个target:
-# tgtadm --lld iscsi --op new --mode target --tid 1 -T iqn.2013-05.com.magedu:tsan.disk1
+# tgtadm --lld iscsi --op new --mode target --tid 1 -T iqn.2013-05.com.test:tsan.disk1
 
 
 (2)显示所有：
@@ -107,7 +107,7 @@ Assign this account to a target:
 # yum install iscsi-initiator-utils
  
  客户端命名
-# echo "InitiatorName=`iscsi-iname -p iqn.2013-05.com.magedu`" > /etc/iscsi/initiatorname.iscsi
+# echo "InitiatorName=`iscsi-iname -p iqn.2013-05.com.test`" > /etc/iscsi/initiatorname.iscsi
 # echo "InitiatorAlias=initiator1" >> /etc/iscsi/initiatorname.iscsi
 
 # service iscsi start
@@ -307,7 +307,7 @@ tgtadm --lld iscsi --op new --mode account --user myuser --password mypass
 tgtadm --lld iscsi --op bind --mode account --tid 1 --user iscsiuser
 tgtadm --lld iscsi --op bind --mode account --tid 1 --user myuser --outgoing
 
-<target iqn.2012-11.com.magedu:tgt.target1>
+<target iqn.2012-11.com.test:tgt.target1>
    backing-store /dev/sdb
    incominguser iscsiuser	mypass
    outgoinguser myuser	mypass

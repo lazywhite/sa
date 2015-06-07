@@ -209,7 +209,7 @@ balance url_param <param> [check_post [<max_wait>]]
   source：将请求的源地址进行hash运算，并由后端服务器的权重总数相除后派发至某匹配的服务器；这可以使得同一个客户端IP的请求始终被派发至某特定的服务器；不过，当服务器权重总数发生变化时，如某服务器宕机或添加了新的服务器，许多客户端的请求可能会被派发至与此前请求不同的服务器；常用于负载均衡无cookie功能的基于TCP的协议；其默认为静态，不过也可以使用hash-type修改此特性；
   uri：对URI的左半部分(“问题”标记之前的部分)或整个URI进行hash运算，并由服务器的总权重相除后派发至某匹配的服务器；这可以使得对同一个URI的请求总是被派发至某特定的服务器，除非服务器的权重总数发生了变化；此算法常用于代理缓存或反病毒代理以提高缓存的命中率；需要注意的是，此算法仅应用于HTTP后端服务器场景；其默认为静态算法，不过也可以使用hash-type修改此特性；
   url_param：通过<argument>为URL指定的参数在每个HTTP GET请求中将会被检索；如果找到了指定的参数且其通过等于号“=”被赋予了一个值，那么此值将被执行hash运算并被服务器的总权重相除后派发至某匹配的服务器；此算法可以通过追踪请求中的用户标识进而确保同一个用户ID的请求将被送往同一个特定的服务器，除非服务器的总权重发生了变化；如果某请求中没有出现指定的参数或其没有有效值，则使用轮叫算法对相应请求进行调度；此算法默认为静态的，不过其也可以使用hash-type修改此特性；
-  hdr(<name>)：对于每个HTTP请求，通过<name>指定的HTTP首部将会被检索；如果相应的首部没有出现或其没有有效值，则使用轮叫算法对相应请求进行调度；其有一个可选选项“use_domain_only”，可在指定检索类似Host类的首部时仅计算域名部分(比如通过www.magedu.com来说，仅计算magedu字符串的hash值)以降低hash算法的运算量；此算法默认为静态的，不过其也可以使用hash-type修改此特性；
+  hdr(<name>)：对于每个HTTP请求，通过<name>指定的HTTP首部将会被检索；如果相应的首部没有出现或其没有有效值，则使用轮叫算法对相应请求进行调度；其有一个可选选项“use_domain_only”，可在指定检索类似Host类的首部时仅计算域名部分(比如通过www.test.com来说，仅计算test字符串的hash值)以降低hash算法的运算量；此算法默认为静态的，不过其也可以使用hash-type修改此特性；
   rdp-cookie
   rdp-cookie(name)：
 
@@ -299,7 +299,7 @@ maxconn <maxconn>：指定此服务器接受的最大并发连接数；如果发
 maxqueue <maxqueue>：设定请求队列的最大长度；
 observe <mode>：通过观察服务器的通信状况来判定其健康状态，默认为禁用，其支持的类型有“layer4”和“layer7”，“layer7”仅能用于http代理场景；
 redir <prefix>：启用重定向功能，将发往此服务器的GET和HEAD请求均以302状态码响应；需要注意的是，在prefix后面不能使用/，且不能使用相对地址，以免造成循环；例如：
-  server srv1 172.16.100.6:80 redir http://imageserver.magedu.com check
+  server srv1 172.16.100.6:80 redir http://imageserver.test.com check
 weight <weight>：权重，默认为1，最大值为256，0表示不参与负载均衡；
 检查方法：
 option httpchk
@@ -309,7 +309,7 @@ option httpchk <method> <uri> <version>：不能用于frontend段，例如：
 
 backend https_relay
     mode tcp
-    option httpchk OPTIONS * HTTP/1.1\r\nHost:\ www.magedu.com
+    option httpchk OPTIONS * HTTP/1.1\r\nHost:\ www.test.com
     server apache1 192.168.1.1:443 check port 80
 
 
@@ -866,7 +866,7 @@ stats enable以默认配置启用stats，默认配置为以下内容
   		stats admin if LOCALHOST
   	例2：
   		stats enable
-    	stats auth  admin:magedu
+    	stats auth  admin:test
     	stats admin if TRUE
 
 
@@ -939,7 +939,7 @@ source:
 	hash-type: consistent
 		动态
 
-http://www.magedu.com/a/b/c/d/e/f/1.html
+http://www.test.com/a/b/c/d/e/f/1.html
 
 header: 首部
 	request header

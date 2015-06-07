@@ -3,25 +3,25 @@ dlm:distributed lock manager
 drbd:distributed replication block device
 
 前提：
-1）本配置共有两个测试节点，分别node1.magedu.com和node2.magedu.com，相的IP地址分别为172.16.100.11和172.16.100.12；
+1）本配置共有两个测试节点，分别node1.test.com和node2.test.com，相的IP地址分别为172.16.100.11和172.16.100.12；
 2）node1和node2两个节点上各提供了一个大小相同的分区作为drbd设备；我们这里为在两个节点上均为/dev/sda5，大小为512M；
 3）系统为CentOS 6.4，x86_64平台；
 
 1、准备工作
 
 两个节点的主机名称和对应的IP地址解析服务可以正常工作，且每个节点的主机名称需要跟"uname -n“命令的结果保持一致；因此，需要保证两个节点上的/etc/hosts文件均为下面的内容：
-172.16.100.15 node1.magedu.com node1
-172.16.100.16 node2.magedu.com node2
+172.16.100.15 node1.test.com node1
+172.16.100.16 node2.test.com node2
 
 为了使得重新启动系统后仍能保持如上的主机名称，还分别需要在各节点执行类似如下的命令：
 
 Node1:
-# sed -i 's@\(HOSTNAME=\).*@\1node1.magedu.com@g'
-# hostname node1.magedu.com
+# sed -i 's@\(HOSTNAME=\).*@\1node1.test.com@g'
+# hostname node1.test.com
 
 Node2：
-# sed -i 's@\(HOSTNAME=\).*@\1node2.magedu.com@g'
-# hostname node2.magedu.com
+# sed -i 's@\(HOSTNAME=\).*@\1node2.test.com@g'
+# hostname node2.test.com
 
 2、安装软件包
 
@@ -44,7 +44,7 @@ common段则用于定义被每一个资源默认继承的参数，可以在资�
 
 resource段则用于定义drbd资源，每个资源通常定义在一个单独的位于/etc/drbd.d目录中的以.res结尾的文件中。资源在定义时必须为其命名，名字可以由非空白的ASCII字符组成。每一个资源段的定义中至少要包含两个host子段，以定义此资源关联至的节点，其它参数均可以从common段或drbd的默认中进行继承而无须定义。
 
-下面的操作在node1.magedu.com上完成。
+下面的操作在node1.test.com上完成。
 
 1 配置/etc/drbd.d/global-common.conf
 global {
@@ -88,13 +88,13 @@ common {
 
 2、定义一个资源/etc/drbd.d/web.res，内容如下：
 resource web {
-  on node1.magedu.com {
+  on node1.test.com {
     device    /dev/drbd0;
     disk      /dev/sda5;
     address   172.16.100.11:7789;
     meta-disk internal;
   }
-  on node2.magedu.com {
+  on node2.test.com {
     device    /dev/drbd0;
     disk      /dev/sda5;
     address   172.16.100.12:7789;
@@ -197,14 +197,14 @@ resource mydrbd {
                 outdate-peer "/sbin/kill-other-node.sh";
         }
 
-        on node1.magedu.com {
+        on node1.test.com {
                 device  /dev/drbd0;
                 disk    /dev/vg0/mydrbd;
                 address 172.16.200.11:7789;
                 meta-disk       internal;
         }
 
-        on node2.magedu.com {
+        on node2.test.com {
                 device  /dev/drbd0;
                 disk    /dev/vg0/mydrbd;
                 address 172.16.200.12:7789;

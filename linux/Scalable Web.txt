@@ -75,7 +75,7 @@ backend dynamic_servers
 
 URL:   /path;params?query#frag
 
-http://www.magedu.com/login.php?name=admin&password=123456
+http://www.test.com/login.php?name=admin&password=123456
 
 
 
@@ -174,7 +174,7 @@ java -XX:+PrintFlagsFinal
     <title>JSP test page.</title>
   </head>
   <body>
-    <% out.println("Welcome to MageEdu. Site, http://www.magedu.com"); %>
+    <% out.println("Welcome to MageEdu. Site, http://www.test.com"); %>
   </body>
 </html>
 

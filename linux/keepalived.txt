@@ -43,7 +43,7 @@ global_defs {
          linuxedu@foxmail.com
          mageedu@126.com  
    }  
-   notification_email_from kanotify@magedu.com 
+   notification_email_from kanotify@test.com 
    smtp_connect_timeout 3  
    smtp_server 127.0.0.1  
    router_id LVS_DEVEL  
@@ -146,7 +146,7 @@ global_defs {
          linuxedu@foxmail.com
          mageedu@126.com  
    }  
-   notification_email_from kanotify@magedu.com 
+   notification_email_from kanotify@test.com 
    smtp_connect_timeout 3  
    smtp_server 127.0.0.1  
    router_id LVS_DEVEL  
@@ -238,7 +238,7 @@ global_defs {
          linuxedu@foxmail.com
          mageedu@126.com  
    }  
-   notification_email_from kanotify@magedu.com 
+   notification_email_from kanotify@test.com 
    smtp_connect_timeout 3  
    smtp_server 127.0.0.1  
    router_id LVS_DEVEL  

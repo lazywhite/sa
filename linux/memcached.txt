@@ -229,7 +229,7 @@ echo "$get_result is from memcached server.";
 
 server {
         listen       80;
-        server_name  www.magedu.com;
+        server_name  www.test.com;
 
         #charset koi8-r;
 

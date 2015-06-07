@@ -430,15 +430,15 @@ Engine容器中可以包含Realm、Host、Listener和Valve子容器。
       reloadable="true" crossContext="true"/>
   </Host>
   
-  <Host name="mail.magedu.com" appBase="/web/mail">
+  <Host name="mail.test.com" appBase="/web/mail">
     <Context path="" docBase="ROOT"/>
   </Host>
 </Engine>
 
 主机别名定义：
 如果一个主机有两个或两个以上的主机名，额外的名称均可以以别名的形式进行定义，如下：
-<Host name="www.magedu.com" appBase="webapps" unpackWARs="true">
-  <Alias>magedu.com</Alias>
+<Host name="www.test.com" appBase="webapps" unpackWARs="true">
+  <Alias>test.com</Alias>
 </Host>
 
 
@@ -647,7 +647,7 @@ manager-status - allows access to the status pages only
 
 添加一个新的Host:
 编辑server.xml:
-     <Host name="www.magedu.com" appBase="webapps" unpackWARs="true" autoDeploy="true" 
+     <Host name="www.test.com" appBase="webapps" unpackWARs="true" autoDeploy="true" 
        xmlValidation="false" xmlNamespaceAware="false">
           <Context docBase="my-webapp" path="" />
      </Host>
@@ -748,8 +748,8 @@ LoadModule proxy_ajp_module modules/mod_proxy_ajp.so
 3、配置apache代理tomcat：
 
 第一种方法，基于proxy-http：
-ProxyPass /my-webapp http://www.magedu.com:8080/my-webapp
-ProxyPassReverse /my-webapp http://www.magedu.com:8080/my-webapp
+ProxyPass /my-webapp http://www.test.com:8080/my-webapp
+ProxyPassReverse /my-webapp http://www.test.com:8080/my-webapp
 ProxyVia On
 
 第二种方法，基于proxy-ajp：
@@ -974,24 +974,24 @@ pathname：会话文件的保存目录；
 
 
 可以从http://apr.apache.org/获取apr源码，目前最新的版本是1.4.6。
-[root@www.magedu.com  ~]# tar  xf  apr-1.4.6.tar.bz2
-[root@www.magedu.com  ~]# cd apr-1.4.6
-[root@www.magedu.com  ~]# ./configure --prefix=/usr/local/apr --disable-ipv6
-[root@www.magedu.com  ~]# make && make install
+[root@www.test.com  ~]# tar  xf  apr-1.4.6.tar.bz2
+[root@www.test.com  ~]# cd apr-1.4.6
+[root@www.test.com  ~]# ./configure --prefix=/usr/local/apr --disable-ipv6
+[root@www.test.com  ~]# make && make install
 
 apr-util是apr的工具库，其可以让程序员更好的使用apr的功能。可以从http://apr.apache.org/获取apr源码，目前最新的版本是1.4.1。
-[root@www.magedu.com  ~]# tar xf apr-util-1.4.1.tar.bz2
-[root@www.magedu.com  ~]# cd apr-util-1.4.1
+[root@www.test.com  ~]# tar xf apr-util-1.4.1.tar.bz2
+[root@www.test.com  ~]# cd apr-util-1.4.1
 [root@www apr-util-1.4.1]#  ./configure  --prefix=/usr/local/apr-util  --with-apr=/usr/local/apr
 [root@www apr-util-1.4.1]#  make && make install
 
 6.4.2 安装apache
 
 httpd目前最新的2.4系列版本中引入了event MPM，其在性能上较之其它MPM有了较大的提升，
-[root@www.magedu.com  ~]# tar xf httpd-2.4.2
-[root@www.magedu.com  ~]# cd httpd-2.4.2
-[root@www.magedu.com  ~]# ./configure --prefix=/usr/local/apache --sysconfdir=/etc/httpd --enable-so --enable-ssl --enable-cgi --enable-rewrite --with-zlib --with-pcre --with-apr=/usr/local/apr --with-apr-util=/usr/local/apr-util --enable-mpms-shared=all --with-mpm=event --enable-proxy --enable-proxy-http --enable-proxy-ajp --enable-proxy-balancer  --enable-lbmethod-heartbeat --enable-heartbeat --enable-slotmem-shm  --enable-slotmem-plain --enable-watchdog
-[root@www.magedu.com  ~]# make && make install
+[root@www.test.com  ~]# tar xf httpd-2.4.2
+[root@www.test.com  ~]# cd httpd-2.4.2
+[root@www.test.com  ~]# ./configure --prefix=/usr/local/apache --sysconfdir=/etc/httpd --enable-so --enable-ssl --enable-cgi --enable-rewrite --with-zlib --with-pcre --with-apr=/usr/local/apr --with-apr-util=/usr/local/apr-util --enable-mpms-shared=all --with-mpm=event --enable-proxy --enable-proxy-http --enable-proxy-ajp --enable-proxy-balancer  --enable-lbmethod-heartbeat --enable-heartbeat --enable-slotmem-shm  --enable-slotmem-plain --enable-watchdog
+[root@www.test.com  ~]# make && make install
 
 为apache提供init脚本，实现服务的控制。建立/etc/rc.d/init.d/httpd文件，并添加如下内容：
 
@@ -1064,8 +1064,8 @@ ProxyPass  [path]  !|url  [key=value key=value ...]]：将后端服务器某URL�
 ◇ stickysession：调度器的sticky session的名字，根据web程序语言的不同，其值为JSESSIONID或PHPSESSIONID。
 上述指令除了能在banlancer://或ProxyPass中设定之外，也可使用ProxySet指令直接进行设置，如：
 <Proxy balancer://hotcluster>
-BalancerMember  http://www1.magedu.com:8080 loadfactor=1
-BalancerMember  http://www2.magedu.com:8080 loadfactor=2
+BalancerMember  http://www1.test.com:8080 loadfactor=1
+BalancerMember  http://www2.test.com:8080 loadfactor=2
 ProxySet  lbmethod=bytraffic
 </Proxy>
 
@@ -1077,10 +1077,10 @@ ProxyPassReverse：用于让apache调整HTTP重定向响应报文中的Location�
 
 mod_jk是ASF的一个项目，是一个工作于apache端基于AJP协议与Tomcat通信的连接器，它是apache的一个模块，是AJP协议的客户端（服务端是Tomcat的AJP连接器）。
 
-[root@www.magedu.com  ~]# tar xf tomcat-connectors-1.2.37-src.tar.gz 
-[root@www.magedu.com  ~]# cd tomcat-connectors-1.2.37-src/native/
-[root@www.magedu.com  ~]# ./configure --with-apxs=/usr/local/apache/bin/apxs 
-[root@www.magedu.com  ~]# make && make install
+[root@www.test.com  ~]# tar xf tomcat-connectors-1.2.37-src.tar.gz 
+[root@www.test.com  ~]# cd tomcat-connectors-1.2.37-src/native/
+[root@www.test.com  ~]# ./configure --with-apxs=/usr/local/apache/bin/apxs 
+[root@www.test.com  ~]# make && make install
 
 apache要使用mod_jk连接器，需要在启动时加载此连接器模块。为了便于管理与mod_jk模块相关的配置，这里使用一个专门的配置文件/etc/httpd/extra/httpd-jk.conf来保存相关指令及其设置。其内容如下：
 # Load the mod_jk
@@ -1290,8 +1290,8 @@ ProxyPass  [path]  !|url  [key=value key=value ...]]：将后端服务器某URL�
 ◇ stickysession：调度器的sticky session的名字，根据web程序语言的不同，其值为JSESSIONID或PHPSESSIONID。
 上述指令除了能在banlancer://或ProxyPass中设定之外，也可使用ProxySet指令直接进行设置，如：
 <Proxy balancer://hotcluster>
-BalancerMember  http://www1.magedu.com:8080 loadfactor=1
-BalancerMember  http://www2.magedu.com:8080 loadfactor=2
+BalancerMember  http://www1.test.com:8080 loadfactor=1
+BalancerMember  http://www2.test.com:8080 loadfactor=2
 ProxySet  lbmethod=bytraffic
 </Proxy>
 
@@ -1312,16 +1312,16 @@ BalancerMember ajp://172.16.100.2:8009 loadfactor=10 route=TomcatB
 </proxy>
 
 <VirtualHost *:80>
-ServerAdmin admin@magedu.com
-ServerName www.magedu.com
+ServerAdmin admin@test.com
+ServerName www.test.com
 ProxyPass / balancer://lbcluster1/ stickysession=jsessionid
 ProxyPassReverse / balancer://lbcluster1/
 </VirtualHost>
 
 
 <Proxy balancer://hotcluster>
-BalancerMember  http://www1.magedu.com:8080 loadfactor=1
-BalancerMember  http://www2.magedu.com:8080 loadfactor=2
+BalancerMember  http://www1.test.com:8080 loadfactor=1
+BalancerMember  http://www2.test.com:8080 loadfactor=2
 ProxySet  lbmethod=bytraffic
 </Proxy>
 

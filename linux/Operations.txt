@@ -77,7 +77,7 @@ cobbler可自行管理这些服务中的部分甚至是全部，但需要配置/
 
 定义好所需的“subnet”及其它参数或选项，而后启动dhcpd守护进程即可。本示例中所用的dhcpd的配置如下所示：
 
-option domain-name "magedu.com";
+option domain-name "test.com";
 option domain-name-servers 192.168.10.254,172.16.0.1;
 
 default-lease-time 43200;
@@ -485,7 +485,7 @@ node 'base' {
         include nginx
 }
 
-node 'node2.magedu.com' inherits 'base' {
+node 'node2.test.com' inherits 'base' {
     include nginx::nginx_web
 }
 

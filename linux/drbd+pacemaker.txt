@@ -208,8 +208,8 @@ Online: [ node2.a.org node1.a.org ]
 mysql+drbd+corosync
  
  
-node node1.magedu.com
-node node2.magedu.com
+node node1.test.com
+node node2.test.com
 
 primitive mysqldrbd ocf:linbit:drbd \
 	params drbd_resource="mysqlres" \
@@ -242,9 +242,9 @@ property $id="cib-bootstrap-options" \
 版本2：
 crm(live)# configure 
 crm(live)configure# SHOW
-node node1.magedu.com \
+node node1.test.com \
 	attributes standby="off"
-node node2.magedu.com \
+node node2.test.com \
 	attributes standby="off"
 primitive myip ocf:heartbeat:IPaddr \
 	params ip="172.16.100.1" nic="eth0" cidr_netmask="255.255.0.0"
@@ -337,10 +337,10 @@ handlers {
 
 
 多节点同时启动一个IP
-node node1.magedu.com \
+node node1.test.com \
 	attributes standby="off"
-node node2.magedu.com
-node node3.magedu.com \
+node node2.test.com
+node node3.test.com \
 	attributes standby="off"
 primitive DLM ocf:pacemaker:controld \
 	params daemon="/usr/sbin/dlm_controld" \

@@ -1,10 +1,10 @@
 
 前提：
-1）本配置共有三个测试节点，分别node1.magedu.com、node2.magedu.com和node3.magedu.com，相的IP地址分别为172.16.100.6、172.16.100.7和172.16.100.8；系统为rhel5.8 32bit；
+1）本配置共有三个测试节点，分别node1.test.com、node2.test.com和node3.test.com，相的IP地址分别为172.16.100.6、172.16.100.7和172.16.100.8；系统为rhel5.8 32bit；
 2）集群服务为apache的httpd服务；
 3）提供web服务的地址为172.16.100.1；
 4）为集群中的每个节点事先配置好yum源；
-5) 额外提供了主机172.16.100.100做为跳板机，以其为平台实现对集群中各节点的管理；其主机名称为stepping.magedu.com；
+5) 额外提供了主机172.16.100.100做为跳板机，以其为平台实现对集群中各节点的管理；其主机名称为stepping.test.com；
 
 一、准备工作
 
@@ -13,32 +13,32 @@
 1.1 设定主机名称解析
 
 所有节点的主机名称和对应的IP地址解析服务可以正常工作，且每个节点的主机名称需要跟"uname -n“命令的结果保持一致；因此，需要保证三个节点上的/etc/hosts文件均为下面的内容：
-172.16.100.6   node1.magedu.com node1
-172.16.100.7   node2.magedu.com node2
-172.16.100.8   node3.magedu.com node3
+172.16.100.6   node1.test.com node1
+172.16.100.7   node2.test.com node2
+172.16.100.8   node3.test.com node3
 
 为了使得重新启动系统后仍能保持如上的主机名称，还分别需要在各节点执行类似如下的命令：
 
 Node1:
-# sed -i 's@\(HOSTNAME=\).*@\1node1.magedu.com@g'  /etc/sysconfig/network
-# hostname node1.magedu.com
+# sed -i 's@\(HOSTNAME=\).*@\1node1.test.com@g'  /etc/sysconfig/network
+# hostname node1.test.com
 
 Node2：
-# sed -i 's@\(HOSTNAME=\).*@\1node2.magedu.com@g' /etc/sysconfig/network
-# hostname node2.magedu.com
+# sed -i 's@\(HOSTNAME=\).*@\1node2.test.com@g' /etc/sysconfig/network
+# hostname node2.test.com
 
 Node3:
-# sed -i 's@\(HOSTNAME=\).*@\1node3.magedu.com@g' /etc/sysconfig/network
-# hostname node3.magedu.com
+# sed -i 's@\(HOSTNAME=\).*@\1node3.test.com@g' /etc/sysconfig/network
+# hostname node3.test.com
 
 1.2 管理机设定
 
 后续的诸多设定，如rpm包安装、配置文件修改等都需要在三个节点上同时进行；为了便于实现此过程，我们这里提供了一台跳板机172.16.100.100，其可以以基于密钥认证的方式分别与三个节点进行通信。实际使用中，如果没有专用的跳板机，也可以以三个节点中的某节点来替代。
 
 首先让跳板机能以主机名称与各节点进行通信，此为非必须，仅为使用方便。在跳板机上建立/etc/hosts文件，内容如下：
-172.16.100.6   node1.magedu.com node1
-172.16.100.7   node2.magedu.com node2
-172.16.100.8   node3.magedu.com node3
+172.16.100.6   node1.test.com node1
+172.16.100.7   node2.test.com node2
+172.16.100.8   node3.test.com node3
 
 接着在跳板机上为ssh生成密钥：
 # ssh-keygen -t rsa -P '' 
@@ -133,9 +133,9 @@ meatware         fence-manaual
 
 RHCS集群需要配置好各节点及相关的fence设备后才能启动，因此，这里需要事先将各节点添加进集群配置文件。每个节点在添加进集群时，需要至少为其配置node id(每个节点的id必须惟一)及相关的fence设备两个属性。ccs_tool的addnode子命令可以完成节点添加。例如将前面规划的三个集群节点添加至集群中，可以使用如下命令实现。
 
-# ccs_tool addnode -n 1 -f meatware node1.magedu.com  
-# ccs_tool addnode -n 2 -f meatware node2.magedu.com 
-# ccs_tool addnode -n 3 -f meatware node3.magedu.com 
+# ccs_tool addnode -n 1 -f meatware node1.test.com  
+# ccs_tool addnode -n 2 -f meatware node2.test.com 
+# ccs_tool addnode -n 3 -f meatware node3.test.com 
 
 查看已经添加完成的节点及相关信息：
 # ccs_tool lsnode
@@ -143,9 +143,9 @@ RHCS集群需要配置好各节点及相关的fence设备后才能启动，因�
 Cluster name: tcluster, config_version: 5
 
 Nodename                        Votes Nodeid Fencetype
-node1.magedu.com                   1    1    meatware
-node2.magedu.com                   1    2    meatware
-node3.magedu.com                   1    3    meatware
+node1.test.com                   1    1    meatware
+node2.test.com                   1    2    meatware
+node3.test.com                   1    3    meatware
 
 3.4 启动集群
 
@@ -174,9 +174,9 @@ Member Status: Quorate
 
  Member Name                                                     ID   Status
  ------ ----                                                     ---- ------
- node1.magedu.com                                                    1 Online, Local
- node2.magedu.com                                                    2 Online
- node3.magedu.com                                                    3 Online
+ node1.test.com                                                    1 Online, Local
+ node2.test.com                                                    2 Online
+ node3.test.com                                                    3 Online
 
 cman_tool的status子命令则以当前节点为视角来显示集群的相关信息。
 # cman_tool status
@@ -195,7 +195,7 @@ Quorum: 2
 Active subsystems: 8
 Flags: Dirty 
 Ports Bound: 0 177  
-Node name: node1.magedu.com
+Node name: node1.test.com
 Node ID: 1
 Multicast addresses: 239.192.110.162 
 Node addresses: 172.16.100.6 
@@ -203,9 +203,9 @@ Node addresses: 172.16.100.6
 cman_tool的nodes子命令则可以列出集群中每个节点的相关信息。
 # cman_tool nodes
 Node  Sts   Inc   Joined               Name
-   1   M      4   2013-05-13 12:00:09  node1.magedu.com
-   2   M      8   2013-05-13 12:00:28  node2.magedu.com
-   3   M     12   2013-05-13 12:00:39  node3.magedu.com
+   1   M      4   2013-05-13 12:00:09  node1.test.com
+   2   M      8   2013-05-13 12:00:28  node2.test.com
+   3   M     12   2013-05-13 12:00:39  node3.test.com
 
 cman_tool的nodes子命令则可以列出集群中每个服务的相关信息。 
 # cman_tool services

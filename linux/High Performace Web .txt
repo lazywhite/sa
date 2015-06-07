@@ -96,7 +96,7 @@ httpd:
 	</Location>
 
 URI路径：
-	http://www.magedu.com/
+	http://www.test.com/
 
 
 location [ = | ~ | ~* | ^~ ] uri { ... }
@@ -218,7 +218,7 @@ URI访问属性；
 
 server {
 	listen 80;
-	server_name www.magedu.com;
+	server_name www.test.com;
 	location / {
 		后端服务器；
 	}
@@ -243,14 +243,14 @@ location /forum/ {
 }
 
 
-http://www.magedu.com/forum/
+http://www.test.com/forum/
 	--> http://172.16.100.11:8080/bbs/;
 
 location ~* ^/forum {
 	proxy_pass http://172.16.100.11:8080/bbs;
 }
 
-http://www.magedu.com/forum/ -->
+http://www.test.com/forum/ -->
 	http://172.16.100.11:8080/forum/
 
 
@@ -368,13 +368,13 @@ location /images/ {
 location / {
 	root html;
 	index index.html;
-	rewrite "^/bbs/(.*)/images/(.*)\.jpg$" http://www.magedu.com/bbs/$2/images/$1.jpg last;
+	rewrite "^/bbs/(.*)/images/(.*)\.jpg$" http://www.test.com/bbs/$2/images/$1.jpg last;
 }
 
-http://www.magedu.com/bbs/a/images/b.jpg --> http://www.magedu.com/bbs/b/images/a.jpg --> http://www.magedu.com/bbs/a/images/b.jpg
+http://www.test.com/bbs/a/images/b.jpg --> http://www.test.com/bbs/b/images/a.jpg --> http://www.test.com/bbs/a/images/b.jpg
 
 
-http://www.magedu.com/bbs/index.html --> http://www.magedu.com/forum/index.html
+http://www.test.com/bbs/index.html --> http://www.test.com/forum/index.html
 
 
 
@@ -395,7 +395,7 @@ name: Jerry
 
 http web object: memcached
 
-http://www.magedu.com/index.html
+http://www.test.com/index.html
 
 
 xml: 
@@ -467,7 +467,7 @@ worker_process :
 syslog: 
 	facility.priority
 
-	http://www.magedu.com/admin.php?a=3&b=4
+	http://www.test.com/admin.php?a=3&b=4
 
 
 listen web
@@ -538,13 +538,13 @@ vcl_pass
 
 泛域名解析
 
-www.magedu.com/admin.php
+www.test.com/admin.php
 
-magedu.com/admin.php
+test.com/admin.php
 
-wwww.magedu.com/admin.php
+wwww.test.com/admin.php
 
-*.magedu.com/
+*.test.com/
 
 
 vcl_recv:
@@ -865,7 +865,7 @@ DocumentRoot
 alias /phpwind, 
 	/web/bbs/phpwind
 
-http://www.magedu.com/phpwind
+http://www.test.com/phpwind
 
 
 
@@ -946,7 +946,7 @@ Tomcat各组件间的关系：
     <title>JSP test page.</title>
   </head>
   <body>
-    <% out.println("Welcome to MageEdu. Site, http://www.magedu.com"); %>
+    <% out.println("Welcome to MageEdu. Site, http://www.test.com"); %>
   </body>
 </html>
 
@@ -1056,7 +1056,7 @@ manager-status - allows access to the status pages only
 
 添加一个新的Host:
 编辑server.xml:
-     <Host name="www.magedu.com" appBase="webapps" unpackWARs="true" autoDeploy="true" 
+     <Host name="www.test.com" appBase="webapps" unpackWARs="true" autoDeploy="true" 
        xmlValidation="false" xmlNamespaceAware="false">
           <Context docBase="my-webapp" path="" />
      </Host>

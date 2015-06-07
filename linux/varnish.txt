@@ -204,7 +204,7 @@ sub vcl_pass {
 4、Banning
 
 ban()是一种从已缓存对象中过滤(filter)出某此特定的对象并将其移除的缓存内容刷新机制，不过，它并不阻止新的内容进入缓存或响应于请求。在Varnish中，ban的实现是指将一个ban添加至ban列表(ban-list)中，这可以通过命令行接口或VCL实现，它们的使用语法是相同的。ban本身就是一个或多个VCL风格的语句，它会在Varnish从缓存哈希(cache hash)中查找某缓存对象时对搜寻的对象进行比较测试，因此，一个ban语句就是类似匹配所有“以/downloads开头的URL”，或“响应首部中包含nginx的对象”。例如：
-	ban req.http.host == "magedu.com" && req.url ~ "\.gif$"
+	ban req.http.host == "test.com" && req.url ~ "\.gif$"
 	
 定义好的所有ban语句会生成一个ban列表(ban-list)，新添加的ban语句会被放置在列表的首部。缓存中的所有对象在响应给客户端之前都会被ban列表检查至少一次，检查完成后将会为每个缓存创建一个指向与其匹配的ban语句的指针。Varnish在从缓存中获取对象时，总是会检查此缓存对象的指针是否指向了ban列表的首部。如果没有指向ban列表的首部，其将对使用所有的新添加的ban语句对此缓存对象进行测试，如果没有任何ban语句能够匹配，则更新ban列表。
 
@@ -217,7 +217,7 @@ Varnish可以检测后端主机的健康状态，在判定后端主机失效时�
 每个后端服务器当前探测的健康状态探测方法通过.probe进行设定，其结果可由req.backend.healthy变量获取，也可通过varnishlog中的Backend_health查看或varnishadm的debug.health查看。
 
 backend web1 {
-	.host = "www.magedu.com";
+	.host = "www.test.com";
 	.probe = {
 		.url = "/.healthtest.html";
 		.interval = 1s;
@@ -231,7 +231,7 @@ backend web1 {
 (2) .request: 探测后端主机健康状态时所请求内容的详细格式，定义后，它会替换.url指定的探测方式；比如：
 	.request =
 		"GET /.healthtest.html HTTP/1.1"
-		"Host: www.magedu.com"
+		"Host: www.test.com"
 		"Connection: close";
 (3) .window：设定在判定后端主机健康状态时基于最近多少次的探测进行，默认是8；
 (4) .threshold：在.window中指定的次数中，至少有多少次是成功的才判定后端主机正健康运行；默认是3；
@@ -240,7 +240,7 @@ backend web1 {
 (7) .interval：探测请求的发送周期，默认为5秒；
 (8) .timeout：每次探测请求的过期时长，默认为2秒；
 
-因此，如上示例中表示每隔1秒对此后端主机www.magedu.com探测一次，请求的URL为http://www.magedu.com/.healthtest.html，在最近5次的探测请求中至少有2次是成功的(响应码为200)就判定此后端主机为正常工作状态。
+因此，如上示例中表示每隔1秒对此后端主机www.test.com探测一次，请求的URL为http://www.test.com/.healthtest.html，在最近5次的探测请求中至少有2次是成功的(响应码为200)就判定此后端主机为正常工作状态。
 
 如果Varnish在某时刻没有任何可用的后端主机，它将尝试使用缓存对象的“宽容副本”(graced copy)，当然，此时VCL中的各种规则依然有效。因此，更好的办法是在VCL规则中判断req.backend.healthy变量显示某后端主机不可用时，为此后端主机增大req.grace变量的值以设定适用的宽容期限长度。
 
@@ -249,7 +249,7 @@ backend web1 {
 Varnish中可以使用director指令将一个或多个近似的后端主机定义为一个逻辑组，并可以指定的调度方式(也叫挑选方法)来轮流将请求发送至这些主机上。不同的director可以使用同一个后端主机，而某director也可以使用“匿名”后端主机(在director中直接进行定义)。每个director都必须有其专用名，且在定义后必须在VCL中进行调用，VCL中任何可以指定后端主机的位置均可以按需将其替换为调用某已定义的director。
 
 backend web1 {
-	.host = "backweb1.magedu.com";
+	.host = "backweb1.test.com";
 	.port = "80";
 }
 
@@ -261,14 +261,14 @@ director webservers random {
   }
   {
     .backend  = {
-      .host = "backweb2.magedu.com";
+      .host = "backweb2.test.com";
 	  .port = "80";
     }
   	.weight         = 3;
   }
 }
 
-如上示例中，web1为显式定义的后端主机，而webservers这个directors还包含了一个“匿名”后端主机(backweb2.magedu.com)。webservers从这两个后端主机中挑选一个主机的方法为random，即以随机方式挑选。
+如上示例中，web1为显式定义的后端主机，而webservers这个directors还包含了一个“匿名”后端主机(backweb2.test.com)。webservers从这两个后端主机中挑选一个主机的方法为random，即以随机方式挑选。
 
 Varnish的director支持的挑选方法中比较简单的有round-robin和random两种。其中，round-robin类型没有任何参数，只需要为其指定各后端主机即可，挑选方式为“轮叫”，并在某后端主机故障时不再将其视作挑选对象；random方法随机从可用后端主机中进行挑选，每一个后端主机都需要一个.weight参数以指定其权重，同时还可以director级别使用.retires参数来设定查找一个健康后端主机时的尝试次数。
 
@@ -684,7 +684,7 @@ req.can_gzip
 req.restarts
 	A count of how many times this request has been restarted.
 
-	http://www.magedu.com/123.jgp http://www.magedu.com/12/3.jpg
+	http://www.test.com/123.jgp http://www.test.com/12/3.jpg
 
 
 req.esi
@@ -833,8 +833,8 @@ Values may be assigned to variables using the set keyword:
 
 sub vcl_recv {
   # Normalize the Host: header
-  if (req.http.host ~ "(?i)^(www.)?magedu.com$") {
-    set req.http.host = "www.magedu.com";
+  if (req.http.host ~ "(?i)^(www.)?test.com$") {
+    set req.http.host = "www.test.com";
   }
 }
 
@@ -854,20 +854,20 @@ sub vcl_fetch {
 例子：
 
 backend www {
-  .host = "www.magedu.com";
+  .host = "www.test.com";
   .port = "80";
 }
 
 backend images {
-  .host = "images.magedu.com";
+  .host = "images.test.com";
   .port = "80";
 }
 
 sub vcl_recv {
-  if (req.http.host ~ "(?i)^(www.)?magedu.com$") {
-    set req.http.host = "www.magedu.com";
+  if (req.http.host ~ "(?i)^(www.)?test.com$") {
+    set req.http.host = "www.test.com";
     set req.backend = www;
-  } elsif (req.http.host ~ "(?i)^images.magedu.com$") {
+  } elsif (req.http.host ~ "(?i)^images.test.com$") {
     set req.backend = images;
   } else {
     error 404 "Unknown virtual host";
@@ -931,7 +931,7 @@ Probes take the following parameters:
 A backend with a probe can be defined like this, together with the backend or director:
 
 backend www {
-  .host = "www.magedu.com";
+  .host = "www.test.com";
   .port = "http";
   .probe = {
     .url = "/test.jpg";
@@ -955,7 +955,7 @@ probe healthcheck {
 }
 
 backend www {
-  .host = "www.magedu.com";
+  .host = "www.test.com";
   .port = "http";
   .probe = healthcheck;
 }
@@ -970,7 +970,7 @@ probe rawprobe {
     # NB: \r\n automatically inserted after each string!
     .request =
       "GET / HTTP/1.1"
-      "Host: www.magedu.com"
+      "Host: www.test.com"
       "Connection: close";
 }
 
@@ -1366,8 +1366,8 @@ director NAME  scheduler {
 referer: 
 
 if (req.http.referer ~ "http://.*") {
-	if (!(req.http.referer ~ "http://.*\.magedu\.com" || req.http.referer ~ "http://.*\.google\.com.*")) {
-		set req.http.host = "www.magedu.com";
+	if (!(req.http.referer ~ "http://.*\.test\.com" || req.http.referer ~ "http://.*\.google\.com.*")) {
+		set req.http.host = "www.test.com";
 		set req.url = "/antireferer/logo.jpg";
 	} 
 }
