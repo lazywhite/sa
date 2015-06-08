@@ -470,3 +470,8 @@ mysqldump -w
 #2014-8-4
 - razor work flow
 - nailgun work flow
+---------------------------
+FATAL:  could not open lock file "/tmp/.s.PGSQL.5432.lock": Permission denied
+rm -f /tmp/.s.PGSQL.5432.lock  /tmp/.s.PGSQL.5432
+----------------------
+
