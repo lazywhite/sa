@@ -97,8 +97,9 @@ export FACTER_fqdn='xx'
 
 
 # Install procedure
-
+确保时间同步
 确保/etc/hosts 跟 /etc/sysconfig/network 的hostname 是a.domain.com
-重启机器
 puppet master --genconfig --verbose >> /etc/puppet/puppet.conf
 
+====================
+/etc/facter/facts.d/ 自定义facter

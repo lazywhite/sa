@@ -1,0 +1,10 @@
+#Installation
+Download the gitlab-ce rpm 
+ensure that no other postgresql-server is running
+rpm -ivh gitlab-ce.rpm
+you can use local postfix or remote smtp server to send email
+#configuration
+gitlab-rails console production
+user = User.where(id: 1).first
+user.password = 'secret_pass'
+user.save!

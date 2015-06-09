@@ -220,3 +220,7 @@ show table status like 'user';
 ---------------------------
 mysqlbinlog --start-datetime='2015-06-05 00:00:00' --stop-datetime='2015-06-05 17:50:00' mysql-bin.000002
 mysqlbinlog --start-position=764322 --stop-position=765150 mysql-bin.000002
+------------------------
+auto_increment_increment (默认间隔值)
+auto_increment_offset   (默认起始值)
+create table tb() AUTO_INCREMENT=100 (指定起始值)

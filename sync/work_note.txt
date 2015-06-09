@@ -474,4 +474,4 @@ mysqldump -w
 FATAL:  could not open lock file "/tmp/.s.PGSQL.5432.lock": Permission denied
 rm -f /tmp/.s.PGSQL.5432.lock  /tmp/.s.PGSQL.5432
 ----------------------
-
+ldd /path/to/exe  查看依赖的动态链接库

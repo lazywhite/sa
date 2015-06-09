@@ -8,3 +8,19 @@
 
 4.在es初始恢复的时候，一些节点用完了磁盘空间。这个不知道是怎样发生的，因为整个集群只使用了总空间的67%，不过相信这是由于之前的高负载和旧java版本引起的。elasticsearch的团队也在跟进这个问题。
 
+-----------------------
+ES node type
+1. data node
+# only store index
+http.enabled=false(they will use transport module to communicate with each
+other
+node.master=false
+node.data=true
+2. dedicated master node (at least 3 node)
+# do not process any request just ensure the instability of cluster
+node.master=true
+node.data=false
+3. client node
+# only gather data
+node.master=false
+node.data=false

@@ -1,0 +1,9 @@
+# Installation
+libevent
+fastdfs
+nginx
+fastdfs-nginx-module
+ldd /path/to/fdfs_tracker
+fdfs_monitor /path/to/storage.conf
+cp /usr/local/src/fastdfs-nginx-module/src/mod_fastdfs.conf /etc/fdfs/
+./configure --prefix=/usr/local --add-module=/usr/local/src/fastdfs-nginx-module/src

@@ -1,5 +1,0 @@
-# config server
-# router 
-# shard set
-# enable database sharding
-# enable collection sharding

@@ -931,11 +931,6 @@ db.runCommand( { enableSharding: <database> } )
 
 
 
-for (i = 1; i <= 1000000; i++) db.mycoll.insert({age:(i%100), name:"magedu_user"+i, address:i+", Some Road, Zhengzhou, Henan", country:"China", course:"cousre"+"(i%12)"})
-
-
-
-
 
 
 
