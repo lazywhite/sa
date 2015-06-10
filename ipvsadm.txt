@@ -1,0 +1,133 @@
+LVS之三：ipvsadm常用管理命令介绍
+2013年10月07日 ⁄ 服务器集群技术 ⁄ 共 2476字 ⁄ 暂无评论 ⁄ 被围观 4,470 views+
+LVS全称为Linux Virtual
+Server，工作在ISO模型中的第四层，由于其工作在第四层，因此与iptables类似，必须工作在内核空间上。因此lvs与iptables一样，是直接工作在内核中的，叫ipvs，主流的linux发行版默认都已经集成了ipvs，因此用户只需安装一个管理工具ipvsadm即可。
+
+查看内核是否已经集成ipvs：
+[root@lvs ~]# grep -i "ip_vs" /boot/config-2.6.32-358.18.1.el6.x86_64 
+CONFIG_IP_VS=m 
+CONFIG_IP_VS_IPV6=y 
+# CONFIG_IP_VS_DEBUG is not set 
+CONFIG_IP_VS_TAB_BITS=12 
+CONFIG_IP_VS_PROTO_TCP=y 
+CONFIG_IP_VS_PROTO_UDP=y 
+CONFIG_IP_VS_PROTO_AH_ESP=y 
+CONFIG_IP_VS_PROTO_ESP=y 
+CONFIG_IP_VS_PROTO_AH=y 
+CONFIG_IP_VS_PROTO_SCTP=y 
+CONFIG_IP_VS_RR=m 
+CONFIG_IP_VS_WRR=m 
+CONFIG_IP_VS_LC=m 
+CONFIG_IP_VS_WLC=m 
+CONFIG_IP_VS_LBLC=m 
+CONFIG_IP_VS_LBLCR=m 
+CONFIG_IP_VS_DH=m 
+CONFIG_IP_VS_SH=m 
+CONFIG_IP_VS_SED=m 
+CONFIG_IP_VS_NQ=m 
+CONFIG_IP_VS_FTP=m
+
+一、安装ipvsadm：
+[root@lvs ~]# yum -y install ipvsadm
+
+二、ipvsadm基本介绍：
+2.1 集群服务管理类命令：
+2.1.1 添加集群：
+# ipvs -A -t|u|f service-address [-s scheduler]
+
+选项说明：
+-t: TCP协议的集群 
+-u: UDP协议的集群 
+    service-address:     IP:PORT 
+-f: FWM: 防火墙标记 
+    service-address: Mark Number
+
+示例：
+[root@lvs ~]# ipvsadm -A -t 172.16.1.253:80 -s wlc
+
+2.1.2 修改集群：
+# ipvs -E -t|u|f service-address [-s scheduler]
+
+示例：
+[root@lvs ~]# ipvsadm -E -t 172.16.1.253:80 -s wrr
+
+2.1.3 删除集群：
+# ipvsadm -D -t|u|f service-address
+
+示例：
+[root@lvs ~]# ipvsadm -D -t 172.16.1.253:80
+
+2.2 管理集群中的RealServer：
+2.2.1 添加RS：
+# ipvsadm -a -t|u|f service-address -r server-address [-g|i|m] [-w weight]
+
+选项说明：
+-t|u|f service-address：事先定义好的某集群服务 
+-r server-address: 某RS的地址，在NAT模型中，可使用IP：PORT实现端口映射； 
+[-g|i|m]: LVS类型    
+    -g: DR 
+    -i: TUN 
+    -m: NAT 
+[-w weight]: 定义服务器权重
+
+示例：
+[root@lvs ~]# ipvsadm -a -t 172.16.1.253:80 -r 172.16.1.101 –g -w 5
+
+[root@lvs ~]# ipvsadm -a -t 172.16.1.253:80 -r 172.16.1.102 –g -w 10
+
+2.2.2 修改RS：
+# ipvsadm -e -t|u|f service-address -r server-address [-g|i|m] [-w weight]
+
+示例：
+[root@lvs ~]# ipvsadm -e -t 172.16.1.253:80 -r 172.16.1.101 –g -w 3
+
+2.2.3 删除RS：
+# ipvsadm -d -t|u|f service-address -r server-address
+
+示例：
+[root@lvs ~]# ipvsadm -d -t 172.16.1.253:80 -r 172.16.1.101
+
+2.3 查看类：
+# ipvsadm -L|l [options]
+
+常用选项[options]如下：
+-n: 数字格式显示主机地址和端口 
+--stats：统计数据 
+--rate: 速率 
+--timeout: 显示tcp、tcpfin和udp的会话超时时长 
+-c: 显示当前的ipvs连接状况
+
+2.4 其他管理类：
+2.4.1 删除所有集群服务：
+# ipvsadm -C
+
+该命令与iptables的-F功能类似，执行后会清除所有规则。
+
+2.4.2 保存规则
+保存规则至默认配置文件：
+# service ipvsadm save
+
+保存规则至指定文件：
+# ipvsadm -S > /path/to/somefile
+
+示例：
+[root@lvs ~]# service ipvsadm save 
+ipvsadm: Saving IPVS table to /etc/sysconfig/ipvsadm:      [确定]
+
+2.4.3 载入保存在文件中的规则
+# ipvsadm -R < /path/form/somefile
+
+三、lvs的其他注意事项：
+关于时间同步：各节点间的时间偏差不大于1s，建议使用统一的ntp服务器进行更新时间；
+DR模型中的VIP的MAC广播问题：
+在DR模型中，由于每个节点均要配置VIP，因此存在VIP的MAC广播问题，在现在的linux内核中，都提供了相应kernel
+参数对MAC广播进行管理，具体如下：
+
+arp_ignore: 定义接收到ARP请求时的响应级别；
+    0：只要本地配置的有相应地址，就给予响应； 
+    1：仅在请求的目标地址配置在到达的接口上的时候，才给予响应；DR模型使用
+
+arp_announce：定义将自己地址向外通告时的通告级别；
+    0：将本地任何接口上的任何地址向外通告； 
+    1：试图仅向目标网络通告与其网络匹配的地址； 
+    2：仅向与本地接口上地址匹配的网络进行通告；DR模型使用
