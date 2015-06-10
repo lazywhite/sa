@@ -60,7 +60,16 @@ unset variable  删除一个shell变量
 declare typeset readonly  getopts  set unset export 
 sleep  usleep(微秒单位的sleep)
 
-##路径自动纠错
+array=('str1' 'str2')
+for i in ${array[@]};do
+    echo $i
+done
+
+
+function f(){
+echo $1 $2
+}
+f 1 2
 
 文本处理命令
 sort tsort uniq expand unexpand cut paste join head tail  grep egrep fgrep sed awk wc  tr colrm iconv tex postscript  enscript  tar 
