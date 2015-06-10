@@ -1,0 +1,28 @@
+db.col.insert({'uid':1001,'username':'mood'})
+db.col.find().count()
+db.col.find().sort({"$sort_key":1|-1})
+db.col.find({"key":"$value"})
+
+
+db.collection.update(
+   <query>,
+   <update>,
+   {
+     upsert: <boolean>, #if not exist, insert new one
+     multi: <boolean>, #default only update first document
+     writeConcern: <document>
+   }
+)
+set unset rename
+
+
+db.collection.remove(
+   <query>,
+   {
+     justOne: <boolean>,
+     writeConcern: <document>
+   }
+)
+
+db.col.drop()
+db.col.remove({"key":"value"})
