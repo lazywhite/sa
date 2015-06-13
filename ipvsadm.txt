@@ -1,5 +1,3 @@
-LVS之三：ipvsadm常用管理命令介绍
-2013年10月07日 ⁄ 服务器集群技术 ⁄ 共 2476字 ⁄ 暂无评论 ⁄ 被围观 4,470 views+
 LVS全称为Linux Virtual
 Server，工作在ISO模型中的第四层，由于其工作在第四层，因此与iptables类似，必须工作在内核空间上。因此lvs与iptables一样，是直接工作在内核中的，叫ipvs，主流的linux发行版默认都已经集成了ipvs，因此用户只需安装一个管理工具ipvsadm即可。
 
