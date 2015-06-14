@@ -1,0 +1,6 @@
+# link css configuration
+a:link {color:blue}
+a:visited {color:blue}
+a:hover {color:#FF0000;font-size:30px;}
+a:active {color:blue}
+a {text-decoration:none}

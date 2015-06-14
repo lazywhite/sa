@@ -1,0 +1,17 @@
+[root@code network-scripts]# cat ifcfg-br0 
+DEVICE=br0
+ONBOOT=yes
+TYPE=Bridge
+NM_CONTROLLED=no
+BOOTPROTO=static
+IPADDR=192.168.1.252
+PREFIX=24
+GATEWAY=192.168.1.1
+
+
+[root@code network-scripts]# cat ifcfg-em1 
+DEVICE=em1
+TYPE=Ethernet
+ONBOOT=yes
+NM_CONTROLLED=no
+BRIDGE=br0
