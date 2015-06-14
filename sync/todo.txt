@@ -78,8 +78,7 @@ mongo CRUD
 - ipmitool
 - nova baremetal
 - texmacs
-- ca working principle
-- hexo expressiong
+- hexo expression
 - nmap-ncat 
 - python virtualenv
 - python distribute
@@ -95,3 +94,5 @@ mongo CRUD
 - nova rescue/migrate
 - ccna
 - gre vlan openvswitch
+- java import;String;
+- python design pattern
