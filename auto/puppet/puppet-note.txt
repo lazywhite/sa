@@ -103,3 +103,6 @@ puppet master --genconfig --verbose >> /etc/puppet/puppet.conf
 
 ====================
 /etc/facter/facts.d/ 自定义facter
+------------
+virtual resource
+tag 

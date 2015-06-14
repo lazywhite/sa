@@ -94,3 +94,4 @@ mongo CRUD
 - parted 
 - nova rescue/migrate
 - ccna
+- gre vlan openvswitch
