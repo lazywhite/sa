@@ -1,0 +1,12 @@
+<dataConfig>
+    <dataSource name="mysql" type="JdbcDataSource" driver="com.mysql.jdbc.Driver" url="jdbc:mysql://localhost:3306/solr" user="solr" password="solr" />
+    <document>
+        <entity name="test" dataSource="mysql"
+                query="select id, name, menu from test">
+                <field column="id" name="id"/>
+                <field column="name" name="name" />
+                <field column="menu" name="menu" />
+        </entity>
+    </document>
+</dataConfig>
+

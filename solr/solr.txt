@@ -1,0 +1,41 @@
+yum install unzip
+wget mysql-connector-java-5.1.35-bin.jar
+tar xf solr-5.2.0.tgz -C /usr/local/src
+cd /usr/local/src/solr-5.2.0
+mkdir server/solr/one
+cp -a example/example-DIH/solr/db/conf server/solr/one
+mv mysql-connector-java-5.1.35-bin.jar  contrib/dataimporthandler/lib/
+
+
+bin/solr start
+    -e (example)
+    -f (forground, default is background)
+    -c (solrCloud mode)
+    -p (port)
+    -d (specify the solr server directory, default is 'server'
+    -m (memory)
+    -s <dir> solr.solr.home system property
+    -a (additional parameter passed to solr)
+    -V (verbose message)
+
+bin/solr stop
+    -all
+    -k (key)
+    -p (port)
+
+cd server/solr/one/conf
+
+solrconfig.xml
+    add mysql-jdbc-connector.jar to lib_path
+    dataimporthandler class set to 'org.apache.solr.handler.dataimport.DataImportHandler'
+
+db-data-config.xml
+    datasource
+    document
+        entity query="" (entity could be nested)
+            field
+schema.xml
+    filed
+    dynamicField
+    copyField
+    fieldType

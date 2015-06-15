@@ -1,0 +1,3 @@
+# installation
+yum install postgresql-libs unixODBC
+rpm -ivh sphinx*.rpm

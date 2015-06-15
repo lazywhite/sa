@@ -35,24 +35,12 @@ python
     6. 熟悉socket, websocket编程
     7. 熟悉Flask, Django框架及周边工具
 
-自我评价
-    8年Unix-like系统操作经验
-    具备快速学习, 即学即用能力
-    良好的英文听读写能力
-    优秀的团队协作能力
     
     
 
 
 blog: cppking.github.io
 
-
-
-复习计划
-    githug博文
-    3本书
-    写过的code
-    运维技术
 
 
 flask
