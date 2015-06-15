@@ -1,5 +1,3 @@
-
-
 # msgpack exchange data just like json but faster and smaller
 pip install msgpack-python
 
@@ -479,3 +477,12 @@ ldd /path/to/exe  查看依赖的动态链接库
 arp -an | virsh dumpxml domain
 --------
 virt-install console parameter
+----------
+/opt/zentao/config/my.php
+.ztaccess
+install.php/ upgrade.php
+
+RedirectMatch "^/$" "/zentao"
+需要安装php-common,以便于apache结合
+=============================
+doku_wiki plugin configuration  exmail smtp port： 25
