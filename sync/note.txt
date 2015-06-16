@@ -67,8 +67,6 @@ computer science
 癌症，能通过反血管增生药物来治疗
 
 
-
-
 RedHat src格式的rpm包：
 
 http://ftp.redhat.com/redhat/linux/enterprise/6Server/en/os/SRPMS/

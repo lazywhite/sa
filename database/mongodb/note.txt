@@ -41,3 +41,9 @@ collection的最大值约为482.5M,64位上只受系统文件大小的限制。
 mongofiles -d gridfs put song.mp3
 >db.fs.files.find()
 
+
+
+
+mongorestore --host 192.168.0.23:25017 outfile  (directory could be
+database or collection)
+mongodump --host 127.0.0.1:27017 -d chanjian_dev [-c collection] -o outfile

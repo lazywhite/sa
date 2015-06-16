@@ -97,3 +97,12 @@ mongo CRUD
 - java import;String;
 - python design pattern
 - virsh console
+- virtual resource
+- file_bulket
+- ipvsadm
+- iptables
+- solr
+- redis-cluster
+- jenkins
+- svnadmin
+- nodejs express

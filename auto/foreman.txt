@@ -45,4 +45,7 @@ Foreman & proxy with a different username:
     puppet: false
     foreman_proxy:
       user: 'myproxy'
-# foreman-installer [-i]
+====================
+ foreman-installer [-i]
+================
+/etc/init.d/foreman-proxy start

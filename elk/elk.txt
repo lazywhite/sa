@@ -10,8 +10,7 @@
 ES node type
 1. data node
 # only store index
-http.enabled=false(they will use transport module to communicate with each
-other
+http.enabled=false(they will use transport module to communicate with each other)
 node.master=false
 node.data=true
 2. dedicated master node (at least 3 node)
@@ -22,3 +21,25 @@ node.data=false
 # only gather data
 node.master=false
 node.data=false
+
+---------------------
+由于集群并未开启allocate， 导致重启数据节点后，全部变为unassigned shards
+集群健康状态为黄色，并不会停止录入数据
+curl localhost:9200/_cluster/settings
+
+# v0.90.x and earlier
+curl -XPUT 'localhost:9200/_settings' -d '{
+    "index.routing.allocation.disable_allocation": false
+}'
+
+# v1.0+
+curl -XPUT 'localhost:9200/_cluster/settings' -d '{
+    "transient" : {
+        "cluster.routing.allocation.enable" : "all"
+    }
+}'
+---------------------
+curl http://localhost:9200/_cat/recovery?v
+curl localhost:9200/_cat/shards
+curl  'http://localhost:9200/_recovery?pretty&human'
+
