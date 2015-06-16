@@ -10,8 +10,7 @@
 ES node type
 1. data node
 # only store index
-http.enabled=false(they will use transport module to communicate with each
-other
+http.enabled=false(they will use transport module to communicate with each other)
 node.master=false
 node.data=true
 2. dedicated master node (at least 3 node)

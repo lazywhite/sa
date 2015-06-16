@@ -6,7 +6,12 @@ bson and Mongodb
 
 brew formula
 
-
+# store image into Redis
+import redis
+r =  redis.StrictRedis()
+img = open("/path/to/img.jpeg","rb").read()
+r.set("bild1",img)
+-----------------------
 
 netstat -anL
 data gram and stream
@@ -486,3 +491,32 @@ RedirectMatch "^/$" "/zentao"
 需要安装php-common,以便于apache结合
 =============================
 doku_wiki plugin configuration  exmail smtp port： 25
+-----------------
+
+@user {'deploy':
+  uid     => 2004,
+  comment => 'Deployment User',
+  group   => www-data,
+  groups  => ["enterprise"],
+  tag     => [deploy, web],
+}
+realize User['deploy']
+
+include virtual::users
+User <| tag == web |> #resource collector
+User <| title == 'deploy' |> #resource collector
+--------------
+mongo replset  election priority 
+ 
+
+
+ git tag 'name' 
+ git tag -l (list)
+ git tag -v 'name' (information)
+
+
+
+ I/O Error with PHP5-FPM, ptrace(PEEKDATA) failed
+ My first guess would be to disable request_slowlog_timeout. Since it's not working right, it may be doing more harm than good. If this doesn't fix the issue of running out of processes, then set the php.ini max_execution_time to something that will kill the script for sure.
+
+ 想明白应该问什么样的问题，而一旦你抓准了问题，剩下的就很容易解决了

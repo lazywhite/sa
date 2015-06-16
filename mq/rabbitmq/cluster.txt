@@ -1,5 +1,6 @@
-1. make sure nodes have the same /var/lib/rabbit/.erlang.cookie
+1. make sure nodes have the same /var/lib/rabbitmq/.erlang.cookie
 2. rabbitmq-server -detached
 3. rabbitmqctl stop_app
 4. rabbitmqctl join_cluster rabbit@node1 -t disk
 5. rabbitmqctl start_app
+5. rabbitmqctl cluster_status
