@@ -43,3 +43,29 @@ curl http://localhost:9200/_cat/recovery?v
 curl localhost:9200/_cat/shards
 curl  'http://localhost:9200/_recovery?pretty&human'
 
+
+
+------------------
+
+
+
+input {
+    file {
+            type => "technical"
+            path => "/home/technical/log"
+    }
+    file {
+            type => "business"
+            path => "/home/business/log"
+    }
+} 
+
+
+filter {
+    if [type] == "technical" {
+            # processing .......
+    }
+    if [type] == "business" {
+            # processing .......
+    }
+}
