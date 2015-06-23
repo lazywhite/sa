@@ -1,3 +1,12 @@
 1. exchange
 2. queue
 3. policy
+
+rabbitmqctl list_users
+rabbitmqctl list_permissions -p /
+rabbitmqctl list_user_permissions guest
+rabbitmqctl add_user admin admin@mmbang
+rabbitmqctl set_user_tags admin administrator
+rabbitmqctl list_user_permissions guest
+rabbitmqctl set_permissions admin ".*" ".*" ".*"
+rabbitmqctl delete_user guest
