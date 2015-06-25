@@ -524,3 +524,4 @@ My first guess would be to disable request_slowlog_timeout. Since it's not worki
 ----------------
 mc = memcached.Client(['localhost:11211'])
 
+export TMOUT=1800
