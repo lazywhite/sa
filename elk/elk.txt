@@ -69,3 +69,19 @@ filter {
             # processing .......
     }
 }
+
+
+=========================
+
+The correct way to restart a cluster is to do a rolling restart using the shutdown API.
+
+This works by:
+
+Disabling shard allocation
+Restarting one node (cluster goes yellow)
+Wait until it rejoins the cluster
+Re-enable shard allocation
+Wait until shards are reallocated (cluster goes green)
+Repeat on other nodes.
+
+=======================
