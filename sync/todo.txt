@@ -109,3 +109,5 @@ mongo CRUD
 - kvm ip netns
 - state threads
 - TDD
+- lucene index structure
+- long-connect proxy

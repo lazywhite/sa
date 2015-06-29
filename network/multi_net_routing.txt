@@ -1,0 +1,7 @@
+/bin/ip route flush table 100
+/bin/ip route add default via 电信网关 dev 电信网卡设备名称 src 电信IP table 100 prio 50
+/bin/ip rule add from 电信IP table 100
+ 
+ /bin/ip route flush table 200
+ /bin/ip route add default via 联通网关 dev 联通网卡设备名称 src  联通IP table 200 prio 50
+ /bin/ip rule add from 联通IP table 200

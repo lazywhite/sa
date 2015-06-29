@@ -13,7 +13,7 @@ fastdfs
     ldd /usr/local/bin/fdfs_tracker
     ln -s /usr/lib/libevent-1.4.2.so /usr/lib64
 nginx
-    ./configure --prefix=/usr/local --add-module=/usr/local/src/fastdfs-nginx-module/src
+    ./configure --prefix=/usr/local/nginx --add-module=/usr/local/src/fastdfs-nginx-module/src
     make;make install
     cp /usr/local/src/fastdfs-nginx-module/src/mod_fastdfs.conf /etc/fdfs/
 # 注意点
