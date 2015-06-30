@@ -1,0 +1,6 @@
+location / {
+    if ($request_uri ~* "group6") {
+         proxy_pass $scheme://group6;
+    } 
+}
+
