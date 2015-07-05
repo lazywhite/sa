@@ -8,6 +8,7 @@ stash: store all information of work dir  and stage, checkout from HEAD
 git stash [save <name>]
 git stash apply [default stash:{0}] 
 git merge --no-ff (no fast-forward)
+git pull --no-ff (no fast-forward)
 
 
 
@@ -44,3 +45,35 @@ git tag -v 'name' (information)
 
 git rebase -i
 git rebase 'branch' on 'master'
+
+
+
+git push origin --tags
+git push origin v1.5
+
+git push origin local_branch:remote_branch
+git push origin :serverfix   删除远程分支
+git checkout --track origin/serverfix
+
+
+git request-pull
+git cherry-pick -x
+
+
+git log master..featureA
+git log master...featureA
+
+
+git log origin/master..HEAD  : what will be pushed to remote
+
+git filter-branch --tree-filter 'rm -f password.txt' HEAD : only on current br
+[--all on all branches]
+
+
+git filter-branch --tree-filter "find * -type f -name '*~' -delete" HEAD
+
+
+git blame -L 12,22 sample.rb
+
+
+git read-tree
