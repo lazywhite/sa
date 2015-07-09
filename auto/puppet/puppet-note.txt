@@ -97,6 +97,8 @@ export FACTER_fqdn='xx'
 
 
 # Install procedure
+安装puppetlabs-release-6-11.noarch
+yum install puppet-server
 确保时间同步
 确保/etc/hosts 跟 /etc/sysconfig/network 的hostname 是a.domain.com
 puppet master --genconfig --verbose >> /etc/puppet/puppet.conf
