@@ -1,0 +1,87 @@
+<dataConfig> 
+  <dataSource type="JdbcDataSource"  
+     driver="com.mysql.jdbc.Driver"  
+     url="jdbc:mysql://mmb-te1.mmb.idc:3306/shop"
+     user="shop"
+     password="fkdsfd432FSDf"/>
+  <document>  
+     <entity name="item" query="select id,cat_id,merchant_id,name,sub_title,status,create_time,act_start,act_end,sale_num,fake_sale_num,(sale_num + fake_sale_num) as total_sale_num,origin_price,sale_price,rebate_price,district_id,city_id,stock_num,remain_num,join_status,update_time from item"
+deltaImportQuery="select id,cat_id,merchant_id,name,sub_title,status,create_time,act_start,act_end,sale_num,fake_sale_num,(sale_num + fake_sale_num) as total_sale_num,origin_price,sale_price,rebate_price,district_id,city_id,stock_num,remain_num,join_status,update_time from item where id='${dataimporter.delta.id}'"   
+deltaQuery="select id from item where FROM_UNIXTIME(update_time) > '${dataimporter.last_index_time}'">
+         <field column="id" name="id" /> 
+         <field column="update_time" name="update_time" /> 
+         <field column="cat_id" name="cat_id" /> 
+         <field column="create_time" name="create_time" /> 
+         <field column="total_sale_num" name="total_sale_num" />
+         <field column="status" name="status" /> 
+         <field column="merchant_id" name="merchant_id" /> 
+         <field column="join_status" name="join_status" /> 
+         <entity name="category" 
+            query="select id, name from item_category where id ='${item.cat_id}'"
+            deltaQuery="select id from item_category where update_time > '${dataimporter.last_index_time}'"
+            parentDeltaQuery="select id from item where cat_id='${category.id}'">
+            <field column="name" name="category_name" /> 
+         </entity>
+         <entity name="merchant" 
+            query="select id,comment_score from merchant where id ='${item.merchant_id}'"
+            deltaQuery="select id from merchant where update_time > '${dataimporter.last_index_time}'"
+            parentDeltaQuery="select id from item where merchant_id='${merchant.id}'">
+            <field column="comment_score" name="merchant_comment_score" /> 
+         </entity>
+         <field column="name" name="name" /> 
+         <field column="sub_title" name="sub_title" />
+         <field column="act_start" name="act_start" /> 
+         <field column="act_end" name="act_end" /> 
+         <field column="sale_num" name="sale_num" /> 
+         <field column="fake_sale_num" name="fake_sale_num" /> 
+         <field column="origin_price" name="origin_price" /> 
+         <field column="district_id" name="district_id" /> 
+         <field column="sale_price" name="sale_price" /> 
+         <field column="rebate_price" name="rebate_price" />
+         <field column="city_id" name="city_id" />
+         <field column="stock_num" name="stock_num" />  
+         <field column="remain_num" name="remain_num" />  
+       <entity name="item_detail" 
+          query="select lat,lng,CONCAT_WS(',',ifnull(cast(lat as char ),'0.00'),ifnull(cast(lng as char ),'0.00')) as latlng, baby_age,baby_foster,thumb,street_address,cover,flag,home_tip,home_tip_custom from item_detail where id ='${item.id}'"  
+          deltaQuery="select id from item_detail where update_time > '${dataimporter.last_index_time}'"
+          parentDeltaQuery="select id from item where id='${item_detail.id}'">
+          <field column="lat" name="lat" /> 
+          <field column="lng" name="lng" /> 
+          <field column="latlng" name="latlng" /> 
+          <field column="baby_age" name="baby_age" /> 
+          <field column="baby_foster" name="baby_foster" /> 
+          <field column="thumb" name="thumb" /> 
+          <field column="street_address" name="street_address" /> 
+          <field column="cover" name="cover" /> 
+          <field column="flag" name="flag" /> 
+          <field column="home_tip" name="home_tip" /> 
+          <field column="home_tip_custom" name="home_tip_custom" /> 
+       </entity>	
+       <entity name="item_extend" 
+          query="select content from item_extend where id ='${item.id}'"
+          deltaQuery="select id from item_extend where update_time > '${dataimporter.last_index_time}'"
+          parentDeltaQuery="select id from item where id='${item_extend.id}'">
+          <field column="content" name="item_content" /> 
+       </entity>
+       <entity name="comments" 
+          query="select count(*) as comment_num,sum(score) as score_sum, avg(score) as score_avg from comments where item_id ='${item.id}'"
+          deltaQuery="select id,item_id from comments where update_time > '${dataimporter.last_index_time}'"
+          parentDeltaQuery="select id from item where id='${comments.item_id}'">
+          <field column="comment_num" name="comment_num" />
+          <field column="score_sum" name="score_sum" />
+          <field column="score_avg" name="score_avg" />
+       </entity>
+       <entity name="item_ref_tag" 
+          query="select tag_id from item_ref_tag where item_id ='${item.id}'"
+          parentDeltaQuery="select id from item where id='${item_ref_tag.item_id}'">
+          <field column="tag_id" name="item_tag_id" />
+          <entity name="item_tag"
+             query="select id,name from item_tag where id ='${item_ref_tag.tag_id}'"
+             deltaQuery="select id from item_tag where FROM_UNIXTIME(update_time) > '${dataimporter.last_index_time}'"
+             parentDeltaQuery="select item_id from item_ref_tag where tag_id='${item_tag.id}'">
+             <field column="name" name="item_tag_name" /> 
+          </entity>
+       </entity>
+     </entity> 
+  </document>  
+</dataConfig>
