@@ -523,7 +523,9 @@ My first guess would be to disable request_slowlog_timeout. Since it's not worki
 
 ----------------
 mc = memcached.Client(['localhost:11211'])
-
+---------
+yum metadata expire time  /etc/yum.conf
+=======
 export TMOUT=1800
 ===========
 echo 'pass'|md5sum ;
