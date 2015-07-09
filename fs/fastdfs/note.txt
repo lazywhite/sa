@@ -1,0 +1,8 @@
+location / {
+    if ($request_uri ~* "group6") {
+         proxy_pass $scheme://group6;
+    } 
+}
+
+
+img01.thumb.mmbang.info 无法通group6

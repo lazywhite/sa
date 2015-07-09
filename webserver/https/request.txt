@@ -1,0 +1,9 @@
+# get the private key of server, you need type in pass phrase
+openssl genrsa -des3 -out domain.com.key 2048
+# enter some information you should provided to CA, just ignore
+# challenge password and optional company name
+openssl req -new -key domain.com.key -out domain.com.csr
+
+
+# get a key without pass phrase
+openssl rsa -in www.key -out new.key
