@@ -530,3 +530,6 @@ export TMOUT=1800
 ===========
 echo 'pass'|md5sum ;
 select MD5('pass')
+========
+zip -e (encript)
+tar |openssl 
