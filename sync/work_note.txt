@@ -536,3 +536,9 @@ ping -b 10.10.1.0/24
 arp -n
 =======
 开3次方  pow(a, (1.0/3))
+========
+zip -e (encript)
+tar |openssl 
+
+============
+au FileType python set ts=4 sts=4 sw=4
