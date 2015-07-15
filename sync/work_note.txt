@@ -530,3 +530,9 @@ export TMOUT=1800
 ===========
 echo 'pass'|md5sum ;
 select MD5('pass')
+=========
+nmap -Sp 10.10.1.0/24
+ping -b 10.10.1.0/24
+arp -n
+=======
+开3次方  pow(a, (1.0/3))
