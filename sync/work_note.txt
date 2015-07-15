@@ -533,3 +533,6 @@ select MD5('pass')
 ========
 zip -e (encript)
 tar |openssl 
+
+============
+au FileType python set ts=4 sts=4 sw=4
