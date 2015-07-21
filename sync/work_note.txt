@@ -542,3 +542,11 @@ tar |openssl
 
 ============
 au FileType python set ts=4 sts=4 sw=4
+========
+kernel parameter rdshell
+======
+ip route add default via 10.10.1.1
+ip addr add 10.10.1.6/24 dev eth0
+
+======
+
