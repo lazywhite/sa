@@ -530,6 +530,12 @@ export TMOUT=1800
 ===========
 echo 'pass'|md5sum ;
 select MD5('pass')
+=========
+nmap -Sp 10.10.1.0/24
+ping -b 10.10.1.0/24
+arp -n
+=======
+开3次方  pow(a, (1.0/3))
 ========
 zip -e (encript)
 tar |openssl 
@@ -596,8 +602,14 @@ ramdisk
 
 
 ctdb
-
-
 =======
 truncate -s 20G disk1
 losetup /dev/loop1 disk1
+========
+kernel parameter rdshell
+======
+ip route add default via 10.10.1.1
+ip addr add 10.10.1.6/24 dev eth0
+
+======
+
