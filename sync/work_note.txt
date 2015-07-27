@@ -536,3 +536,68 @@ tar |openssl
 
 ============
 au FileType python set ts=4 sts=4 sw=4
+===========
+sftp
+
+===========
+write back:  写入缓存, 再根据policy写入磁盘, 缓存所有读(可调)
+write through: 通写, 写入缓存的同时写入磁盘, 缓存所有读(可调)
+write around: 仅写入磁盘, 不写缓存, 缓存所有读(可调)
+write only: 只有写操作才会缓存, 不缓存读
+read ahead
+prefetch
+===========
+vmstat
+    虚拟内存
+    多级页表, page out(写入磁盘), page in(读入内存), 查不到发生page fault
+
+buffer
+    缓冲, 同步速率不同的设备,为了以后的写
+    块设备层
+
+cache
+    缓存, 提高读取速度, 为了以后的读
+    文件系统层
+
+hugepage: 虚拟内存技术, 必须关闭swap
+
+page cache: 
+    逻辑级磁盘缓存
+buffer:
+    物理级磁盘缓存
+
+paging: 虚拟内存技术
+
+
+raid5:
+    chunk
+    strip
+    rcw/rmw
+
+ramdisk
+
+=====
+l1 cache,分为数据缓存和指令缓存, 静态RAM, 32-256KB
+L2 cache,分为内部(速率等于主频)和外部(速率等于主频一半)两种芯片, 2-3MB
+L3 cache
+
+storage
+network
+database
+======
+jenkins daily build : build trigger: cron like 
+java -jar jenkins.war --httpPort=9000 > jenkins.log  2>&1 &
+=====
+mknod
+ramdisk
+
+内核参数
+    dirty_ratio
+
+
+ctdb
+
+
+=======
+truncate -s 20G disk1
+losetup /dev/loop1 disk1
