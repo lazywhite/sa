@@ -610,6 +610,20 @@ kernel parameter rdshell
 ======
 ip route add default via 10.10.1.1
 ip addr add 10.10.1.6/24 dev eth0
-
 ======
+
+btrfs
+systemd
+
+
+==========
+k1: v1
+k2: v2
+subdict:
+    - subk1: subv1
+      subk2: subv2
+list1:
+    - v1
+    - v2
+yaml.load(stream)
 
