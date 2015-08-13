@@ -30,11 +30,6 @@ echo 'CDPATH=~/.paths' >> ~/.bashrc
 
 "Bad marshal data" when importing python module
     delete the pyo, pyc file of that file
-
-
-
-
-
 svnadmin
     create <target>
     dump: dump the repo to standard output
@@ -626,4 +621,40 @@ list1:
     - v1
     - v2
 yaml.load(stream)
+==========
+mkdir path/{dir1,dir2} no space 
 
+route -n add 10.0.0.0/8 10.16.3.254
+==========
+import requests_unixsocket
+session = requests_unixsocket.Session()
+r = session.get('http+unix://%2Fvar%2Frun%2Fdocker.sock/images/json')
+=========
+echo -e "GET /images/json HTTP/1.1\r\n" | socat unix-connect:/var/run/docker.sock STDIO
+
+# nc version (netcat-freebsd)
+echo -e "GET /images/json HTTP/1.0\r\n" | nc -U /var/run/docker.sock
+
+# bonus round: relay socket
+socat -d -d TCP-L:8080,fork UNIX:/var/run/docker.sock
+=============
+
+ifconfig en0 alias x.x.x.x/msk
+ifconfig en0 -alias x.x.x.x
+==========
+__file__.split('.')[0]
+=========
+pip install ftptool
+========
+dpkg -l
+dpkg-query -L <package>
+=======
+Cannot open your terminal '/dev/pts/0' - please check.
+script /dev/null
+=======
+diff -Naur old new > foo.patch
+cd old; patch -p1 < /path/to/foo.patch
+
+diff 的4种格式
+=========
+bash关联数组必须declare -A

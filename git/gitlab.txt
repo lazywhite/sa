@@ -3,11 +3,17 @@ Download the gitlab-ce rpm
 ensure that no other postgresql-server is running
 rpm -ivh gitlab-ce.rpm
 you can use local postfix or remote smtp server to send email
-#configuration
+On Ubuntu, you have to run postfix manually
+
+# configuration
 gitlab-rails console production
 user = User.where(id: 1).first
 user.password = 'secret_pass'
 user.save!
+
+# signup user email restrict
+admin_aread->settings->restricted domains for sign-up
+
 ------------------
 external_url 'http://192.168.1.252:8080'
 gitlab_rails['gitlab_email_from'] = 'code@shrlwl.cn'
@@ -21,7 +27,9 @@ gitlab_rails['smtp_domain'] = "shrlwl.cn"
 gitlab_rails['smtp_authentication'] = "login"
 gitlab_rails['smtp_enable_starttls_auto'] = true
 gitlab_rails['smtp_tls'] = true
-unicorn['listen'] = '0.0.0.0'
-unicorn['port'] = 8080
-nginx['enable'] = false
-ci_nginx['enable'] = false
+nginx['listen_port'] = 7000
+
+gitlab_rails['gitlab_ssh_host'] = 'i.storswift.com'
+gitlab_rails['gitlab_shell_ssh_port'] = 322
+nginx['client_max_body_size'] = '2500m'
+

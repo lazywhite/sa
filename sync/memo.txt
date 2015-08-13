@@ -14,6 +14,7 @@
 		xrandr --output VGA1 --right-of LVDS1
 - use qemu to test if usb is bootable
 		qemu-kvm -hdb /dev/sdb
+        qemu-system-x86_64 -hdb /dev/sdb
 - failed to initialize KVM: Device or resource busy
 		shutdown virtualbox or vmware
 - can't open remote display using xshell-enterprise

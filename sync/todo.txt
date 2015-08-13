@@ -111,3 +111,7 @@ mongo CRUD
 - TDD
 - lucene index structure
 - long-connect proxy
+- linux哪些不支持namespace
+- etcd confd
+- kvm add just guest online
+- rcu algorithm
