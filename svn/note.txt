@@ -3,3 +3,12 @@ svnserve -d --listen-host 0.0.0.0 --listen-port 2345 -r /root
 
 git svn clone svn://ip:port/svn-test
 
+
+conf/passwd
+[users]
+harry = harryssecret
+sally = sallyssecret
+
+conf/svnserve.conf
+password-db = passwd
+
