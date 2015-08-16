@@ -542,3 +542,5 @@ tar |openssl
 
 ============
 au FileType python set ts=4 sts=4 sw=4
+========
+kernel parameter rdshell
