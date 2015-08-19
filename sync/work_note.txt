@@ -660,3 +660,9 @@ diff 的4种格式
 bash关联数组必须declare -A
 
 conf/{passwd,svnserve.conf}
+==========
+haldaemon can't start --> service messagbus start
+
+
+export C_INCLUDE_PATH=/usr/local/include/<package>
+make clean; make distclean

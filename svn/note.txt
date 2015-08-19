@@ -10,5 +10,6 @@ harry = harryssecret
 sally = sallyssecret
 
 conf/svnserve.conf
+anon-access = none
 password-db = passwd
 

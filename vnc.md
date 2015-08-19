@@ -1,3 +1,8 @@
-yum install x11vnc
-x11vnc  -storepasswd
-x11vnc -forever -rfbauth /root/.vnc/passwd -display :0
+## on centos-7
+yum install tigervnc-server
+vncpasswd  --> /home/<User>/.vnc/passwd
+vncserver 
+## configuration file
+/lib/systemd/system/vncserver@.service
+
+/etc/sysconfig/vncserver
