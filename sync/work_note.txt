@@ -662,3 +662,5 @@ diff 的4种格式
 bash关联数组必须declare -A
 
 conf/{passwd,svnserve.conf}
+=========
+ipython 出现DistributionNotFound, 重新安装distribution模块

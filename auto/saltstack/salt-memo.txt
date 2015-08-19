@@ -4,4 +4,6 @@ salt "*" network.interfaces
 salt "*" test.ping
 when troubleshooting it can be more beneficial to login to the minion directly and use salt-call.
 
+salt grains.items
+
 salt "*"  sys.doc [module]
