@@ -537,6 +537,8 @@ tar |openssl
 
 ============
 au FileType python set ts=4 sts=4 sw=4
+========
+kernel parameter rdshell
 ===========
 sftp
 
@@ -660,9 +662,12 @@ diff 的4种格式
 bash关联数组必须declare -A
 
 conf/{passwd,svnserve.conf}
+bash 4.3以上才能使用变量间接引用
 ==========
 haldaemon can't start --> service messagbus start
 
 
 export C_INCLUDE_PATH=/usr/local/include/<package>
 make clean; make distclean
+=========
+ipython 出现DistributionNotFound, 重新安装distribution模块
