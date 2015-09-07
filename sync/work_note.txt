@@ -671,3 +671,16 @@ export C_INCLUDE_PATH=/usr/local/include/<package>
 make clean; make distclean
 =========
 ipython 出现DistributionNotFound, 重新安装distribution模块
+ntpdate [0-3].cn.pool.ntp.org
+
+samba-client
+    smbclient -L <server>: show share
+    smbpasswd -a <user>: internal user name
+
+==========
+python class.__dict__ 是只读的, dictproxy type
+只能用setattr来设置属性
+
+
+cp -f /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+ntpdate pool.ntp.org
