@@ -684,3 +684,5 @@ python class.__dict__ 是只读的, dictproxy type
 
 cp -f /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 ntpdate pool.ntp.org
+
+rsync -e 'ssh -p 1234' username@hostname:SourceFile DestFile
