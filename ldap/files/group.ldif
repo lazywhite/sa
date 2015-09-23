@@ -1,0 +1,413 @@
+dn: cn=root,ou=Group,dc=local,dc=com
+objectClass: posixGroup
+objectClass: top
+cn: root
+userPassword: {crypt}x
+gidNumber: 0
+
+dn: cn=bin,ou=Group,dc=local,dc=com
+objectClass: posixGroup
+objectClass: top
+cn: bin
+userPassword: {crypt}x
+gidNumber: 1
+memberUid: daemon
+
+dn: cn=daemon,ou=Group,dc=local,dc=com
+objectClass: posixGroup
+objectClass: top
+cn: daemon
+userPassword: {crypt}x
+gidNumber: 2
+memberUid: bin
+
+dn: cn=sys,ou=Group,dc=local,dc=com
+objectClass: posixGroup
+objectClass: top
+cn: sys
+userPassword: {crypt}x
+gidNumber: 3
+memberUid: adm
+memberUid: bin
+
+dn: cn=adm,ou=Group,dc=local,dc=com
+objectClass: posixGroup
+objectClass: top
+cn: adm
+userPassword: {crypt}x
+gidNumber: 4
+memberUid: daemon
+
+dn: cn=tty,ou=Group,dc=local,dc=com
+objectClass: posixGroup
+objectClass: top
+cn: tty
+userPassword: {crypt}x
+gidNumber: 5
+
+dn: cn=disk,ou=Group,dc=local,dc=com
+objectClass: posixGroup
+objectClass: top
+cn: disk
+userPassword: {crypt}x
+gidNumber: 6
+
+dn: cn=lp,ou=Group,dc=local,dc=com
+objectClass: posixGroup
+objectClass: top
+cn: lp
+userPassword: {crypt}x
+gidNumber: 7
+memberUid: daemon
+
+dn: cn=mem,ou=Group,dc=local,dc=com
+objectClass: posixGroup
+objectClass: top
+cn: mem
+userPassword: {crypt}x
+gidNumber: 8
+
+dn: cn=kmem,ou=Group,dc=local,dc=com
+objectClass: posixGroup
+objectClass: top
+cn: kmem
+userPassword: {crypt}x
+gidNumber: 9
+
+dn: cn=wheel,ou=Group,dc=local,dc=com
+objectClass: posixGroup
+objectClass: top
+cn: wheel
+userPassword: {crypt}x
+gidNumber: 10
+
+dn: cn=mail,ou=Group,dc=local,dc=com
+objectClass: posixGroup
+objectClass: top
+cn: mail
+userPassword: {crypt}x
+gidNumber: 12
+memberUid: postfix
+
+dn: cn=uucp,ou=Group,dc=local,dc=com
+objectClass: posixGroup
+objectClass: top
+cn: uucp
+userPassword: {crypt}x
+gidNumber: 14
+
+dn: cn=man,ou=Group,dc=local,dc=com
+objectClass: posixGroup
+objectClass: top
+cn: man
+userPassword: {crypt}x
+gidNumber: 15
+
+dn: cn=games,ou=Group,dc=local,dc=com
+objectClass: posixGroup
+objectClass: top
+cn: games
+userPassword: {crypt}x
+gidNumber: 20
+
+dn: cn=gopher,ou=Group,dc=local,dc=com
+objectClass: posixGroup
+objectClass: top
+cn: gopher
+userPassword: {crypt}x
+gidNumber: 30
+
+dn: cn=video,ou=Group,dc=local,dc=com
+objectClass: posixGroup
+objectClass: top
+cn: video
+userPassword: {crypt}x
+gidNumber: 39
+
+dn: cn=dip,ou=Group,dc=local,dc=com
+objectClass: posixGroup
+objectClass: top
+cn: dip
+userPassword: {crypt}x
+gidNumber: 40
+
+dn: cn=ftp,ou=Group,dc=local,dc=com
+objectClass: posixGroup
+objectClass: top
+cn: ftp
+userPassword: {crypt}x
+gidNumber: 50
+
+dn: cn=lock,ou=Group,dc=local,dc=com
+objectClass: posixGroup
+objectClass: top
+cn: lock
+userPassword: {crypt}x
+gidNumber: 54
+
+dn: cn=audio,ou=Group,dc=local,dc=com
+objectClass: posixGroup
+objectClass: top
+cn: audio
+userPassword: {crypt}x
+gidNumber: 63
+
+dn: cn=nobody,ou=Group,dc=local,dc=com
+objectClass: posixGroup
+objectClass: top
+cn: nobody
+userPassword: {crypt}x
+gidNumber: 99
+
+dn: cn=users,ou=Group,dc=local,dc=com
+objectClass: posixGroup
+objectClass: top
+cn: users
+userPassword: {crypt}x
+gidNumber: 100
+
+dn: cn=dbus,ou=Group,dc=local,dc=com
+objectClass: posixGroup
+objectClass: top
+cn: dbus
+userPassword: {crypt}x
+gidNumber: 81
+
+dn: cn=usbmuxd,ou=Group,dc=local,dc=com
+objectClass: posixGroup
+objectClass: top
+cn: usbmuxd
+userPassword: {crypt}x
+gidNumber: 113
+
+dn: cn=utmp,ou=Group,dc=local,dc=com
+objectClass: posixGroup
+objectClass: top
+cn: utmp
+userPassword: {crypt}x
+gidNumber: 22
+
+dn: cn=utempter,ou=Group,dc=local,dc=com
+objectClass: posixGroup
+objectClass: top
+cn: utempter
+userPassword: {crypt}x
+gidNumber: 35
+
+dn: cn=desktop_admin_r,ou=Group,dc=local,dc=com
+objectClass: posixGroup
+objectClass: top
+cn: desktop_admin_r
+userPassword: {crypt}x
+gidNumber: 499
+
+dn: cn=desktop_user_r,ou=Group,dc=local,dc=com
+objectClass: posixGroup
+objectClass: top
+cn: desktop_user_r
+userPassword: {crypt}x
+gidNumber: 498
+
+dn: cn=floppy,ou=Group,dc=local,dc=com
+objectClass: posixGroup
+objectClass: top
+cn: floppy
+userPassword: {crypt}x
+gidNumber: 19
+
+dn: cn=vcsa,ou=Group,dc=local,dc=com
+objectClass: posixGroup
+objectClass: top
+cn: vcsa
+userPassword: {crypt}x
+gidNumber: 69
+
+dn: cn=rpc,ou=Group,dc=local,dc=com
+objectClass: posixGroup
+objectClass: top
+cn: rpc
+userPassword: {crypt}x
+gidNumber: 32
+
+dn: cn=rtkit,ou=Group,dc=local,dc=com
+objectClass: posixGroup
+objectClass: top
+cn: rtkit
+userPassword: {crypt}x
+gidNumber: 497
+
+dn: cn=avahi-autoipd,ou=Group,dc=local,dc=com
+objectClass: posixGroup
+objectClass: top
+cn: avahi-autoipd
+userPassword: {crypt}x
+gidNumber: 170
+
+dn: cn=abrt,ou=Group,dc=local,dc=com
+objectClass: posixGroup
+objectClass: top
+cn: abrt
+userPassword: {crypt}x
+gidNumber: 173
+
+dn: cn=cdrom,ou=Group,dc=local,dc=com
+objectClass: posixGroup
+objectClass: top
+cn: cdrom
+userPassword: {crypt}x
+gidNumber: 11
+
+dn: cn=tape,ou=Group,dc=local,dc=com
+objectClass: posixGroup
+objectClass: top
+cn: tape
+userPassword: {crypt}x
+gidNumber: 33
+
+dn: cn=dialout,ou=Group,dc=local,dc=com
+objectClass: posixGroup
+objectClass: top
+cn: dialout
+userPassword: {crypt}x
+gidNumber: 18
+
+dn: cn=wbpriv,ou=Group,dc=local,dc=com
+objectClass: posixGroup
+objectClass: top
+cn: wbpriv
+userPassword: {crypt}x
+gidNumber: 88
+
+dn: cn=rpcuser,ou=Group,dc=local,dc=com
+objectClass: posixGroup
+objectClass: top
+cn: rpcuser
+userPassword: {crypt}x
+gidNumber: 29
+
+dn: cn=nfsnobody,ou=Group,dc=local,dc=com
+objectClass: posixGroup
+objectClass: top
+cn: nfsnobody
+userPassword: {crypt}x
+gidNumber: 65534
+
+dn: cn=haldaemon,ou=Group,dc=local,dc=com
+objectClass: posixGroup
+objectClass: top
+cn: haldaemon
+userPassword: {crypt}x
+gidNumber: 68
+
+dn: cn=gdm,ou=Group,dc=local,dc=com
+objectClass: posixGroup
+objectClass: top
+cn: gdm
+userPassword: {crypt}x
+gidNumber: 42
+
+dn: cn=ntp,ou=Group,dc=local,dc=com
+objectClass: posixGroup
+objectClass: top
+cn: ntp
+userPassword: {crypt}x
+gidNumber: 38
+
+dn: cn=apache,ou=Group,dc=local,dc=com
+objectClass: posixGroup
+objectClass: top
+cn: apache
+userPassword: {crypt}x
+gidNumber: 48
+
+dn: cn=saslauth,ou=Group,dc=local,dc=com
+objectClass: posixGroup
+objectClass: top
+cn: saslauth
+userPassword: {crypt}x
+gidNumber: 76
+
+dn: cn=postdrop,ou=Group,dc=local,dc=com
+objectClass: posixGroup
+objectClass: top
+cn: postdrop
+userPassword: {crypt}x
+gidNumber: 90
+
+dn: cn=postfix,ou=Group,dc=local,dc=com
+objectClass: posixGroup
+objectClass: top
+cn: postfix
+userPassword: {crypt}x
+gidNumber: 89
+
+dn: cn=pulse,ou=Group,dc=local,dc=com
+objectClass: posixGroup
+objectClass: top
+cn: pulse
+userPassword: {crypt}x
+gidNumber: 496
+
+dn: cn=pulse-access,ou=Group,dc=local,dc=com
+objectClass: posixGroup
+objectClass: top
+cn: pulse-access
+userPassword: {crypt}x
+gidNumber: 495
+
+dn: cn=fuse,ou=Group,dc=local,dc=com
+objectClass: posixGroup
+objectClass: top
+cn: fuse
+userPassword: {crypt}x
+gidNumber: 494
+
+dn: cn=stapusr,ou=Group,dc=local,dc=com
+objectClass: posixGroup
+objectClass: top
+cn: stapusr
+userPassword: {crypt}x
+gidNumber: 156
+
+dn: cn=stapsys,ou=Group,dc=local,dc=com
+objectClass: posixGroup
+objectClass: top
+cn: stapsys
+userPassword: {crypt}x
+gidNumber: 157
+
+dn: cn=stapdev,ou=Group,dc=local,dc=com
+objectClass: posixGroup
+objectClass: top
+cn: stapdev
+userPassword: {crypt}x
+gidNumber: 158
+
+dn: cn=sshd,ou=Group,dc=local,dc=com
+objectClass: posixGroup
+objectClass: top
+cn: sshd
+userPassword: {crypt}x
+gidNumber: 74
+
+dn: cn=tcpdump,ou=Group,dc=local,dc=com
+objectClass: posixGroup
+objectClass: top
+cn: tcpdump
+userPassword: {crypt}x
+gidNumber: 72
+
+dn: cn=slocate,ou=Group,dc=local,dc=com
+objectClass: posixGroup
+objectClass: top
+cn: slocate
+userPassword: {crypt}x
+gidNumber: 21
+
+dn: cn=ldap,ou=Group,dc=local,dc=com
+objectClass: posixGroup
+objectClass: top
+cn: ldap
+userPassword: {crypt}x
+gidNumber: 55
+
