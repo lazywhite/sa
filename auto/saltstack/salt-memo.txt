@@ -7,3 +7,31 @@ when troubleshooting it can be more beneficial to login to the minion directly a
 salt grains.items
 
 salt "*"  sys.doc [module]
+
+
+
+=============
+
+environment: defined in top.sls
+grains: facter system
+    self-defined: /etc/salt/minion
+    server-side: /srv/salt/_grains/
+pillar: minion attribute defined on master side
+events: file.modified
+reactor:    events to actions
+beacon: produce event
+
+returnner
+roster: salt-ssh
+syndic: distribute manage system
+
+
+HA
+
+SPM
+    formula
+
+mine:
+    
+
+

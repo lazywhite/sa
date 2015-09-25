@@ -48,8 +48,13 @@ service nfs restart
 service autofs restart
 
 
+chkconfig sssd off
+chkconfig nscd off
+
+
+
 ## debug tools
-ltrace -f -p <pid> -o <output_file>
+ltrace -S -f -p <pid> -o <output_file>
 
 sudo -V | grep ldap
 ldapsearch -x -W -D "cn=admin,dc=local,dc=com" -s base -b "" -H ldap://10.10.30.11
