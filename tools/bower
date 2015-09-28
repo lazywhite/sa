@@ -1,0 +1,4 @@
+yum install npm git
+npm install -g bower
+bower install --allow-root angular
+

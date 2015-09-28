@@ -1,6 +1,8 @@
 ## environment
 centos6.5 with epel-6 repo enabled
+make sure cluster time is same 
 disable iptables and selinux
+
 ## packages of master
 python-ldap-2.3.10-1.el6.x86_64
 openldap-2.4.40-5.el6.x86_64
@@ -16,6 +18,7 @@ migrationtools-47-7.el6.noarch
 nfs-utils-1.2.3-64.el6.x86_64
 autofs-5.0.5-113.el6.x86_64
 httpd-2.2.15-47.el6.centos.x86_64
+oddjob-mkhomedir-0.30-5.el6.x86_64
 
 ## procedure
 
@@ -59,3 +62,6 @@ ltrace -S -f -p <pid> -o <output_file>
 sudo -V | grep ldap
 ldapsearch -x -W -D "cn=admin,dc=local,dc=com" -s base -b "" -H ldap://10.10.30.11
 ldapsearch -x -W -D "cn=admin,dc=local,dc=com" -s children -b "ou=People,dc=local,dc=com" -H ldap://10.10.30.11
+
+
+

@@ -11,20 +11,18 @@ salt "*"  sys.doc [module]
 
 
 =============
-
 environment: defined in top.sls
 grains: facter system
     self-defined: /etc/salt/minion
     server-side: /srv/salt/_grains/
 pillar: minion attribute defined on master side
-events: file.modified
-reactor:    events to actions
-beacon: produce event
+events: changed resource state
+reactor: events to actions
+beacon: monitor resource then produce event
 
-returnner
+returnner: store information into backend
 roster: salt-ssh
 syndic: distribute manage system
-
 
 HA
 
@@ -32,6 +30,21 @@ SPM
     formula
 
 mine:
+
+targeting:
     
+peer
+proxy
 
 
+========================
+salt "*" saltutil.sync_grains
+salt "*" saltutil.refresh_pillar
+salt "*" pillar.items
+salt "*" grain.items
+
+salt-call state.highstate
+=========================
+apply specified sls files 
+====================
+salt-run
