@@ -77,3 +77,6 @@ git blame -L 12,22 sample.rb
 
 
 git read-tree
+
+
+git checkout <commit-id>
