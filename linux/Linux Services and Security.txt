@@ -513,7 +513,6 @@ bind:
 
 
 file: /var/log/query.log
-rsyslog
 
 bind: 
 	channel categroy
@@ -3165,13 +3164,6 @@ memadmin-master
 
 subject verb object
 
-
-
-
-
-
-
-selinux, rsyslog, sed and awk
 
 SELinux的相关概念：
 

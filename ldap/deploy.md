@@ -22,11 +22,15 @@ oddjob-mkhomedir-0.30-5.el6.x86_64
 
 ## procedure
 
+```bash
 cp /usr/share/openldap-servers/slapd.conf.obsolete /etc/openldap/slapd.conf
 slappasswd -s 'rootpw' -h {MD5}
 cp /usr/share/openldap-servers/DB_CONFIG.example  /var/lib/ldap/DB_CONFIG
- rm -rf /etc/openldap/slapd.d/*
+
+# if change rootpwd, should do this again
+rm -rf /etc/openldap/slapd.d/*
 slaptest  -f /etc/openldap/slapd.conf -F /etc/openldap/slapd.d
+
 chown -R ldap:ldap /var/lib/ldap
 chown -R ldap:ldap /etc/openldap/
  service slapd restart
@@ -53,7 +57,7 @@ service autofs restart
 
 chkconfig sssd off
 chkconfig nscd off
-
+```
 
 
 ## debug tools
@@ -64,4 +68,6 @@ ldapsearch -x -W -D "cn=admin,dc=local,dc=com" -s base -b "" -H ldap://10.10.30.
 ldapsearch -x -W -D "cn=admin,dc=local,dc=com" -s children -b "ou=People,dc=local,dc=com" -H ldap://10.10.30.11
 
 
+## attention
+after add new user to ldap server, should wait a minite to get it applied
 
