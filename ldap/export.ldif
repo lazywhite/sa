@@ -1,0 +1,120 @@
+# extended LDIF
+#
+# LDAPv3
+# base <dc=local,dc=com> with scope children
+# filter: (objectclass=*)
+# requesting: ALL
+#
+
+# Hosts, local.com
+dn: ou=Hosts,dc=local,dc=com
+ou: Hosts
+objectClass: top
+objectClass: organizationalUnit
+
+# People, local.com
+dn: ou=People,dc=local,dc=com
+ou: People
+objectClass: top
+objectClass: organizationalUnit
+
+# Group, local.com
+dn: ou=Group,dc=local,dc=com
+ou: Group
+objectClass: top
+objectClass: organizationalUnit
+
+# wheel, Group, local.com
+dn: cn=wheel,ou=Group,dc=local,dc=com
+objectClass: posixGroup
+objectClass: top
+cn: wheel
+userPassword:: e2NyeXB0fXg=
+gidNumber: 10
+
+# SUDOers, local.com
+dn: ou=SUDOers,dc=local,dc=com
+objectClass: top
+objectClass: organizationalUnit
+description: SUDO Configuration Subtree
+ou: SUDOers
+
+# defaults, SUDOers, local.com
+dn: cn=defaults,ou=SUDOers,dc=local,dc=com
+objectClass: top
+objectClass: sudoRole
+cn: defaults
+description: Default sudoOption's go here
+sudoOption: requiretty
+sudoOption: !visiblepw
+sudoOption: env_reset
+
+# root, SUDOers, local.com
+dn: cn=root,ou=SUDOers,dc=local,dc=com
+objectClass: top
+objectClass: sudoRole
+cn: root
+sudoUser: root
+sudoHost: ALL
+sudoRunAsUser: ALL
+sudoCommand: ALL
+
+# %wheel, SUDOers, local.com
+dn: cn=%wheel,ou=SUDOers,dc=local,dc=com
+objectClass: top
+objectClass: sudoRole
+cn: %wheel
+sudoUser: %wheel
+sudoHost: ALL
+sudoRunAsUser: ALL
+sudoOption: !authenticate
+sudoCommand: ALL
+
+# local, SUDOers, local.com
+dn: cn=local,ou=SUDOers,dc=local,dc=com
+objectClass: top
+objectClass: sudoRole
+cn: local
+sudoUser: local
+sudoHost: ALL
+sudoRunAsUser: ALL
+sudoOption: !authenticate
+sudoCommand: ALL
+
+# test, People, local.com
+dn: uid=test,ou=People,dc=local,dc=com
+givenName: tt
+sn: test
+uid: test
+uidNumber: 1000
+gidNumber: 10
+homeDirectory: /home/test
+objectClass: inetOrgPerson
+objectClass: posixAccount
+objectClass: top
+cn: test
+loginShell: /bin/bash
+userPassword:: e01ENX0vK1ZUYVU5UWxrY1ZrRFEwTWpXZUFnPT0=
+
+# admin, People, local.com
+dn: uid=admin,ou=People,dc=local,dc=com
+givenName: admin
+sn: admin
+cn: admin
+uid: admin
+uidNumber: 1001
+gidNumber: 10
+homeDirectory: /home/admin
+objectClass: inetOrgPerson
+objectClass: posixAccount
+objectClass: top
+loginShell: /bin/bash
+userPassword:: c2g6IHNsYXBwYXNzd2Q6IGNvbW1hbmQgbm90IGZvdW5k
+
+# search result
+search: 2
+result: 0 Success
+
+# numResponses: 12
+# numEntries: 11
+

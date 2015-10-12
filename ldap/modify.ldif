@@ -1,0 +1,8 @@
+dn: cn=%wheel,ou=SUDOers,dc=local,dc=com
+changetype: modify
+replace: sudoCommand
+sudoCommand: ALL
+-
+add: sudoCommand
+sudoCommand: !/bin/sh
+

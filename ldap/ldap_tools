@@ -1,0 +1,7 @@
+ldapdelete  -d127 -x -w <password> -D "cn=manager,dc=local,dc=com"  -H ldaps://10.10.30.11 cn=pulse,ou=Group,dc=local,dc=com
+
+
+ldapsearch  -x -w e01ENX1VcHlvQlFvQUdBZ -D "cn=manager,dc=local,dc=com" -s children -b "dc=local,dc=com" -H ldaps://10.10.30.11 > /root/export.ldif
+
+
+ldapmodify -d127  -x -w e01ENX1VcHlvQlFvQUdBZ -D "cn=manager,dc=local,dc=com" -H ldaps://10.10.30.11 -f mod.ldif
