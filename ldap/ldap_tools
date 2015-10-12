@@ -5,3 +5,5 @@ ldapsearch  -x -w e01ENX1VcHlvQlFvQUdBZ -D "cn=manager,dc=local,dc=com" -s child
 
 
 ldapmodify -d127  -x -w e01ENX1VcHlvQlFvQUdBZ -D "cn=manager,dc=local,dc=com" -H ldaps://10.10.30.11 -f mod.ldif
+
+ldapadd -d127  -x -w e01ENX1VcHlvQlFvQUdBZ -D "cn=manager,dc=local,dc=com" -H ldaps://10.10.30.11 -f exports.ldif

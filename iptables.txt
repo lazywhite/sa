@@ -99,3 +99,9 @@ iptables -t nat -D POSTROUTING 1
 #drop control ports
 #default drop other data
 /sbin/iptables -P INPUT DROP
+
+
+
+=============
+iptables -t nat -A PREROUTING -d 202.202.202.2 -j DNAT --to-destination 192.168.0.102  
+iptables -t nat -A POSTROUTING -d 192.168.0.102 -j SNAT --to 192.168.0.1 

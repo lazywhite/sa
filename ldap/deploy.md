@@ -71,3 +71,10 @@ ldapsearch -x -W -D "cn=admin,dc=local,dc=com" -s children -b "ou=People,dc=loca
 ## attention
 after add new user to ldap server, should wait a minite to get it applied
 
+
+
+## debug
+
+slapd -4 -d127 -h ldaps:/// -f /etc/openldap/slapd.conf
+
+openssl s_client -connect ldap.local.com:636 -CAfile /etc/openldap/cacerts/cacert.pem -showcerts -state
