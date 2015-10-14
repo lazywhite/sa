@@ -1,0 +1,83 @@
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number: 14362717160795412929 (0xc7529f292a9e19c1)
+    Signature Algorithm: sha1WithRSAEncryption
+        Issuer: C=CN, ST=Shanghai, O=TheDream, OU=Tech, CN=ldap.local.com/emailAddress=cppking@126.com
+        Validity
+            Not Before: Oct  9 03:05:31 2015 GMT
+            Not After : Oct  8 03:05:31 2016 GMT
+        Subject: C=CN, ST=Shanghai, L=Changning, O=TheDream, OU=Tech, CN=ldap.local.com/emailAddress=cppking@126.com
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption
+                Public-Key: (2048 bit)
+                Modulus:
+                    00:c6:df:b2:ff:6d:92:ac:84:5a:f3:54:4b:3f:08:
+                    be:b5:9c:bb:1a:69:8c:0f:3d:f9:d9:87:f2:71:57:
+                    ff:a1:2a:09:63:1f:e2:c1:fd:bd:14:fc:43:c8:83:
+                    f4:08:43:49:b8:86:5e:e6:71:e0:89:32:c3:2a:55:
+                    18:04:ee:99:15:a9:f1:ba:bb:ba:96:b9:22:06:81:
+                    a0:a8:9a:2e:46:76:a5:4c:cb:64:e4:1d:1f:9a:a0:
+                    55:04:f5:87:b2:8c:c9:5d:4b:bd:61:e7:c9:8a:f2:
+                    26:a8:e4:9e:ed:73:de:da:c7:1f:97:92:fd:aa:93:
+                    a0:26:88:98:9c:fa:ef:6f:3a:c8:dc:3d:3a:fe:ce:
+                    7f:e0:8b:d2:87:a3:87:27:26:6b:f0:89:d3:79:c3:
+                    6d:e2:24:6f:ed:46:66:37:29:04:f1:55:f5:5d:77:
+                    a6:6d:62:d7:d0:e2:fe:bb:2e:b2:ce:54:03:e1:ac:
+                    4e:cb:26:9a:df:ef:90:e0:be:a1:49:8d:1a:31:b0:
+                    0e:25:a9:bf:34:d0:88:b7:0d:29:23:51:85:67:ae:
+                    18:e7:53:72:6e:cd:b3:44:e2:e1:d2:e1:cf:f9:79:
+                    cc:75:28:2f:e2:4d:71:3f:35:0d:bb:3d:82:70:ae:
+                    55:00:11:d8:0b:04:9a:4b:e1:c9:2e:89:52:b2:a0:
+                    73:19
+                Exponent: 65537 (0x10001)
+        X509v3 extensions:
+            X509v3 Basic Constraints: 
+                CA:FALSE
+            Netscape Comment: 
+                OpenSSL Generated Certificate
+            X509v3 Subject Key Identifier: 
+                7E:F3:D1:95:C8:A9:AD:F9:9F:C1:E9:37:B4:96:79:1B:BB:B7:B2:12
+            X509v3 Authority Key Identifier: 
+                keyid:4E:00:99:90:99:89:15:A1:05:A0:A1:E2:BB:18:B9:6F:C5:2E:21:80
+
+    Signature Algorithm: sha1WithRSAEncryption
+         3e:12:01:08:f1:41:01:cb:c5:4a:b9:d7:c7:c7:99:b6:11:b8:
+         c3:b9:0f:69:d3:bc:1a:15:7d:79:6d:20:7c:2f:cc:af:76:e3:
+         6a:de:ff:0c:6b:4e:4c:fa:6f:55:2f:4b:be:dd:08:d9:e0:12:
+         79:30:7a:2b:6c:2d:29:c7:c0:ae:4b:43:7e:90:01:99:b7:7f:
+         6a:27:d5:57:ac:13:f8:a8:cb:b2:2f:5d:39:2a:f2:21:ae:ae:
+         9a:fa:8f:84:f1:88:30:b8:89:81:8f:39:77:25:d3:73:64:b6:
+         24:cb:bc:3a:71:4c:52:f9:32:3c:47:b1:f0:b1:d9:10:54:03:
+         14:f6:06:6e:d4:9c:9d:14:a5:74:66:04:8b:2f:ce:51:5e:58:
+         e4:53:c2:be:2b:88:e2:44:8a:9b:73:8a:79:03:d4:84:34:dd:
+         4a:d2:33:8f:20:9d:4f:08:be:21:0c:28:25:8e:3a:16:95:37:
+         72:de:7a:a6:2d:ff:1d:d6:a6:47:b7:29:ef:b4:e7:17:79:57:
+         3b:17:51:f6:c4:c5:39:2f:b1:9f:f6:cc:f1:be:ce:a1:f3:a7:
+         44:c4:5c:c7:d1:c1:53:63:f7:a7:ad:63:6a:29:5e:e6:46:90:
+         01:27:d2:5b:ad:8a:d0:a6:96:a6:0c:83:86:3e:8f:64:0f:e4:
+         b8:9f:92:64
+-----BEGIN CERTIFICATE-----
+MIIECTCCAvGgAwIBAgIJAMdSnykqnhnBMA0GCSqGSIb3DQEBBQUAMHsxCzAJBgNV
+BAYTAkNOMREwDwYDVQQIDAhTaGFuZ2hhaTERMA8GA1UECgwIVGhlRHJlYW0xDTAL
+BgNVBAsMBFRlY2gxFzAVBgNVBAMMDmxkYXAubG9jYWwuY29tMR4wHAYJKoZIhvcN
+AQkBFg9jcHBraW5nQDEyNi5jb20wHhcNMTUxMDA5MDMwNTMxWhcNMTYxMDA4MDMw
+NTMxWjCBjzELMAkGA1UEBhMCQ04xETAPBgNVBAgMCFNoYW5naGFpMRIwEAYDVQQH
+DAlDaGFuZ25pbmcxETAPBgNVBAoMCFRoZURyZWFtMQ0wCwYDVQQLDARUZWNoMRcw
+FQYDVQQDDA5sZGFwLmxvY2FsLmNvbTEeMBwGCSqGSIb3DQEJARYPY3Bwa2luZ0Ax
+MjYuY29tMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxt+y/22SrIRa
+81RLPwi+tZy7GmmMDz352YfycVf/oSoJYx/iwf29FPxDyIP0CENJuIZe5nHgiTLD
+KlUYBO6ZFanxuru6lrkiBoGgqJouRnalTMtk5B0fmqBVBPWHsozJXUu9YefJivIm
+qOSe7XPe2scfl5L9qpOgJoiYnPrvbzrI3D06/s5/4IvSh6OHJyZr8InTecNt4iRv
+7UZmNykE8VX1XXembWLX0OL+uy6yzlQD4axOyyaa3++Q4L6hSY0aMbAOJam/NNCI
+tw0pI1GFZ64Y51Nybs2zROLh0uHP+XnMdSgv4k1xPzUNuz2CcK5VABHYCwSaS+HJ
+LolSsqBzGQIDAQABo3sweTAJBgNVHRMEAjAAMCwGCWCGSAGG+EIBDQQfFh1PcGVu
+U1NMIEdlbmVyYXRlZCBDZXJ0aWZpY2F0ZTAdBgNVHQ4EFgQUfvPRlciprfmfwek3
+tJZ5G7u3shIwHwYDVR0jBBgwFoAUTgCZkJmJFaEFoKHiuxi5b8UuIYAwDQYJKoZI
+hvcNAQEFBQADggEBAD4SAQjxQQHLxUq518fHmbYRuMO5D2nTvBoVfXltIHwvzK92
+42re/wxrTkz6b1UvS77dCNngEnkweitsLSnHwK5LQ36QAZm3f2on1VesE/ioy7Iv
+XTkq8iGurpr6j4TxiDC4iYGPOXcl03NktiTLvDpxTFL5MjxHsfCx2RBUAxT2Bm7U
+nJ0UpXRmBIsvzlFeWORTwr4riOJEiptzinkD1IQ03UrSM48gnU8IviEMKCWOOhaV
+N3LeeqYt/x3Wpke3Ke+05xd5VzsXUfbExTkvsZ/2zPG+zqHzp0TEXMfRwVNj96et
+Y2opXuZGkAEn0lutitCmlqYMg4Y+j2QP5LifkmQ=
+-----END CERTIFICATE-----

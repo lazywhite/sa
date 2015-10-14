@@ -94,7 +94,7 @@ objectClass: posixAccount
 objectClass: top
 cn: test
 loginShell: /bin/bash
-userPassword:: e01ENX0vK1ZUYVU5UWxrY1ZrRFEwTWpXZUFnPT0=
+userPassword:: e01ENX1OcEV3anlwTUwybUQ4b2dOTXVLY2hBPT0=
 
 # admin, People, local.com
 dn: uid=admin,ou=People,dc=local,dc=com
@@ -117,4 +117,3 @@ result: 0 Success
 
 # numResponses: 12
 # numEntries: 11
-

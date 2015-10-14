@@ -23,6 +23,8 @@ oddjob-mkhomedir-0.30-5.el6.x86_64
 ## procedure
 
 ```bash
+# enable ldaps in /etc/sysconfig/ldap
+
 cp /usr/share/openldap-servers/slapd.conf.obsolete /etc/openldap/slapd.conf
 slappasswd -s 'rootpw' -h {MD5}
 cp /usr/share/openldap-servers/DB_CONFIG.example  /var/lib/ldap/DB_CONFIG
@@ -33,8 +35,10 @@ slaptest  -f /etc/openldap/slapd.conf -F /etc/openldap/slapd.d
 
 chown -R ldap:ldap /var/lib/ldap
 chown -R ldap:ldap /etc/openldap/
- service slapd restart
+service slapd start # to generate id2entry.bdb and other files
 
+
+## generate ldif file to import 
 cd /usr/share/migrationtools/
 vi  migrate_common.ph
 
@@ -46,6 +50,9 @@ ldapadd -x -D "cn=admin,dc=example,dc=com" -W -f /tmp/base.ldif
 ldapadd -x -D "cn=admin,dc=example,dc=com" -W -f /tmp/passwd.ldif
 ldapadd -x -D "cn=admin,dc=example,dc=com" -W -f /tmp/group.ldif
 ldapadd -x -D "cn=admin,dc=example,dc=com" -W -f /tmp/sudo.ldif
+
+## or 
+ldapadd -x -D "cn=admin,dc=example,dc=com" -W -f export.ldif
 
 service slapd restart
 
@@ -59,7 +66,13 @@ chkconfig sssd off
 chkconfig nscd off
 ```
 
+## enable tls support
+server.key and client.key should be without password protected
+openssl rsa -in private.origin -out private.key
 
+
+## generate CA and ssl-keys
+http://www.ibm.com/developerworks/cn/linux/1312_zhangchao_opensslldap/
 ## debug tools
 ltrace -S -f -p <pid> -o <output_file>
 
@@ -70,7 +83,7 @@ ldapsearch -x -W -D "cn=admin,dc=local,dc=com" -s children -b "ou=People,dc=loca
 
 ## attention
 after add new user to ldap server, should wait a minite to get it applied
-
+ssl-key common-name can not be same with server hostname
 
 
 ## debug
