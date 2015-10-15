@@ -689,3 +689,31 @@ rsync -e 'ssh -p 1234' username@hostname:SourceFile DestFile
 
 
 rsyslog: @@tcp @udp
+
+
+remote: error: GH001: Large files detected. You may want to try Git Large File Storage - https://git-lfs.github.com.
+git filter-branch -f --index-filter "git rm -rf --cached --ignore-unmatch FOLDERNAME" -- --all  
+git rebase -i; edit; git rm -rf <large file>; git ci --amend ; git rebase --continue 
+
+
+
+===============
+minion 错误日志 
+2014-06-06 02:04:22,505 [salt.crypt  ][ERROR   ] The master key has changed, the salt master could have been subverted, verify salt master's public key 
+2014-06-06 02:04:22,506 [salt.crypt ][CRITICAL] The Salt Master server's public key did not authenticate! 
+The master may need to be updated if it is a version of Salt lower than 2014.1.4, or If you are confident that you are connecting to a valid Salt Master, then remove the master public key and restart the Salt Minion. 
+The master public key can be found at: 
+/etc/salt/pki/minion/minion_master.pub 
+
+解决办法 
+master/syndic 端 
+删除此minion KEY
+salt-key -d xxx (minion ID)
+
+minion 端 
+删除minion_master.pub 
+rm -rf /etc/salt/pki/minion/minion_master.pub
+
+重启minion
+/etc/init.d/salt-minion restart
+

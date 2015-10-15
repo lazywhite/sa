@@ -38,28 +38,9 @@ chown -R ldap:ldap /etc/openldap/
 service slapd start # to generate id2entry.bdb and other files
 
 
-## generate ldif file to import 
-cd /usr/share/migrationtools/
-vi  migrate_common.ph
-
-./migrate_base.pl > /tmp/base.ldif
-./migrate_passwd.pl  /etc/passwd > /tmp/passwd.ldif
-./migrate_group.pl  /etc/group > /tmp/group.ldif
-
-ldapadd -x -D "cn=admin,dc=example,dc=com" -W -f /tmp/base.ldif
-ldapadd -x -D "cn=admin,dc=example,dc=com" -W -f /tmp/passwd.ldif
-ldapadd -x -D "cn=admin,dc=example,dc=com" -W -f /tmp/group.ldif
-ldapadd -x -D "cn=admin,dc=example,dc=com" -W -f /tmp/sudo.ldif
-
-## or 
 ldapadd -x -D "cn=admin,dc=example,dc=com" -W -f export.ldif
 
 service slapd restart
-
-
-service rpcbind restart
-service nfs restart
-service autofs restart
 
 
 chkconfig sssd off

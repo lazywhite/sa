@@ -40,6 +40,10 @@ clear:both
 <p stype="text-align:center">
 <style type="text/css">p {text-align:center}</style>
 
-float,
-absolute,fixed,relative,
-drop-down menu
+visibility:hidden 保留元素之前的空间
+display:none  不保留之前的空间
+
+static, relative 在正常文本流
+fixed, absolute 不占用正常文本流
+
+
