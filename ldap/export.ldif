@@ -111,9 +111,6 @@ objectClass: top
 loginShell: /bin/bash
 userPassword:: c2g6IHNsYXBwYXNzd2Q6IGNvbW1hbmQgbm90IGZvdW5k
 
-# search result
-search: 2
-result: 0 Success
 
 # numResponses: 12
 # numEntries: 11

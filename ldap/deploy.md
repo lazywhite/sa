@@ -14,12 +14,11 @@ php-ldap-5.3.3-46.el6_6.x86_64
 pam_ldap-185-11.el6.x86_64
 openssh-ldap-5.3p1-112.el6_7.x86_64
 phpldapadmin-1.2.3-1.el6.noarch
-migrationtools-47-7.el6.noarch
 nfs-utils-1.2.3-64.el6.x86_64
 autofs-5.0.5-113.el6.x86_64
-httpd-2.2.15-47.el6.centos.x86_64
 oddjob-mkhomedir-0.30-5.el6.x86_64
 
+migrationtools-47-7.el6.noarch ## provide script to produce ldif files
 ## procedure
 
 ```bash

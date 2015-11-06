@@ -717,3 +717,13 @@ rm -rf /etc/salt/pki/minion/minion_master.pub
 重启minion
 /etc/init.d/salt-minion restart
 
+
+
+weechat block leave/join message
+/filter add irc_smart * irc_smart_filter *
+
+
+dict sometime  lost datetime datatype
+
+
+virt-what

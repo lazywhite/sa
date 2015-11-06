@@ -21,3 +21,5 @@ JavaScript 不会到 <style> 标签或者 CSS 文件去获取相应的样式，�
 
 alert(),confirm(),prompt();
 
+
+
