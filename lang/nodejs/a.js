@@ -23,3 +23,6 @@ function test(obj, name){
 }
 test(u1, 'bbbbbb')
 console.log(u1.name)
+
+
+var fs = require('fs')
