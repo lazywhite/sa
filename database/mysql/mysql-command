@@ -97,6 +97,11 @@ should be in a compound statement{ begin...end}
 declare variable type [default Value]
 
 
+<<<<<<< HEAD
+=======
+# Conditions
+
+>>>>>>> origin/master
 
 # Flow control
 
