@@ -1,0 +1,89 @@
+
+
+# numactl --interleave=all mongod --config /data/mongodb/mongodb.conf
+# sysctl -w vm.overcommit_memory=1
+//or 
+$pid=`pidof mongod` echo -17 >  /proc/$pid/oom_adj
+//disable swappiness
+vm.swappiness = 0
+
+//change ssd io scheduler
+echo noop > /sys/block/sda/queue/scheduler
+
+
+db.adminCommand({backupStart: ’/mnt/backup/’ + backupName})
+db.adminCommand({backupThrottle: ’10MB’})
+db.adminCommand(’backupStatus’)
+
+
+db.adminCommand({loadPlugin: ’pitr_plugin’}) -> return checksum of plugin
+
+To run recoverToPoint, the server must be in maintenance mode.
+
+rsMaintenance = True
+
+db.adminCommand({'replSetMaintenance': true})
+On secondaries, the command forces the secondary to enter RECOVERING state. Read operations issued to an instance in the RECOVERING state will fail.
+
+db.runCommand({recoverToPoint: 1, gtid: GTID(1, 152)})
+{
+  recoverToPoint: 1,
+  ts:             <date>
+}
+// or
+{
+  recoverToPoint: 1,
+  gtid:           <GTID>
+}
+
+fast update
+bulk load
+
+// force a member to be Master
+cfg = rs.conf()
+cfg.members[0].priority = 0.5
+cfg.members[1].priority = 0.5
+cfg.members[2].priority = 1
+rs.reconfig(cfg)
+
+
+db.users.createIndex({"uid":1})
+db.users.stats() // 查看索引情况
+
+
+db.serverStatus().ft
+
+hostnamectl set-hostname mongo1
+timedatectl set-timezone Asia/Shanghai
+
+
+MongoDB uses write ahead logging to an on-disk journal to guarantee write operation durability and to provide crash resiliency.
+
+db.getReplicationInfo()
+db.adminCommand({logRotate:1})
+
+
+
+
+db.collection.find().sort({ $natural: -1 }).limit(N)
+db.runCommand( { repairDatabase: 1 } )
+
+
+
+一. PITR
+//on one secondary
+1. stop tokumx service
+2. replace data in dbpath with backup data
+3. edit config file , add 
+rsMaintenance = true
+do not add 
+fastsync = true
+4. start tokumx service 
+5. db.adminCommand({loadPlugin: ’pitr_plugin’})
+6. db.adminCommand({recoverToPoint: 1, ts: ISODate("2015-11-06T09:11:50.000Z")})
+//timestamp is in UTC format, 8 hours less than Asia/Shanghai
+7. at Master,  rs.remove("mongo2:27017")
+8. edit config file, remove 
+replSet=kok
+rsMaintanence=true
+9. start tokumx service, it will container snapshot data
