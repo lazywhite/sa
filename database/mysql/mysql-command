@@ -1,8 +1,43 @@
 # Database
+## subquery
+### 标量(单一值)
+SELECT * FROM article WHERE uid = (SELECT uid FROM user WHERE status=1 ORDER BY uid DESC LIMIT 1)
+### N行一列
+#### IN
+SELECT * FROM article WHERE uid IN(SELECT uid FROM user WHERE status=1)
+#### ANY
+SELECT s1 FROM table1 WHERE s1 > ANY (SELECT s2 FROM table2)
+#### ALL
+SELECT s1 FROM table1 WHERE s1 > ALL (SELECT s2 FROM table2)
+### N列一行
+SELECT * FROM table1 WHERE (1,2) = (SELECT column1, column2 FROM table2)
+SELECT * FROM article WHERE (title,content,uid) = (SELECT title,content,uid FROM blog WHERE bid=2)
+### N行N列(表)
+SELECT * FROM article WHERE (title,content,uid) IN (SELECT title,content,uid FROM blog)
+### From子句子查询
+SELECT ... FROM (subquery) AS name
+### EXIST
+SELECT * FROM article WHERE EXISTS (SELECT * FROM user WHERE article.uid = user.uid)
+
+## join 拼接表
+### left join 
+### right join
+### inner join
+#
+## avg(), max(), min(), count()
+## Union
+UNION 用于把来自多个 SELECT 语句的结果组合到一个结果集合, 自带去重
+union all 不过滤重复数据
+
+
+## limit 
+mysql> SELECT * FROM table LIMIT 5,10;
+mysql> SELECT * FROM table LIMIT 95,-1;
+
 ## view database info
 show create database test;
 ## create db
-create database test utf8;
+create database test charset utf8;
 
 
 # Procedure
@@ -18,7 +53,9 @@ mysql> Drop procedure <name>;
 # Function
 ## create function
 create function hello(s char(20)) returns char(50) deterministic return concat('hello ', s, '!');
-
+## function return type
+Deterministic functions always return the same result any time they are called with a specific set of input values.
+Nondeterministic functions may return different results each time they are called with a specific set of input values.
 ## use function
 select hello('world');
 
@@ -41,6 +78,17 @@ mysql> select 5 div 2;  5 / 2;
 mysql> select 5 mod 2; mod(5, 2);
 
 mysql> select ifnull(<exp1>, <exp2>);
+
+# Tips
+## disable auto-reconnect
+variable lost with connection
+mysql --skip-reconnect
+
+## safe update
+mysql --safe-updates
+
+## PS1
+shell> export MYSQL_PS1="(\u@\h) [\d]> "
 
 # Trigger 
 ## create trigger
@@ -96,12 +144,6 @@ mysql> execute stmt using @a, @b;
 should be in a compound statement{ begin...end}
 declare variable type [default Value]
 
-
-<<<<<<< HEAD
-=======
-# Conditions
-
->>>>>>> origin/master
 
 # Flow control
 
@@ -220,3 +262,13 @@ character-set-server=utf8
 max_prepared_stmt_count=0 (disable prepare statement function)
 
 ### Mysql NDB cluster 
+#
+#
+# JSON datatype
+JSON columns cannot have a default value.
+JSON columns cannot be indexed
+
+
+
+You can use SELECT ... INTO with user-defined variables. 
+The same syntax can also be used inside stored routines using cursors and local variable
