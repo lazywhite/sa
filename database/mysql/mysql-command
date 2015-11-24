@@ -211,11 +211,11 @@ NULL is a special value that cannot be compared using the usual comparison opera
 where death IS NOT NULL
 mysql> select month(date_add(curdate(), interval 1 month));
 0 or NULL means false and anything else means true. The default truth value from a boolean operation is 1
- it is entirely possible to insert a zero or empty string into a NOT NULL column
- To find names containing exactly five characters, use five instances of the “_” pattern character
- If you really want to force a REGEXP comparison to be case sensitive, use the BINARY keyword to make one of the strings a binary string.
- SELECT * FROM pet WHERE name REGEXP '^.....$'; (match five characters)
- SELECT * FROM pet WHERE name REGEXP '^.{5}$';
+it is entirely possible to insert a zero or empty string into a NOT NULL column
+To find names containing exactly five characters, use five instances of the “_” pattern character
+If you really want to force a REGEXP comparison to be case sensitive, use the BINARY keyword to make one of the strings a binary string.
+SELECT * FROM pet WHERE name REGEXP '^.....$'; (match five characters)
+SELECT * FROM pet WHERE name REGEXP '^.{5}$';
 
  Number of animals per combination of species and sex:
 mysql> SELECT species, sex, COUNT(*) FROM pet GROUP BY species, sex;

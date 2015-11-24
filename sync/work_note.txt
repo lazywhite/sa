@@ -728,6 +728,8 @@ dict sometime  lost datetime datatype
 
 virt-what
 
+python模块导入的路径与程序的入口有关
+
 
 状态机
     表示有限个状态以及在这些状态之间的转移和动作等行为的数学模型。
