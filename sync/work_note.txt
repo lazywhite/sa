@@ -737,3 +737,11 @@ python模块导入的路径与程序的入口有关
         Mealy有限状态机的输出不单与当前状态有关，而且与输入信号的当前值有关
     摩尔性(moore)
         摩尔型有限状态机的输出只与有限状态自动机的当前状态有关
+
+
+Grunt: bootstrap's default build system, install by npm
+bower: front-end package manager, install by npm
+
+
+
+ssh -i /Users/rock/Desktop/key/jiashuanxi.id_rsa -p 36023 -L 5890:10.0.2.23:3306 jiashuanxi@114.80.0.39
