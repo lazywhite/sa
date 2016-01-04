@@ -43,7 +43,7 @@ svn info file_path
 
 svn revert -R .
 svn diff -r 64222:64212 trunk/apps/admin/views/tool.py
-svn remove branches/jia_dev  ;svn ci
+svn remove branches/jia_dev;svn ci
 
 
 django template
@@ -102,7 +102,6 @@ import gc
 del a
 gc.collect()
 
-route add(delete) 192.168.183.0 mask 255.255.255.0 192.168.255.10
 
 cent 7 
 	firewalld : 动态防火墙, netfilter
@@ -745,3 +744,16 @@ bower: front-end package manager, install by npm
 
 
 ssh -i /Users/rock/Desktop/key/jiashuanxi.id_rsa -p 36023 -L 5890:10.0.2.23:3306 jiashuanxi@114.80.0.39
+
+
+## vbox 扩大硬盘容量
+VBoxManage clonehd work-disk1.vmdk new.vdi --format vdi
+VBoxManage modifyhd new.vdi --resize 20480
+cfdisk /dev/sda # add partition
+vgextend vg /dev/sda5
+lvextent -l 100%FREE /dev/vg/lv_root
+resize2fs /dev/vg/lv_root
+
+
+hash: one way
+encryption: two way

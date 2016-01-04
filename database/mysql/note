@@ -272,3 +272,9 @@ JSON columns cannot be indexed
 
 You can use SELECT ... INTO with user-defined variables. 
 The same syntax can also be used inside stored routines using cursors and local variable
+
+
+
+
+ALTER TABLE tbl_name MODIFY COLUMN col_name BIGINT;
+RENAME TABLE tbl_name TO new_tbl_name, tbl_name2 TO new_tbl_name2;
