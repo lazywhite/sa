@@ -13,7 +13,8 @@ firewall-cmd --zone=trusted --list-sources
 
 
 
-As an exemple of source management, let’s assume you want to only allow connections to your server from a specific IP address (here 1.2.3.4/32).
+As an exemple of source management, let’s assume you want to only 
+allow connections to your server from a specific IP address (here 1.2.3.4/32).
 
 # firewall-cmd --zone=internal --add-service=ssh --permanent
 success

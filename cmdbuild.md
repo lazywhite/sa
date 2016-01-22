@@ -71,6 +71,9 @@ cmdb_admin_module --> User and Group --> change password of 'workflow'
 
 /usr/share/tomcat6/webapps/cmdbuild/WEB-INF/conf/database.conf
 
+
+xpdl template must have same class name with process class
+
 ### configure share database user
 /etc/tomcat6/Catalina/localhost/shark.xml
      url="jdbc:postgresql://192.168.1.190/cmdb_demo"
