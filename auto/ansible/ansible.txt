@@ -5,3 +5,12 @@ ansible localhost -m setup  [ -a 'filter=*network*' ]
 ansible-doc module
 
 # playbook
+
+role
+    common
+        files
+        tasks
+        defaults
+        handlers
+        templates
+host_vars

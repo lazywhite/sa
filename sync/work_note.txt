@@ -757,3 +757,12 @@ resize2fs /dev/vg/lv_root
 
 hash: one way
 encryption: two way
+
+
+
+
+vi /etc/ld.so.conf.d/myapp.conf
+    /usr/local/lib
+
+export C_INCLUDE_PATH=
+export LD_LIBRARY_PATH=
