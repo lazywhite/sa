@@ -766,3 +766,12 @@ vi /etc/ld.so.conf.d/myapp.conf
 
 export C_INCLUDE_PATH=
 export LD_LIBRARY_PATH=
+
+
+
+/etc/security/limits.conf
+
+usr/bin/ld: /usr/local/lib/libpython2.7.a(abstract.o): relocation R_X86_64_32S against `_Py_NotImplementedStruct' can not be used when making a shared object; recompile with -fPIC
+
+python compile
+export CFLAGS="$CFLAGS -fPIC"

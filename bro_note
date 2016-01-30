@@ -1,0 +1,84 @@
+bro write all information into log file
+	output to database
+
+builtin function
+
+a platform for traffic analyse
+
+broctl setup bro cluster
+
+
+## datatype
+
+vector
+table
+record
+string
+count
+addr
+set
+int
+double
+bool
+subnet
+port
+time
+interval
+pattern
+
+tap: mechanism to split the packet stream in order to make a copy to inspect
+
+frontend: split traffic into many streams of flows
+    discret
+        cPacket
+        openflow-switch
+
+    on-host
+        PFRing
+        NetMap
+manager: 
+	receive log message and notices from other cluster nodes to generate centrol log
+	de-duplicate notices
+
+proxy: manage synchronized state
+	Each proxy connects to another proxy in a ring and the workers are shared between them as evenly as possible.
+
+
+The rule of thumb we have followed recently is to allocate approximately 1 core for every 80Mbps of traffic that is being analyzed.
+
+
+conn.log
+    Contains an entry for every connection seen on the wire, with basic properties such as time and duration, originator and responder IP addresses, services and ports, payload size, and much more. This log provides a comprehensive record of the network’s activity.
+notice.log
+    Identifies specific activity that Bro recognizes as potentially interesting, odd, or bad. In Bro-speak, such activity is called a “notice”.
+
+
+deploying Bro can be an iterative process of updating its policy to take different actions for events that are noticed, and using its scripting language to programmatically extend traffic analysis in a precise way. 
+
+
+ 1453959383.212755   Reporter::WARNING   Your interface is likely receiving invalid TCP checksums, most likely from NIC checksum offloading.  By default, packets with invalid     checksums are discarded by Bro unless using the -C command-line option or toggling the 'ignore_checksums' variable.  Alternatively, disable checksum offloading by the network     adapter to ensure Bro analyzes the actual checksums that are transmitted.  /opt/bro/share/bro/base/misc/find-checksum-offloading.bro, line 54
+
+
+$PREFIX/share/bro/site where local site-specific files can be put without fear of being clobbered later
+ By default, Bro automatically loads all scripts under $PREFIX/share/bro/base (unless the -b command line option is supplied), which deal either with collecting basic/useful state about network activities or providing frameworks/utilities that extend Bro’s functionality without any performance cost.
+Scripts under the "policy" directory may be more situational or costly, and so users must explicitly choose if they want to load them.
+
+The main entry point for the default analysis configuration of a standalone Bro instance managed by BroControl is the $PREFIX/share/bro/site/local.bro
+
+
+Many simple customizations just require you to redefine a variable from a standard Bro script with your own value, using Bro’s redef operator.
+
+
+The typical way a standard Bro script advertises tweak-able options to users is by defining variables with the &redef attribute and const qualifier.
+
+$PREFIX/bro/spool/  runtime configuartions 
+
+
+Generally, all of Bro’s log files are produced by a corresponding script that defines their individual structure
+
+
+ Intrusion Detection System(IDS) 
+
+
+
+
