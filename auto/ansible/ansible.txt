@@ -14,3 +14,12 @@ role
         handlers
         templates
 host_vars
+
+
+copy
+    backup=yes
+    owner
+    group
+    mode
+
+ansible-playbook -i <inventory_file> -u <remote_user> <playbook.yml>

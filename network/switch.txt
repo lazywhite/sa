@@ -1,0 +1,228 @@
+网络分层
+    核心层
+    汇聚层
+    接入层
+    
+相关技术
+    access
+    trunk
+    级联
+    堆叠
+    高可用
+
+网络虚拟化
+    openflow
+    openvswitch
+    GRE
+    VxLan
+路由
+    静态
+        本地路由器
+        静态/缺省/浮动
+    动态
+        路由器之间
+
+CCNA < CCNP < CCIE
+## Topic 
+1. Spanning-tree protocol生成树协议
+```
+功能
+一是在利用生成树算法、在以太网络中， 创建一个以某台交换机的某个端口为根的生成树，避免环路。
+二是在以太网络拓扑发生变化时，通过生成树协议达到收敛保护的目的
+```
+2.Vlan Trunking Protocol中继协议, 虚拟局域网干道协议
+把一台交换机配置成VTP Server, 其余交换机配置成VTP Client,这样他们可以自动学习到server 上的VLAN 信息
+要使用VTP，首先必须建立一个VTP管理域，在同一管理域中的交换机共享vlan信息，并且一个交换机只能参加一个管理域。不同域中的交换机不能共享vlan信息。
+###要求
+```
+1、域内的每台交换机都必须使用相同的域名，不论是通过配置实现，还是由交换自动学到的。
+2、Catalyst交换机必须是相邻的，即相邻的交换机需要具有相同的域名。
+3、在所有Catalyst交换机之间，必须配置中继链路。
+```
+###模式
+服务器模式(server)
+客户机模式(client)
+透明模式(transparent)
+
+## 级联
+1. 总线型
+2. 树形
+3. 星形
+
+uplink 端口, 普通端口
+
+## 堆叠
+堆叠线
+堆叠模块
+
+逻辑堆叠
+物理堆叠
+
+
+## vlan
+静态
+动态
+    
+
+
+## FAQ
+1. line protocol is down : duplex auto
+2. vlan database is deprecated, use config mode 
+3. translating ... domain server: Router(config)#no ip domain-lookup
+4. hostname: conf t; hostname "switch"
+5. password: enable secret "password";  username admin password "cisco"
+6. save config:Router#copy running-config startup-config 
+6. erase config:Router#erase startup-config 
+
+
+
+## 2层交换机配置vlan
+```
+Switch#conf t
+Switch(config)#vlan 10
+Switch(config-vlan)#name vlan-10
+Switch(config-vlan)#exit
+Switch(config)#vlan 20
+Switch(config-vlan)#name vlan-20
+Switch(config-vlan)#exit
+Switch(config)#interface range FastEthernet0/1-12
+Switch(config-if-range)#no shutdown
+Switch(config-if-range)#switchport mode access
+Switch(config-if-range)#switchport access vlan 10
+Switch(config-if-range)#exit
+Switch(config)#interface range FastEthernet0/13-24
+Switch(config-if-range)#switchport mode access 
+Switch(config-if-range)#switchport access vlan 20
+Switch(config-if-range)#exit
+Switch(config)#interface range GigabitEthernet1/1-2
+Switch(config-if-range)#switchport mode trunk
+Switch(config-if)#switchport trunk allowed vlan all(允许所有vlan)
+Switch(config-if-range)#no shutdown
+Switch(config-if-range)#end
+Switch(config)#interface vlan 10
+Switch(config-if)#ip address 192.168.0.253 255.255.255.0
+Switch(config-if)#exit
+Switch(config)#interface vlan 20
+Switch(config-if)#ip address 192.168.1.253 255.255.255.0
+Switch(config-if)#exit
+```
+
+
+```
+### 路由器设置
+Router>enable
+Router#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#interface GigabitEthernet0/1
+Router(config-if)#no shutdown
+Router(config-if)#exit
+Router(config)#interface GigabitEthernet0/1.1
+Router(config-subif)#
+%LINK-5-CHANGED: Interface GigabitEthernet0/1.1, changed state to up
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/1.1, changed state to up
+Router(config-subif)#encapsulation dot1q 10
+Router(config-subif)#ip address 192.168.0.254 255.255.255.0
+Router(config-subif)#exit
+Router(config)#interface GigabitEthernet0/1.2
+Router(config-subif)#
+%LINK-5-CHANGED: Interface GigabitEthernet0/1.2, changed state to up
+%LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/1.2, changed state to up
+Router(config-subif)#encapsulation dot1q 20
+Router(config-subif)#ip address 192.168.1.254 255.255.255.0
+Router(config-subif)#exit
+
+## SNAT配置
+Router(config)#do clear ip nat trans * (clear all nat rules)
+
+Router(config)#interface GigabitEthernet0/0
+Router(config-if)#ip nat outside
+Router(config-if)#exit
+Router(config)#interface GigabitEthernet0/1.1
+Router(config-subif)#ip nat inside
+Router(config-subif)#exit
+Router(config)#ip nat pool ovrld 10.0.0.101 10.0.0.101 netmask 255.255.0.0
+Router(config)#exit
+--------no-overload-------
+ip nat pool no-overload 172.16.10.1 172.16.10.63 netmask 255.255.0.0
+ip nat inside source list 1 pool no-overload 
+--------------------------
+Router(config)#access-list 1 permit 192.168.0.0 0.0.255.255
+Router(config)#ip nat inside source list 1 pool ovrld overload
+Router(config)#exit
+Router#show ip nat translations
+Pro  Inside global     Inside local       Outside local      Outside global
+tcp 10.0.0.101:1025    192.168.0.1:1025   172.16.0.1:80      172.16.0.1:80
+
+## DNAT
+Router(config)#ip nat inside source static  tcp 192.168.0.1(内网机器) 80(内网端口) 10.0.0.101(外网地址) 80(外网端口)
+
+## 静态路由配置
+Router#clear ip route *
+
+Router(config)#ip route 0.0.0.0 0.0.0.0 GigabitEthernet0/0 (默认路由)
+##Router(config)#ip route 0.0.0.0 0.0.0.0 10.0.0.1 (默认路由)
+Router(config)#ip route 192.168.0.0 255.255.255.0 10.0.0.1 
+##Router(config)#ip route 192.168.0.0 255.255.255.0 GigabitEthernet0/0
+Router(config)#exit
+Router#show ip route
+Codes: L - local, C - connected, S - static, R - RIP, M - mobile, B - BGP
+       D - EIGRP, EX - EIGRP external, O - OSPF, IA - OSPF inter area
+       N1 - OSPF NSSA external type 1, N2 - OSPF NSSA external type 2
+       E1 - OSPF external type 1, E2 - OSPF external type 2, E - EGP
+       i - IS-IS, L1 - IS-IS level-1, L2 - IS-IS level-2, ia - IS-IS inter area
+       * - candidate default, U - per-user static route, o - ODR
+       P - periodic downloaded static route
+
+Gateway of last resort is not set
+
+     10.0.0.0/8 is variably subnetted, 2 subnets, 2 masks
+C       10.0.0.0/16 is directly connected, GigabitEthernet0/0
+L       10.0.0.2/32 is directly connected, GigabitEthernet0/0
+     172.16.0.0/16 is variably subnetted, 2 subnets, 2 masks
+C       172.16.0.0/16 is directly connected, GigabitEthernet0/1.1
+L       172.16.0.1/32 is directly connected, GigabitEthernet0/1.1
+S    192.168.0.0/24 [1/0] via 10.0.0.1
+
+Router(config)#ip route 192.168.1.0 255.255.255.0 10.0.0.1
+Router(config)#exit
+Router#show ip route static
+S    192.168.0.0/24 [1/0] via 10.0.0.1
+S    192.168.1.0/24 [1/0] via 10.0.0.1
+
+## DHCP
+----config dhcp service for vlan 100 --------
+Router(config)#ip dhcp pool vlan_100
+Router(dhcp-config)#network 192.168.0.0 255.255.255.0
+Router(dhcp-config)#default-router 192.168.0.254
+Router(dhcp-config)#dns-server 8.8.8.8
+Router(dhcp-config)#exit
+Router(config)#ip dhcp excluded-address 192.168.0.254 192.168.0.253
+
+----config dhcp service for vlan 200 --------
+Router(config)#ip dhcp pool vlan_200
+Router(dhcp-config)#network 192.168.1.0 255.255.255.0
+Router(dhcp-config)#default-router 192.168.1.254
+Router(dhcp-config)#dns-server 8.8.8.8
+Router(dhcp-config)#exit
+Router(config)#ip dhcp excluded-address 192.168.1.254 192.168.1.253
+
+
+
+## 端口镜像
+SPAN: switch port analyzer
+```
+　　2900#conf t（进入配置状态）
+　　2900(config)#int f0/18（对f0/18端口进行配置）
+　　2900(config-if)#port monitor f 0/22（对f 0/22端口进行镜像）
+　　2900(config-if)#end（结束配置）
+　　2900C#sh port monitor （察看当前镜像端口及被镜像端口）
+　　Monitor Port Port Being Monitored
+　　--------------------- ---------------------
+　　FastEthernet0/18 FastEthernet0/22
+
+
+    2940#show monitor
+　　2940(config)#monitor session 1 source interface fa 0/1 
+　　2940(config)#monitor session 1 destination interface fa 0/4
+```
+
