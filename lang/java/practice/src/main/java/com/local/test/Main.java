@@ -20,6 +20,8 @@ public class Main{
         Puppy inst = new Puppy("Jerry");
         inst.setAge(10);
         System.out.println("Age of puppy is: " + inst.getAge());
+        inst = null;
+        System.gc();
         // List
         ArrayList<Object> aList = new ArrayList<Object>();
         aList.add(100);

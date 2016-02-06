@@ -6,4 +6,5 @@ __pycache__
 *.sock
 *.class
 *.o
-*/target/**
+**/target
+

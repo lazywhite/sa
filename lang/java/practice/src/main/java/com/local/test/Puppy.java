@@ -1,6 +1,6 @@
 package com.local.test;
 
-public class Puppy{
+public class Puppy extends Animal{
     String puppyName;
     int puppyAge;
     public Puppy(String name){
