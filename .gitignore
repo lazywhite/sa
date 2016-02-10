@@ -7,4 +7,6 @@ __pycache__
 *.class
 *.o
 **/target
+*.iws
+*.xml
 

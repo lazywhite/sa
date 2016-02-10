@@ -10,9 +10,18 @@ import java.util.HashSet;
 // TODO: use Iterator interface 
 // TODO: CRUD of Datatype
 
+
+
 public class Main{
         // Enum 
         public enum weekDay {Mon, Tue, Wed, Thu, Fri, Sat, Sun}
+        //overload
+        public static int test(int i, String name){
+            return name.length() + i;
+        }
+        public static String test(String name, int i){
+            return name + i;
+        }
         public static void main(String[] args){
         for (String arg: args){
             System.out.print(arg + ' ');
@@ -76,5 +85,16 @@ public class Main{
             x ++;
         }while (x<25);
 
+        // Exception
+        try{
+            throw new MyException();
+        }
+        catch(Exception e)
+        {
+            System.out.println("Exception is:" + e.toString());
+        }
+
+        System.out.println(test(1, "dog"));
+        System.out.println(test("dog", 1));
     }
 }

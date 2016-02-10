@@ -1,6 +1,18 @@
 1. exchange
 2. queue
-3. policy
+3. binding
+
+exchange type
+    1. base on routing key
+        fanout
+        direct
+        topic
+    2. base on routing value
+        header
+
+rpc
+log
+
 
 rabbitmqctl list_users
 rabbitmqctl list_permissions -p /

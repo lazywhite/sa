@@ -1,0 +1,143 @@
+append: add value to a key holding string
+bgrewirteaof: async rewrite aof 
+keys [pattern]
+flushdb: clear all keys in current db
+flushall: clear all keys in all dbs
+save: sync save data to disk
+==========
+client list
+client kill [ip:port]
+client setname|getname
+ping: test connection
+quit:
+role: return replication role 
+===========
+cluster info
+cluster slaves
+cluster nodes
+cluster slots
+============
+expireat key <timestamp>
+expire key <seconds>
+pexpire key <milliseconds>
+ttl key : return ttl in seconds
+pttl <key> : return ttl in milliseconds
+persist <key> remove expiration from key
+
+randomkey: return a random key from keyspace
+rename <key> <new name> 
+renamenx <key> <new name>: only if <new name> not exist
+
+decr <key> : decrease the integer value of one key by 1
+decrby <key> <decrement> 
+
+incr <key>
+incrby <key> <increment>
+incrbyfloat <key> <increment>
+
+del <key> [key ...]: delete a key
+dump <key> : return the serialized version of value stored in key
+echo <msg>
+
+===
+eval
+execute
+=====
+geoadd <key> <longitude> <latitude> <member> [...]
+=====
+get <key>
+mget <key1> [<key2> ...]
+set <key> <value>
+mset <key1> <value1> [<key2> <value2> ...]
+msetnx: only if none of keys exist
+
+strlen <key>: return string length of key
+type <key>: return type of key
+getrange <key> <start> <end>: get substring of string stored in key
+
+getset <key> <new value>: set key to new value and return old value
+
+=======
+hset <key> <field> <value>
+hsetnx <key> <field> <value>: only if field does not exists
+hmset <key> <field 1> <value 1> <filed 2> <value 2>
+hmget <key> <field 1> <field 2> ...
+hget <key> <field>
+hgetall <key>
+hdel <key> <field 1>  [<field 2> ...]
+hkeys <key> 
+hvals <key>
+hexists <key> <field>
+hincreby <key> <field> <value>
+hincrebyfloat <key> <field> <value>
+hlen <key>
+hstrlen <key> <field> : return string length of field
+============
+info [section]: return status information of server
+config get <parameter>
+config set <parameter> <value>
+lastsave: return timestamp of last successfully save
+monitor: list received request in real time
+move <key> <db>: move key to another db
+time: return current timestamp of server
+
+===========
+lindex <list> <index>: return  list[index]
+lpush <list> <value>
+lpushx <list> <value>: only if list already exists
+lpop <list>: remove and return first element of list
+rpush <list> <value>
+rpushx <list> <value>: only if list already exists
+rpop <list>: remove and return last element  
+linsert <list> <before|after> <pivot> <value>
+llen <list> : length of list
+lrange <list> <start> <end>
+rpoplpush <list 1> <list 2>: remove last element of list_1 and push
+                            to first of list_2
+
+lrem <list> <count> <pivot>: remove count number of pivot from list
+lset <list> <index> <value>: set list[index] = value
+ltrim <list> <start> <end>: only element between start and end will be remained
+
+blpop
+brpop
+brpoplpush
+============
+scard <set>: return cardinality (number of elements) of a set
+sadd <set> <member>: 
+smembers <set>
+sismember <set> <member>: test if member is in set 
+spop <set> [count]: remove and return [count] random element from set 
+sdiff <set1> <set2> [<set3> ...]: return memeber in set1 not in set2 and set3 
+sdiffstore <dest> <set1> <set2> ...: store diff memebers in <dest>
+sinter <set1> <set2>[ ...]: return intersection of all sets
+sinterstore <dest> <set1> <set2> ...: store intersection into <dest>
+smove <src> <dest> <member>: move member of src to dest
+srandomember <set> [count]: return count random member of set 
+                            if count is positive, return distinct
+                            if count is negative, return not distinct 
+srem <set> <member>: remove member from set
+sunion <set1> <set2> [<set3> ...]: return union of all 
+sunionstore <dest> <set1> <set2> [<set3> ...]: store union into dest
+
+==============
+zadd <sset> <score> <member> [<score> <member>]
+zcard <sset>: total members of sset
+zcount <sset> <start> <end>: return count of members which score between start and end
+zincrby <sset> <increment> <member>: 
+zlexcount
+zrange <sset> <start> <end>: return members base on rank 
+zrangebyscore <sset> <start> <end>: return members base on score 
+zrangebylex: return members have same score by lex
+zrank <sset> <member>: return rank of member, scores from low to high
+zrevrank <sset> <member>: return rank of member, scores from high to low
+zrem <sset> <member>: remove member from sset
+zremrangebyrank
+zremrangebylex
+zremrangebyscore
+zrevrange <sset> <start> <end>: return members base on reversed rank
+zrevrangebylex
+zrevrangebyscore
+zscore <sset> <member>: return score of member 
+
+
