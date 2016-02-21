@@ -56,8 +56,6 @@ notice.log
 deploying Bro can be an iterative process of updating its policy to take different actions for events that are noticed, and using its scripting language to programmatically extend traffic analysis in a precise way. 
 
 
- 1453959383.212755   Reporter::WARNING   Your interface is likely receiving invalid TCP checksums, most likely from NIC checksum offloading.  By default, packets with invalid     checksums are discarded by Bro unless using the -C command-line option or toggling the 'ignore_checksums' variable.  Alternatively, disable checksum offloading by the network     adapter to ensure Bro analyzes the actual checksums that are transmitted.  /opt/bro/share/bro/base/misc/find-checksum-offloading.bro, line 54
-
 
 $PREFIX/share/bro/site where local site-specific files can be put without fear of being clobbered later
  By default, Bro automatically loads all scripts under $PREFIX/share/bro/base (unless the -b command line option is supplied), which deal either with collecting basic/useful state about network activities or providing frameworks/utilities that extend Bro’s functionality without any performance cost.
@@ -77,8 +75,4 @@ $PREFIX/bro/spool/  runtime configuartions
 Generally, all of Bro’s log files are produced by a corresponding script that defines their individual structure
 
 
- Intrusion Detection System(IDS) 
-
-
-
-
+Intrusion Detection System(IDS) 

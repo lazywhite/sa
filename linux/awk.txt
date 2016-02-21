@@ -1,103 +1,103 @@
-Linux Web·şÎñÆ÷ÍøÕ¾¹ÊÕÏ·ÖÎö³£ÓÃµÄÃüÁî
+Linux WebæœåŠ¡å™¨ç½‘ç«™æ•…éšœåˆ†æå¸¸ç”¨çš„å‘½ä»¤
 
-ÏµÍ³Á¬½Ó×´Ì¬Æª£º
-1.²é¿´TCPÁ¬½Ó×´Ì¬
-netstat -nat |awk ¡®{print $6}¡¯|sort|uniq -c|sort -rn
+ç³»ç»Ÿè¿æ¥çŠ¶æ€ç¯‡ï¼š
+1.æŸ¥çœ‹TCPè¿æ¥çŠ¶æ€
+netstat -nat |awk â€˜{print $6}â€™|sort|uniq -c|sort -rn
 
-netstat -n | awk ¡®/^tcp/ {++S[$NF]};END {for(a in S) print a, S[a]}¡¯ »ò
-netstat -n | awk ¡®/^tcp/ {++state[$NF]}; END {for(key in state) print key,"\t",state[key]}¡¯
-netstat -n | awk ¡®/^tcp/ {++arr[$NF]};END {for(k in arr) print k,"t",arr[k]}¡¯
+netstat -n | awk â€˜/^tcp/ {++S[$NF]};END {for(a in S) print a, S[a]}â€™ æˆ–
+netstat -n | awk â€˜/^tcp/ {++state[$NF]}; END {for(key in state) print key,"\t",state[key]}â€™
+netstat -n | awk â€˜/^tcp/ {++arr[$NF]};END {for(k in arr) print k,"t",arr[k]}â€™
 
-netstat -n |awk ¡®/^tcp/ {print $NF}¡¯|sort|uniq -c|sort -rn
+netstat -n |awk â€˜/^tcp/ {print $NF}â€™|sort|uniq -c|sort -rn
 
-netstat -ant | awk ¡®{print $NF}¡¯ | grep -v ¡®[a-z]¡® | sort | uniq -c
-
- 
-
-2.²éÕÒÇëÇóÊıÇë20¸öIP£¨³£ÓÃÓÚ²éÕÒ¹¥À´Ô´£©£º
-
-netstat -anlp|grep 80|grep tcp|awk ¡®{print $5}¡¯|awk -F: ¡®{print $1}¡¯|sort|uniq -c|sort -nr|head -n20
-
-netstat -ant |awk ¡®/:80/{split($5,ip,":");++A[ip[1]]}END{for(i in A) print A[i],i}¡¯ |sort -rn|head -n20
-
-3.ÓÃtcpdumpĞáÌ½80¶Ë¿ÚµÄ·ÃÎÊ¿´¿´Ë­×î¸ß
-
-tcpdump -i eth0 -tnn dst port 80 -c 1000 | awk -F"." ¡®{print $1"."$2"."$3"."$4}¡¯ | sort | uniq -c | sort -nr |head -20
-
-4.²éÕÒ½Ï¶àtime_waitÁ¬½Ó
-
-netstat -n|grep TIME_WAIT|awk ¡®{print $5}¡¯|sort|uniq -c|sort -rn|head -n20
-
-5.ÕÒ²é½Ï¶àµÄSYNÁ¬½Ó
-
-netstat -an | grep SYN | awk ¡®{print $5}¡¯ | awk -F: ¡®{print $1}¡¯ | sort | uniq -c | sort -nr | more
-
-6.¸ù¾İ¶Ë¿ÚÁĞ½ø³Ì
-
-netstat -ntlp | grep 80 | awk ¡®{print $7}¡¯ | cut -d/ -f1
+netstat -ant | awk â€˜{print $NF}â€™ | grep -v â€˜[a-z]â€˜ | sort | uniq -c
 
  
 
-ÍøÕ¾ÈÕÖ¾·ÖÎöÆª1£¨Apache£©£º
+2.æŸ¥æ‰¾è¯·æ±‚æ•°è¯·20ä¸ªIPï¼ˆå¸¸ç”¨äºæŸ¥æ‰¾æ”»æ¥æºï¼‰ï¼š
 
-1.»ñµÃ·ÃÎÊÇ°10Î»µÄipµØÖ·
+netstat -anlp|grep 80|grep tcp|awk â€˜{print $5}â€™|awk -F: â€˜{print $1}â€™|sort|uniq -c|sort -nr|head -n20
 
-cat access.log|awk ¡®{print $1}¡¯|sort|uniq -c|sort -nr|head -10
-cat access.log|awk ¡®{counts[$(11)]+=1}; END {for(url in counts) print counts[url], url}¡¯
+netstat -ant |awk â€˜/:80/{split($5,ip,":");++A[ip[1]]}END{for(i in A) print A[i],i}â€™ |sort -rn|head -n20
 
-2.·ÃÎÊ´ÎÊı×î¶àµÄÎÄ¼ş»òÒ³Ãæ,È¡Ç°20
+3.ç”¨tcpdumpå—…æ¢80ç«¯å£çš„è®¿é—®çœ‹çœ‹è°æœ€é«˜
 
-cat access.log|awk ¡®{print $11}¡¯|sort|uniq -c|sort -nr|head -20
+tcpdump -i eth0 -tnn dst port 80 -c 1000 | awk -F"." â€˜{print $1"."$2"."$3"."$4}â€™ | sort | uniq -c | sort -nr |head -20
 
-3.ÁĞ³ö´«Êä×î´óµÄ¼¸¸öexeÎÄ¼ş£¨·ÖÎöÏÂÔØÕ¾µÄÊ±ºò³£ÓÃ£©
+4.æŸ¥æ‰¾è¾ƒå¤štime_waitè¿æ¥
 
-cat access.log |awk ¡®($7~/.exe/){print $10 " " $1 " " $4 " " $7}¡¯|sort -nr|head -20
+netstat -n|grep TIME_WAIT|awk â€˜{print $5}â€™|sort|uniq -c|sort -rn|head -n20
 
-4.ÁĞ³öÊä³ö´óÓÚ200000byte(Ô¼200kb)µÄexeÎÄ¼şÒÔ¼°¶ÔÓ¦ÎÄ¼ş·¢Éú´ÎÊı
+5.æ‰¾æŸ¥è¾ƒå¤šçš„SYNè¿æ¥
 
-cat access.log |awk ¡®($10 > 200000 && $7~/.exe/){print $7}¡¯|sort -n|uniq -c|sort -nr|head -100
+netstat -an | grep SYN | awk â€˜{print $5}â€™ | awk -F: â€˜{print $1}â€™ | sort | uniq -c | sort -nr | more
 
-5.Èç¹ûÈÕÖ¾×îºóÒ»ÁĞ¼ÇÂ¼µÄÊÇÒ³ÃæÎÄ¼ş´«ÊäÊ±¼ä£¬ÔòÓĞÁĞ³öµ½¿Í»§¶Ë×îºÄÊ±µÄÒ³Ãæ
+6.æ ¹æ®ç«¯å£åˆ—è¿›ç¨‹
 
-cat access.log |awk ¡®($7~/.php/){print $NF " " $1 " " $4 " " $7}¡¯|sort -nr|head -100
+netstat -ntlp | grep 80 | awk â€˜{print $7}â€™ | cut -d/ -f1
 
-6.ÁĞ³ö×î×îºÄÊ±µÄÒ³Ãæ(³¬¹ı60ÃëµÄ)µÄÒÔ¼°¶ÔÓ¦Ò³Ãæ·¢Éú´ÎÊı
+ 
 
-cat access.log |awk ¡®($NF > 60 && $7~/.php/){print $7}¡¯|sort -n|uniq -c|sort -nr|head -100
+ç½‘ç«™æ—¥å¿—åˆ†æç¯‡1ï¼ˆApacheï¼‰ï¼š
 
-7.ÁĞ³ö´«ÊäÊ±¼ä³¬¹ı 30 ÃëµÄÎÄ¼ş
+1.è·å¾—è®¿é—®å‰10ä½çš„ipåœ°å€
 
-cat access.log |awk ¡®($NF > 30){print $7}¡¯|sort -n|uniq -c|sort -nr|head -20
+cat access.log|awk â€˜{print $1}â€™|sort|uniq -c|sort -nr|head -10
+cat access.log|awk â€˜{counts[$(11)]+=1}; END {for(url in counts) print counts[url], url}â€™
 
-8.Í³¼ÆÍøÕ¾Á÷Á¿£¨G)
+2.è®¿é—®æ¬¡æ•°æœ€å¤šçš„æ–‡ä»¶æˆ–é¡µé¢,å–å‰20
 
-cat access.log |awk ¡®{sum+=$10} END {print sum/1024/1024/1024}¡¯
+cat access.log|awk â€˜{print $11}â€™|sort|uniq -c|sort -nr|head -20
 
-9.Í³¼Æ404µÄÁ¬½Ó
+3.åˆ—å‡ºä¼ è¾“æœ€å¤§çš„å‡ ä¸ªexeæ–‡ä»¶ï¼ˆåˆ†æä¸‹è½½ç«™çš„æ—¶å€™å¸¸ç”¨ï¼‰
 
-awk ¡®($9 ~/404/)¡¯ access.log | awk ¡®{print $9,$7}¡¯ | sort
+cat access.log |awk â€˜($7~/.exe/){print $10 " " $1 " " $4 " " $7}â€™|sort -nr|head -20
 
-10. Í³¼Æhttp status
+4.åˆ—å‡ºè¾“å‡ºå¤§äº200000byte(çº¦200kb)çš„exeæ–‡ä»¶ä»¥åŠå¯¹åº”æ–‡ä»¶å‘ç”Ÿæ¬¡æ•°
 
-cat access.log |awk ¡®{counts[$(9)]+=1}; END {for(code in counts) print code, counts[code]}'
+cat access.log |awk â€˜($10 > 200000 && $7~/.exe/){print $7}â€™|sort -n|uniq -c|sort -nr|head -100
+
+5.å¦‚æœæ—¥å¿—æœ€åä¸€åˆ—è®°å½•çš„æ˜¯é¡µé¢æ–‡ä»¶ä¼ è¾“æ—¶é—´ï¼Œåˆ™æœ‰åˆ—å‡ºåˆ°å®¢æˆ·ç«¯æœ€è€—æ—¶çš„é¡µé¢
+
+cat access.log |awk â€˜($7~/.php/){print $NF " " $1 " " $4 " " $7}â€™|sort -nr|head -100
+
+6.åˆ—å‡ºæœ€æœ€è€—æ—¶çš„é¡µé¢(è¶…è¿‡60ç§’çš„)çš„ä»¥åŠå¯¹åº”é¡µé¢å‘ç”Ÿæ¬¡æ•°
+
+cat access.log |awk â€˜($NF > 60 && $7~/.php/){print $7}â€™|sort -n|uniq -c|sort -nr|head -100
+
+7.åˆ—å‡ºä¼ è¾“æ—¶é—´è¶…è¿‡ 30 ç§’çš„æ–‡ä»¶
+
+cat access.log |awk â€˜($NF > 30){print $7}â€™|sort -n|uniq -c|sort -nr|head -20
+
+8.ç»Ÿè®¡ç½‘ç«™æµé‡ï¼ˆG)
+
+cat access.log |awk â€˜{sum+=$10} END {print sum/1024/1024/1024}â€™
+
+9.ç»Ÿè®¡404çš„è¿æ¥
+
+awk â€˜($9 ~/404/)â€™ access.log | awk â€˜{print $9,$7}â€™ | sort
+
+10. ç»Ÿè®¡http status
+
+cat access.log |awk â€˜{counts[$(9)]+=1}; END {for(code in counts) print code, counts[code]}'
 cat access.log |awk '{print $9}'|sort|uniq -c|sort -rn
 
-10.Ö©Öë·ÖÎö£¬²é¿´ÊÇÄÄĞ©Ö©ÖëÔÚ×¥È¡ÄÚÈİ¡£
+10.èœ˜è››åˆ†æï¼ŒæŸ¥çœ‹æ˜¯å“ªäº›èœ˜è››åœ¨æŠ“å–å†…å®¹ã€‚
 
 /usr/sbin/tcpdump -i eth0 -l -s 0 -w - dst port 80 | strings | grep -i user-agent | grep -i -E 'bot|crawler|slurp|spider'
 
-ÍøÕ¾ÈÕ·ÖÎö2(SquidÆª£©°´ÓòÍ³¼ÆÁ÷Á¿
+ç½‘ç«™æ—¥åˆ†æ2(Squidç¯‡ï¼‰æŒ‰åŸŸç»Ÿè®¡æµé‡
 
 zcat squid_access.log.tar.gz| awk '{print $10,$7}' |awk 'BEGIN{FS="[ /]"}{trfc[$4]+=$1}END{for(domain in trfc){printf "%st%dn",domain,trfc[domain]}}'
 
-Êı¾İ¿âÆª
-1.²é¿´Êı¾İ¿âÖ´ĞĞµÄsql
+æ•°æ®åº“ç¯‡
+1.æŸ¥çœ‹æ•°æ®åº“æ‰§è¡Œçš„sql
 
 /usr/sbin/tcpdump -i eth0 -s 0 -l -w - dst port 3306 | strings | egrep -i 'SELECT|UPDATE|DELETE|INSERT|SET|COMMIT|ROLLBACK|CREATE|DROP|ALTER|CALL'
 
-ÏµÍ³Debug·ÖÎöÆª
-1.µ÷ÊÔÃüÁî
+ç³»ç»ŸDebugåˆ†æç¯‡
+1.è°ƒè¯•å‘½ä»¤
 strace -p pid
-2.¸ú×ÙÖ¸¶¨½ø³ÌµÄPID
+2.è·Ÿè¸ªæŒ‡å®šè¿›ç¨‹çš„PID
 gdb -p pid
 
