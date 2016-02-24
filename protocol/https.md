@@ -17,25 +17,29 @@ SSL/TLS协议大致的工作流程为
 RSA: 密匙交换算法
 
 ```
-##不需客户端认证的工作流程
+##工作流程
 1. client hello
     supported protocol: TLS 1.0
     random number
     supported encrypt method: RSA
     compression method: gzip
+
 2. server hello
     protocol: TLS 1.0
     random number
     encrypt method: RSA
     cert file (pub key + ca pub key)
+    client cert request: optional 
+
 3. client process
-    validate server cert then get server pub key
+    send client cert (optionnal, send if server requested)
+    validate server cert using CA; check hostname; then get server pub key
     random number (pre-master key)
-    client goodby
+    client finish
      
 4. server process
     generate session key 
-    server goodby
+    server finish
 ```        
 
     
@@ -60,8 +64,6 @@ SessionID: bd608869f0c629767ea7e3ebf7a63bdcffb0ef58b1b941e6b0c044acb6820a77
 Use Cipher Suite:
 TLS_RSA_WITH_3DES_EDE_CBC_SHA
 Compression Algorithm: NONE
-```
-
 ```
 
 

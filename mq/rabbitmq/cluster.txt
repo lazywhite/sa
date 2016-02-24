@@ -3,7 +3,7 @@
 3. rabbitmqctl stop_app
 4. rabbitmqctl join_cluster rabbit@node1 -t disk
 5. rabbitmqctl start_app
-5. rabbitmqctl cluster_status
+6. rabbitmqctl cluster_status
 
 
 

@@ -6,6 +6,7 @@ ansible-doc module
 
 # playbook
 
+host_vars
 role
     common
         files
@@ -13,7 +14,6 @@ role
         defaults
         handlers
         templates
-host_vars
 
 
 copy

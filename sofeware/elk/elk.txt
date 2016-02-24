@@ -1,0 +1,240 @@
+最后，elasticsearch团队提供了对运行大集群的几点优化建议：
+
+1.设置ES_HEAP_SIZE环境变量，保证JVM使用的最大和最小内存用量相同。如果设置的最小和最大内存不一样，这意味着当jvm需要额外的内存时（最多达到最大内存的大小），它会阻塞java进程来分配内存给它。结合使用旧版本的java情况就可以解释为什么集群中的节点会停顿、出现高负载和不断的进行内存分配的情况。elasticsearch团队建议给es设置50%的系统内存
+2.缩短recover_after_time超时配置，这样恢复可以马上进行，而不是还要再等一段时间。
+3.配置minimum_master_nodes，避免多个节点长期暂停时，有些节点的子集合试图自行组织集群，从而导致整个集群不稳定。
+4.在es初始恢复的时候，一些节点用完了磁盘空间。这个不知道是怎样发生的，因为整个集群只使用了总空间的67%，不过相信这是由于之前的高负载和旧java版本引起的。elasticsearch的团队也在跟进这个问题。
+
+-----------------------
+ES node type
+1. data node
+# only store index
+http.enabled=false(they will use transport module to communicate with each other)
+node.master=false
+node.data=true
+2. dedicated master node (at least 3 node)
+# do not process any request just ensure the instability of cluster
+node.master=true
+node.data=false
+3. client node
+# only gather data
+node.master=false
+node.data=false
+
+---------------------
+由于集群并未开启allocate， 导致重启数据节点后，全部变为unassigned shards
+集群健康状态为黄色，并不会停止录入数据
+curl localhost:9200/_cluster/settings
+
+# v0.90.x and earlier
+curl -XPUT 'localhost:9200/_settings' -d '{
+    "index.routing.allocation.disable_allocation": false
+}'
+
+# v1.0+
+curl -XPUT 'localhost:9200/_cluster/settings' -d '{
+    "transient" : {
+        "cluster.routing.allocation.enable" : "all"
+    }
+}'
+---------------------
+curl http://localhost:9200/_cat/recovery?v
+curl localhost:9200/_cat/shards
+curl  'http://localhost:9200/_recovery?pretty&human'
+
+
+
+------------------
+
+
+
+input {
+    file {
+            type => "technical"
+            path => "/home/technical/log"
+    }
+    file {
+            type => "business"
+            path => "/home/business/log"
+    }
+} 
+
+
+filter {
+    if [type] == "technical" {
+            # processing .......
+    }
+    if [type] == "business" {
+            # processing .......
+    }
+}
+
+
+=========================
+
+The correct way to restart a cluster is to do a rolling restart using the shutdown API.
+
+This works by:
+
+Disabling shard allocation
+Restarting one node (cluster goes yellow)
+Wait until it rejoins the cluster
+Re-enable shard allocation
+Wait until shards are reallocated (cluster goes green)
+Repeat on other nodes.
+
+=======================
+web client
+    Sense
+        ./bin/kibana plugin --install elastic/sense
+monitoring
+    Marvel
+        bin/plugin install license
+        bin/plugin install marvel-agent
+        bin/kibana plugin --install elasticsearch/marvel/latest
+
+security
+    Shield
+alert
+    Watcher
+es as service
+    Cloud
+virtualize 
+    Kibana
+collect
+    Logstash
+collec, parse, ship
+    Beats
+es for hadoop
+rivers
+curator
+
+
+
+cluster
+    node
+        index
+            type
+                document (json)
+    
+
+
+shard
+    horizontally split/scale your content volume
+    distribute and parallelize operations across shards
+replication
+    high availability
+    scale out search volumn/throughout since search can be executed on all replicas 
+
+replica number can be changed dynamiclly but shard number can't 
+
+
+## Installation
+```
+#jdk 7 required
+curl -L -O https://download.elastic.co/elasticsearch/release/org/elasticsearch/distribution/tar/elasticsearch/2.2.0/elasticsearch-2.2.0.tar.gz
+tar -xvf elasticsearch-2.2.0.tar.gz
+cd elasticsearch-2.2.0/bin
+./elasticsearch --cluster.name my_cluster_name --node.name my_node_name
+# port 9200 is used for rest api
+```
+## Rest API
+1. check cluster, node, index health and status
+2. admin cluster, node, index
+3. perform CRUD and serach on index
+4. advanced search operation like paging sorting filtering scripting aggregation
+
+
+## Usefull api
+#curl 'localhost:9200/_cat/health?v'
+epoch      timestamp cluster       status node.total node.data shards pri relo init unassign
+1394735289 14:28:09  elasticsearch green           1         1      0   0    0    0        0
+
+#curl 'localhost:9200/_cat/nodes?v'
+host         ip        heap.percent ram.percent load node.role master name
+mwubuntu1    127.0.1.1            8           4 0.00 d         *      New Goblin
+
+#curl 'localhost:9200/_cat/indices?v'
+health index pri rep docs.count docs.deleted store.size pri.store.size
+
+# create an index
+curl -XPUT 'localhost:9200/customer?pretty'
+curl 'localhost:9200/_cat/indices?v'
+
+
+# create an document
+curl -XPUT 'localhost:9200/customer/external/1?pretty' -d '
+{
+  "name": "John Doe"
+}'
+
+# query or index an document
+curl -XGET 'localhost:9200/customer/external/1?pretty'
+{
+  "_index" : "customer",
+  "_type" : "external",
+  "_id" : "1",
+  "_version" : 1,
+  "found" : true,
+  "_source" : {
+    "name" : "john Doe"
+  }
+}
+
+# replace an document
+curl -XPUT 'localhost:9200/customer/external/1?pretty' -d '
+{
+  "name": "Weild Linkin"
+}'
+
+
+# When indexing, the ID part is optional. If not specified, Elasticsearch will generate a random ID
+# we are using the POST verb instead of PUT since we didn’t specify an ID.
+curl -XPOST 'localhost:9200/customer/external?pretty' -d '
+{
+  "name": "Jane Doe"
+}'
+
+# update an document
+# ES does not do in-place update, it just delete old one and place a new one
+curl -XPOST 'localhost:9200/customer/external/1/_update?pretty' -d '
+{
+  "doc": { "name": "Jane Doe" }
+}'
+
+# update and add new field to document
+curl -XPOST 'localhost:9200/customer/external/1/_update?pretty' -d '
+{
+  "doc": { "name": "Jane Doe", "age": 20 }
+}'
+
+# using "script" to update an document
+curl -XPOST 'localhost:9200/customer/external/1/_update?pretty' -d '
+{
+  "script" : "ctx._source.age += 5"
+}'
+
+# delete an document
+curl -XDELETE 'localhost:9200/customer/external/2?pretty'
+
+# batch processing
+# perform CRUD operaton in batches using _bulk api
+The bulk API executes all the actions sequentially and in order. If a single action fails for whatever reason, it will continue to process the remainder of the actions after it
+curl -XPOST 'localhost:9200/customer/external/_bulk?pretty' -d '
+{"index":{"_id":"1"}}
+{"name": "John Doe" }
+{"index":{"_id":"2"}}
+{"name": "Jane Doe" }
+'
+
+# create an index with shard and replica settings
+$ curl -XPUT 'localhost:9200/customer' -d '
+{
+    "settings":{
+        "index":{
+        "number_of_shards": 1,
+        "number_of_replicas": 0
+        }
+    }
+}'
+

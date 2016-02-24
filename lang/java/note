@@ -1,3 +1,4 @@
+## Exception class tree
 Throwable
     Error
     Exception
