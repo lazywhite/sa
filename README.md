@@ -5,7 +5,6 @@ So I put my notes here for unexpected needs.
 
 
 ## Information
-appserver: uwsgi, hhvm etc  
 auto: puppet, saltstack, ansible etc  
 database: mysql, mongodb, redis, influxdb etc  
 fs: zfs, fastdfs, glusterfs etc  
