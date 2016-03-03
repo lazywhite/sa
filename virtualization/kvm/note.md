@@ -9,6 +9,7 @@
 7. glusterfs  
 
 ## example: directory base storage pool
+```
 <pool type="dir">
         <name>virtimages</name>
         <target>
@@ -16,7 +17,6 @@
         </target>
  </pool>
   
-```
 virsh pool-define /path/to/pool.xml
 virsh pool-list --all
 virsh pool-start <name>
