@@ -48,7 +48,6 @@ mongo CRUD
 - blog  
 - evolution  
 - QQ  
-- iptables  
 - tcpdump
 - live migration
 - zfs

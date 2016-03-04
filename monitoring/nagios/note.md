@@ -26,13 +26,12 @@ nagios
 
 
 
-nagios
-    nrpe: nagios remote plugin executeor
-    nsca: nagios service check acceptor
-    nagios-plugin
+nagios   
+>    nrpe: nagios remote plugin executeor  
+>    nsca: nagios service check acceptor  
+>    nagios-plugin  
 
 
-
-报警延迟是由于host or service状态不稳定，nagios称之为flapping state
+报警延迟是由于host or service状态不稳定，nagios称之为flapping state  
 htpasswd -c -b  /etc/nagios/passwd nagiosadmin admin
 

@@ -1,15 +1,3 @@
-iptables -L -n --line-numbers
-iptables -R INPUT(chain name) 1(line number) -p tcp --dport 22 -j accept
-
-当iptables的policy为DROP时， iptables -F 会导致阻止任何连接
-
-iptables -I INPUT 3 -p tcp -m tcp --dport 20 -j ACCEPT
-iptables -D INPUT 3
-iptables -t nat -D POSTROUTING 1
-
-
-
------------------------
 #!/bin/bash
 
 #/sbin/modprobe ip_conntrack_ftp
@@ -99,9 +87,3 @@ iptables -t nat -D POSTROUTING 1
 #drop control ports
 #default drop other data
 /sbin/iptables -P INPUT DROP
-
-
-
-=============
-iptables -t nat -A PREROUTING -d 202.202.202.2 -j DNAT --to-destination 192.168.0.102  
-iptables -t nat -A POSTROUTING -d 192.168.0.102 -j SNAT --to 192.168.0.1 

@@ -1,4 +1,9 @@
 
+## Workflow
+1. centralized workflow
+2. integration-manager workflow
+3. Diactor and  Lieutenants Workflow
+
 git repack -a -d (直接删除)
 git repack -A -d (不直接删除)
 
@@ -31,13 +36,8 @@ git ls-tree tree-hash
 git cat-file -t blob-hash : blob
 git cat-file blob  blob-hash
 
-git workflow
-fork workflow
-    git remote add upstream
-
 
 git fetch origin;;git branch -[a|r|v]
-
 
 git tag 'name' 
 git tag -l (list)
