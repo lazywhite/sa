@@ -1,12 +1,14 @@
 ## Doc
 [ss 用法](http://www.ttlsa.com/linux-command/ss-replace-netstat/)
 ## netstat or ss
+```
 /proc/net/sockstat
 netstat通过遍历proc来获取socket信息,效率较低
 ss使用netlink与内核tcp_diag模块通信获取socket信息。
 
-
+```
 ## ss
+```
 [root@localhost ~]# ss -h
 Usage: ss [ OPTIONS ]
        ss [ OPTIONS ] [ FILTER ]
@@ -65,14 +67,19 @@ LISTEN     0      128                           *:22                           *
 LISTEN     0      100                         ::1:25                          :::*
 LISTEN     0      100                   127.0.0.1:25                           *:*
 LISTEN     0      128                          :::43963                       :::*
-
+```
 
 ## 列出所有连接中的http的连接
+```
 ss -o state established '( dport = :http or sport = :http )'
+```
 ## 列出fin-wait的http连接
+```
 ss -o state fin-wait-1 '( dport = :http or sport = :http )'
+```
 
 ## ss 常用socket状态
+```
 established
 syn-sent
 syn-recv
@@ -89,8 +96,10 @@ connected : All the states except for listen and closed
 synchronized : All the connected states except for syn-sent
 bucket : Show states, which are maintained as minisockets, i.e. time-wait and syn-recv.
 big : Opposite to bucket state.
-
+```
 ## 常用命令
+```
 ss src 120.33.31.1:80
 ss src :22
 ss sport eq :22
+```

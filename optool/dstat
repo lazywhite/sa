@@ -1,0 +1,47 @@
+dstat命令跟网络相关的选项：
+       --raw  enable raw stats (raw sockets)
+
+       --socket
+              enable socket stats (total, tcp, udp, raw, ip-fragments)
+
+       --tcp  enable tcp stats (listen, established, syn, time_wait, close)
+
+       --udp  enable udp stats (listen, active)
+
+       --unix enable unix stats (datagram, stream, listen, active)
+
+       -n, --net   enable network stats (receive, send)
+
+       -N eth1,total   include eth1 and total
+
+       --net-packets show the number of packets received and transmitted
+
+其它常用的选项：
+
+       --top-bio
+              show most expensive block I/O process
+
+       --top-cpu
+              show most expensive CPU process
+
+       --top-cputime
+              show process using the most CPU time (in ms)
+
+       --top-cputime-avg
+              show process with the highest average timeslice (in ms)
+
+       --top-io
+              show most expensive I/O process
+
+       --top-latency
+              show process with highest total latency (in ms)
+
+       --top-latency-avg
+              show process with the highest average latency (in ms)
+
+       --top-mem
+              show process using the most memory
+
+       --top-oom
+              show process that will be killed by OOM the first
+
