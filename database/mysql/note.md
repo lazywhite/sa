@@ -123,47 +123,11 @@ performance_schema
 	块的强制写出：
 
 
-MySQL安装方式：
-	二进制格式：
-		rpm
-			OS vendor
-			MySQL
-		通用二进制包:
-			5.6.13
-			5.5
-			5.1
-
-	源码格式:
-		make --> cmake
-
-
-堆，栈
-
 heap: 数据存储于内存的中存储引擎；
 
 内存数据库：临时表
 
-Percona: InnoDB --> XtraDB
-		Xtrabackup
 
-
-1、配置文件；
-2、root密码；
-3、删除匿名用户；
-4、在需要时，为应用程序提供授权帐号；
-
-权限可以转移：WITH GRANT OPTION
-
-
-
-修改用户密码：
-1、# mysqladmin -uUSERNAME -hHOST  password 'new_pass'; 
-2、mysql> SET PASSWORD FOR username@host=PASSWORD('new_pass');
-3、mysql.user
-	mysql> UPDATE user SET password=PASSWORD('new_pass') WHERE user='root';
-
-
-mysql, mysqld, mysqld_safe
 
 mysql: 使用模式
 	交互式模式
@@ -187,39 +151,10 @@ constraint: 约束
 _: 任意单个字符；
 
 
-
 忘记root用户密码：
 	修改/etc/rc.d/init.d/mysqld
 	启动选项：--skip-grant --skip-networking
 
-
-/usr/local/mysql/bin
-	mysql服务器端程序：mysqld，mysqld_safe, mysqld_multi
-	mysql客户端程序：需要连接至服务器端(TCP/IP, IPC): mysql, mysqladmin, mysqldump
-	非客户端程序：
-
-
-
-集中式配置文件：
-[mysqld]
-
-[mysqld_safe]
-
-[mysql]
-
-[mysqldump]
-
-[client]
-
-mysqld_safe: 
-
-mysqld读取配置文件次序：
-	mysqld --help --verbose 
-
-	/etc/mysql/my.cnf --> /etc/my.cnf --> --default-extra-file=/path/to/some_conf_file --> ~/.my.cnf
-
-
-mysqld --options=
 
 
 mysql> SET {GLOBAL|SESSION} variable_name='value';
@@ -228,54 +163,11 @@ mysql> SELECT @@{GLOBAL|SESSION}.variable_name;
 
 
 
-
-
 DBA: 
 	开发DBA：数据库设计、SQL语句、存储过程、存储函数、触发器
 	管理DBA：安装、升级、备份、恢复、用户管理、权限管理、监控、性能分析、基准测试
 
-SQL语言的组成部分：
-	DDL
-	DML
-	完整性定义语言：DDL的一部分功能
-	视图定义：
-	事务控制：
-	嵌入式SQL和动态SQL：
-	授权：DCL
 
-
-
-数据类型：
-1、存入的值类型；
-2、占据的存储空间；
-3、定长还变长；
-4、如何比较及排序；
-5、是否能够索引；
-
-定义表：定义字段以及字段属性
-
-
-
-
-
-
-MySQL客户端工具：
-	mysql
-	mysqldump
-	mysqladmin
-	mysqlcheck
-	mysqlimport
-
-	[client]
-
-	-u USERNAME
-	-h HOST
-	-p ''
-	--protocol {tcp|socket|pipe|memory}
-	--port PORT
-
-
-服务器：mysqld, mysqld_safe, mysqld_multi
 
 
 数据类型：
@@ -319,8 +211,6 @@ MySQL客户端工具：
 
 mysql> HELP CREATE TABLE; 
 	显示创建表的帮助信息，可以从中获取所支持所有数据类型；
-
-
 
 
 慢查询日志可以支持到微秒级计时；可以记录进表中，但意义不大；
@@ -532,17 +422,6 @@ SELECT：
 
 
 
-学员信息库：
-	同学（姓名、年龄、性别、班级、学号），课程，老师，课程分数，班级，成绩
-
-	DISTINCT
-
-	以性别分组，显示各组年龄中的最大值；
-	以班级分组，显示各组年龄中的最小值；只显示最小年龄小于20的班级；
-	以性别分组，显示各组年龄的年龄之和，要求将年龄之和逆序排列；
-	以年龄分组，显示各组中的人数；
-
-
 表联结：
 	交叉联结
 	内联结：自然联结
@@ -556,21 +435,6 @@ SELECT：
 
 	联合查询：
 		SELECT clause UNION SELECT clause
-
-
-练习：导入hellodb.sql，完成以下题目：
-1、显示前5位同学的姓名、课程及成绩；
-2、显示其成绩高于80的同学的名称及课程；
-3、求前8位同学每位同学自己两门课的平均成绩，并按降序排列；
-4、显示每门课程课程名称及学习的同学的个数；
-
-
-思考：
-1、如何显示其年龄大于平均年龄的同学的名字？
-2、如何显示其学习的课程为第1、2，4或第7门课的同学的名字？
-3、如何显示其成员数最少为3个的班级的同学中年龄大于同班同学平均年龄的同学？
-
-4、统计各班级中年龄大于全校同学平均年龄的同学。
 
 
 子查询：
@@ -623,12 +487,6 @@ MySQL查询：
 	隐式锁：
 
 
-
-
-SELECT [FOR UPDATE | LOCK IN SHARE MODE]]
-
-
-
 事务：ACID
 
 mysql> SHOW GLOBAL VARIABLES LIKE 'autocommit';
@@ -666,10 +524,6 @@ MVCC: Multi Version Concurrency Control
 	SERIALIZABLE
 
 mysql> START TRANSACTION; COMMIT; ROLLBACK; SAVEPOINT; ROLLBACK TO point;
-
-autocommit=0
-
-
 
 mariaDB --> maria, aria (MyISAM)
 
@@ -1272,15 +1126,6 @@ proxies_priv: Contains proxy-user privileges.
 
 
 
-
-
-
-
-
-
-
-
-
 MySQL缓存
 
 与缓存相关的服务器变量：
@@ -1355,11 +1200,6 @@ hits rate = Qcache_hists/(Qcache_hits+Com_select)，不过，这个未必能反�
 3、必要时，使用SQL_CACHE和SQL_NO_CACHE手动控制缓存动作。
 4、对写密集型的场景来说，禁用缓存可以提高性能。
 
-
-
-
-
-
 MySQL常用函数：
 	NOW()
 	CONNECTION_ID()
@@ -1367,25 +1207,7 @@ MySQL常用函数：
 	CURRENT_DATE()
 
 
-
 LOAD INDEX INTO CACHE命令
-
-
-
-MySQL, lammp
-
-复制、sharding、高可用、性能调优
-
-web: nginx, haproxy, MongoDB, (ruby,python,jsp)
-
-Cluster，
-
-
-
-
-
-
-
 
 
 配置MySQL复制基本步骤：
@@ -1466,8 +1288,6 @@ relay-log.info
 skip-slave-start=1
 
 
-
-
 5、数据库复制过滤
 
 在主服务器上实现：
@@ -1475,7 +1295,6 @@ binlog-do-db=testdb
 binlog-do-db=mydb
 
 binlog-ignore-db=mysql
-
 
 
 主服务器
@@ -1496,21 +1315,6 @@ replicate_ignore_table
 
 replicate_wild_do_table
 replicate_wild_ignore_table
-
-
-
-
-在从服务器上只复制mageedu一个数据库：
-
-[mysqld]
-replicate_do_db=mageedu
-replicate_do_db=mysql
-
-
-
-
-
-
 
 
 
@@ -1553,8 +1357,6 @@ mysql> SHOW GLOBAL STATUS LIKE 'rpl_semi%';
 mysql> SHOW GLOBAL STATUS LIKE 'rpl_semi%';
 
 
-
-
 6、主服务器崩溃，事务已经提交-->写入二进制日志；
 
 
@@ -1568,25 +1370,6 @@ innodb_flush_logs_at_trx_commit=1
 从服务器：
 skip_slave_start=1
 read_only=1
-
-
-
-SSL:
-
-REQURIED SSL
-
-
-
-
-
-auto_increment
-
-1,3,5
-
-2,4,8
-
-
-
 
 
 
@@ -1638,10 +1421,6 @@ server2|mysql> CHANGE MASTER TO ...,MASTER_LOG_FILE='mysql-bin.000001', MASTER_L
 
 
 
-A: 查看B的二进制日志文件及位置，并以及作为自己的复制起点；
-B：
-
-
 MySQL主从复制架构：
 	一主多从：
 	一从多主？
@@ -1667,11 +1446,6 @@ MySQL：异步
 
 		replicate-wild-do-table
 		replicate-wild-ignore-table
-
-复制：多主
-	双主：
-
-
 
 
 MySQL HA:
@@ -1699,14 +1473,6 @@ sharding：
 	dbShards
 	ScalArc
 
-newsql:
-	Clustrix
-	ScalArc
-nosql
-
-
-
-
 amoeba: java, 配置文件：xml
 mysql-proxy: lua
 
@@ -1723,12 +1489,6 @@ partition
 
 
 
-抓包工具
-	windows：wireshark，sniffer
-	linux：wireshark-tshark snort（NIDS）osser（HIDS） tcpdump(libpcap)
-扫描工具：
-	nmap
-	backtrack
 NIPS：network intrusion protect system 
 NIDS：network intrusion defence system
 HIDS：host intrusion detect system
@@ -1740,161 +1500,10 @@ HIDS：host intrusion detect system
 
 
 
-tcpdump -i any -s 0 -A -n -p port 3306 and src IP|grep -i -E 'SELECT|INSERT'
-
-协议报文分析器：
-	sniffer: 商业工具
-
-tcpdump, wireshark(GUI), tshark(CLI)
-
-tcpdump [options] 过滤条件
-
-获取报文的条件：		
-		
-ip src host 172.16.100.1
-tcp src or dst port 21
-
-udp dst port 53
-
-tcp src or dst port 21 AND src host 172.16.100.1
-
-tcp port 21 AND host 172.16.100.1
-		
-		
-		
-
-tcpdump的语法：
-tcpdump [options] [Protocol] [Direction] [Host(s)] [Value] [Logical Operations] [Other expression]
-
-Protocol(协议):
-Values(取值): ether, fddi, ip, arp, rarp, decnet, lat, sca, moprc, mopdl, tcp and udp.
-If no protocol is specified, all the protocols are used. 
-
-Direction(流向):
-Values(取值): src, dst, src and dst, src or dst
-If no source or destination is specified, the "src or dst" keywords are applied. 
-For example, "host 10.2.2.2" is equivalent to "src or dst host 10.2.2.2".
 
 
-Host(s)(主机):
-Values(替代关键字): net, port, host, portrange.
-If no host(s) is specified, the "host" keyword is used. 默认如果此段没有指定关键字，默认即host。
-For example, "src 10.1.1.1" is equivalent to "src host 10.1.1.1". 
-
-
-Logical Operations:
-(1) AND 
-and or &&
-(2) OR 
-or or ||
-(3) EXCEPT 
-not or !
-
-
-常用选项：
-
--i any : Listen on all interfaces just to see if you're seeing any traffic.
--n : Don't resolve hostnames.（主机名）
--nn : Don't resolve hostnames or port names.（主机名和服务名）
--X : Show the packet's contents in both hex and ASCII.
--XX : Same as -X, but also shows the ethernet header.
--v, -vv, -vvv : Increase the amount of packet information you get back.
--c # : Only get x number of packets and then stop. 抓前n个包
--s : Define the snaplength (size) of the capture in bytes. Use -s0 to get everything, unless you are intentionally capturing less.
--S : Print absolute sequence numbers.
--e : Get the ethernet header as well.
--q : Show less protocol information.
--E : Decrypt IPSEC traffic by providing an encryption key.
--A ：Display Captured Packets in ASCII
--w /path/to/some_file : Capture the packets and write into a file 
--r /path/from/some_file : Reading the packets from a saved file 
--tttt : Capture packets with proper readable timestamp
-
-
-ip host 172.16.100.1
-ip src host 172.16.100.1
-ip dst host 172.16.100.1
-ip src and dst host 172.16.100.1
-
-tcp src port 110
-
-
-
-tcpdump -i eth0 -s0 -nn -XX tcp dst port 3306 and ip dst host 192.168.10.16 
-
-
-mysql alter 语句用法,添加、修改、删除字段等
-
-//主键
-
-   alter table tabelname add new_field_id int(5) unsigned default 0 not null auto_increment ,add primary key (new_field_id);
-//增加一个新列
-
-   alter table t2 add d timestamp;
-alter table infos add ex tinyint not null default '0';
-//删除列
-
-   alter table t2 drop column c;
-//重命名列
-
-   alter table t1 change a b integer;
-
-//改变列的类型
-
-   alter table t1 change b b bigint not null;
-alter table infos change list list tinyint not null default '0';
-//重命名表549830479
-
-   alter table t1 rename t2;
-加索引549830479
-
-   mysql> alter table tablename change depno depno int(5) not null;
-mysql> alter table tablename add index 索引名 (字段名1[，字段名2 …]);
-mysql> alter table tablename add index emp_name (name);
-加主关键字的索引549830479
-
-mysql> alter table tablename add primary key(id);
-加唯一限制条件的索引
-  mysql> alter table tablename add unique emp_name2(cardnumber);
-删除某个索引549830479
-
-   mysql>alter table tablename drop index emp_name;
-修改表：549830479
-
-增加字段：549830479
-
-   mysql> ALTER TABLE table_name ADD field_name field_type;
-修改原字段名称及类型：549830479
-
-   mysql> ALTER TABLE table_name CHANGE old_field_name new_field_name field_type;
-删除字段：549830479
-
-   mysql> ALTER TABLE table_name DROP field_name; 
-
-
-
-	select * from information_schema.views\G
-
-	show procedure status
-	show function status
-	show create procedure proc_name;
-	show create function func_name;
-
-
-	SHOW TRIGGERS [FROM db_name] [LIKE expr]
-    SHOW TRIGGERS\G     //触发器
-
-
-select into
-
-cursor:declare open close fetch
-游标的作用就是用于对查询数据库所返回的记录进行遍历，以便进行相应的操作；游标有下面这些属性：
-
-    a、游标是只读的，也就是不能更新它；
-
-    b、游标是不能滚动的，也就是只能在一个方向上进行遍历，不能在记录之间随意进退，不能跳过某些记录；
-
-    c、避免在已经打开游标的表上更新数据。
-
-trigger:delete insert update
-
+# get database disk usage 
+```
+select concat(round(sum(DATA_LENGTH/1024/1024),2),'MB') as data  from TABLES where table_schema='apoyl';
+select concat(round(sum(DATA_LENGTH/1024/1024),2),'MB') as data  from TABLES
+```

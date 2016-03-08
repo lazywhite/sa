@@ -16,5 +16,5 @@ password-db = passwd
 
 
 ========
-svn co --username=<> --password=<> -r 1199 svn://i.storswift.com:20888/homeland/dev/1.1_glusterfs rpmbuild
+svn co --username=<> --password=<> -r 1199 svn://domain:20888/homeland/dev/1.1_glusterfs rpmbuild
 

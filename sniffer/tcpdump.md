@@ -98,3 +98,67 @@ tcpdump -s 500
 Capture all bytes of data within the packet:
 tcpdump -s 0
 ```
+```
+tcpdump -i any -s 0 -A -n -p port 3306 and src IP|grep -i -E 'SELECT|INSERT'
+
+tcpdump [options] 过滤条件
+
+tcpdump的语法：
+tcpdump [options] [Protocol] [Direction] [Host(s)] [Value] [Logical Operations] [Other expression]
+
+Protocol(协议):
+Values(取值): ether, fddi, ip, arp, rarp, decnet, lat, sca, moprc, mopdl, tcp and udp.
+If no protocol is specified, all the protocols are used. 
+
+Direction(流向):
+Values(取值): src, dst, src and dst, src or dst
+If no source or destination is specified, the "src or dst" keywords are applied. 
+For example, "host 10.2.2.2" is equivalent to "src or dst host 10.2.2.2".
+
+
+Host(s)(主机):
+Values(替代关键字): net, port, host, portrange.
+If no host(s) is specified, the "host" keyword is used. 默认如果此段没有指定关键字，默认即host。
+For example, "src 10.1.1.1" is equivalent to "src host 10.1.1.1". 
+
+
+Logical Operations:
+(1) AND 
+and or &&
+(2) OR 
+or or ||
+(3) EXCEPT 
+not or !
+
+
+常用选项：
+
+-i any : Listen on all interfaces just to see if you're seeing any traffic.
+-n : Don't resolve hostnames.（主机名）
+-nn : Don't resolve hostnames or port names.（主机名和服务名）
+-X : Show the packet's contents in both hex and ASCII.
+-XX : Same as -X, but also shows the ethernet header.
+-v, -vv, -vvv : Increase the amount of packet information you get back.
+-c # : Only get x number of packets and then stop. 抓前n个包
+-s : Define the snaplength (size) of the capture in bytes. Use -s0 to get everything, unless you are intentionally capturing less.
+-S : Print absolute sequence numbers.
+-e : Get the ethernet header as well.
+-q : Show less protocol information.
+-E : Decrypt IPSEC traffic by providing an encryption key.
+-A ：Display Captured Packets in ASCII
+-w /path/to/some_file : Capture the packets and write into a file 
+-r /path/from/some_file : Reading the packets from a saved file 
+-tttt : Capture packets with proper readable timestamp
+
+
+ip host 172.16.100.1
+ip src host 172.16.100.1
+ip dst host 172.16.100.1
+ip src and dst host 172.16.100.1
+
+tcp src port 110
+
+
+
+tcpdump -i eth0 -s0 -nn -XX tcp dst port 3306 and ip dst host 192.168.10.16 
+```

@@ -1,7 +1,5 @@
-# Installation
-written in Go, compile into single binary package not external dependence needed
-
-
+# Introduction
+written in Go, compile into single binary package no external dependence needed
 
 ## networking
 8083: admin panel
@@ -12,8 +10,6 @@ written in Go, compile into single binary package not external dependence needed
 ## Database admin
 
 ## CRUD
-
-
 
 ##using with grafana, collectd
 ### Building grafana from source

@@ -260,7 +260,6 @@ virsh net-undefine default
 
 docker run -t -i -v /root:/mnt:rw cppking/local_cent65 /bin/bash
 
-主动模式的FTP是指服务器主动连接客户端的数据端口，被动模式的FTP是指服务器被动地等待客户端连接自己的数据端口
 
 awk 'NR==5{print substr($0,2,3)}'
 

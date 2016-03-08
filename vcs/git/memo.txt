@@ -1,3 +1,8 @@
+## 
+提交前注意事项
+>    commit message需要清楚  
+>    commit 是否需要rebase  
+>    千万不要rebase一个已经推送过的commit  
 
 ## Workflow
 1. centralized workflow
@@ -37,15 +42,16 @@ git cat-file -t blob-hash : blob
 git cat-file blob  blob-hash
 
 
-git fetch origin;;git branch -[a|r|v]
+git fetch origin;git branch -[a|r|v]
 
 git tag 'name' 
 git tag -l (list)
 git tag -v 'name' (information)
 
 git rebase -i
-git rebase 'branch' on 'master'
+git rebase <upstream> <branch>
 
+git rebase --onto master next topic
 
 
 git push origin --tags
@@ -75,8 +81,12 @@ git filter-branch --tree-filter "find * -type f -name '*~' -delete" HEAD
 
 git blame -L 12,22 sample.rb
 
-
 git read-tree
 
+<fix01>git diff master > 1.patch
+<master>git co -b fix01;git apply 1.patch;git co masster;git merge fix01
 
-git checkout <commit-id>
+git format-patch -M master ## generate a mailbox git-format patch 
+git am  ## apply patch from mailbox
+
+git revert ## like patch -R
