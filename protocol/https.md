@@ -1,5 +1,5 @@
-##doc
-[https简介](http://www.ruanyifeng.com/blog/2014/02/ssl_tls.html)
+## Doc
+[https简介](http://www.ruanyifeng.com/blog/2014/02/ssl_tls.html)  
 [https detail](https://technet.microsoft.com/en-us/library/cc785811(v=ws.10).aspx)
 
 公钥加密算法:客户端索要服务器公钥, 用公钥加密信息, 服务度用私钥解密
@@ -17,7 +17,7 @@ SSL/TLS协议大致的工作流程为
 RSA: 密匙交换算法
 
 ```
-##工作流程
+## 工作流程
 1. client hello
     supported protocol: TLS 1.0
     random number

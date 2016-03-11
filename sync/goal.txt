@@ -14,35 +14,6 @@ python
 
 
 
-
-
-运维相关
-    掌握Mail, DNS, Cache, HTTP, FTP, Proxy, LDAP服务配置
-    掌握MySQL Sharding, HA, Replica，Backup/Restore技术
-    掌握MongoDB sharding set，repl set，GridFS技术
-    掌握Zabbix，Ganglia监控工具使用
-    掌握Puppet，Ansible自动化运维工具
-    掌握Openstack，Docker， Solaris Zone虚拟化技术
-    掌握基于corosync pacemaker,keepalived, RHCS 高可用集群搭建
-    掌握GlusterFS，MogileFS, ZFS, GFS2等文件系统使用
-
-编程相关   
-    1. 深入理解python语言
-    2. 熟悉常见python软件设计模式
-    3. 掌握基于消息队列的分布式编程
-    4. 掌握基于多进程，多线程，协程的并发编程
-    5. 掌握REST_FULL编程
-    6. 熟悉socket, websocket编程
-    7. 熟悉Flask, Django框架及周边工具
-
-    
-    
-
-
-blog: cppking.github.io
-
-
-
 flask
     werkzeug
     jinjia
@@ -52,8 +23,6 @@ flask
     flask_restless
     flask_oauthlib
     
-django + uwsgi + nginx
-
 
 
 # 高级运维工程师

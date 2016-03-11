@@ -2,10 +2,10 @@
 [http状态码](https://zh.wikipedia.org/wiki/HTTP%E7%8A%B6%E6%80%81%E7%A0%81)
 
 ## note
-http协议是无状态的, web程序引入cookie机制来维护状态
-cookie可以人为禁止, 服务端引入session来保存状态
-header与body之间有空行
-request Method 区分大小写, header不区分大小写
+http协议是无状态的, web程序引入cookie机制来维护状态  
+cookie可以人为禁止, 服务端引入session来保存状态  
+header与body之间有空行  
+request Method 区分大小写, header不区分大小写  
 
 ## Get和Post方法的区别
 1. get提交的数据会放在url之后, 以?分隔url和传输数据, url长度有限制
