@@ -9,7 +9,6 @@ auto: puppet, saltstack, ansible etc
 database: mysql, mongodb, redis, influxdb etc  
 fs: zfs, fastdfs, glusterfs etc  
 network: switch , router   
-lang: java, nodejs, ruby etc  
 mq: rabbitmq  
 sniffer: tshark, tcpdump, bro, Charles    
 software: ELK, CMDBuild   

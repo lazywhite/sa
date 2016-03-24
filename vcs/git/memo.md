@@ -12,6 +12,9 @@
 git repack -a -d (直接删除)    
 git repack -A -d (不直接删除)    
   
+### commit
+git commit -a -F -  (input from stdin)
+
 ### config  
 git config push.default=simple  
   

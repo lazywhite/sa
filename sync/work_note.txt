@@ -781,3 +781,15 @@ awk '!/time_transfer:0.00/{print $4,$7,$10,$11,$12}'|tr ' ' :|awk -F:  'BEGIN{s1
 
 
 watch -n 5 'seq 1 200 | xargs -I {} -n 1 -P 50 curl -o /dev/null -4 -s -w "`date`http_code:%{http_code}  http_connect:%{http_connect}  dns:%{time_namelookup}  redirect:%{time_redirect}  pretransfer:%{time_pretransfer}  time_connect:%{time_connect}  time_transfer:%{time_starttransfer}  time_total:%{time_total}  speed_down:%{speed_download}\n" "http://139.196.60.69/checkvip?ip=8.8.8.8&auth=2d411ebbdd8fb53b" >> bigsec_3.log'
+
+
+
+
+pyramid>=1.4,<1.5
+
+
+fatal: object 47e1979a125aa4bac0d03f8d31814036404a1196 is corrupted
+rm -f .git/object/47/e1979a125aa4bac0d03f8d31814036404a1196 ; git pull
+
+
+grep -l #only print filename
