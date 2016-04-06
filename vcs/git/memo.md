@@ -1,6 +1,7 @@
 ## 提交前注意事项  
 >   用rebase保持提交的质量, 写清楚comment  
->    千万不要rebase一个已经推送过的commit    
+>   千万不要rebase一个已经推送过的commit    
+>   flask8 代码检查
   
 ## Workflow  
 1. centralized workflow  
@@ -96,3 +97,16 @@ git am  ## apply patch from mailbox
   
 ### revert  
 git revert ## like patch -R  
+
+
+### Tips
+### The seven rules of a great git commit message
+```
+Separate subject from body with a blank line
+Limit the subject line to 50 characters
+Capitalize the subject line
+Do not end the subject line with a period
+Use the imperative mood in the subject line
+Wrap the body at 72 characters
+Use the body to explain what and why vs. how
+```

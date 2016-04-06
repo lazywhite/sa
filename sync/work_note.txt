@@ -753,6 +753,11 @@ vgextend vg /dev/sda5
 lvextent -l 100%FREE /dev/vg/lv_root
 resize2fs /dev/vg/lv_root
 
+## vbox shrink vdisk
+dd if=/dev/zero of=/empty bs=1M
+rm -f /empty
+halt
+VBoxManage modifyhd new.vdi --compact
 
 hash: one way
 encryption: two way
@@ -793,3 +798,6 @@ rm -f .git/object/47/e1979a125aa4bac0d03f8d31814036404a1196 ; git pull
 
 
 grep -l #only print filename
+
+
+mkfifo <pipe file>
