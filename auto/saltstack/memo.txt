@@ -9,7 +9,6 @@ salt grains.items
 salt "*"  sys.doc [module]
 
 
-
 =============
 environment: defined in top.sls
 grains: facter system
@@ -18,9 +17,14 @@ grains: facter system
 pillar: minion attribute defined on master side
 events: changed resource state
 reactor: events to actions
-beacon: monitor resource then produce event
+beacon: monitor system processes and produce an event then trigger reactor
+    filesystem change
+    system load
+    service status
+    shell activity;such as user login
+    network and disk usage
 
-returnner: store information into backend
+returner: store execute result into backend other than return to master
 roster: salt-ssh
 syndic: distribute manage system
 
@@ -37,14 +41,45 @@ peer
 proxy
 
 
-========================
 salt "*" saltutil.sync_grains
 salt "*" saltutil.refresh_pillar
 salt "*" pillar.items
 salt "*" grain.items
 
-salt-call state.highstate
-=========================
-apply specified sls files 
-====================
-salt-run
+## returner system
+/srv/salt/_returners/local.py
+    from __future__ import print_function
+    def returner(ret):
+        print(ret)
+
+salt '*' saltutil.sync_returners
+salt '*'  cmd.run   'hostname'  --return    local
+
+## self-defined graines
+/srv/salt/_graines/
+
+## self-defined module
+/srv/salt/_modules/cheng.py
+    def cheng(name):
+      return __salt__['foo.foo'](name)
+salt '*' saltutil.sync_modules
+salt '*' cheng.cheng nae
+
+## reactor system
+salt-call event.send 'foo' '{orchestrate: refresh}' ## fire an event
+salt-run state.event pretty=True
+
+salt/job/20150213001905721678/new       {
+    "_stamp": "2015-02-13T00:19:05.724583",
+    "arg": [],
+    "fun": "test.ping",
+    "jid": "20150213001905721678",
+    "minions": [
+        "jerry"
+    ],
+    "tgt": "*",
+    "tgt_type": "glob",
+    "user": "root"
+}
+
+stop the master; salt-master -l debug  ## debug reactor system

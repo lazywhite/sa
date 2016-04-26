@@ -504,3 +504,9 @@ mysqlbinlog --start-position=764322 --stop-position=765150 mysql-bin.000002
 auto_increment_increment (默认间隔值)
 auto_increment_offset   (默认起始值)
 create table tb() AUTO_INCREMENT=100 (指定起始值)
+
+
+
+
+## String function
+substring_index(username, '@', 1)

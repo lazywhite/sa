@@ -27,6 +27,11 @@ rabbitmqctl list_user_permissions guest
 rabbitmqctl set_permissions admin ".*" ".*" ".*"
 rabbitmqctl delete_user guest
 
+
+## add consistant-hash-exchange support 
+git clone  https://github.com/rabbitmq/rabbitmq-consistent-hash-exchange; make
+rabbitmq-plugins enable rabbitmq_consistent_hash_exchange
+
 ## Python library
 publisher:
     connection = Connection(host='', port='')
