@@ -83,11 +83,14 @@ git branch -d -r ios_20130709150855_39721
 ```
 
 
+
+
 ## Tips
 ```
 git svn show-ignore > .git/info/exclude  ## no .gitignore file
 git svn create-ignore
 git svn blame <file>
 git svn info
+git co -b 109tmp remotes/origin/109tmp ## create local branch and track a remote branch
 ```
 
