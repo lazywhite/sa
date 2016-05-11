@@ -1,3 +1,6 @@
+## Installation
+[Install Guild](http://zhongyaonan.com/hadoop-tutorial/setting-up-hadoop-2-6-on-mac-osx-yosemite.html)
+  
 ## Concept
 
 1. RDD
@@ -9,4 +12,7 @@
 3. SQLcontext
 
 4. DataFrame
+
+
+
     

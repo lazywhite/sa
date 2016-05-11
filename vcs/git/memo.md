@@ -100,7 +100,7 @@ git revert ## like patch -R
 
 
 ### Tips
-### The seven rules of a great git commit message
+#### The seven rules of a great git commit message
 ```
 Separate subject from body with a blank line
 Limit the subject line to 50 characters
@@ -110,3 +110,7 @@ Use the imperative mood in the subject line
 Wrap the body at 72 characters
 Use the body to explain what and why vs. how
 ```
+
+#### Create branch from a commit
+git co -b 'new' <commit-id>
+
