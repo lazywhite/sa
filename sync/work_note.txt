@@ -801,3 +801,8 @@ grep -l #only print filename
 
 
 mkfifo <pipe file>
+
+gitstatus : calculate the status of git repo
+
+
+sudo launchctl unload /Library/LaunchDaemons/com.alipay.DispatcherService.plist 
