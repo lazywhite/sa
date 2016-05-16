@@ -4,13 +4,15 @@
 :buffer <number> 跳转至编号文件
 :bn  下一帧 
 :bp  上一帧 
-:blast 
-:bfirst 
+:bd [number] delete [number] buffer, default current 
+:bw close current buffer
+:b [number]  go to [number] buffer
 ```
 
 #TAb
 ```
 :Te   tab explorer (used to open files)
+:tabedit <file>  open file in new tab
 gt  next tab
 gT  previouse tab
 [i]gt go to <number> tab

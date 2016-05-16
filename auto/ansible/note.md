@@ -29,3 +29,8 @@ ansible-pull -o -C develop -d /var/projects/myrepo -i /var/projects/myrepo/hosts
 
 ansible all -vvvv -u rock -i test.hosts -m git -a "repo=git@github.com:lazywhite/python.git dest=/Users/rock/python update=yes version=master force=yes"
 
+
+## checkmode
+ansible -C 
+
+##  Galaxy
