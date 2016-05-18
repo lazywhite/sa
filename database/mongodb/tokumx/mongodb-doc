@@ -1,5 +1,3 @@
-
-
 # numactl --interleave=all mongod --config /data/mongodb/mongodb.conf
 # sysctl -w vm.overcommit_memory=1
 //or 
@@ -68,9 +66,31 @@ db.adminCommand({logRotate:1})
 db.collection.find().sort({ $natural: -1 }).limit(N)
 db.runCommand( { repairDatabase: 1 } )
 
+# HotBackup
+1. 逻辑备份, mongodump
+2. backup data files with LVM, EBS snapshot, xfs_freeze 
+3. 物理备份
+    1. 单机
+        execute 'backupStart' in a specialized secondary
+    2. sharding
+        1. disconnect a secondary from each shard and config db at same time, then use any backup method
+        2. getting a truly consistent backup of a sharded cluster requires that the application pause all writes and the balancer, wait for one secondary on each shard to catch up fully with the primary, then disconnect one config server and a secondary from each shard. After this, the application can continue (and the balancer as well, once the config server has been backed up), and when the backup is finished, the secondaries will need to catch up again.
 
 
-一. PITR
+## Enable hot backup 
+1. load hot backup plugin, enable "backupStart, backupStatus, backupTrottle" command
+  
+```
+db.adminCommand({loadPlugin: 'backup_plugin'}) #can be configured auto  loaded
+> var d = new Date()
+> var month = (d.getMonth() < 9 ? '0' : '') + (d.getMonth() + 1)
+> var backupName = 'tokumx-' + d.getFullYear() + month + d.getDate()
+> db.runCommand({backupStart: '/mnt/backup/' + backupName})
+{ "ok" : 1 } 
+```
+
+
+## PITR
 //on one secondary
 1. stop tokumx service
 2. replace data in dbpath with backup data
