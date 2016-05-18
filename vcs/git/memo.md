@@ -2,7 +2,20 @@
 >   用rebase保持提交的质量, 写清楚comment  
 >   千万不要rebase一个已经推送过的commit    
 >   flask8 代码检查
-  
+## Rewrite commit histroy
+```
+
+git filter-branch --commit-filter '
+        if [ "$GIT_AUTHOR_EMAIL" = "rock@domain.com" ];
+        then
+                GIT_AUTHOR_NAME="white";
+                GIT_AUTHOR_EMAIL="346816483@qq.com";
+                git commit-tree "$@";
+        else
+                git commit-tree "$@";
+        fi' HEAD
+```  
+    
 ## Workflow  
 1. centralized workflow  
 2. integration-manager workflow  
