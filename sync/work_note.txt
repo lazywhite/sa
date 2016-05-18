@@ -808,3 +808,7 @@ gitstatus : calculate the status of git repo
 sudo launchctl unload /Library/LaunchDaemons/com.alipay.DispatcherService.plist 
 
 sbt is a build tool for Scala, Java, and more. It requires Java 1.6 or later.
+
+
+fatal: renaming ‘foldername’ failed: Invalid argumen
+git mv <old> <tmp>; git mv <tmp> <new>
