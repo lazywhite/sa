@@ -52,3 +52,8 @@ mkdir /tmp/hive_tmp_io
 ## Usage 
 no update and delete operation allowd 
 insert overwrite table my_word  select * from my_word  where id != 100;
+
+
+## Concept
+Hive is a data warehouse infrastructure tool to process structured data in Hadoop. It resides on top of Hadoop to summarize Big Data, and makes querying and analyzing easy.
+the data aggregation actually generate MapReduce tasks

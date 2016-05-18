@@ -14,7 +14,7 @@ fsck: to diagnose health of the filesystem, find missing files or blocks
 fetchdt: fetch delegationtoken and store it in a file on the local system
 balancer: tool to balance the cluster when data is unevenly distributed
 upgrade and rollback: after software upgrade, you can rollback 
-secondary namenode
+secondary namenode: merge "fsimage" and "edits" log periodly
 Checkpoint node: 
 backup node: an extension to checkpoint node 
 ## Usage

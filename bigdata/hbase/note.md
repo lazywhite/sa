@@ -2,6 +2,8 @@
 HBASE is the hadoop database, a distribute, scalable, big data store  
 Use hbase when you need random, realtime read/write access to your BigData  
 Hbase is distributed, versioned, non-relational database 
+
+HBase is a data model that is similar to Google’s big table designed to provide quick random access to huge amounts of structured data.
 ## Features
 strictly consistent reads and writes  
 automatic and configurable sharding of tables  
