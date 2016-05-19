@@ -14,11 +14,15 @@ So I put my notes here for unexpected needs.
 │   ├── puppet
 │   └── saltstack
 ├── bigdata
+│   ├── flume
 │   ├── hadoop
 │   ├── hbase
+│   ├── hcatalog
 │   ├── hive
+│   ├── mahout
 │   ├── pig
 │   ├── spark
+│   ├── storm
 │   └── zookeeper
 ├── cache
 │   ├── memcache
