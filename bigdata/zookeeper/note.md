@@ -1,3 +1,9 @@
+Zab is a different protocol than Paxos, although it shares with it some key aspects, as for example:
+A leader proposes values to the followers
+Leaders wait for acknowledgements from a quorum of followers before considering a proposal committed (learned)
+Proposals include epoch numbers, which are similar to ballot numbers in Paxos
+The main conceptual difference between Zab and Paxos is that it is primarily designed for primary-backup systems, like Zookeeper, rather than for state machine replication.
+
 Zookeeper 从设计模式角度来看，是一个基于观察者模式设计的分布式服务管理框架，它负责存储和管理大家都关心的数据，然后接受观察者的注册，一旦这些数据的状态发生变化，Zookeeper 就将负责通知已经在 Zookeeper 上注册的那些观察者做出相应的反应，从而实现集群中类似 Master/Slave 管理模式
 
 
@@ -5,6 +11,7 @@ Zookeeper 作为 Hadoop 项目中的一个子项目，是 Hadoop 集群管理的
 
 主要功能
 ## Name Service
+FQDN
 ## Configuration management
 将配置信息保存在 Zookeeper 的某个目录节点中，然后将所有需要修改的应用机器监控配置信息的状态，一旦配置信息发生变化，每台应用机器就会收到 Zookeeper 的通知，然后从 Zookeeper 获取新的配置信息应用到系统中
 ## Cluster management
