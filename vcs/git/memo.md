@@ -127,3 +127,5 @@ Use the body to explain what and why vs. how
 #### Create branch from a commit
 git co -b 'new' <commit-id>
 
+### List repo contributors
+git log --format='%aN' | sort -u
