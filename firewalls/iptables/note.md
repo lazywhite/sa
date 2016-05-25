@@ -5,11 +5,12 @@ iptables是netfilter项目的一部分
 Filter:
     INPUT FORWARD OUTPUT
 NAT:
-    PREROUTING FORWARD POSTROUTING
+    PREROUTING OUTPUT POSTROUTING
 Mangle:
-    PREROUTING OUTPUT
-RAW:
     PREROUTING INPUT  FORWARD  OUTPUT POSTROUTING
+RAW:
+    PREROUTING OUTPUT
+    The raw table is mainly only used for one thing, and that is to set a mark on packets that they should not be handled by the connection tracking system
 SECURITY:
     
 ## Usage
@@ -59,3 +60,30 @@ iptables -t nat -A POSTROUTING -d 192.168.0.102 -j SNAT --to 192.168.0.1
 # iptables -A logdrop -j DROP
 
 iptables -A INPUT -m conntrack --ctstate INVALID -j logdrop
+
+
+## Topic
+###  ip_conntrack: table full, dropping packet  
+```
+(1) 加大 ip_conntrack_max 值
+
+vi /etc/sysctl.conf
+
+net.ipv4.ip_conntrack_max = 393216
+net.ipv4.netfilter.ip_conntrack_max = 393216
+
+
+(2): 降低 ip_conntrack timeout时间
+
+vi /etc/sysctl.conf
+
+net.ipv4.netfilter.ip_conntrack_tcp_timeout_established = 300
+net.ipv4.netfilter.ip_conntrack_tcp_timeout_time_wait = 120
+net.ipv4.netfilter.ip_conntrack_tcp_timeout_close_wait = 60
+net.ipv4.netfilter.ip_conntrack_tcp_timeout_fin_wait = 120
+(3): 加入raw规则, 不跟踪
+
+iptables -t raw -A PREROUTING -d 1.2.3.4 -p tcp --dport 80 -j NOTRACK
+iptables -A FORWARD -m state --state UNTRACKED -j ACCEPT
+```
+  

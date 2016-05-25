@@ -1,3 +1,6 @@
+## Concept
+DLM: distribute lock manager
+## Install
 创建一个GFS文件系统：
 需要提供的信息：
 1、锁类型：
@@ -16,8 +19,6 @@ Syntax: gfs_mkfs -p lock_dlm -t ClusterName:FSName -j Number -b block_size -J jo
 	
 可以通过其对应挂载点查看gfs文件系统属性信息；
 # gfs_tool df /mount_point
-
-
 
 
 挂载GFS文件系统：
