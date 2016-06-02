@@ -4,7 +4,8 @@ salt "*" network.interfaces
 salt "*" test.ping
 when troubleshooting it can be more beneficial to login to the minion directly and use salt-call.
 
-salt grains.items
+salt 'host' grains.items
+salt 'host' grains.item host
 
 salt "*"  sys.doc [module]
 
@@ -83,3 +84,7 @@ salt/job/20150213001905721678/new       {
 }
 
 stop the master; salt-master -l debug  ## debug reactor system
+
+
+## Topic
+不需要为salt-minion开放端口, 只需要为salt-master开发4505,4506即可

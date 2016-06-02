@@ -14,3 +14,13 @@ ganglia + nagios
 monitoring with ganglia 
     ganglia sflow
 
+
+
+/usr/lib64/ganglia/python_modules : gmond need
+/usr/share/ganglia/graph.d   : gmetad need
+
+## how to configure ganglia rrds storage path
+/etc/ganglia/gmeta.conf:
+    rrd_rootdir "/wdzj/rrds"
+/usr/share/ganglia/conf_default.php: 
+    $conf['rrds'] = "/wdzj/rrds";

@@ -33,5 +33,14 @@ nagios
 
 
 报警延迟是由于host or service状态不稳定，nagios称之为flapping state  
-htpasswd -c -b  /etc/nagios/passwd nagiosadmin admin
+htpasswd -c -b  /etc/nagios/passwd nagiosadmin <new password>
 
+
+
+/usr/lib64/nagios/plugins : path of check_ganglia.py
+
+
+
+
+### Installation 
+yum -y install nagios nagios-plugins-all
