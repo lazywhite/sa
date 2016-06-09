@@ -1,0 +1,38 @@
+## zabbix-server
+cd zabbix-3.0.3
+yum install gcc  libxml2-devel  unixODBC-devel net-snmp-devel libcurl-devel libssh2-devel OpenIPMI-devel openssl-devel 
+./configure --prefix=/usr/local --enable-server --enable-agent --with-mysql --with-net-snmp --with-libcurl --with-libxml2 --with-unixodbc --with-ssh2 --with-openipmi --with-openssl
+make install 
+
+
+/usr/local/etc/zabbix_server.conf
+/usr/local/etc/zabbix_agent.conf
+
+## zabbix-web
+requirements: php-5.4 or above
+rpm -Uvh https://mirror.webtatic.com/yum/el6/latest.rpm
+
+install following packages
+    php56w-cli-5.6.22-1.w6.x86_64
+    php56w-pdo-5.6.22-1.w6.x86_64
+    php56w-bcmath-5.6.22-1.w6.x86_64
+    php56w-5.6.22-1.w6.x86_64
+    php56w-mysql-5.6.22-1.w6.x86_64
+    php56w-gd-5.6.22-1.w6.x86_64
+    php56w-xml-5.6.22-1.w6.x86_64
+    php56w-common-5.6.22-1.w6.x86_64
+    php56w-mbstring-5.6.22-1.w6.x86_64
+
+/etc/php.ini
+    post_max_size=16M
+    max_execution_time=300
+    max_input_time=300
+    date.timezone=Europe/Riga
+    always_populate_raw_post_data=-1
+
+cp -ar frontend/php   /var/www/html/zabbix
+chown -R apache:apache /var/www/html
+# enable multi language support
+yum -y install gettext 
+cd /var/www/html/zabbix/locale; ./make_mo.sh 
+

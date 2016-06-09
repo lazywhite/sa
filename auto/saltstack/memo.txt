@@ -88,3 +88,23 @@ stop the master; salt-master -l debug  ## debug reactor system
 
 ## Topic
 不需要为salt-minion开放端口, 只需要为salt-master开发4505,4506即可
+
+### backup file 
+```
+file_foo:
+  file.managed:
+    - name: /root/foo
+    - backup: minion
+
+# salt-call --local file.list_backups /root/foo
+local:
+    local:
+    0:
+        Backup Time:
+            Fri Jun 03 2016 17:21:25.573320
+        Location:
+            /var/cache/salt/minion/file_backup/etc/vimrc_Fri_Jun_03_17:21:25_573320_2016
+        Size:
+            2039
+
+```

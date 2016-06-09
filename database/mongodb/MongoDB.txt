@@ -192,19 +192,6 @@ exit $RETVAL
 
 
 
-
-
-
-
-
-安装Rockmongo：
-
-解决依赖关系
-# yum -y install httpd php php-pecl-mongo
-
-
-
-
 db.COLL_NAME.METHOD
 常用的方法：
 C: insert()
@@ -224,10 +211,6 @@ remove({})
 
 Database, Collection, Document
 
-索引：
-
-
-
 
 NoSQL:
 	键值存储模型
@@ -238,10 +221,6 @@ NoSQL:
 文档：JSON, BSON
 
 database: collection (Document)
-
-C/S：mongod, mongo
-
-CRUD:
 
 db.COLLECTION.insert({})
 
@@ -273,10 +252,7 @@ db.COLLECTION.find({查找标准},{显示的域}).
 	$nor
 
 {$operator [{},{},{}]}
-
 	db.testcoll.find({$or: [{Name: "User12"}, {Age: {$gt: 80}}]})
-
-1000W：80
 
 全表扫描
 
@@ -344,30 +320,10 @@ B+树索引：
 适用场景：
 	精确匹配：=，IN(), <=>
 
-MySQL: 全文索引；fulltext
-	sphinx, lucene
 
-	空间索引：必须使用空间索引函数获取相应的查询结果；
+## Mongodb复制集：
 
-	主键，惟一键
-
-MySQL: 创建索引
-	CREATE INDEX index_name ON table (col1,...)
-	ALTER TABLE ADD INDEX 
-	ALTER TABLE DROP INDEX
-	DROP INDEX index_name FROM TABLE 
-	SHOW INDEXES FROM TABLE;
-
-
-
-
-
-mongodb复制集：
-
-
-
-配置文件选项：
-
+```
 port = 27017
 
 bind_ip = 10.8.0.10
@@ -377,8 +333,7 @@ dbpath = /srv/mongodb/
 fork = true
 
 replSet = rs0
-
-
+```
 
 
 接着初始化:
@@ -387,11 +342,6 @@ Use rs.initiate() to initiate a replica set consisting of the current member and
 rs.initiate()
 Display the current replica configuration:
 rs.conf()
-
-
-
-
-
 
 
 
@@ -512,11 +462,6 @@ testSet0:SECONDARY> rs.conf()
 提示：成员节点的属性配置都可采用如上方式，关于其更多可配置属性信息请参考的官方文档：http://docs.mongodb.org/manual/reference/replica-configuration/。
 
 replica set console: 监听于28017
-
-
-
-
-
 
 
 

@@ -33,3 +33,13 @@ gitlab_rails['gitlab_ssh_host'] = 'i.storswift.com'
 gitlab_rails['gitlab_shell_ssh_port'] = 322
 nginx['client_max_body_size'] = '2500m'
 
+time_zone: 'Asia/Shanghai'
+email_enabled: true
+
+
+
+https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/doc/settings/smtp.md
+
+
+
+

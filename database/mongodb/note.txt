@@ -47,3 +47,12 @@ mongofiles -d gridfs put song.mp3
 mongorestore --host 192.168.0.23:25017 outfile  (directory could be
 database or collection)
 mongodump --host 127.0.0.1:27017 -d chanjian_dev [-c collection] -o outfile
+
+
+
+In MongoDB when you go to a sharded system and you don't see any balancing it could one of several things.
+
+You may not have enough data to trigger balancing. That was definitely not your situation but some people may not realize that with default chunk size of 64MB it might take a while of inserting data before there is enough to split and balance some of it to other chunks.
+The balancer may not have been running - since your other collections were getting balanced that was unlikely in your case unless this collection was sharded last after the balancer was stopped for some reason.
+The chunks in your collection can't be moved. This can happen when the shard key is not granular enough to split the data into small enough chunks. As it turns out this was your case because your shard key turned out not to be granular enough for this large a collection - you have 105 chunks (which probably corresponds to the number of unique job_id values) and over 30GB of data. When the chunks are too large and the balancer can't move them it tags them as "jumbo" (so it won't spin its wheels trying to migrate them).
+How to recover from a poor choice of a shard key? Normally it's very painful to change the shard key - since shard key is immutable you have to do an equivalent of a full data migration to get it into a collection with another shard key. However, in your case the collection is all on one shard still, so it should be relatively easy to "unshard" the collection and reshard it with a new shard key. Because the number of job_ids is relatively small I would recommend using a regular index to shard on job_id,customer_code since you probably query on that and I'm guessing it's always set at document creation time.

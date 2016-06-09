@@ -816,3 +816,7 @@ git mv <old> <tmp>; git mv <tmp> <new>
 
 
 ksm: kernel samepage merging
+
+
+# echo never > /sys/kernel/mm/redhat_transparent_hugepage/enabled
+# echo never > /sys/kernel/mm/redhat_transparent_hugepage/defrag
