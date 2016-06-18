@@ -44,9 +44,9 @@ gitlab-ctl start
 			    authentication: :login,
 			    address: "smtp.exmail.qq.com",
 			    port: 465,
-			    user_name: "noreply@rongzhijia.com",
-			    password: "rzj@2015",
-			    domain: "rongzhijia.com",
+			    user_name: "noreply@demo.com",
+			    password: "",
+			    domain: "demo.com",
 			    enable_starttls_auto: true,
 
 			    ssl: true,
@@ -58,3 +58,9 @@ gitlab-ctl start
 
 
 ```
+
+### imap setting
+
+### Topic
+debug_level: /opt/gitlab/embedded/service/gitlab-rails/config/environments/production.rb  
+    config.log_level = :debug

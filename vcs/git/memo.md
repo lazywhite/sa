@@ -129,3 +129,17 @@ git co -b 'new' <commit-id>
 
 ### List repo contributors
 git log --format='%aN' | sort -u
+
+
+### Problem
+```
+$ git push origin master
+Counting objects: 1, done.
+Writing objects: 100% (1/1), 215 bytes | 0 bytes/s, done.
+Total 1 (delta 0), reused 0 (delta 0)
+remote: GitLab: API is not accessible
+To http://gitlab.rongzhijia.com/white/maven_test.git
+ ! [remote rejected] master -> master (pre-receive hook declined)
+error: failed to push some refs to 'http://gitlab.rongzhijia.com/white/maven_test.git'
+```
+wait some time

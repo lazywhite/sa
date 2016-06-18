@@ -108,3 +108,7 @@ local:
             2039
 
 ```
+
+
+## template include 
+{% include 'zabbix/templates/common.conf' %} : file path is not relative, should be absolute path

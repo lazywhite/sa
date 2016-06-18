@@ -22,6 +22,10 @@ install following packages
     php56w-xml-5.6.22-1.w6.x86_64
     php56w-common-5.6.22-1.w6.x86_64
     php56w-mbstring-5.6.22-1.w6.x86_64
+    php56w-devel-5.6.22-1.w6.x86_64
+    php56w-pear-1.10.1-1.w6.noarch ##pecl support
+
+
 
 /etc/php.ini
     post_max_size=16M
@@ -32,7 +36,37 @@ install following packages
 
 cp -ar frontend/php   /var/www/html/zabbix
 chown -R apache:apache /var/www/html
+
 # enable multi language support
 yum -y install gettext 
 cd /var/www/html/zabbix/locale; ./make_mo.sh 
 
+
+
+### install java-gateway
+./configure --prefix=/usr/local --enable-java
+make install
+/usr/local/sbin/zabbix_java
+    startup.sh
+    shutdown.sh
+    settings.sh
+    lib
+        logback.xml
+
+### configure 
+/usr/local/etc/zabbix_server.conf:
+    JavaGateway=<ip of java_gateway>
+    JavaGatewayPort=10052
+    StartJavaPoller=5
+    
+# restart zabbix_server 
+
+### dashboard
+1. start java application
+# vim /usr/local/tomcat-7.0.65/bin/catalina.sh 
+CATALINA_OPTS="-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.port=12345"
+
+bin/catalina.sh start
+2. configure host, add JMX interface
+3. link Template JMX Generic, Template JMX Tomcat
+4. item type : JMX agent proxy

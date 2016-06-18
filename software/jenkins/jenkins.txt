@@ -11,3 +11,58 @@ generate a paire of keys to deploy, Deploy keys allow read-only access to the re
 jenkins create a item managed by git and  private key for deploy as credentials
 webhook of push event of gitlab repo is
 http://jenkins_server:port/gitlab/build_now
+
+
+# check jenkins version 
+unzip -c jenkins.war   META-INF/MANIFEST.MF|grep 'Jenkins-Version'
+
+
+
+## smtp 
+501 mail from address must be same as authorization user
+
+```
+以下两项应该一样
+Jenkins Location
+    system admin email address: noreply@xxx.com
+
+SMTP
+    user: noreply@xxx.com    
+```
+
+gitlab webhook format for "Gitlab Plugin"
+    http://jenkins:port/project/<Jenkins Project Name>
+
+## new install procedure 
+1. download jenkins-2.8.war
+2. java -jar jenkins-2.8.war --httpPort=5000 > /var/log/jenkins.log 2>&1
+3. http://jenkins:port/  <enter admin password produced in jenkins.log, start install>
+4. download needed plugins in '.hpi' format
+5. System Config --> Advanced upload and install plugin 
+6. restart jenkins to ensure plugin has loaded
+7. create jobs
+
+job
+    Jenkins Project Name
+    Gitlab Connection
+        Credential with api-key (https://github.com/jenkinsci/gitlab-plugin)
+    Source code Management
+        git
+            Repositories
+                repo_url:  http://gitlab.rongzhijia.com/white/maven_test.git
+                credentials:
+                    kind: Username with password
+                advanced: name --> origin
+            
+    Build Trigger
+        check "build when a change is pushed to gitlab    
+    Build
+        Root POM: pom.xml
+        Maven OPTS
+    Email notification
+
+    
+## 添加maven tool
+System Config --> Global Tool Configuration --> Maven
+    add maven --> MAVEN_HOME=/usr/share/maven
+

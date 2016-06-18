@@ -53,3 +53,14 @@ monitor
             host
             template
             global
+
+
+# userparameter
+UserParameter=<key>,<command>
+<key>=<String[parameter01,parameter02],command $1... 
+
+<commad>: escape '$' awk '{print $$4}'
+
+
+## user defined macro
+{$MACRONAME} 

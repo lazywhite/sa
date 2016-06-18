@@ -72,8 +72,6 @@ tail -f |grep -v
 
 
 create table test (str varchar(32), ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
-mongodb default timestamp
-
 
 brew install libmemcached
 pip install pylibmc --install-option="--with-libmemcached=/usr/local"
@@ -94,7 +92,6 @@ Socket.IO 是一个面向实时 web 应用的 JavaScript 库。它使得服务�
 服务端库。两者有着几乎一样的API。像Node.js一样，它也是事件驱动的.
 
 
-
 brew tap gapple/services
 
 
@@ -108,7 +105,6 @@ cent 7
 	systemd
 	xfs
 	iscsi in kernel space
-
 
 
 switch: 
@@ -139,7 +135,6 @@ telnet:
 enable
    conf t=> enable password switch
             end
-
 
 
 /dev/ttyUSB0
@@ -174,11 +169,7 @@ command not found : aclocal
 
 
 
-
 use 'dmesg' to detect inserted device 
-
-
-
 
 
 
@@ -187,10 +178,6 @@ brew install libxslt
 brew link libxml2 --force
 brew link libxslt --force
 sudo C_INCLUDE_PATH=/usr/local/include/libxml2 pip install lxml
-
-
-
-
 
 
 # linux lvm
@@ -235,7 +222,6 @@ for i in {1..5};do rsync --delete --exclude=database.php --exclude=start.php --e
 
 yum groupinstall "X Window System" xorg-x11-xauth dejavu-lgc-sans-fonts
 dbus-uuidgen > /var/lib/dbus/machine-id
-
 
 
 read a b c
@@ -298,8 +284,6 @@ sar 1 5
 
 
 
-
-
 mininet
 
 
@@ -323,7 +307,6 @@ noVNC
 
 oVirt
 	a virtual datacenter managment platform
-
 
 
 
@@ -467,9 +450,6 @@ mysqldump -w
 - razor work flow
 - nailgun work flow
 ---------------------------
-FATAL:  could not open lock file "/tmp/.s.PGSQL.5432.lock": Permission denied
-rm -f /tmp/.s.PGSQL.5432.lock  /tmp/.s.PGSQL.5432
-----------------------
 ldd /path/to/exe  查看依赖的动态链接库
 ----------
 arp -an | virsh dumpxml domain
@@ -609,8 +589,6 @@ ip addr add 10.10.1.6/24 dev eth0
 
 btrfs
 systemd
-
-
 ==========
 k1: v1
 k2: v2
@@ -638,7 +616,6 @@ echo -e "GET /images/json HTTP/1.0\r\n" | nc -U /var/run/docker.sock
 # bonus round: relay socket
 socat -d -d TCP-L:8080,fork UNIX:/var/run/docker.sock
 =============
-
 ifconfig en0 alias x.x.x.x/msk
 ifconfig en0 -alias x.x.x.x
 ==========
@@ -692,8 +669,6 @@ rsyslog: @@tcp @udp
 remote: error: GH001: Large files detected. You may want to try Git Large File Storage - https://git-lfs.github.com.
 git filter-branch -f --index-filter "git rm -rf --cached --ignore-unmatch FOLDERNAME" -- --all  
 git rebase -i; edit; git rm -rf <large file>; git ci --amend ; git rebase --continue 
-
-
 
 ===============
 minion 错误日志 
