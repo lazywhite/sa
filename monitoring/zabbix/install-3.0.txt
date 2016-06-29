@@ -8,6 +8,11 @@ make install
 /usr/local/etc/zabbix_server.conf
 /usr/local/etc/zabbix_agent.conf
 
+## zabbix-agent
+./configure --prefix=/usr/local --enable-agent
+cp misc/init.d/debian/zabbix-agent  /etc/init.d/
+
+
 ## zabbix-web
 requirements: php-5.4 or above
 rpm -Uvh https://mirror.webtatic.com/yum/el6/latest.rpm
@@ -70,3 +75,10 @@ bin/catalina.sh start
 2. configure host, add JMX interface
 3. link Template JMX Generic, Template JMX Tomcat
 4. item type : JMX agent proxy
+
+
+## Problem
+[root@demo~]# zabbix_get -s host -k system.uptime
+zabbix_get [8967]: Check access restrictions in Zabbix agent configuration
+
+    check logfile of zabbix agent, connection from "114.55.57.153" rejected, add ip to "Server="  list

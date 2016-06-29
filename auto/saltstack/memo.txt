@@ -112,3 +112,17 @@ local:
 
 ## template include 
 {% include 'zabbix/templates/common.conf' %} : file path is not relative, should be absolute path
+
+
+
+## host target
+
+-E
+    'web1-(prod|devel)'
+-L
+    'web1,web2,web3'
+globbing
+    '*.example.*'
+    'web?.example.net'
+    'web[1-5]'
+

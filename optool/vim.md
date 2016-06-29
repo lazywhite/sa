@@ -1,7 +1,6 @@
 #Buffer
 ```
 :ls   查看缓冲区文件
-:buffer <number> 跳转至编号文件
 :bn  下一帧 
 :bp  上一帧 
 :bd [number] delete [number] buffer, default current 

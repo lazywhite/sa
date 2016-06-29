@@ -18,3 +18,16 @@ Writing
     The current number of connections where nginx is writing the response back to the client.
 Waiting
     The current number of idle client connections waiting for a request.
+
+
+## Topic
+
+### how nginx process a request
+
+[request process doc](http://nginx.org/en/docs/http/request_processing.html)
+1. decides which server should process the request by "Host" header
+    if this value doesn't match any server name or value is null, nginx will 
+    route this request to default server
+    if you don't allow request withou "Host" header, you can define a vhost whose
+    server name is ""
+2. nginx first searches for the most specific prefix location given by literal strings regardless of the listed order. 

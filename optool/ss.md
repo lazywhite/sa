@@ -72,6 +72,7 @@ LISTEN     0      128                          :::43963                       ::
 ## 列出所有连接中的http的连接
 ```
 ss -o state established '( dport = :http or sport = :http )'
+ss -o state syn-recv|wc -l  判定是否为sync-flood
 ```
 ## 列出fin-wait的http连接
 ```

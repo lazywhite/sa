@@ -143,3 +143,18 @@ To http://gitlab.rongzhijia.com/white/maven_test.git
 error: failed to push some refs to 'http://gitlab.rongzhijia.com/white/maven_test.git'
 ```
 wait some time
+
+
+
+### push all 
+git push --all origin
+git push --tags origin
+
+
+### get all
+git fetch --all --tags origin
+
+
+
+## set branch upstream
+git branch --set-upstream <local_br> <upstream>/<branch>
