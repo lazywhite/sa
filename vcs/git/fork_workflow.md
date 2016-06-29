@@ -1,10 +1,10 @@
 1. white create main repo
-    origin    git@gitlab.rongzhijia.com:white/maven_test.git
+    origin    git@gitlab.test.com:white/maven_test.git
 2. test fork main repo
-    origin    git@gitlab.rongzhijia.com:test/maven_test.git
+    origin    git@gitlab.test.com:test/maven_test.git
 3. test add main repo as upstream
-    upstream    git@gitlab.rongzhijia.com:white/maven_test.git (fetch)
-    upstream    git@gitlab.rongzhijia.com:white/maven_test.git (push)
+    upstream    git@gitlab.test.com:white/maven_test.git (fetch)
+    upstream    git@gitlab.test.com:white/maven_test.git (push)
 4. test sync upstream
     git co master; git pull upstream master
 5. test create new feature branch
@@ -21,7 +21,7 @@
 ```
     # method 01
     [remote "origin"]
-    url = http://gitlab.rongzhijia.com/white/maven_test.git
+    url = http://gitlab.test.com/white/maven_test.git
     fetch = +refs/heads/*:refs/remotes/origin/*
     fetch = +refs/merge-requests/*/head:refs/remotes/origin/merge-requests/*    
 
@@ -29,7 +29,7 @@
 ```
 ```
     # method 02
-    git fetch http://gitlab.rongzhijia.com/test/maven_test.git feature01
+    git fetch http://gitlab.test.com/test/maven_test.git feature01
     git checkout -b test/maven_test-feature01 FETCH_HEAD
     # make sure everything is ok
     git co master; git merge --no-ff feature01 
