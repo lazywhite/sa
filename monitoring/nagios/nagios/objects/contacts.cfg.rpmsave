@@ -40,7 +40,7 @@ define contact{
     	use				                sms-contact		; Inherit default values from generic-contact template (defined above)
         alias                           white		; Full name of user
 
-        email                           jiasx@rongzhijia.com; <<***** CHANGE THIS TO YOUR EMAIL ADDRESS ******
+        email                           jiasx@test.com; <<***** CHANGE THIS TO YOUR EMAIL ADDRESS ******
         address1                        13020106439
         }
 

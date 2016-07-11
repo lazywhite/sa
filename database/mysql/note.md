@@ -1507,3 +1507,10 @@ HIDS：host intrusion detect system
 select concat(round(sum(DATA_LENGTH/1024/1024),2),'MB') as data  from TABLES where table_schema='apoyl';
 select concat(round(sum(DATA_LENGTH/1024/1024),2),'MB') as data  from TABLES
 ```
+
+
+show status;
+show processlist
+status;
+select user()
+select database()

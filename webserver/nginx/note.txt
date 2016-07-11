@@ -1,4 +1,14 @@
+## add auth for vhost
+```
+    auth_basic           "Authentication";
+    auth_basic_user_file /usr/local/nginx/conf/auth_user.htpasswd;
+```
+apt-get install apache2-utils
+htpasswd -c apt-get install apache2-utils <user>
+prompt: 
 
+
+## directory index for nginx 
 location /somedir {
      autoindex on;
 }

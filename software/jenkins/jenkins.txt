@@ -38,18 +38,22 @@ gitlab webhook format for "Gitlab Plugin"
 2. java -jar jenkins-2.8.war --httpPort=5000 > /var/log/jenkins.log 2>&1
 3. http://jenkins:port/  <enter admin password produced in jenkins.log, start install>
 4. download needed plugins in '.hpi' format
-5. System Config --> Advanced upload and install plugin 
+5. System Config --> Advanced --> Upload and install plugin 
 6. restart jenkins to ensure plugin has loaded
 7. create jobs
 
+8. Gitlab connections:   System-config -> Gitlab
+                            Connection Name: <Gitlab>
+                            Gitlab host URL: http://gitlab.test.com
+                            API Token: <api-token of jenkins user>
+                            Ignore SSL Certificate Errors
 job
     Jenkins Project Name
-    Gitlab Connection
-        Credential with api-key (https://github.com/jenkinsci/gitlab-plugin)
+    Gitlab Connection: <Gitlab>
     Source code Management
         git
             Repositories
-                repo_url:  http://gitlab.rongzhijia.com/white/maven_test.git
+                repo_url:  http://gitlab.test.com/white/maven_test.git
                 credentials:
                     kind: Username with password
                 advanced: name --> origin

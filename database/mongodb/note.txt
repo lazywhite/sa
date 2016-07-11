@@ -67,3 +67,14 @@ mongos instance route queries and write operations to shards in a shard cluster.
 
 the mongos tracks what data is on which shard by caching the metadata from config servers. them mongos use metadata to route operations from application 
 and clients to the mongod instances, a mongos has no persistent state and consumes minimal system resources
+
+
+
+
+## 修改replset优先级
+cfg = rs.conf()
+cfg.members[0].priority = 0.5
+cfg.members[1].priority = 2
+cfg.members[2].priority = 2
+rs.reconfig(cfg)
+

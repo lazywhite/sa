@@ -795,3 +795,28 @@ ksm: kernel samepage merging
 
 # echo never > /sys/kernel/mm/redhat_transparent_hugepage/enabled
 # echo never > /sys/kernel/mm/redhat_transparent_hugepage/defrag
+
+## windows清空dns缓存
+ipconfig /flushdns
+## mac清空dns缓存
+sudo killall -HUP mDNSResponder
+
+mysql -h<> -u<> -p -e 'show tables like "qrtz%"' -sN  (no-header, silent)
+
+
+
+ls -l |grep '^d'
+b      block (buffered) special
+c      character (unbuffered) special
+d      directory
+p      named pipe (FIFO)
+f      regular file
+l      symbolic link; this is never true if the  -L  option
+       or  the -follow option is in effect, unless the sym‐
+       bolic link is broken.  If you  want  to  search  for
+       symbolic links when -L is in effect, use -xtype.
+s      socket
+
+
+ssh -vv -ND 7070 root@gfw_jumper
+curl -vv -x socks5h://127.0.0.1:7070 http://www.freeproxylists.net/zh/\?c\=CN\&pt\=\&pr\=\&a%5B%5D\=0\&a%5B%5D\=1\&a%5B%5D\=2\&u\=0

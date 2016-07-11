@@ -126,3 +126,11 @@ globbing
     'web?.example.net'
     'web[1-5]'
 
+
+
+#### iptables module
+salt 'mongo*' iptables.set_policy filter INPUT ACCEPT
+salt 'mongo*' iptables.get_policy filter INPUT
+salt 'mongo*' iptables.flush filter INPUT
+salt 'mongo*' cmd.run ':>/etc/sysconfig/iptables'
+
