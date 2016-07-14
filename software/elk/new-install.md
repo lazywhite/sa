@@ -280,3 +280,5 @@ logging.quiet: false
 # logging.verbose: false
 
 ```
+### delete object(virtualization, dashboard) from kibana
+Setting->Objects

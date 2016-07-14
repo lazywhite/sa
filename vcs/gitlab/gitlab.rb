@@ -98,32 +98,33 @@ gitlab_rails['incoming_email_mailbox_name'] = "inbox"
 ## Be careful not to break the identation in the ldap_servers block. It is in
 ## yaml format and the spaces must be retained. Using tabs will not work.
 
-# gitlab_rails['ldap_enabled'] = false
-# gitlab_rails['ldap_servers'] = YAML.load <<-'EOS' # remember to close this block with 'EOS' below
-#   main: # 'main' is the GitLab 'provider ID' of this LDAP server
-#     label: 'LDAP'
-#     host: '_your_ldap_server'
-#     port: 389
-#     uid: 'sAMAccountName'
-#     method: 'plain' # "tls" or "ssl" or "plain"
-#     bind_dn: '_the_full_dn_of_the_user_you_will_bind_with'
-#     password: '_the_password_of_the_bind_user'
-#     active_directory: true
-#     allow_username_or_email_login: false
-#     block_auto_created_users: false
-#     base: ''
-#     user_filter: ''
-#     attributes:
-#       username: ['uid', 'userid', 'sAMAccountName']
-#       email:    ['mail', 'email', 'userPrincipalName']
-#       name:       'cn'
-#       first_name: 'givenName'
-#       last_name:  'sn'
-#     ## EE only
-#     group_base: ''
-#     admin_group: ''
-#     sync_ssh_keys: false
-#
+gitlab_rails['ldap_enabled'] = true
+gitlab_rails['ldap_servers'] = YAML.load <<-'EOS' # remember to close this block with 'EOS' below
+  main: # 'main' is the GitLab 'provider ID' of this LDAP server
+    label: 'LDAP'
+    host: '<ldap_ip>'
+    port: 389
+    uid: 'uid'
+    method: 'plain' # "tls" or "ssl" or "plain"
+    bind_dn: 'cn=manager,dc=local,dc=com'
+    password: ''
+    active_directory: false
+    allow_username_or_email_login: false
+    block_auto_created_users: false
+    base: 'ou=People,dc=local,dc=com'
+    user_filter: ''
+    attributes:
+      username: ['uid', 'userid', 'sAMAccountName']
+      email:    ['mail', 'email', 'userPrincipalName']
+      name:       'cn'
+      first_name: 'givenName'
+      last_name:  'sn'
+    ## EE only
+    group_base: ''
+    admin_group: ''
+    sync_ssh_keys: false
+EOS
+
 #   secondary: # 'secondary' is the GitLab 'provider ID' of second LDAP server
 #     label: 'LDAP'
 #     host: '_your_ldap_server'
