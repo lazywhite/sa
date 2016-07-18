@@ -6,6 +6,10 @@ LDIF（LDAP Data Interchange Format，数据交换格式）是LDAP数据库信�
 
 
 ## phpldapadmin
-yum -y install phpldapadmin-1.2.3-1.el6.noarch
+yum -y install phpldapadmin
 /etc/phpldapadmin/config.php
 $servers->setValue('login','attr','dn'); # use dn as login name
+
+
+## Issue
+allow user to change their own password

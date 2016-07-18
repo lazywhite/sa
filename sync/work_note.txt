@@ -820,3 +820,6 @@ s      socket
 
 ssh -vv -ND 7070 root@gfw_jumper
 curl -vv -x socks5h://127.0.0.1:7070 http://www.freeproxylists.net/zh/\?c\=CN\&pt\=\&pr\=\&a%5B%5D\=0\&a%5B%5D\=1\&a%5B%5D\=2\&u\=0
+
+
+mac --> window --> zoom
