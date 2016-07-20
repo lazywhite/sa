@@ -21,3 +21,9 @@ gT  previouse tab
 vim -p file1 file2 ...   open files in tab mode
 :bufdo tab split        translate bufferes into tabs
 ```
+
+
+## Ignore 
+```
+/start\_.*end/
+```
