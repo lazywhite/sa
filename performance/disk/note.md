@@ -1,12 +1,12 @@
 io_scheduler
-	cfq
-	deadline
+	cfq: 完全公平队列调度
+	deadline: 最终期限调度
 	anticipatory
 	noop
 
 持久化
     /etc/rc.d/rc.local
-        echo "io_scheduler" > /sys/block/<dev>/queue/scheduler
+        echo "<io_scheduler>" > /sys/block/<dev>/queue/scheduler
 
 Queue length
 /sys/block/<dev>/queue/nr_requests

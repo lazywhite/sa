@@ -106,6 +106,7 @@ http://host:9200/_plugin/<plugin_name>
 
 ## logstash
 ```
+/etc/init.d/logstash
 export JAVA_HOME=/usr/local/jdk-1.8
 ```
 
@@ -136,6 +137,39 @@ output {
         data_type => "list"
         key => 'logstash'
     }
+}
+```
+### tomcat 
+```
+input {
+    file {
+        codec => multiline {
+            pattern => "(^\s)|(^com.test.*Exception)"
+            what => "previous"
+        }
+        path => "/zj/java/tomcat_gateway/logs/gateway_log*.log"
+        #path => "/zj/logs/tomcat/catalina.out.2016-07-19.out"
+        #path => "/zj/logs/tomcat/catalina.out.%{+YYYY-MM-dd}.out"
+        type => "gateway-02"
+    }
+}
+
+filter {
+    grok {
+        match => {
+            "message" => "%{YEAR:year}-%{MONTHNUM:month}-%{MONTHDAY:day}\s+%{HOUR:hour}:%{MINUTE:minute}:%{SECOND:second},%{BASE10NUM:ms}\s+%{LOGLEVEL:log_level}\s+%{JAVACLASS:class}\s+\[%{NOTSPACE:thread}\]\s-\s+(?<msg>.*$)"
+        }
+    }
+}
+
+output {
+    redis{
+        host => "test"
+        port => 7379
+        data_type => "list"
+        key => 'logstash'
+    }
+#    stdout { codec => rubydebug }
 }
 ```
 ### indexer

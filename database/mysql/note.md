@@ -1514,3 +1514,11 @@ show processlist
 status;
 select user()
 select database()
+
+
+## delete 'sleep' process of mysql
+http://www.xiaomastack.com/2016/05/29/mysql-sleep/
+
+
+## purge binary log
+PURGE { BINARY|MASTER } LOGS { TO 'log_name'| BEFORE 'datetime_expr' }
