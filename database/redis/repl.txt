@@ -1,7 +1,9 @@
 # redis sentinel
 sentinel monitor master 10.171.209.231 6379 1
+
 # redis slave
 masterauth 'passwd'
 slaveof 10.168.86.226 6379
+
 # redis master
 requirepass 'passwd'

@@ -1,4 +1,4 @@
-========= 
+======= client side =======
 client list
 client kill [ip:port]
 client setname|getname
@@ -65,6 +65,7 @@ hincrebyfloat <key> <field> <value>
 hlen <key>
 hstrlen <key> <field> : return string length of field
 =========Server side ===
+shutdown <save|nosave>: shutdown redis instance
 info [section]: return status information of server
 config get <parameter>
 config set <parameter> <value>
@@ -142,3 +143,4 @@ discard: flush all previously queued commands, unwatch every watched keys
 watch: marks the given key to be watched for transaction, if watched key changed,
         transaction will fail
 exec: execute all queued commands
+

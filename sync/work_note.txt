@@ -823,3 +823,6 @@ curl -vv -x socks5h://127.0.0.1:7070 http://www.freeproxylists.net/zh/\?c\=CN\&p
 
 
 mac --> window --> zoom
+
+
+mysqldump  -h<host> -u<user> -p<passwd>  --where='1 limit 100' <db_name> > dump.sql
