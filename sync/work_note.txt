@@ -826,3 +826,10 @@ mac --> window --> zoom
 
 
 mysqldump  -h<host> -u<user> -p<passwd>  --where='1 limit 100' <db_name> > dump.sql
+
+
+===== windows list listening port =====
+netstat -aon|more
+
+===== disable oom ======
+

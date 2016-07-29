@@ -119,6 +119,7 @@ cluster
 shard
     horizontally split/scale your content volume
     distribute and parallelize operations across shards
+
 replication
     high availability
     scale out search volumn/throughout since search can be executed on all replicas 

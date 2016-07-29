@@ -17,3 +17,27 @@ http://maven.apache.org/xsd/settings-1.0.0.xsd">
 </mirrors>
 </settings>
 ```
+
+
+## Concept
+1. blob storage
+2. repo
+    group
+    proxy
+    hosted
+        allow redeploy
+3. repo asset and components
+    
+
+
+## Usage
+1. proxy and registry for docker images
+2. proxy and registry for npm package
+3. proxy and registry for jar package
+
+
+## Topic
+### upload jar to maven repository
+```
+mvn deploy:deploy-file -DgroupId=com.huacloud.jar -DartifactId=sqljdbc4 -Dversion=1.0.0 -Dpackaging=jar -Dfile=sqljdbc4.jar -DrepositoryId=snapshots -Durl=http://222.197.188.5:9000/nexus/content/repositories/snapshots
+```
