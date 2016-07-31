@@ -27,3 +27,7 @@ vim -p file1 file2 ...   open files in tab mode
 ```
 /start\_.*end/
 ```
+
+
+## command
+["x"]s: delete "x" characters and start insert
