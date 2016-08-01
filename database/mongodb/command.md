@@ -12,6 +12,8 @@ show collections|tables # list collections
 db.getCollectionNames()
 db.getCollection("col").find({})
 db.copyCollection()
+db.col.renameCollection("name")
+db.runCommand({renameCollection: "db.old", to: "db.new"})
 
 ## cursor methods
 count

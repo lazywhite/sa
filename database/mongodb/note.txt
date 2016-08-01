@@ -78,3 +78,8 @@ cfg.members[1].priority = 2
 cfg.members[2].priority = 2
 rs.reconfig(cfg)
 
+
+
+## Mongodb WiredTiger max cache size
+mongod.conf
+    wiredTigerCacheSizeGB = 1
