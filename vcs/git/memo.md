@@ -164,3 +164,5 @@ git branch --set-upstream <local_br> <upstream>/<branch>
 ## git colorful log output
 git log -n 5 --pretty=format:"%C(yellow)%h%Creset %Cred%an%Creset %Cgreen%ad%Creset" --date=iso
 
+## case insensitive
+[case problem](http://www.worldhello.net/gotgit/08-git-misc/030-case-insensitive.html)

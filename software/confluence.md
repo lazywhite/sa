@@ -1,12 +1,12 @@
 # Installation
 1. ./atlassian-confluence-5.10.0-x64.bin
 2. mv lib/mysql-connector-java-5.1.39-bin.jar   <Confluence_DIR>/lib/
-3. service confluence start
+3. crate database, user for confluence and start service 
 4. configure through webpage and get trial token from official site
 5. service confluence stop
 6. cp atlassian-extras-decoder-v2-3.2.jar  <Confluence_DIR>/confluence/WEB-INF/lib
 7. service confluence start
-8. upload confluence plugin Confluence-5.10.0-language-pack-zh_CN.jar
+8. upload  Confluence-5.10.0-language-pack-zh_CN.jar plugin to add zh_CN support
 
 
 # Issue
@@ -17,9 +17,9 @@
 ```
 服务器设置
 	名称: LDAP服务器
-	目录类型: Generic Posix/RFC2307 Directory<ReadOnly>
+	目录类型: Generic Posix/RFC2307 Directory<Read-Only>
 	主机名: <ip>
-	端口: 389  <ssl>
+	端口: 389  <ssl false>
 	账号: cn=manager,dc=local,dc=com
 	密码: <password>
 
@@ -28,12 +28,14 @@ LDAP模式
 	
 LDAP权限
 	只读
+
 高级设置
 	简单DN匹配
 	同步间隔: 10<分钟>
 	读取超时: 120
 	搜索超时: 60
 	连接时限: 10
+
 设置用户模式
 	用户对象类: inetorgperson
 	用户对象过滤: (objectclass=inetorgperson)
@@ -46,6 +48,7 @@ LDAP权限
 	用户密码属性: userPassword
 	用户密码加密: SSHA
 	用户唯一的ID属性: entryUUID
+
 用户组模板设置
 	用户组对象类: posixGroup
 	组对象过滤: (objectclass=posixGroup)
@@ -58,16 +61,16 @@ LDAP权限
  
 ```
 
-## can't create group
+## Can't create group
 disable LDAP then create group
       
-## smtp server not work
+## SMTP server not work
  
 
 1. cd /opt/atlassion/confluence
 2. mv confluence/WEB-INF/lib/mail-1.4.5.jar  ./lib/
 3. stop confluence
-4. modify server.xml
+4. modify server.xml (don't use SSL)
 5. start confluence  
 
 ```
@@ -80,6 +83,7 @@ SMTP服务器详情
 	主题前缀: [Confluence]
 JNDI位置
 	java:comp/env/mail/QqSMTPServer
+	
 ```
   
 ```

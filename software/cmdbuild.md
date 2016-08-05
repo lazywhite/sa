@@ -18,23 +18,29 @@ host    all             all             0.0.0.0/24              password
 /var/lib/pgsql/9.4/data/postgresql.conf 
 listen_addresses = '*' 
 ```
-##### change password 
+### change password 
+```
 #su - postgres
 >psql
 \password postgres
 create user dbuser with password 'password'
 create database exampledb owner dbuser encoding 'utf-8';
 grant all privileges on database exampledb to dbuser;
+```
 
 #### connect to psql 
-psql -h<host> -U<user> -W -d<databa>
+```
+psql -h<host> -U<user> -W -d<database>
+```
 
 #### related command 
+```
 alter user dbuser password 'password';
 \l: list databases
 \c <db>: connect to other database
 \du: display user
 \conninfo: display connection information
+```
 
 ### Configure cmdbuild
 ```
