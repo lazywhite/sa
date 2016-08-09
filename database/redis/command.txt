@@ -89,7 +89,7 @@ rpushx <list> <value>: only if list already exists
 rpop <list>: remove and return last element  
 linsert <list> <before|after> <pivot> <value>
 llen <list> : length of list
-lrange <list> <start> <end>
+lrange <list> <start> <end>  # position could be negative
 rpoplpush <list 1> <list 2>: remove last element of list_1 and push
                             to first of list_2
 

@@ -833,3 +833,8 @@ netstat -aon|more
 
 ===== disable oom ======
 
+
+
+===== get encoding of file ======
+mac: file -I <filename>
+linux: file -i <filename>
