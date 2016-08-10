@@ -838,3 +838,7 @@ netstat -aon|more
 ===== get encoding of file ======
 mac: file -I <filename>
 linux: file -i <filename>
+
+
+====== view image on no x-window system ====
+python -m SimpleHTTPServer <port>
