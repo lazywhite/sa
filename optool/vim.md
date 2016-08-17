@@ -31,3 +31,7 @@ vim -p file1 file2 ...   open files in tab mode
 
 ## command
 ["x"]s: delete "x" characters and start insert
+
+
+## syntax
+:set syntax=<xml>

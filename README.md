@@ -67,8 +67,10 @@ So I put my notes here for unexpected needs.
 │   │   └── note.md
 │   ├── mongodb
 │   │   ├── MongoDB.txt
-│   │   ├── crud.txt
+│   │   ├── command.md
+│   │   ├── crud.md
 │   │   ├── note.txt
+│   │   ├── sharding.md
 │   │   └── tokumx
 │   ├── mysql
 │   │   ├── HA
@@ -172,6 +174,7 @@ So I put my notes here for unexpected needs.
 │   ├── 2033581_1370221372VEAi.jpg
 │   ├── bzImage
 │   ├── course.txt
+│   ├── debian.md
 │   ├── http-netstat.txt
 │   ├── iproute2.png
 │   ├── java_run_process.jpg
@@ -289,6 +292,7 @@ So I put my notes here for unexpected needs.
 │   └── tcp1.jpg
 ├── software
 │   ├── cmdbuild.md
+│   ├── confluence.md
 │   ├── elk
 │   │   ├── elk.txt
 │   │   ├── esclient.py
@@ -356,4 +360,5 @@ So I put my notes here for unexpected needs.
     │   ├── rewrite.txt
     │   └── tengine.md
     └── note.md
+
 ```

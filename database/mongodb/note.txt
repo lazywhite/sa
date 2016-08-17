@@ -83,3 +83,7 @@ rs.reconfig(cfg)
 ## Mongodb WiredTiger max cache size
 mongod.conf
     wiredTigerCacheSizeGB = 1
+
+
+## show collection size
+db.col.getShardDistribution()

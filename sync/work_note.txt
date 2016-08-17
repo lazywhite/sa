@@ -842,3 +842,16 @@ linux: file -i <filename>
 
 ====== view image on no x-window system ====
 python -m SimpleHTTPServer <port>
+
+
+====== use curl to post data ======
+curl -XPOST -H "Content-Type: application/json" http://localhost:8080/user/ --data "{\"firstName\":\"good\"}"
+
+
+======= inotifywatch max file to watch ======
+[root@web ~]# echo 50000000>/proc/sys/fs/inotify/max_user_watches # /etc/rc.local
+[root@web ~]# echo 50000000>/proc/sys/fs/inotify/max_queued_events
+
+max_user_watches #设置inotifywait或inotifywatch命令可以监视的文件数量(单进程)
+max_user_instances #设置每个用户可以运行的inotifywait或inotifywatch命令的进程数
+max_queued_events #设置inotify实例事件(event)队列可容纳的事件数量

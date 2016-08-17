@@ -91,6 +91,7 @@ db.users.remote(
 var p = {"uid":10001, "name": "allien", "age": 32}
 db.col.insert(p)
 db.col.find()
+db.col.find({}, {'column': 1}) # select column from col;
 db.col.find({age:{$gte:18}}) # select * from table where age > 18;
 db.col.find({uid: 10001}, {name:1 }) # select name from table where uid=10001
 var ret = db.col.find( { uid: 10001},{name:1 }).toArray(); ret[0].name # store query result into variable
