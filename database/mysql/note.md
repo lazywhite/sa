@@ -1499,10 +1499,8 @@ HIDS：host intrusion detect system
 网卡混杂模式：可接受到达别的ip的包
 
 
-
-
-
 # get database disk usage 
+
 ```
 select concat(round(sum(DATA_LENGTH/1024/1024),2),'MB') as data  from TABLES where table_schema='apoyl';
 select concat(round(sum(DATA_LENGTH/1024/1024),2),'MB') as data  from TABLES
@@ -1522,3 +1520,11 @@ http://www.xiaomastack.com/2016/05/29/mysql-sleep/
 
 ## purge binary log
 PURGE { BINARY|MASTER } LOGS { TO 'log_name'| BEFORE 'datetime_expr' }
+
+
+
+## move a table from system tablespace to its own tablespace
+```
+SET GLOBAL innodb_file_per_table=1;
+ALTER TABLE table_name ENGINE=InnoDB;
+```

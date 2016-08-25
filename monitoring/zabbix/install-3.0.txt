@@ -76,6 +76,17 @@ bin/catalina.sh start
 3. link Template JMX Generic, Template JMX Tomcat
 4. item type : JMX agent proxy
 
+### alert
+```
+名称: send_sms
+类型: 脚本
+脚本名称: send_sms.py
+脚本参数: 
+    {ALERT.SENDTO}
+    {ALERT.SUBJECT}
+    {ALERT.MESSAGE}
+```
+
 
 ## Problem
 [root@demo~]# zabbix_get -s host -k system.uptime
