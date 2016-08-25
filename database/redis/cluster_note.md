@@ -74,3 +74,22 @@ if the hash slot is served by the node, the query is simply processed, otherwise
 the node will check its internal hash slot to node map, and will reply to the client
 with a "MOVED" error, the error includes the hash slot of the key(3999) and the 
 ip:port of the instance that can serve the query. 
+
+
+## Tips
+### cluster status 
+只有两种状态: FAIL, OK
+即使集群中只有一部分hash slot不能使用, 集群也会停止处理任何命令
+
+集群进入FAIL状态的两种情况
+1. 至少有一个hash slot不能使用
+2. 集群中大部分master节点都进入PFAIL状态, 集群也会进入FAIL状态
+
+### 从节点选举
+一旦某个主节点进入 FAIL 状态， 如果这个主节点有一个或多个从节点存在， 那么其中一个从节点会被升级为新的主节点， 而其他从节点则会开始对这个新的主节点进行复制。
+
+在集群的生命周期中， 如果一个带有 PROMOTED 标识的主节点因为某些原因转变成了从节点， 那么该节点将丢失它所带有的 PROMOTED 标识。
+
+### 发布订阅
+在一个 Redis 集群中， 客户端可以订阅任意一个节点， 也可以向任意一个节点发送信息， 节点会对客户端所发送的信息进行转发。
+
