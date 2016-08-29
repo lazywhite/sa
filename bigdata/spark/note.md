@@ -7,23 +7,39 @@ Apache Spark is a lightning-fast cluster computing designed for fast computation
 
 The main feature of Spark is its in-memory cluster computing that increases the processing speed of an application.
 
-## Key Concept
-1. DAG: directed acyclic graph
-2. transformation
-3. action
+# Keyword
+## RDD
+Resilient Distribute Dataset, is an immutable distribute collection of objects;  
+each dataset in RDD is divided into logical partitions, which may be computed   
+on different nodes of the cluster, RDDS can contain any type of Python, Java,  
+Scala objects, including user-defined classes.
 
-1. RDD
-    redilient distribute dataset, can be created from HDFS, HBase or other RDDs
-    RDDS has 'action', which return value and transformations(return pointer to new RDDs)  
-RDD is a read-only, partitioned collection of records.  RDDs can contain any type of Python, Java, or Scala objects, including user-defined classes.
 
-2. Dstream
-     the basic abstraction in Spark Streaming.
+### Charactor
+1. read-only
+2. partitioned
+3. fault-tolerant
+
+### create a RDD
+1. parallelizing an existing collection
+2. referencing a dataset in an external storage system (HDFS, HBASE...)
+
+
+## DAG
+directed acyclic graph
+## Transformation
+## Action
+
+## Dstream
+the basic abstraction in Spark Streaming.
 
 # Components of Spark
-##  Streaming
+## Spark Core
+Spark Core is the underlying general execution engine for spark platform that all other functionality is built upon. It provides In-Memory computing and referencing datasets in external storage systems.
+##  Streaming	
+Spark Streaming leverages Spark Core's fast scheduling capability to perform streaming analytics. It ingests data in mini-batches and performs RDD (Resilient Distributed Datasets) transformations on those mini-batches of data.
 
-## spark SQL
+## Spark SQL
 spark SQL is a component on top of Spark Core that introduces a new data abstraction called SchemaRDD, which provides support for structured and semi-structured data.
 ## MLlib
 MLlib is a distributed machine learning framework above Spark because of the distributed memory-based Spark architecture

@@ -1,11 +1,39 @@
 ## Concept
-HDFS is the primary distributed storage used by Hadoop applications  
-A HDFS cluster promarily consists of a NameNode that manages the filesystem  
-metadata and DataNodes that store the data
-## Install
+HDFS is the primary distributed storage used by Hadoop applications  A HDFS   
+cluster promarily consists of a NameNode that manages the filesystem metadata  
+ and DataNodes that store the data
 
+### NameNode
+1. manage the filesystem namespace
+2. regulate client's access to files
+3. execute filesystem operations like "renaming, closing, opening"  
+
+### Secondary NameNode
+
+   
+### DataNode
+1. perform read-write operations
+2. perfom operation like "block creation, deletion, replication according the  
+    instructions of the namenode
+
+### Block
+file in the filesystem will be devided into one or more segments  called blocks  
+default block size is 64MB
+  
+### Goal
+1. fault detection and recovery  
+2. huge datasets  
+3. hardware at data  
+
+
+## Install
+```
+hdfs-site.xml  
 ssh must enabled
+```
+
 ## Feature
+```
 Shell like commands to interact with HDFS directly
 NameNode and DataNode have built in web servers to show the status 
 File permissions and authentications
@@ -17,18 +45,18 @@ upgrade and rollback: after software upgrade, you can rollback
 secondary namenode: merge "fsimage" and "edits" log periodly
 Checkpoint node: 
 backup node: an extension to checkpoint node 
-## Usage
-hdfs-site.xml
-hdfs fs -help
+```
+
+
 ## Document
+```
 NameNode persists its namespace using two files: fsimage, which is the latest checkpoint of the namespace and edits, a journal (log) of changes to the namespace since the checkpoint.
 
 The secondary NameNode merges the fsimage and the edits log files periodically and keeps edits log size within a limit. It is usually run on a different machine than the primary NameNode since its memory requirements are on the same order as the primary NameNode.
-
-
-
+```
 
 ## Usage
+```
 prefix: hdfs dfs  or hadoop dfs (deprecated)
 cat
 chgrp
@@ -57,13 +85,15 @@ test: 检查文件是否存在
 text: 将源文件输出为文本格式
 touchz: 创建一个0字节的空文件
 
-
-
 hdfs dfs -rm -r hdfs://path/to/file
+```
 ## Question
+```
 how hdfs-cli or other Client communitate with HDFS
-hdfs:// protocol    
+hdfs:// protocol   
+``` 
 ## HDFS port
+```
 9000    fs.defaultFS，如：hdfs://172.25.40.171:9000
 9001    dfs.namenode.rpc-address，DataNode会连接这个端口
 50070   dfs.namenode.http-address
@@ -99,3 +129,4 @@ hdfs:// protocol
 8080    hbase.rest.port，HBase REST server的端口
 10000   hive.server2.thrift.port
 9083    hive.metastore.uris
+```
