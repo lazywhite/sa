@@ -1,4 +1,5 @@
 ## Introduction
+```
 Pig is a platform for analyzing large dataset that consists of a high-level  
 language for expressing data analysis programs, coupled with infrastructure  
 for evaluating these programs. The salient property of Pig program is that  
@@ -15,6 +16,7 @@ To perform a particular task Programmers using Pig, programmers need to write a 
 MapReduce programs  which has **ease of programming**, **optimization opportunities**  
 **extensibility** properties
 
+```
 ## Usage
 Build by ant  
 PATH  
