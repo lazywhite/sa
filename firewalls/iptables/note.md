@@ -8,10 +8,10 @@ NAT:
     PREROUTING OUTPUT POSTROUTING
 Mangle:
     PREROUTING INPUT  FORWARD  OUTPUT POSTROUTING
+    一般用来修改包
 RAW:
     PREROUTING OUTPUT
     The raw table is mainly only used for one thing, and that is to set a mark on packets that they should not be handled by the connection tracking system
-SECURITY:
     
 ## Usage
 -A: append

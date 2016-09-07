@@ -1,5 +1,3 @@
-
-
 MySQL 5.6引入的GTID(Global Transaction IDs)使得其复制功能的配置、监控及管理变得更加易于实现，且更加健壮。
 
 要在MySQL 5.6中使用复制功能，其服务配置段[mysqld]中于少应该定义如下选项：

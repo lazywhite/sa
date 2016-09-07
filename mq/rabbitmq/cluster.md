@@ -1,15 +1,15 @@
+## Cluster setup
+```
 1. make sure nodes have the same /var/lib/rabbitmq/.erlang.cookie
 2. rabbitmq-server -detached
 3. rabbitmqctl stop_app
 4. rabbitmqctl join_cluster rabbit@node1 -t disk
 5. rabbitmqctl start_app
 6. rabbitmqctl cluster_status
+```
 
-
-
-## federation plugin
-Federating clusters
-
+## Clusters Federation
+```
 Clusters can be linked together with federation just as single brokers can. To summarise how clustering and federation interact:
 
 You can define policies and parameters on any node in the downstream cluster; once defined on one node they will apply on all nodes.
@@ -18,7 +18,6 @@ Queue federation links will start on the same node as the downstream queue. If t
 To connect to an upstream cluster, you can specify multiple URIs in a single upstream. The federation link process will choose one of these URIs at random each time it attempts to connect.
 
 
-```
 rabbitmq-plugins enable rabbitmq_federation
 rabbitmq-plugins enable rabbitmq_federation_management
 ```

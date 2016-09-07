@@ -1,9 +1,25 @@
+## Keyword
+```
+HMaster (active, standby)
+Region Server
+Stores
+    Memstore
+    HFile
+Regions
+    Regions are nothing but tables that are split up and spread across the region servers.
+
+Random Access Databases
+```
+
 ## Concept
 HBASE is the hadoop database, a distribute, scalable, big data store  
 Use hbase when you need random, realtime read/write access to your BigData  
 Hbase is distributed, versioned, non-relational database 
 
 HBase is a data model that is similar to Google’s big table designed to provide quick random access to huge amounts of structured data.
+
+It leverages the fault tolerance provided by the Hadoop File System (HDFS).
+
 ## Features
 strictly consistent reads and writes  
 automatic and configurable sharding of tables  
@@ -64,6 +80,11 @@ or
 hbase shell
 ```
 
-## Problems 
-integrate with zookeeper
+## Topic
+### How hbase modify data
+```
+HBase stores data in HDFS in an indexed form. Oversimplifying things, the HDFS files have the keys stored in sorted order so that looking up a particular key is fast. HBase data storage is taken care of in the RegionServers (RS).
+
+In the RS, the keys are first written to an in-memory store (called memstore). The memstore stores the new keys/updates an deletes. After a certain threshold, these keys are pushed to HDFS as a new index file. Updates are taken care of by timestamps - the assumption is that the latest version is the only valid version. So if the previous index file has the same key, it will be ignored. Deletes are the same as updates, the only difference is that deletes have a special type field which have a flag marking the key as deleted.
+```
 

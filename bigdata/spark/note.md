@@ -1,3 +1,22 @@
+## Keyword
+```
+节点类型
+    Master
+    Standby-master
+    Slave
+
+交互式分析
+    spark-shell
+    pyspark
+
+运行
+    spark-session
+    spark-context
+    spark-submit <scala|java>
+    spark-class
+    python script
+
+```
 ## Installation
 [Install Guild](http://zhongyaonan.com/hadoop-tutorial/setting-up-hadoop-2-6-on-mac-osx-yosemite.html)
   

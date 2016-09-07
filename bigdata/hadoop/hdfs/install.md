@@ -1,6 +1,4 @@
-## Installation
-
-## Usage
+## Single Node Installation
 
 ```
 hadoop namenode -format
@@ -15,7 +13,7 @@ hadoop fs -get /user/output/ /home/hadoop_tp/
 
 stop-dfs.sh
 
-
 hdfs dfs -setrep 2 passwd 
 ```
 
+## Cluster installation
