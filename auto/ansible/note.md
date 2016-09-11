@@ -6,14 +6,22 @@ ansible-doc module
 
 # playbook
 
+## directory layout
+group_vars
+    group1
 host_vars
-role
+    hostname1
+roles
     common
+        vars
         files
         tasks
         defaults
         handlers
         templates
+        meta
+site.yml
+webserver.yml
 
 
 copy
