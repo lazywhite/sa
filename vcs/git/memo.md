@@ -166,3 +166,9 @@ git log -n 5 --pretty=format:"%C(yellow)%h%Creset %Cred%an%Creset %Cgreen%ad%Cre
 
 ## case insensitive
 [case problem](http://www.worldhello.net/gotgit/08-git-misc/030-case-insensitive.html)
+
+### Topic
+```
+1. undo 'git add': git reset HEAD <file>
+    keep change of files in work directory and remove it from stage area
+
