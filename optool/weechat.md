@@ -21,4 +21,9 @@
     freenode.username = "cppking"
     freenode.password = "10101010"
 ```
-    
+## Add Filter for join and leave room
+
+```
+/set irc.look.smart_filter on 
+/filter add irc_smart * irc_smart_filter *
+```

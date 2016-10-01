@@ -94,3 +94,8 @@ centos7 container 无法运行systemd系统
 ## 问题
 1. cockpit 如何做到container终端通过web进行交互
 2. 搜集数据的daemon如何做到事件驱动而不是死循环
+
+
+
+## daocloud mirror
+docker -d --registry-mirror=http://daocloud.io

@@ -7,8 +7,8 @@
 ## Speedup
 ```
 cd /usr/local/Homebrew
-git remote set-url origin git://mirrors.tuna.tsinghua.edu.cn/homebrew.git
+git remote set-url origin git://mirrors.ustc.edu.cn/brew.git
 brew update
-echo 'export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.tuna.tsinghua.edu.cn/homebrew-bottles' >> ~/.bash_profile
+echo 'export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.ustc.edu.cn/homebrew-bottles' >> ~/.bash_profile
 source ~/.bash_profile
 ```

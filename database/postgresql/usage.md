@@ -258,3 +258,14 @@ pseudo type(used to declare a function argument or result type)
 object identifier are used internally by postgresql as primary key for
 various system tables cant used as column data type
 
+
+## show processlist
+SELECT * FROM pg_stat_activity;
+
+## kill process
+SELECT pg_cancel_backend(pid of the postgres process);
+
+
+## change database owner
+alter database <dbname> set owner to <username>
+\password <username>

@@ -205,7 +205,6 @@ pip install pyreadline
 JIRA_HOME = /var/jira 
 download mysql jdbc drive and put it in lib/
 
-docker -d --registry-mirror=http://daocloud.io
 
 cat /dev/urandom | md5sum
 # Mac dd 过慢问题
@@ -859,3 +858,21 @@ max_queued_events #设置inotify实例事件(event)队列可容纳的事件数�
 ====== colorful PS1 ========
 export PS1="\[\033[38;5;11m\]\u\[$(tput sgr0)\]\[\033[38;5;15m\]@\h:\[$(tput sgr0)\]\[\033[38;5;6m\][\w]:\[$(tput sgr0)\]\[\033[38;5;15m\] \[$(tput sgr0)\]"
 
+
+
+## 安装中文编码
+locale-gen zh_CN.UTF-8
+
+
+
+## mac set ls output color
+export CLICOLOR=1
+LSCOLORS=ExFxCxDxBxegedabagacad
+
+
+## mac GVim set font size
+set guifont=Monaco:h12
+
+
+## mac set user loggin shell
+chpass -u white -s /usr/local/bin/zsh

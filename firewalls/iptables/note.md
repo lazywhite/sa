@@ -52,6 +52,9 @@ iptables -t nat -D POSTROUTING 1
 iptables -t nat -A PREROUTING -d 202.202.202.2 -j DNAT --to-destination 192.168.0.102  
 iptables -t nat -A POSTROUTING -d 192.168.0.102 -j SNAT --to 192.168.0.1 
 
+iptables -t nat -A PREROUTING -i eth0 -d 218.29.30.31 -p tcp --dport 80 -j DNAT --to-destination 192.168.1.7:80
+iptables -t nat -A PREROUTING -i eth0 -d 218.29.30.31 -p tcp --dport 2346 -j DNAT --to-destination 192.168.1.7:22
+
 
 ## LOG
 # iptables -N logdrop
