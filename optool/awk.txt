@@ -328,3 +328,7 @@ function F_NAME([variable])
 
 
 
+
+
+## skip first <number> lines 
+awk 'NR>10{print $1}'
