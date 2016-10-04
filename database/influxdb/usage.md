@@ -1,3 +1,11 @@
+## Subscription
+subscriptions tell influxdb to send all the data it receives to kapacitor or 
+other third parties
+
+```
+show subscriptions
+
+CREATE SUBSCRIPTION "sub0" ON "mydb"."autogen" DESTINATIONS ANY 'udp://h1.example.com:9090', 'udp://h2.example.com:9090'
 ## CLI
 ```
     connect <host:port>   connects to another node specified by host:port
