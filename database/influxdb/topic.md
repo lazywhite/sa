@@ -11,3 +11,7 @@ curl -G 'http://localhost:8086/query' --data-urlencode "db=deluge" --data-urlenc
 ## Schema design
 In the 0.9.x version of InfluxDB, it is recommended that you encode most metadata into the series Tags. Tags are indexed within the InfluxDB system allowing fast querying by 1 or more tag values. Note that tag values are always interpreted as strings. 
 
+
+
+## Timezone
+currently influxdb only support UTC

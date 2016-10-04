@@ -27,6 +27,7 @@ revoke all privileges from <username>
 show users
 
 create user <username> with password '<password>'
+CREATE USER "username" WITH PASSWORD 'password' WITH ALL PRIVILEGES
 
 
 grant <all,read,write> on <dbname> to <username>

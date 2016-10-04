@@ -12,6 +12,8 @@ make install
 ./configure --prefix=/usr/local --enable-agent
 cp misc/init.d/debian/zabbix-agent  /etc/init.d/
 
+## zabbix-proxy
+./configure --prefix=/usr --enable-proxy --with-net-snmp --with-mysql --with-ssh2
 
 ## zabbix-web
 requirements: php-5.4 or above

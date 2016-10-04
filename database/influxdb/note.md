@@ -28,8 +28,8 @@ RETENTION Policy
 
 ## Networking
 8083: admin panel
-8086: client and server http-api
-8088,8091: clusterd db-instance
+8086: http-api   /ping /query /write
+8088,8091: internal communication port between instance of cluster
 
 
 ##using with grafana, collectd

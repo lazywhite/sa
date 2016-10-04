@@ -267,5 +267,5 @@ SELECT pg_cancel_backend(pid of the postgres process);
 
 
 ## change database owner
-alter database <dbname> set owner to <username>
+alter database <dbname> owner to <username>
 \password <username>
