@@ -1,3 +1,5 @@
+## CLI help information
+```
 Nmap 7.12 ( https://nmap.org )
 Usage: nmap [Scan Type(s)] [Options] {target specification}
 TARGET SPECIFICATION:
@@ -112,7 +114,9 @@ EXAMPLES:
   nmap -v -sn 192.168.0.0/16 10.0.0.0/8
   nmap -v -iR 10000 -Pn -p 80
 SEE THE MAN PAGE (https://nmap.org/book/man.html) FOR MORE OPTIONS AND EXAMPLES
+```
 
-
-
+## Examples
+```
 sudo nmap -T5 -Pn -p1-65535 <ip> # scan all opened portd of host
+```
