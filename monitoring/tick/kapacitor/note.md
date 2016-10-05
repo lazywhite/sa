@@ -19,5 +19,38 @@ task: an amount of work to do on a set of data
         batch
     DSL: TICKscript
 
+recording
+replays
+
+
 subscription
+```
+
+## Integreate with Slack
+
+
+
+## Task example
+### 1. create a cpu_alert.tick
+```
+stream
+    // Select just the cpu measurement from our example database.
+    |from()
+        .database('telegraf')
+        .retentionPolicy('autogen')
+        .measurement('cpu')
+    |alert()
+        .crit(lambda: "usage_idle" <  95)
+        // Whenever we get an alert write it to a file.
+        .log('/tmp/alerts.log')
+	    .slack()
+        .channel('#alert')
+```
+
+### 2. define a task from tick file
+```
+kapacitor define cpu_alert \
+    -type stream \
+    -tick cpu_alert.tick \
+    -dbrp kapacitor_example.default
 ```

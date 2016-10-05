@@ -1,11 +1,3 @@
-## Subscription
-subscriptions tell influxdb to send all the data it receives to kapacitor or 
-other third parties
-
-```
-show subscriptions
-
-CREATE SUBSCRIPTION "sub0" ON "mydb"."autogen" DESTINATIONS ANY 'udp://h1.example.com:9090', 'udp://h2.example.com:9090'
 ## CLI
 ```
     connect <host:port>   connects to another node specified by host:port
@@ -147,8 +139,14 @@ select * from temp where time < '2016-10-21';
 
 
 ## Subscription
+subscriptions tell influxdb to send all the data it receives to kapacitor or other third parties  
+
 ```
-show subscriptions;
+show subscriptions
+use _internal
+
+CREATE SUBSCRIPTION "sub0" ON "mydb"."autogen" DESTINATIONS ANY 'udp://h1.example.com:9090', 'udp://h2.example.com:9090'
+drop subscription "kapacitor-a39af078-fa8d-4ada-b5d8-dc7cc8d65b7c" on _internal.monitor;
 ```
 
 ## Functions
