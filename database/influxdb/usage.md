@@ -125,7 +125,7 @@ usage_user      float
 ```
 ## Insert data
 ```
-Insert temp,machine=unit42,type=assembly external=25,internal=27;
+Insert temp,machine=unit42,type=assembly external=25,internal=27 [timestamp];
 Insert cpu,host=serverA,region=us_west value=0.64
 ```
 
@@ -162,3 +162,4 @@ show subscriptions;
 |MEDIAN() |   MIN() |  HISTOGRAM() |
 |SUM() |  PERCENTILE() |   NON\_NEGATIVE\_DERIVATIVE()|
 |TOP()   |STDDEV()|
+
