@@ -1,7 +1,4 @@
-
-
-
-## caped collections
+## Caped collections
 "capped collection" are fixed-size collections that support high-throughput
 operations that insert and retrive documents based on insertion order.
 capped collections work in a way similar to circular buffers; once a collection
@@ -36,13 +33,6 @@ j
 mongofiles -d gridfs put song.mp3
 >db.fs.files.find()
 
-```
-
-## backup and restore
-
-```
-mongodump && mongorestore
-mongoexport && mongoimport 
 ```
 
 ## shard collection balancing

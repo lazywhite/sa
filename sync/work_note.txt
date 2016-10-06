@@ -4,46 +4,12 @@ pip install msgpack-python
 bson and Mongodb
     BSON is a binary-encoded serialization of JSON-like documents. BSON is designed to be lightweight, traversable, and efficient.
 
-brew formula
-
-# store image into Redis
-import redis
-r =  redis.StrictRedis()
-img = open("/path/to/img.jpeg","rb").read()
-r.set("bild1",img)
------------------------
-
-netstat -anL
-data gram and stream
-
-alias vim='/Applications/MacVim.app/Contents/MacOS/Vim'
-
-youcompleteme ./install.sh --clang-completer
-hash -r
-
-iterm2 profile
-mac network profile
-
 # path shortcut
 echo 'CDPATH=~/.paths' >> ~/.bashrc
 
 
 "Bad marshal data" when importing python module
     delete the pyo, pyc file of that file
-svnadmin
-    create <target>
-    dump: dump the repo to standard output
-
-svn log --limit 10
-svn copy http://host/trunk http://host/branches/branch_one
-svn copy http://host/trunk http://host/tags/v1.0.01
-<trunk> svn merge http://host/branches/branch_one
-svn mergeinfo
-svn info file_path
-
-svn revert -R .
-svn diff -r 64222:64212 trunk/apps/admin/views/tool.py
-svn remove branches/jia_dev;svn ci
 
 
 django template
@@ -54,9 +20,6 @@ django template
 
 networksetup -listallnetworkservices
 networksetup -setv6off Ethernet
-
-
-mac ports
 
 ssh tunnel
     ssh -fN -L 4321:remote_host:22 bridge_user@bridge_host
@@ -85,19 +48,6 @@ python venv
         pyvenv <path>
     source <path/bin/active>
     deactivate
-
-SocketIO
-Socket.IO 是一个面向实时 web 应用的 JavaScript 库。它使得服务器和客户端之间实时
-双向的通信成为可能。他有两个部分：在浏览器中运行的客户端库，和一个面向Node.js的
-服务端库。两者有着几乎一样的API。像Node.js一样，它也是事件驱动的.
-
-
-brew tap gapple/services
-
-
-import gc 
-del a
-gc.collect()
 
 
 cent 7 
@@ -170,7 +120,6 @@ command not found : aclocal
 
 
 use 'dmesg' to detect inserted device 
-
 
 
 brew install libxml2
@@ -309,21 +258,6 @@ oVirt
 
 
 
-# ELK
-curl localhost:9200/_nodes/process?pretty
-curl 'localhost:9200/_cat/indices?v'
-curl 'localhost:9200/_cat/nodes?v'
-curl -XPUT 'localhost:9200/customer?pretty'
-curl 'localhost:9200/_cat/indices?v'
-curl -XPUT 'localhost:9200/customer/external/1?pretty' -d '
-{
-  "name": "John Doe"
-}
-curl -XDELETE 'localhost:9200/customer?pretty'
-curl -XPUT 'localhost:9200/customer/external/1?pretty' -d '
-{
-  "name": "John Doe"
-}'
 ulimit -l unlimited(es cant start)
 bootstrap.mlockall: true
 vm.max_map_count=262144
@@ -334,11 +268,6 @@ virsh storage pool
 Max number of nodes = Number of shards * (number of replicas +1)
 换句话说，如果你计划用10个分片和2个分片副本，那么最大的节点数是30。
 
-
-bin/plugin -install karmi/elasticsearch-paramedic
-bin/plugin --install mobz/elasticsearch-head
-bin/plugin --install lukas-vlcek/bigdesk
-bin/plugin --install lmenezes/elasticsearch-kopf/1.5.3
 
 
 If you do not explicitly set underscores_in_headers on;, nginx will silently drop HTTP headers with underscores (which are perfectly valid according to the HTTP standard). This is done in order to prevent ambiguities when mapping headers to CGI variables, as both dashes and underscores are mapped to underscores during that process.
@@ -354,13 +283,9 @@ logstash -e 'input { stdin { } } output { stdout {} }'
 ipconfig /all
 
 
-mongodump --host mongodb1.example.net --port 37017 --username user --password pass /opt/backup/mongodump-2011-10-24
-
-
 
 redis:MISCONF
 config set stop-writes-on-bgsave-error no
-
 
 
 STOP SLAVE;
@@ -395,7 +320,6 @@ disable 'request_slowlog_timeout'
 set 'max_execution_time' in php.ini
 
 mysqldump -w
-
 
 
 
@@ -876,3 +800,13 @@ set guifont=Monaco:h12
 
 ## mac set user loggin shell
 chpass -u white -s /usr/local/bin/zsh
+
+
+## kill epmd
+```
+epmd: erlang port mapper daemon
+This daemon acts as a name server on all hosts involved in distributed Erlang computations
+/path/to/epmd -kill
+
+http://erlang.org/doc/man/epmd.html
+```
