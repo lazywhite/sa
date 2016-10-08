@@ -104,6 +104,9 @@ nv(numberSet, scalar) numberSet
 rename(seriesSet, string) seriesSet
 sort(numberSet, (asc|desc) string) numberSet
 timedelta(seriesSet) seriesSet
-
-
 ```
+
+## Topic
+1. env variable  
+2. cannot acknowledge closed alert  
+

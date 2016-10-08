@@ -88,7 +88,7 @@ cpu
 host
 ```
 ```
-show tag values from cpu with key = 'host';
+show tag values from cpu with key = "host";  ## must double quoted
 
 name: cpu
 ---------

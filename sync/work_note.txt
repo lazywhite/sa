@@ -810,3 +810,10 @@ This daemon acts as a name server on all hosts involved in distributed Erlang co
 
 http://erlang.org/doc/man/epmd.html
 ```
+
+
+## chrome switch between tabs keyboard shortcut
+command + option + Left|Right
+
+
+less -S : cause lines longer than width of screen chopped not wrapped
