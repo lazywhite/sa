@@ -31,4 +31,7 @@ docker logs: fetch the logs of a container
 docker plugin: enhancement of docker engine
 docker wait: block until a container stops then print its exit code
 
+
+docker inspect <container> 
+    -f: format
 ```

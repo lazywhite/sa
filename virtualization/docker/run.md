@@ -92,3 +92,26 @@ Options:
       --volumes-from value          Mount volumes from the specified container(s) (default [])
   -w, --workdir string              Working directory inside the container
 ```
+
+
+## set environment variable
+docker run -e "key=value" [-e "key2=value1"] --entrypoint <container_file_path> <image> 
+docker run  --env-file /path/to/env-file
+
+
+## set default entrypoint of an Image
+```
+## Dockfile
+```
+FROM ubuntu:14.04
+ENTRYPONT ["/bin/bash"]
+```
+
+## set metadata for container
+```
+docker run -l|--label "label_key=label_value"
+docker run --label-file </path/to/label_file>
+
+# use "docker inspect <container> to get label setting" 
+#       Config-->Labels (dict)
+```
