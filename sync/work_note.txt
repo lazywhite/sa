@@ -817,3 +817,7 @@ command + option + Left|Right
 
 
 less -S : cause lines longer than width of screen chopped not wrapped
+
+
+## du skip directory
+du -h --max-depth=1 --exclude ./<relative path> .

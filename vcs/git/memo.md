@@ -172,3 +172,6 @@ git log -n 5 --pretty=format:"%C(yellow)%h%Creset %Cred%an%Creset %Cgreen%ad%Cre
 1. undo 'git add': git reset HEAD <file>
     keep change of files in work directory and remove it from stage area
 
+2. check what commits will be commited
+git log --branches --not --remotes
+```
