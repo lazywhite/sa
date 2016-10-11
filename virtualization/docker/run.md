@@ -87,7 +87,7 @@ Options:
   -u, --user string                 Username or UID (format: <name|uid>[:<group|gid>])
       --userns string               User namespace to use
       --uts string                  UTS namespace to use
-  -v, --volume value                Bind mount a volume (default [])
+  -v, --volume=[host-src:]container-dest[:<options>]:
       --volume-driver string        Optional volume driver for the container
       --volumes-from value          Mount volumes from the specified container(s) (default [])
   -w, --workdir string              Working directory inside the container

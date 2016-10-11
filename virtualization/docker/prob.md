@@ -9,3 +9,7 @@ docker logs -f <cid>
 
 docker logs --tail=200 <cid>
 
+
+
+## auto start container
+## restart container keep environment variable
