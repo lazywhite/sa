@@ -136,7 +136,7 @@ select * from temp where time < '2016-10-21';
 ```
 
 
-
+select * from "<measurement>" if name of measurement has special character
 
 ## Subscription
 subscriptions tell influxdb to send all the data it receives to kapacitor or other third parties  

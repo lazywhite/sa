@@ -120,3 +120,5 @@ SEE THE MAN PAGE (https://nmap.org/book/man.html) FOR MORE OPTIONS AND EXAMPLES
 ```
 sudo nmap -T5 -Pn -p1-65535 <ip> # scan all opened portd of host
 ```
+
+nmap -A -T4 -p30000-60000 121.41.175.142

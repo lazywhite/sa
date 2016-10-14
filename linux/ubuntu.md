@@ -105,3 +105,5 @@ esac
 
 exit 0
 ```
+## disable service on startup
+update-rc.d apache2 disable
