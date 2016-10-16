@@ -78,7 +78,7 @@ bin/catalina.sh start
 3. link Template JMX Generic, Template JMX Tomcat
 4. item type : JMX agent proxy
 
-### alert
+### Alert
 ```
 名称: send_sms
 类型: 脚本
@@ -89,6 +89,21 @@ bin/catalina.sh start
     {ALERT.MESSAGE}
 ```
 
+## default message
+```
+Trigger: {TRIGGER.NAME}
+Trigger status: {TRIGGER.STATUS}
+Trigger severity: {TRIGGER.SEVERITY}
+Trigger URL: {TRIGGER.URL}
+Event Datetime: {EVENT.DATE}{EVENT.TIME}
+
+Item values:
+
+{ITEM.NAME1} ({HOST.NAME1}:{ITEM.KEY1}): {ITEM.VALUE1}
+
+
+Original event ID: {EVENT.ID}
+```
 
 ## Problem
 [root@demo~]# zabbix_get -s host -k system.uptime
