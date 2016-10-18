@@ -134,3 +134,29 @@ salt 'mongo*' iptables.get_policy filter INPUT
 salt 'mongo*' iptables.flush filter INPUT
 salt 'mongo*' cmd.run ':>/etc/sysconfig/iptables'
 
+
+
+### install salt on ubuntu 12.04
+```
+apt-get install python-software-properties
+add-apt-repository ppa:saltstack/salt
+apt-get update
+apt-get install salt-minion
+
+## master and minion version should be same
+
+```
+
+### salt minion regenerate keys
+```
+cd /etc/salt/
+rm -rf pki/minion/*
+:>minion_id
+service salt-minion restart
+```
+
+### salt-minion cat generate keys
+```
+tail /var/log/salt/minion
+for ubuntu-12.04: apt-get purge python-psutil
+```

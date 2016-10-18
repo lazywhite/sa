@@ -88,5 +88,9 @@ built-in runners
 
 ## Topic
 1. salt-run is always executed on salt-master
-2. salt-call is always executed on salt-minion
+2. salt-call is always executed on salt-minion  
+3. salt-syndic not respond to test.ping  
+4. salt-master can control minions in intranet  
+5. use pgrep or pkill, not to use too many pipe  
+6. only need to open 4505, 4506 for salt-master, no need for salt-minion
 
