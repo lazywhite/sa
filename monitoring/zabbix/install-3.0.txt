@@ -91,18 +91,19 @@ bin/catalina.sh start
 
 ## default message
 ```
-Trigger: {TRIGGER.NAME}
-Trigger status: {TRIGGER.STATUS}
-Trigger severity: {TRIGGER.SEVERITY}
-Trigger URL: {TRIGGER.URL}
-Event Datetime: {EVENT.DATE}{EVENT.TIME}
+Subject: {TRIGGER.STATUS}: {TRIGGER.NAME}
 
-Item values:
+Message: 
+    Trigger status: {TRIGGER.STATUS}
+    Trigger severity: {TRIGGER.SEVERITY}
+    Event Datetime: {EVENT.DATE} {EVENT.TIME}
 
-{ITEM.NAME1} ({HOST.NAME1}:{ITEM.KEY1}): {ITEM.VALUE1}
+    Item values:
+
+    {ITEM.NAME1} ({HOST.NAME1}:{ITEM.KEY1}): {ITEM.VALUE1}
 
 
-Original event ID: {EVENT.ID}
+    Original event ID: {EVENT.ID}
 ```
 
 ## Problem

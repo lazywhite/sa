@@ -67,7 +67,7 @@ cp msyh.ttf   /var/www/html/zabbix/fonts/
 
 ### 四、 Proxy
 ```
-apt-get install  libsnmp-dev libmysql++-dev  libssh2-1-dev
+apt-get install  mysql-server libsnmp-dev libmysql++-dev  libssh2-1-dev
 ./configure --prefix=/usr/local/zabbix --enable-proxy --with-net-snmp --with-mysql --with-ssh2
 create database zabbix_proxy charset utf8;
 grant all on zabbix.* to 'zabbix_user'@'%' identified by 'zabbix_pwd'
