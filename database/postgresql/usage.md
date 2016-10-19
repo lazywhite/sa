@@ -269,3 +269,7 @@ SELECT pg_cancel_backend(pid of the postgres process);
 ## change database owner
 alter database <dbname> owner to <username>
 \password <username>
+
+
+## show database triggers
+select * from pg_proc;
