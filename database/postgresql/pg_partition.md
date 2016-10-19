@@ -1,5 +1,12 @@
 # <center> PgSQL partition table usage
 
+## requirements
+```
+${PG_DATA}/data/postgresql.conf
+    constraint_exclusion = partition
+
+restart postgre service
+```
 ## 1. create partion table
 ``` 
  CREATE TABLE almart
@@ -194,5 +201,29 @@ Time: 26.761 ms
 
 ```
 
+##  9. check partition work
+```
+## insert operation
+test=# insert into almart (date_key, expense) values ('2016-10-21', 101010);
+
+
+select * from almart_2016_10_21 where expense = 101010;
+  date_key  | hour_key | client_key | item_key | account | expense
+------------+----------+------------+----------+---------+---------
+ 2016-10-21 |          |            |          |         |  101010
+(1 row)
+
+
+## select operation
+
+select * from almart where expense = 101010;
+
+date_key  | hour_key | client_key | item_key | account | expense
+------------+----------+------------+----------+---------+---------
+ 2016-10-21 |          |            |          |         |  101010
+ 2016-10-23 |          |            |          |         |  101010
+(2 rows)
+
+```
 
 
