@@ -57,7 +57,7 @@ hmget <key> <field 1> <field 2> ...
 hget <key> <field>
 hgetall <key>
 hdel <key> <field 1>  [<field 2> ...]
-hkeys <key> 
+hkeys <key>: get all keys in same hash 
 hvals <key>
 hexists <key> <field>
 hincreby <key> <field> <value>

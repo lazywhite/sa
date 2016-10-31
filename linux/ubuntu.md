@@ -1,3 +1,5 @@
+## 安装特定版本
+apt-get install package=version
 ## 清空source缓存
 rm -rf /var/lib/apt/lists/*
 

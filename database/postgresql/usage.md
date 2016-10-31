@@ -31,6 +31,10 @@ sequence
 ```
 ## Usage 
 ```
+## get help 
+\help create databae
+
+
 # install postgresql  
 su - postgres(default user)
 createdb testdb
@@ -273,3 +277,26 @@ alter database <dbname> owner to <username>
 
 ## show database triggers
 select * from pg_proc;
+
+## declare default value for column 
+```
+CREATE TABLE products (
+    product_no integer,
+    name text,
+    price numeric DEFAULT 9.99
+);
+```
+
+
+###  timestamp without timezone
+
+```
+local=# select pg_typeof(now()::TIMESTAMP);
+          pg_typeof
+-----------------------------
+ timestamp without time zone
+```
+
+
+## get db or table size
+https://wiki.postgresql.org/wiki/Disk_Usage

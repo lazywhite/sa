@@ -1,5 +1,11 @@
 # <center> PgSQL partition table usage
-
+## introduction
+partition type
+    range partition
+        the table is partitioned into "ranges" defined by a key column or set of columns, one might partition by date
+        range, or by ranges of identifiers for particular business objects
+    list partition
+        the table is partitioned by explicitly listing which key values apprear in each partition
 ## requirements
 ```
 ${PG_DATA}/data/postgresql.conf
@@ -7,7 +13,7 @@ ${PG_DATA}/data/postgresql.conf
 
 restart postgre service
 ```
-## 1. create partion table
+## 1. create master table
 ``` 
  CREATE TABLE almart
 (
@@ -201,7 +207,7 @@ Time: 26.761 ms
 
 ```
 
-##  9. check partition work
+##  9. check partition 
 ```
 ## insert operation
 test=# insert into almart (date_key, expense) values ('2016-10-21', 101010);
