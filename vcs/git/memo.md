@@ -175,3 +175,13 @@ git log -n 5 --pretty=format:"%C(yellow)%h%Creset %Cred%an%Creset %Cgreen%ad%Cre
 2. check what commits will be commited
 git log --branches --not --remotes
 ```
+
+
+## cherry-pick
+
+git cherry-pick <commit-id>
+    resolve merge conflict
+    git add <file>
+
+git cherry-pick --continue
+    add commit message
