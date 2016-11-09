@@ -1,7 +1,11 @@
 ## 安装特定版本
 apt-get install package=version
 ## 清空source缓存
+```
+Hash Sum mismatch
+
 rm -rf /var/lib/apt/lists/*
+```
 
 ## 添加第三方源
 /et/apt/sources.list.d/<third>.list
