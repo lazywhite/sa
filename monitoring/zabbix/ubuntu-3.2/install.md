@@ -61,18 +61,21 @@ cp msyh.ttf   /var/www/html/zabbix/fonts/
 
 ### 三、 Agent
 ```
-./configure --prefix=/usr/local/zabbix
+./configure --enable-agent --prefix=/usr/local/zabbix
 
 ```
 
 ### 四、 Proxy
 ```
+useradd zabbix -M -s /sbin/nologin
+
 apt-get install  mysql-server libsnmp-dev libmysql++-dev  libssh2-1-dev
 ./configure --prefix=/usr/local/zabbix --enable-proxy --with-net-snmp --with-mysql --with-ssh2
 create database zabbix_proxy charset utf8;
-grant all on zabbix.* to 'zabbix_user'@'%' identified by 'zabbix_pwd'
+grant all on zabbix_proxy.* to 'zabbix_user'@'%' identified by 'zabbix_pwd'
+mysql -uzabbix_user -p'zabbix_pwd' zabbix_proxy < schema.sql
 
-mysql -uzabbix_user -p'zabbix_pwd' zabbix < schema.sql
+# configure zabbix_proxy.conf
 
 /etc/init.d/zabbix_proxy start
 ```
