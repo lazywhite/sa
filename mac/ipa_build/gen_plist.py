@@ -72,7 +72,7 @@ def create_plist_file(ipa_path=None, url=None):
 
     #4-4 string
     key_fourth_4 = etree.SubElement(dict_fourth,'string')
-    key_fourth_4.text = ipa['CFBundleVersion']
+    key_fourth_4.text = ipa['CFBundleShortVersionString']
 
     #4-5 key
     key_fourth_5 = etree.SubElement(dict_fourth,'key')
