@@ -94,3 +94,13 @@ built-in runners
 5. use pgrep or pkill, not to use too many pipe  
 6. only need to open 4505, 4506 for salt-master, no need for salt-minion
 
+
+
+### pillar related
+```
+salt '*' saltutil.refresh_pillar 
+salt '*' pillar.items
+```
+
+### cant get pillar setting from syndic node
+must restart salt-master daemon, not salt-syndic daemon
