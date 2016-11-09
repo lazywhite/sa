@@ -43,6 +43,8 @@ SELECT name FROM sysobjects WHERE type = 'U';
 ### Create database
 ```
 ## Notice: disk device size in Mb
+
+
 disk init
    name="JASONWOOD",
    physname="/opt/sap/data/jasonwood.dat",
@@ -53,7 +55,7 @@ go
 disk init 
    name="JASONWOOD_LOG",
    physname="/opt/sap/data/jasonwood_log.dat",
-   size="100m"
+   size="122880m"
 go
 
 
@@ -62,10 +64,8 @@ go
 
 create database jasonwood
    on JASONWOOD="225280m"
-   log on JASONWOOD_LOG="100m"
+   log on JASONWOOD_LOG="122880m"
 go
-
-
 
 ```
 
