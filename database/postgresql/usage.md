@@ -300,3 +300,7 @@ local=# select pg_typeof(now()::TIMESTAMP);
 
 ## get db or table size
 https://wiki.postgresql.org/wiki/Disk_Usage
+
+
+## log in as postgres user  
+psql -h localhost -U postgres -W  
