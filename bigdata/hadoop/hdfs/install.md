@@ -17,3 +17,11 @@ hdfs dfs -setrep 2 passwd
 ```
 
 ## Cluster installation
+```
+ssh-key authorized
+
+$HADOOP_HOME/etc/hadoop/slaves
+    localhost
+    datanode1
+    datanode2
+```

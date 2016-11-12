@@ -12,3 +12,18 @@ brew update
 echo 'export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.ustc.edu.cn/homebrew-bottles' >> ~/.bash_profile
 source ~/.bash_profile
 ```
+
+
+## Formula
+
+```
+desc
+homepage
+url # replace this with file_path to installed from local, version involved
+mirror
+sha256  # 
+
+```
+
+
+

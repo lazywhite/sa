@@ -1,42 +1,99 @@
-create <tbname>, <column family>...
-    create 'emp', 'personal data', 'professional data'
+## Concept and Keyword
+1. tables are horizonal split into 'regions' and are served by RegionServers  
+2. 'Regions' are vertically divided by column families into 'Stores'  
+3. 'Stores' are saved as files in HDFS    
+4. 'Stores' contain 'MemStore' and 'Hfiles'  
+  
+```
+HMaster: 
+    assign regions to regionServer
+    zookeeper to make HA
+RegionServer
+```
+## start stop hbase 
+```
+start-hbase.sh
+stop-hbase.sh
+```
 
-list: list table
+## Hbase shell
+1. # hbase shell: enter interactive shell mode  
+2. status: output server status  
+3. version: output server version  
+4. whoami: output information of current user  
+5. describe <table name>: describe table   
+6. is_enabled <table> : check if table is enabled  
+7. alter <table>: alter a table  
+8. drop_all <regexp>: drop all tables matching 'regexp'  
 
-disable <tbname>: disable table, can not scan 
-enable <tbname>
 
-describe <tbname>
-    describe 'emp'
-
-alter <tbname>
-    alter 'emp', NAME ⇒ 'personal data', VERSIONS ⇒ 5
-    alter 'emp', READONLY
-    alter 'emp', 'delete'⇒'professional'
+## Create a table
+```
+create  'emp','personal','job'
+```
+## Drop a table
+```
+disable 'emp' # must be disabled before dropped
 drop 'emp'
-put '<table name>','row1','<colfamily:colname>','<value>'
-put 'emp','1','personal data:name','raju' # insert or update
+exists 'emp'
+```
 
-get 'emp', '1'
-get 'emp', 'row1', {COLUMN ⇒ 'personal:name'}
+## Insert or Update data
+row_key could be number or 'string'  
 
-delete 'emp', '1', 'personal data:city',
-deleteall 'emp','1'
+```
+put 'emp', '1', 'personal:name', 'Bob'
+put 'emp', '1', 'personal:age', 34
 
-count 'emp'
-scan 'emp'
+put 'emp','1','job:title','CEO'
+put 'emp','1','job:salary',13450
 
-truncate 'emp'
+```
+## Read data
+```
+1. scan 'emp' # get all rows of table
 
-scan 'filemetadata', { COLUMNS => 'colFam:colQualifier', LIMIT => 10, FILTER => "ValueFilter( =, 'binaryprefix:<someValue.e.g. test1 AsDefinedInQuestion>' )" }
+2. count 'emp' # get rows of table
 
-scan 'test', {COLUMNS => ['F'],FILTER => \ 
-"(SingleColumnValueFilter('F','u',=,'regexstring:http:.*pdf',true,true)) AND \
-(SingleColumnValueFilter('F','s',=,'binary:2',true,true))"}
+3. truncate 'emp' # clear all data
 
-grant 'username', 'table'
-grant 'Tutorialspoint', 'RWXCA'
-revoke 'table'
-user_permission 'emp'
+3. get 'emp', '1'  # get row by row_key
+COLUMN          CELL
+ job:salary     timestamp=1478856940758, value=13450
+ job:title      timestamp=1478856929626, value=CEO
+ personal:age   timestamp=1478856884425, value=34
+ personal:name  timestamp=1478856875511, value=Bob
+ 
+4. get 'emp', '1', {COLUMN => 'personal:name'} # get a specific column 
+COLUMN                  CELL
+ personal:name          timestamp=1478856875511, value=Bob
+
+5. get 'emp','1',{COLUMN => ['job:salary', 'personal:name']}
+COLUMN                  CELL
+  job:salary             timestamp=1478862365295, value=124124
+  personal:name          timestamp=1478862192934, value=Bob
+
+ 
+```
+
+## Delete data
+```
+delete '<table name>', '<row>', '<column name >', <time stamp> # ts should not be quoted
+delete 'emp','1','job:salary',1478859240219
+
+deleteall '<table name', '<row>'
+deleteall 'emp',1
+```
 
 
+## Topic
+sql phrase end with "newline" not semi-colon  
+
+### 1. Change the maxium number of cells of a column family, default is 1
+```
+alter 't1', NAME => 'f1', VERSIONS => 5
+```
+### 2. Delete a column family
+```
+alter 'table name', 'delete' ⇒ 'column family'
+```
