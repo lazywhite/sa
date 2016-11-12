@@ -1,3 +1,16 @@
+## Keyword
+```
+pool
+    peer
+brick
+volume
+    replica
+    strip
+    disperse
+
+openstack-cinder
+openstack-glance
+```
 ## volume create prompt already created
 1. 在/test/data1和/test/data2目录中删除".glusterfs"的目录
 2. setfattr -x trusted.glusterfs.volume-id /test/data1
