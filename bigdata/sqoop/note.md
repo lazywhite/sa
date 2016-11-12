@@ -3,17 +3,18 @@ sqoop is designed to transfer data between Hadoop and RDBMS
 
 ## Configuration
 ```
-#Set path to where bin/hadoop is available
-export HADOOP_COMMON_HOME=/usr/local/hadoop/hadoop
+conf/sqoop-env.sh
+    #Set path to where bin/hadoop is available
+    export HADOOP_COMMON_HOME=/usr/local/hadoop/hadoop
 
-#Set path to where hadoop-*-core.jar is available
-export HADOOP_MAPRED_HOME=/usr/local/hadoop/hadoop
+    #Set path to where hadoop-*-core.jar is available
+    export HADOOP_MAPRED_HOME=/usr/local/hadoop/hadoop
 
-#set the path to where bin/hbase is available
-export HBASE_HOME=/usr/local/hadoop/hbase
+    #set the path to where bin/hbase is available
+    export HBASE_HOME=/usr/local/hadoop/hbase
 
-#Set the path to where bin/hive is available
-export HIVE_HOME=/usr/local/hadoop/hive
+    #Set the path to where bin/hive is available
+    export HIVE_HOME=/usr/local/hadoop/hive
 
 ```
 
