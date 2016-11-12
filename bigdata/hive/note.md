@@ -9,6 +9,8 @@ trift
 ## Concept
 Hive is a data warehouse infrastructure tool to process structured data in Hadoop. It resides on top of Hadoop to summarize Big Data, and makes querying and analyzing easy.
 the data aggregation actually generate MapReduce tasks
+  
+Use HiveQL to run MapReduce job
 
 ## Installation
 ```
