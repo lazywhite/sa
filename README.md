@@ -57,6 +57,10 @@ My personal note for IT technology I've learned
 ├── bigdata
 │   ├── flume
 │   │   └── note.md
+│   ├── kylin
+│   │   └── note.md
+│   ├── sqoop
+│   │   └── note.md
 │   ├── hadoop
 │   │   ├── hdfs
 │   │   │   ├── hdfs.md

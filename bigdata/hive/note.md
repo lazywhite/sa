@@ -1,8 +1,10 @@
 ## Keywords
 ```
-derby
-    metastore of hive
-
+metastore
+beeline
+hiveServer2
+hcatalog
+trift
 ```
 ## Concept
 Hive is a data warehouse infrastructure tool to process structured data in Hadoop. It resides on top of Hadoop to summarize Big Data, and makes querying and analyzing easy.
@@ -10,7 +12,6 @@ the data aggregation actually generate MapReduce tasks
 
 ## Installation
 ```
-
 brew install hive
 
 cp conf/hive-default.xml.template conf/hive-site.xml
@@ -58,6 +59,11 @@ $ hdfs dfs -chmod g+w /user/hive/warehouse
 mkdir /tmp/hive_tmp_io
 #change all ${system:java.io.tmpdir} to /tmp/hive_tmp_io
 
+```
+## Configuration
+```
+conf/hive-env.sh
+    export HADOOP_HOME=/usr/local/hadoop/hadoop
 ```
 ## Usage 
 no update and delete operation allowd 
