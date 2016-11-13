@@ -1,11 +1,27 @@
 ## Keyword
-ephemeral
-ephemeral_sequential
-znode
-znode data version
-leader  
-follower  
+```
+znode: 
+    ephemeral node: deleted when session end
+        sequential: append 10digit to end of node name
+    normal node
+        data  has version
+ensemble
+   hosts  
+        leader  
+        follower  
 Zab protocol
+```
+
+## API
+```
+create: create a node at a location of tree
+delete: delete a node
+exists: test if node exists on a location
+getData: read data from a node
+setData: writes data to a node
+getChildren: retrive a list of children nodes
+sync: wait for data to be propagated
+```
 
 ## Introduction
 Zookeeper 从设计模式角度来看，是一个基于观察者模式设计的分布式服务管理框架，它负责存储和管理大家都关心的数据，然后接受观察者的注册，一旦这些数据的状态发生变化，Zookeeper 就将负责通知已经在 Zookeeper 上注册的那些观察者做出相应的反应，从而实现集群中类似 Master/Slave 管理模式
