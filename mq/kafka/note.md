@@ -1,18 +1,29 @@
 ## Document
 [kafka key concept](http://www.javali.org/bigdata/kafka-key-concepts-docs-html.html )
 
-## Topic
-compress-type   
-send(key)    
-group-id   
-client-id  
-dump log file
-consumer auto commit  
-partition_assignment_strategy  
-mirror data between cluster  
-get topic partition information  
+## Keyword
+```
+cluster
+    broker
+        topic
+            metaData
+            partition
+                leader
+                follower
+                replica
+                    replica log
+
+            publisher
+                publish algorithm
+
+            consumer group
+                consumer
+                    commit offset into zookeeper
+
+```
  
-## ecosystem
+## Ecosystem
+```
 kafka connect  
 stream processing  
 hadoop integration  
@@ -23,7 +34,23 @@ AWS
 logging  
 ganglia integration  
   
+sqoop
+```
+  
+## Topic  
 
+1. publisher api
+>    choose partition
+
+2. consumer
+>   choose partition  
+>   save last consumed offset
+
+3. dump log file
+4. consumer auto commit  
+5. partition_assignment_strategy  
+6. mirror data between cluster  
+7. get topic partition information  
 
 ## Commands
 ```
@@ -56,7 +83,7 @@ config/server-1.properties:
     log.dir=/tmp/kafka-logs-1
 
 ```
-## Keyword
+## Concept
 ### 1.Topics
 
 A stream of messages belonging to a particular category is called a topic. Data is stored in topics.
