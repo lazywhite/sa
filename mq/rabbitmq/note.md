@@ -105,3 +105,10 @@ git clone  https://github.com/rabbitmq/rabbitmq-consistent-hash-exchange; make
 rabbitmq-plugins enable rabbitmq_consistent_hash_exchange
 
 ```
+## add delayed_exchange 
+```
+A user can declare an exchange with the type x-delayed-message and then publish messages with the custom header x-delay expressing in milliseconds a delay time for the message. The message will be delivered to the respective queues after x-delay milliseconds.
+
+1. download the plugin  and place in $RABBIT_HOME/plugins
+2. rabbitmq-plugins enable rabbitmq_delayed_message_exchange
+```
