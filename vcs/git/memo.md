@@ -14,6 +14,8 @@ git filter-branch --commit-filter '
         else
                 git commit-tree "$@";
         fi' HEAD
+
+git push -f origin master
 ```  
     
 ## Workflow  
