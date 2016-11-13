@@ -2,17 +2,18 @@
 ```
 derby
     metastore of hive
-
 Hcatalog
+    work on top of hive metastore, share metadata through applications
 trift
+    A rest api service for HiveServer2
 ```
 ## Concept
 Hive is a data warehouse infrastructure tool to process structured data in Hadoop. It resides on top of Hadoop to summarize Big Data, and makes querying and analyzing easy.
 the data aggregation actually generate MapReduce tasks
 
 ## Installation
-```
 
+```
 brew install hive
 
 cp conf/hive-default.xml.template conf/hive-site.xml
@@ -62,10 +63,10 @@ mkdir /tmp/hive_tmp_io
 
 ```
 ## Usage 
+```
 no update and delete operation allowd 
 insert overwrite table my_word  select * from my_word  where id != 100;
-
+```
 
 ## Partition
-it is a way of dividing a table into related parts base on the values of 
-partitioned columns such as date, city, and department
+it is a way of dividing a table into related parts base on the values of partitioned columns such as date, city, and department
