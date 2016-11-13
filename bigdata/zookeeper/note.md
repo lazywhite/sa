@@ -1,6 +1,6 @@
 ## Keyword
 ```
-znode: 
+znode: data, properties, children
     ephemeral node: deleted when session end
         sequential: append 10digit to end of node name
     normal node

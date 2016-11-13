@@ -5,16 +5,18 @@ cluster promarily consists of a NameNode that manages the filesystem metadata
 
 ### NameNode
 1. manage the filesystem namespace
-2. regulate client's access to files
+2. regulate client access to files
 3. execute filesystem operations like "renaming, closing, opening"  
+4. 可以启动多个nameNode, 另一个处于standby状态，zookeeper进行master选举
+Quorum Journal Manager用来在namenode间共享edits 
 
 ### Secondary NameNode
-
+定期合并fsimage 和 edits log， 确保editk log不会太大
    
 ### DataNode
 1. perform read-write operations
 2. perfom operation like "block creation, deletion, replication according the  
-    instructions of the namenode
+    instructions of the namenode"
 
 ### Block
 file in the filesystem will be devided into one or more segments  called blocks  
