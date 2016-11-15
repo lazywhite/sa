@@ -18,17 +18,36 @@ influxdb is meant to be used as a backing store for any use case involving large
 ```
 TSM:  Time Structured Merge Tree
 Database
-Measurement
-Tag
-Field
+    Measurement
+        Timestamp
+        Tag
+        Field
+
 Line Protoconl
 
 RETENTION Policy
 
 continuous query
 cluster
-
+    raft node
+    data node
+    
 ```
+
+## Clustering
+```
+number of servers: 12
+replication factor: 3
+split: 4
+shard duration: 7 day
+
+Shards are distributed throughout an InfluxDB cluster. A shard holds the data for any number of time series for a contiguous block of time  
+Shards are created for each new block of time.
+ have a replication factor of 3 and a split of 4 and shard durations of 7 days. At the beginning of a new 7 day period we’d create 4 shards and make sure each shard exists on 3 different servers. So if we have a cluster of 12 machines, each one would get a shard.
+```
+### how to setup a cluster
+1. set up a raft cluster  
+2. join data node into raft cluster
 
 ## Networking
 8083: admin panel
@@ -51,8 +70,6 @@ http://docs.grafana.org/project/building_from_source/
 7. double quote field values that are string
 8. query by tag use where <tag key> = <tag value> , tag value should only be single quoted 
 
-
-special characters and keyword
     commas ,
     equal signs = 
     spaces 
@@ -90,3 +107,6 @@ difference()
     requires one argument, which is a column name. It will output the difference in the first and last value for each group by interval.
 top/bottom()
    require two arguments, the column name and the number of top results to return.  
+
+
+
