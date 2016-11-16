@@ -510,3 +510,40 @@ create table tb() AUTO_INCREMENT=100 (指定起始值)
 
 ## String function
 substring_index(username, '@', 1)
+
+
+## Multi Left Join
+```
+
+
+
+CREATE TABLE `user` (
+  `id` int(11) NOT NULL,
+  `name` varchar(30) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE `user_info` (
+  `id` int(11) NOT NULL,
+  `uid` int(11) DEFAULT NULL,
+  `location` varchar(30) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE `article` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `uid` int(11) DEFAULT NULL,
+  `content` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+
+
+
+select * from user as a inner join article as b on (a.id = b.uid);
+
+select user.name, article.content, user_info.location from user left join article on (user.id = article.uid) left join user_info on (user.id = user_info.id)
+
+```
+
