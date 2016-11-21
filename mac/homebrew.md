@@ -27,3 +27,13 @@ sha256  #
 
 
 
+## Distribute
+```
+brew create https://test.local.com/bar-1.1.tar.gz
+```
+
+## Edit  
+```
+brew edit wget
+
+```

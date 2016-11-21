@@ -12,3 +12,4 @@ __pycache__
 
 
 *.jar
+**/.DS_Store
