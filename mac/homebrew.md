@@ -13,6 +13,10 @@ echo 'export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.ustc.edu.cn/homebrew-bottles
 source ~/.bash_profile
 ```
 
+## Services tap
+```
+brew tap homebrew/services
+```
 
 ## Formula
 
