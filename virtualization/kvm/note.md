@@ -32,3 +32,10 @@ virsh vol-create-as --help
 mount -o loop /path/to/centos6.5.iso /mnt/CentOS-65
 virt-install --name vhost_one --ram 2048 --vcpus=4 --location=/mnt/CentOS-65 --disk vol=virtimages:vhost_one.img,bus=virtio --network bridge=br0,model=virtio --extra-args="ks=http://kickstartserver/timtest.cfg text console=tty0 utf8 console=ttyS0,115200" --graphics vnc
 ```
+
+# create a clone
+```
+virt-clone --name <clone> --original <name> --file /path/to/disk.qcow2
+or 
+virt-clone --original <name> --auto-clone
+```
