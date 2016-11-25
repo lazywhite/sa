@@ -7,6 +7,7 @@ docker run -e "key=value" [-e "key2=value1"] --entrypoint <container_file_path> 
 ```
 docker run
     --rm:  remove the container after it exit
+    --bind: bind to host ip 
     -h: container hostname
     -t: allocate a pseudo-TTY
     -i: interactive mode

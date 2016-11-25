@@ -29,6 +29,9 @@ a process to do DNAT in host
 docker run -p 7000-8000:7000-8000
 
 ## docker port mapping set host ip
+```
+docker run --bind 127.0.0.1
+```
 
 ## can't run top in container
 ```
