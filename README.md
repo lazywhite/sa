@@ -1,9 +1,9 @@
 ## Introduction
-My personal note for IT technology I've learned   
-## Repo structure  
+note for linux system administration and some other staff  
+
+## Directory architecture  
 
 ```  
-├── RHCE.png
 ├── andriod
 │   ├── build.gradle
 │   ├── jenkins-jixiang-android-cos.sh
