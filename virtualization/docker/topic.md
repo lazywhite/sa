@@ -1,3 +1,8 @@
+## oss storage
+```
+docker-registry + oss + nginx + ssl
+docker client
+```
 ## set docker storage root
 ```
 DOCKER_OPTS="-g /mnt/DATA/docker"

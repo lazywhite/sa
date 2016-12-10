@@ -3,7 +3,7 @@
 docker run -e "key=value" [-e "key2=value1"] --entrypoint <container_file_path> <image> 
 
 ```
-
+## command line options
 ```
 docker run
     --rm:  remove the container after it exit
@@ -19,7 +19,8 @@ docker run
     --oom-kill-disable: disable oom-killer
     --pid <pid>: pid namespace to use
     --privileged: give extended privilege to this container
-    -p <host_port:container_port>: publish host port to this container
+    -p <host_port>:<container_port>: publish host port to this container
+        -p IP::8000  map 8000 of container to IP:<random_port>
     -P : publish all exposed ports to random ports of host
     --restart: set restart policy for this container
     --sig-proxy: proxy received signal to this container, default true
