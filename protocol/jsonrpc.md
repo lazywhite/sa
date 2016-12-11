@@ -1,3 +1,7 @@
+## Introduction
+基于json的跨语言远程过程调用协议
+
+## Example
 ```
 POST http://company.com/zabbix/api_jsonrpc.php HTTP/1.1
 Content-Type: application/json-rpc
