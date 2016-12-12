@@ -17,7 +17,12 @@ git filter-branch --commit-filter '
 
 git push -f origin master
 ```  
-    
+## Remove files from all commits
+```
+git filter-branch \
+--index-filter 'git rm --cached --ignore-unmatch linux/bzImage' <start>..<stop|HEAD>
+```    
+
 ## Workflow  
 1. centralized workflow  
 2. integration-manager workflow  
