@@ -1,9 +1,10 @@
 ## Introduction
-note for linux system administration and some other staff  
+note for linux system administration
 
 ## Directory architecture  
 
 ```  
+├── README.md
 ├── RHCE.png
 ├── andriod
 │   ├── build.gradle
@@ -11,6 +12,7 @@ note for linux system administration and some other staff
 │   ├── jenkins_android.md
 │   └── note.md
 ├── appserver
+│   ├── jetty
 │   ├── php
 │   └── tomcat
 ├── auto
@@ -92,7 +94,6 @@ note for linux system administration and some other staff
 │   ├── 2033581_1369963308D7At.jpg
 │   ├── 2033581_1369963393EOGB.jpg
 │   ├── 2033581_1370221372VEAi.jpg
-│   ├── bzImage
 │   ├── course.txt
 │   ├── debian.md
 │   ├── http-netstat.txt
@@ -169,20 +170,18 @@ note for linux system administration and some other staff
 │   ├── dns.md
 │   ├── http
 │   ├── https.md
-│   ├── json_rpc.md
 │   ├── jsonrpc.md
 │   ├── jwt.md
 │   ├── note.md
-│   ├── oauth.md
 │   └── trift.md
 ├── proxy
 │   ├── note.md
 │   └── reverse_proxy
 ├── security
-│   ├── oauth.md
 │   ├── clamav.md
 │   ├── csrf.md
 │   ├── ddos.md
+│   ├── oauth.md
 │   └── xss.md
 ├── sniffer
 │   ├── bro
