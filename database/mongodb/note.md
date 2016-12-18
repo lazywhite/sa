@@ -150,3 +150,7 @@ roles: [
 use admin
 db.isMaster() --> "msg": "isdbgrid" ## show it is mongos otherwise not
 ```
+
+## Topic
+1. mongodb document size is limited cannot exceed 16MB, so you should be careful when using embbed document
+use seperate document not embbed document
