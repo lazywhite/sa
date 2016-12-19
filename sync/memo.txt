@@ -105,3 +105,6 @@ RHEL support mount nfs with tcp protocol,so we can mount it with this command
     lvextent -r -l +100%FREE /dev/VolGroup/lv_root
 - compile py-gunreadline
     yum install readline-devel patch
+
+- bash scp command not found
+    yum -y install openssh-clients  # in remote server
