@@ -1,3 +1,7 @@
+## expose docker api to network
+```
+dockerd -H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock
+```
 ## oss storage
 ```
 docker-registry + oss + nginx + ssl
