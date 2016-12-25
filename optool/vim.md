@@ -35,3 +35,7 @@ vim -p file1 file2 ...   open files in tab mode
 
 ## syntax
 :set syntax=<xml>
+## customized setting for sepecified filetype
+```
+au FileType yaml setl noai sw=2 sts=2 et
+```
