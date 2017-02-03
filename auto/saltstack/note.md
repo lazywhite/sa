@@ -44,7 +44,19 @@ a proprietary OS, devices with limited CPU or memeoy, or devices that could run 
 minion but for security reasons, will not;   
 
 ## Salt Syndic
+## Salt Mine
+```
+The Salt Mine is used to collect arbitrary data from Minions and store it on the Master. 
+This data is then made available to all Minions via the salt.modules.mine module.
 
+"mine data" is more up-to-date than "grain data"
+
+/etc/salt/minion.conf
+    mine_function
+    mine_interval
+
+salt['mine.get']('roles:web', 'network.ip_addrs', expr_form='grain') 
+```
 ## Salt Virt
 ```
 support core cloud operations
@@ -55,11 +67,21 @@ support core cloud operations
     Automatic VM integration with all aspects of salt
     Image pre-seeding
 ```
+## Salt Execution module
+1. functions called by "salt" command on minions
+2. sync module to minions
+```
+state.apply
+saltutil.sync_modules
+saltutil.sync_all
+```
+
 ## Salt runner
 Salt runners are convenience applications executed with the salt-run command.  
 Salt runners work similarly to Salt execution modules however they execute on the Salt master itself instead of remote Salt minions.  
 A Salt runner can be a simple client call or a complex application.    
 
+a runner execute command on master side and manipulate return values like "ls|grep|awk"
 ```
 built-in runners  
     cache
@@ -104,3 +126,9 @@ salt '*' pillar.items
 
 ### cant get pillar setting from syndic node
 must restart salt-master daemon, not salt-syndic daemon
+
+## state target in top.sls
+1. by grains with match: grain 
+2. by pillar with match: pillar
+3. by ID with RE or ID list  match: list
+4. compound match  with 'or'

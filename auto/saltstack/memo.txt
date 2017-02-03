@@ -8,8 +8,6 @@ salt 'host' grains.items
 salt 'host' grains.item host
 
 salt "*"  sys.doc [module]
-
-
 =============
 environment: defined in top.sls
 grains: facter system

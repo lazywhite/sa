@@ -6,7 +6,7 @@ note for linux system administration
 ```  
 ├── README.md
 ├── RHCE.png
-├── andriod
+├── android
 │   ├── build.gradle
 │   ├── jenkins-jixiang-android-cos.sh
 │   ├── jenkins_android.md
