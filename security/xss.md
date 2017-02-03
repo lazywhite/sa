@@ -1,7 +1,7 @@
 ## Introduction
 
-cross site scripting
-类似于SQL注入
+cross site scripting  
+类似于SQL注入, 执行输入的javascript代码  
 
 
 ## 防范
