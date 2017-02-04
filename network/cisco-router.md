@@ -97,31 +97,5 @@ Router(dhcp-config)#dns-server 8.8.8.8
 Router(dhcp-config)#exit
 Router(config)#ip dhcp excluded-address 192.168.1.254 192.168.1.253
 
-
-
-## 端口镜像 SPAN: switch port analyzer
-```
-#local SPAN
-    single switch
-    switch stack
-Local SPAN supports a SPAN session entirely within one switch; 
-all source ports or source VLANs and destination ports are in the same switch 
-or switch stack. Local SPAN copies traffic from one or more source ports in 
-any VLAN or from one or more VLANs to a destination port for analysis
-#remote SPAN
- 
-　　2900#conf t（进入配置状态）
-　　2900(config)#int f0/18（对f0/18端口进行配置）
-　　2900(config-if)#port monitor f 0/22（对f 0/22端口进行镜像）
-　　2900(config-if)#end（结束配置）
-　　2900C#sh port monitor （察看当前镜像端口及被镜像端口）
-　　Monitor Port Port Being Monitored
-　　--------------------- ---------------------
-　　FastEthernet0/18 FastEthernet0/22
-
-
-    2940#show monitor
-　　2940(config)#monitor session 1 source interface fa 0/1 
-　　2940(config)#monitor session 1 destination interface fa 0/4
 ```
 
