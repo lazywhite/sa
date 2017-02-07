@@ -9,12 +9,12 @@ vm.swappiness = 0
 echo noop > /sys/block/sda/queue/scheduler
 
 
-db.adminCommand({backupStart: ’/mnt/backup/’ + backupName})
-db.adminCommand({backupThrottle: ’10MB’})
-db.adminCommand(’backupStatus’)
+db.adminCommand({backupStart: '/mnt/backup/' + backupName})
+db.adminCommand({backupThrottle: '10MB'})
+db.adminCommand('backupStatus')
 
 
-db.adminCommand({loadPlugin: ’pitr_plugin’}) -> return checksum of plugin
+db.adminCommand({loadPlugin: 'pitr_plugin'}) -> return checksum of plugin
 
 To run recoverToPoint, the server must be in maintenance mode.
 

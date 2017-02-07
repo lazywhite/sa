@@ -48,6 +48,8 @@ drop database <dbname>
 
 ```
 ## Retention policy
+data duration and repica factor  
+
 ```
 SHOW RETENTION POLICIES ON <dbname>;
 CREATE RETENTION POLICY <retention_policy_name> ON <database_name> DURATION <duration> REPLICATION <n> [DEFAULT]
@@ -66,13 +68,16 @@ DEFAULT: sets the new retention policy as the default retention policy for the d
 
 
 ## Measurements  
+The measurement acts as a container for tags, fields, and the time column  
 
 ```
-show measurements [whre <tag key>=<tag value>];
+show measurements [where <tag key>=<tag value>];
 drop measurement <mname>
 ```
 
 ## Series
+a series is the collection of data that share a retention policy, measurement, and tag set  
+
 ```
 show series [ from <measurement> ];
 drop series <sname>
@@ -133,10 +138,10 @@ select * from <measurement> where <tag key> = <tag value>;
 select * from <measurement> where time < now();
 select * from temp where time < now() - 10m;
 select * from temp where time < '2016-10-21';
-```
-
 
 select * from "<measurement>" if name of measurement has special character
+```
+
 
 ## Subscription
 subscriptions tell influxdb to send all the data it receives to kapacitor or other third parties  

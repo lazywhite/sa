@@ -31,7 +31,8 @@ continuous query
 cluster
     raft node
     data node
-    
+        shard group
+            shard
 ```
 
 ## Clustering
@@ -50,10 +51,11 @@ Shards are created for each new block of time.
 2. join data node into raft cluster
 
 ## Networking
-8083: admin panel
-8086: http-api   /ping /query /write
-8088,8091: internal communication port between instance of cluster
-
+```
+8083: admin panel  
+8086: http-api   /ping /query /write  
+8088,8091: internal communication port between instance of cluster  
+```
 
 ##using with grafana, collectd
 ### Building grafana from source

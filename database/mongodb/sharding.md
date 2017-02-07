@@ -146,7 +146,7 @@ shard as the data set grows. when add a shard, you may set a "maximum size" for 
 shard. 
 
 ### chunk size
-default 64MB, if automatic migrations have more I/O than your hardware can handle, 
+default "64MB", if automatic migrations have more I/O than your hardware can handle, 
 you can reduce the chunk size, a small chunk size leads to more repid and frequent 
 migrations, the allowed range of chunk size is between 1 and 1024 MB.   
 

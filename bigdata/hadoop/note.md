@@ -1,7 +1,6 @@
 ## Keyword
 ```
 namenode
-zookeeper
 secondary namenode
 journal node
 datanode
