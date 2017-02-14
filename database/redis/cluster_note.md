@@ -93,3 +93,7 @@ ip:port of the instance that can serve the query.
 ### 发布订阅
 在一个 Redis 集群中， 客户端可以订阅任意一个节点， 也可以向任意一个节点发送信息， 节点会对客户端所发送的信息进行转发。
 
+### shutdown server
+```
+redis-cli>shutdown
+```

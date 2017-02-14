@@ -271,8 +271,10 @@ SELECT pg_cancel_backend(pid of the postgres process);
 
 
 ## change database owner
+```
 alter database <dbname> owner to <username>
 \password <username>
+```
 
 
 ## show database triggers
@@ -304,3 +306,27 @@ https://wiki.postgresql.org/wiki/Disk_Usage
 
 ## log in as postgres user  
 psql -h localhost -U postgres -W  
+
+
+## installation on centos
+```
+yum -y install postgresql-server postgresql
+service postgresql initdb
+
+## set bind address and login 
+/var/lib/pgsql/data/postgresql.conf
+    listen_address = '*'
+    #listen_address = '127.0.0.1,10.0.0.12'
+
+/var/lib/pgsql/data/pg_hba.conf
+    local   all         all                         ident
+    host   all         all         192.168.1.0/24        md5
+    # IPv4 local connections:
+    host    all         all         127.0.0.1/32          ident
+    # IPv6 local connections:
+    host    all         all         ::1/128               ident
+
+
+/etc/init.d/postgresql start
+
+```
