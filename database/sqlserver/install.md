@@ -1,4 +1,6 @@
 ```
+# CentOS-7 only
+
 ## install mssql-server
 curl https://packages.microsoft.com/config/rhel/7/mssql-server.repo > /etc/yum.repos.d/mssql-server.repo
 yum install -y mssql-server

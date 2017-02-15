@@ -1,0 +1,211 @@
+1.操作系统及Oracle版本
+Linux版本：CentOS release 7.0 (Final)
+Oracle版本：Oracle Database 11g Release 2 (11.2.0.1.0) for Linux x86-64 (linux.x64_11gR2_database_1of2.zip、linux.x64_11gR2_database_2of2.zip)
+ 
+2.安装依赖系统包
+yum install -y binutils compat-libstdc++-33 elfutils-libelf elfutils-libelf-devel gcc gcc-c++ glibc-2.5 glibc-common glibc-devel glibc-headers ksh libaio libaio-devel libgcc libstdc++ libstdc++-devel make sysstat unixODBC unixODBC-devel
+ 
+3.创建所需的操作系统组和用户
+ 
+groupadd oinstall
+groupadd dba
+useradd -g oinstall -G dba oracle
+设置oracle用户密码
+ 
+passwd oracle
+ 
+4.修改内核参数
+在/etc/sysctl.conf 文件中，使用文本编辑器或vi命令增加或修改以下参数
+ 
+fs.aio-max-nr = 1048576
+fs.file-max = 6815744
+kernel.shmall = 2097152
+kernel.shmmax = 536870912
+kernel.shmmni = 4096
+kernel.sem = 250 32000 100 128
+net.ipv4.ip_local_port_range = 9000 65500
+net.core.rmem_default = 262144
+net.core.rmem_max = 4194304
+net.core.wmem_default = 262144
+net.core.wmem_max = 1048576
+修改后，使设置生效
+ 
+/sbin/sysctl -p
+ 
+5.修改用户限制
+在/etc/security/limits.conf 文件中，使用文本编辑器或vi命令增加或修改以下参数
+oracle soft nproc 2047
+oracle hard nproc 16384
+oracle soft nofile 1024
+oracle hard nofile 65536
+oracle soft stack 10240
+在/etc/pam.d/login 文件中，使用文本编辑器或vi命令增加或修改以下内容
+session required /lib/security/pam_limits.so
+session required pam_limits.so
+在/etc/profile 文件中，使用文本编辑器或vi命令增加或修改以下内容
+if [ $USER = "oracle" ]; then
+if [ $SHELL = "/bin/ksh" ]; then
+ulimit -p 16384
+ulimit -n 65536
+else
+ulimit -u 16384 -n 65536
+fi
+fi
+使设置生效 
+source /etc/profile
+7.创建安装目录(可根据情况，选择比较多空间的目录创建)
+mkdir -p /usr/oracle
+chown -R oracle:oinstall /usr/oracle
+chmod -R 775 /usr/oracle
+ 
+8.创建/etc/oraInst.loc文件,内容如下
+ 
+inventory_loc=/usr/oracle/oraInventory
+inst_group=oinstall
+更改文件的权限
+chown oracle:oinstall /etc/oraInst.loc
+chmod 664 /etc/oraInst.loc
+ 
+9.设置oracle环境变量
+ 
+su - oracle
+ 
+vi ~/.bash_profile
+ 
+在最后加上以下内容
+ 
+export ORACLE_BASE=/usr/oracle
+export ORACLE_SID=book
+export ORACLE_HOME=$ORACLE_BASE/product/11.2.0/db_1
+export TNS_ADMIN=$ORACLE_HOME/network/admin
+export PATH=.:${PATH}:$HOME/bin:$ORACLE_HOME/bin
+export PATH=${PATH}:/usr/bin:/bin:/usr/bin/X11:/usr/local/bin
+export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:$ORACLE_HOME/lib
+export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:$ORACLE_HOME/oracm/lib
+export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/lib:/usr/lib:/usr/local/lib
+export CLASSPATH=${CLASSPATH}:$ORACLE_HOME/JRE
+export CLASSPATH=${CLASSPATH}:$ORACLE_HOME/JRE/lib
+export CLASSPATH=${CLASSPATH}:$ORACLE_HOME/jlib
+export CLASSPATH=${CLASSPATH}:$ORACLE_HOME/rdbms/jlib
+export CLASSPATH=${CLASSPATH}:$ORACLE_HOME/network/jlib
+export LIBPATH=${CLASSPATH}:$ORACLE_HOME/lib:$ORACLE_HOME/ctx/lib
+export ORACLE_OWNER=oracle
+export SPFILE_PATH=$ORACLE_HOME/dbs
+export ORA_NLS10=$ORACLE_HOME/nls/data
+export NLS_LANG="SIMPLIFIED CHINESE_CHINA.UTF8"
+
+ 
+使设置生效
+ 
+source /home/oracle/.bash_profile
+
+ 
+10.解压oracle安装文件
+ 先获取安装文件http://61.155.22.84:81/oracle
+unzip linux.x64_11gR2_database_1of2.zip
+unzip linux.x64_11gR2_database_2of2.zip
+ 
+11.复制响应文件模板
+ cd /home/oracle
+mkdir etc
+cp /home/oracle/database/response/* /home/oracle/etc/
+设置响应文件权限
+ 
+su - root
+chmod 700 /home/oracle/etc/*.rsp（注意所有者，oinstall）
+12.静默安装Oracle软件
+su - oracle
+修改安装Oracle软件的响应文件/home/oracle/etc/db_install.rsp
+ 
+oracle.install.option=INSTALL_DB_SWONLY // 29 安装类型
+ORACLE_HOSTNAME=jiatu-db// 37 主机名称（hostname查询）
+UNIX_GROUP_NAME=oinstall // 42 安装组
+INVENTORY_LOCATION=/usr/oracle/oraInventory //47 INVENTORY目录（不填就是默认值）
+SELECTED_LANGUAGES=en,zh_CN,zh_TW // 78 选择语言
+ORACLE_HOME=/usr/oracle/product/11.2.0/db_1 // 83 oracle_home
+ORACLE_BASE=/usr/oracle // 88 oracle_base
+oracle.install.db.InstallEdition=EE // 99 oracle版本
+oracle.install.db.isCustomInstall=false //自定义安装，否，使用默认组件
+oracle.install.db.DBA_GROUP=dba // 143 dba用户组
+oracle.install.db.OPER_GROUP=oinstall // 147 oper用户组
+oracle.install.db.config.starterdb.type=GENERAL_PURPOSE // 160 数据库类型
+oracle.install.db.config.starterdb.globalDBName=orcl // 165 globalDBName
+oracle.install.db.config.starterdb.SID=orcl // 170 SID
+oracle.install.db.config.starterdb.memoryLimit=81920 // 200 自动管理内存的内存(M)
+oracle.install.db.config.starterdb.password.ALL=oracle // 233 设定所有数据库用户使用同一个密码
+SECURITY_UPDATES_VIA_MYORACLESUPPORT=false // 376（手动写了false）
+DECLINE_SECURITY_UPDATES=true // 385 设置安全更新（貌似是有bug，这个一定要选true，否则会无限提醒邮件地址有问题，终止安装。PS：不管地址对不对）
+
+开始静默安装
+ 
+cd database
+./runInstaller -ignorePrereq  -silent -force -responseFile /home/oracle/etc/db_install.rsp
+安装完成之后
+su root
+/usr/oracle/product/11.2.0/db_1/root.sh
+13.静默配置网络 
+ 
+$ORACLE_HOME/bin/netca /silent /responseFile /home/oracle/etc/netca.rsp
+
+ 
+14.静默安装数据库
+修改仅安装数据库的响应文件/home/oracle/etc/dbca.rsp
+ 
+GDBNAME="book" //78 行 全局数据库的名字=SID+主机域名
+SID="book" //149行 SID
+CHARACTERSET="AL32UTF8" //415行 编码
+NATIONALCHARACTERSET="UTF8" //425行 编码
+
+进行静默安装数据库
+cd $ORACLE_HOME/dbs
+
+找到默认的init.ora，然后创建一个新的init.ora:
+cat init.ora | grep -V ^# | grep -V ^$ | > init$ORACLE_SID.ora
+
+修改新参数文件里面的<$ORACLE_HOME>为绝对路径，然后把db_name之类的东西改成自己的就好~
+
+创建spfile
+sqlplus /nolog
+conn / as sysdba;
+startup nomount
+create spfile from pfile;
+
+如果一切正常，那么会显示出数据库的一些池和缓存的信息，接下来就是创建数据库了，
+
+先创建必要目录
+mkdir -p $ORACLE_BASE/admin/$ORACLE_SID/adump
+mkdir -p $ORACLE_BASE/oradata
+
+建库脚本如下：
+CREATE DATABASE orcl 
+USER SYS IDENTIFIED BY sys 
+USER SYSTEM IDENTIFIED BY system 
+LOGFILE 
+GROUP 1 ('/usr/oracle/oradata/redo01.log') SIZE 1024M, 
+GROUP 2 ('/usr/oracle/oradata/redo02.log') size 1024m, 
+GROUP 3 ('/usr/oracle/oradata/redo03.log') size 1024m, 
+GROUP 4 ('/usr/oracle/oradata/redo04.log') size 1024m, 
+GROUP 5 ('/usr/oracle/oradata/redo05.log') size 1024m
+MAXLOGFILES 5 
+MAXLOGMEMBERS 5 
+MAXLOGHISTORY 200 
+MAXDATAFILES 10000
+MAXINSTANCES 1 
+CHARACTER SET AL32UTF8 
+NATIONAL CHARACTER SET AL16UTF16 
+datafile '/usr/oracle/oradata/system01.dbf' size 2048M  REUSE
+EXTENT MANAGEMENT LOCAL
+sysaux datafile '/usr/oracle/oradata/sysaux01.dbf' size 2048M REUSE
+default temporary tablespace temp 
+tempfile '/usr/oracle/oradata/temp01.dbf' size 2048M REUSE
+undo tablespace UNDOTBS1 
+datafile '/usr/oracle/oradata/undotbs01.dbf' size 4096M  REUSE
+AUTOEXTEND off
+default tablespace DATA
+datafile '/usr/oracle/oradata/data01.dbf' size 8192M  REUSE
+EXTENT MANAGEMENT LOCAL
+SEGMENT SPACE MANAGEMENT AUTO;
+
+接下来可以正常启动oracle
+shutdown abort
+startup
