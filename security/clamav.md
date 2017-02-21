@@ -12,7 +12,7 @@ or
 
 
 1. enable epel
-2. yum -y install clamav
+2. yum -y install clamav clamav-update
 ```
 
 ## Usage
