@@ -1,0 +1,10 @@
+<html>
+  <head> 
+    <title>thegeekstuff.com</title>
+  </head>
+  <body>
+    <p> 
+      Today is <!--#echo var="DATE_LOCAL" --> 
+    </p>
+  </body>
+</html>

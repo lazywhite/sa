@@ -1,0 +1,9 @@
+<footer>
+  <span> The Geek Stuff, Los Angeles, USA <span>
+  <ul> 
+    <li> <a href="aboutus.html">About Us</a> </li>
+    <li> <a href="contactus.html">Contact Us</a> </li>
+    <li> <a href="ourworks.html">Portfolio</a> </li>
+  </ul>
+</footer>
+
