@@ -103,4 +103,18 @@ big : Opposite to bucket state.
 ss src 120.33.31.1:80
 ss src :22
 ss sport eq :22
+
+
+ss -n -o state established |grep 1433|wc -l # 查看mssql当前连接数
 ```
+
+
+## doc
+1. list tcp, udp, unix type : -t or -u or -x
+2. -n disable hostname resolve to ip
+3. -l show listening port
+4. -p show process name/pid
+5. -4/-6|-f inet/inet6 display only ipv4 or ipv6  
+
+
+
