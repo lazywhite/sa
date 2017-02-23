@@ -1,9 +1,0 @@
-Nginx rewrite is used to change request URI using regular expressions, return redirects, and conditionally select configurations.
-
-The ngx_http_rewrite_module module directives are processed in the following order:
-
-the directives of this module specified on the server level are executed sequentially;
-repeatedly:
-a location is searched based on a request URI;
-the directives of this module specified inside the found location are executed sequentially;
-the loop is repeated if a request URI was rewritten, but not more than 10 times.
