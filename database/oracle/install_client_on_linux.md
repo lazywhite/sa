@@ -52,7 +52,7 @@ EOF
             expus.msb
             impus.msb
  
-# 6. sqlplus  <user>/<password>@<host>/<dbname>  # 测试能否正常连接
+# 6. sqlplus  <user>/<password>@<host:port>/<dbname>  # 测试能否正常连接
 
 ```
      
