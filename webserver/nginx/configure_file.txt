@@ -37,7 +37,7 @@ upstream interlib {
 }
 server {
     listen       8010;
-    server_token off; #关闭版本号
+    server_tokens off; #关闭版本号
     root /usr/share/nginx/html;
     client_max_body_size 1000M;
 

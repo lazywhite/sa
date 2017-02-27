@@ -22,8 +22,8 @@ networksetup -listallnetworkservices
 networksetup -setv6off Ethernet
 
 ssh tunnel
-    ssh -fN -L 4321:remote_host:22 bridge_user@bridge_host
-
+    ssh -fN -L 4321:remote_host:80 bridge_user@bridge_host
+    curl http://localhost:4321/ 可以访问bridge_host网络内remote_host的80端口
 
 tcp_wrapper 匹配规则
     /etc/hosts.allow --> /etc/hosts.deny --> permited
@@ -842,3 +842,11 @@ Software:
       System Integrity Protection: Enabled
       Time since boot: 9 days 19:35
 ```
+
+
+## check tcp port alive
+```
+nc -w 2 192.168.0.64 9797 </dev/null
+echo $?
+```
+
