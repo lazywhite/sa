@@ -1,6 +1,7 @@
 ## Concept
 DLM: distribute lock manager
 ## Install
+```
 创建一个GFS文件系统：
 需要提供的信息：
 1、锁类型：
@@ -52,4 +53,4 @@ acl
 
 # lvscan
 lvmconf --enale-cluster
-
+```

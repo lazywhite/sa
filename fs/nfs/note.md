@@ -3,9 +3,10 @@
 yum -y install nfs-utils
 ```
 ## Usage
+```
 servce rpcbind start
 service nfs start
-
+```
 
 ## Configure
 ```

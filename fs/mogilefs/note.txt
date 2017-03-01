@@ -1,5 +1,4 @@
 
-
 # yum -y install make gcc unzip perl-DBD-MySQL perl perl-CPAN perl-YAML perl-Time-HiRes
 
 # cpan 
@@ -16,7 +15,6 @@ Danga::Socket
 	# make test
 	# make install 
 
-
 # cpan -i App::cpanminus
 cpan> install App:cpanminus
 
@@ -25,15 +23,6 @@ cpan> install App:cpanminus
 
 conf: 
 	/etc/mogilefs/{mogifsd.conf, mogstored.conf}
-
-
-
-
-
-
-
-
-
 
 
 
@@ -71,7 +60,7 @@ mogadm host add 192.168.0.203 –ip=192.168.0.203 –port=7500 –status=alive
 
 
 
-mogilefsd服务脚本：
+mogilefsd服务脚本
 #!/bin/bash
 #
 # mogilefsd - Startup script for the MogileFS tracker
@@ -141,7 +130,6 @@ case "$1" in
 		exit 1
 esac
 exit $RETVAL
-
 
 
 mogstored服务脚本：
@@ -216,10 +204,6 @@ case "$1" in
 		exit 1
 esac
 exit $RETVAL
-
-
-
-
 
 
 
