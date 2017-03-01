@@ -46,7 +46,9 @@ columns, Conceptually, it is equivalent to relational tables.
 ### SQLContext
 SQLContext is a class and is used for initializing the functionalities of  
 sparkSQL. by default  SparkContext object is initialized with the name "sc" 
-when the spark-shell starts  
+when the spark-shell starts    
+
+
 ```
 val sqlContext = new org.apache.spark.sql.SQLContext(sc)
 val dfs = sqlContext.read.json("ep.json")

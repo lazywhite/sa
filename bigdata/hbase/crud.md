@@ -17,7 +17,8 @@ stop-hbase.sh
 ```
 
 ## Hbase shell
-1. # hbase shell: enter interactive shell mode  
+```
+1. hbase shell: enter interactive shell mode  
 2. status: output server status  
 3. version: output server version  
 4. whoami: output information of current user  
@@ -25,7 +26,7 @@ stop-hbase.sh
 6. is_enabled <table> : check if table is enabled  
 7. alter <table>: alter a table  
 8. drop_all <regexp>: drop all tables matching 'regexp'  
-
+```  
 
 ## Create a table
 ```

@@ -1,3 +1,4 @@
+```
 firewall-cmd --status
 firewall-cmd --state
 firewall-cmd --get-default-zone
@@ -27,3 +28,4 @@ success
 
 
 # firewall-cmd --zone=internal --add-port=443/tcp
+```
