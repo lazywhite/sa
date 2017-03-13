@@ -327,12 +327,26 @@ function F_NAME([variable])
 
 
 
-
-
-
 ## skip first <number> lines 
 awk 'NR>10{print $1}'
 
 
 ## specify multi Field separator 
 awk -F[<>]  '{print $3}'
+
+## access log 访问最高前十IP
+awk '{a[$1] += 1;} END {for (i in a) printf("%d %s\n", a[i], i);}' 日志文件 | sort -n | tail
+
+## 当前WEB服务器中联接次数最多的ip地址
+netstat -ntu |awk '{print $5}' |sort | uniq -c| sort -nr
+
+
+## 查看日志中访问次数最多的前10个IP
+cat access_log |cut -d ' ' -f 1 | sort |uniq -c | sort -nr | awk '{print $0 }' | head -n 10 | less
+
+
+## 列出传输时间超过 30 秒的文件
+cat access_log | awk '($NF > 30){print $7}' | sort -n | uniq -c | sort -nr | head -20
+ 
+## 列出最最耗时的页面(超过60秒的)
+cat access_log | awk '($NF > 60 && $7~/\.PHP/){print $7}' | sort -n | uniq -c | sort -nr | head -100

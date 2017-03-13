@@ -4,16 +4,12 @@ note for linux system administration
 ## Directory Layout 
 
 ```  
-├── README.md
-├── RHCE.png
 ├── android
 │   ├── build.gradle
 │   ├── jenkins-jixiang-android-cos.sh
 │   ├── jenkins_android.md
 │   └── note.md
 ├── appserver
-│   ├── jetty
-│   ├── php
 │   └── tomcat
 ├── auto
 │   ├── ansible
@@ -44,8 +40,10 @@ note for linux system administration
 │   ├── counchdb
 │   ├── influxdb
 │   ├── mongodb
+│   ├── mssql_server
 │   ├── mysql
 │   ├── opentsdb
+│   ├── oracle
 │   ├── postgresql
 │   ├── redis
 │   ├── sqlite
@@ -85,16 +83,9 @@ note for linux system administration
 ├── library
 │   └── openssl.md
 ├── linux
-│   ├── 143256261.jpg
-│   ├── 2033581_1369962477MN7p.jpg
-│   ├── 2033581_13699627772B10.jpg
-│   ├── 2033581_1369962848eEh1.jpg
-│   ├── 2033581_1369962958hvxf.jpg
-│   ├── 2033581_1369963124kxNd.jpg
-│   ├── 2033581_1369963308D7At.jpg
-│   ├── 2033581_1369963393EOGB.jpg
-│   ├── 2033581_1370221372VEAi.jpg
+│   ├── cent7
 │   ├── course.txt
+│   ├── cronolog.md
 │   ├── debian.md
 │   ├── http-netstat.txt
 │   ├── iproute2.png
@@ -102,6 +93,7 @@ note for linux system administration
 │   ├── procedure.txt
 │   ├── ssh_config.md
 │   ├── sysadmin.txt
+│   ├── systemd
 │   ├── tcpfsm.png
 │   ├── ubuntu.md
 │   ├── vcl.png
@@ -112,6 +104,13 @@ note for linux system administration
 │   ├── ipa_build
 │   ├── note.md
 │   └── route.md
+├── microservice
+│   ├── consul
+│   ├── etcd
+│   ├── eureka
+│   ├── hystrix
+│   ├── note.md
+│   └── zuul
 ├── monitoring
 │   ├── bosun
 │   ├── cadvisor
@@ -120,12 +119,6 @@ note for linux system administration
 │   ├── nagios
 │   ├── tick
 │   └── zabbix
-├── microservice
-│   ├── consul
-│   ├── eureka
-│   ├── hystrix
-│   ├── note.md
-│   └── zuul
 ├── mq
 │   ├── activemq
 │   ├── kafka
@@ -145,6 +138,7 @@ note for linux system administration
 │   ├── customize_iso.txt
 │   ├── dstat
 │   ├── experience.txt
+│   ├── find.md
 │   ├── htop.md
 │   ├── iptables.txt
 │   ├── irc.txt
@@ -179,7 +173,7 @@ note for linux system administration
 │   ├── jsonrpc.md
 │   ├── jwt.md
 │   ├── note.md
-│   └── trift.md
+│   └── thrift.md
 ├── proxy
 │   ├── note.md
 │   └── reverse_proxy
@@ -229,3 +223,4 @@ note for linux system administration
     ├── nginx
     └── note.md
 ```
+

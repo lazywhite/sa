@@ -850,3 +850,7 @@ nc -w 2 192.168.0.64 9797 </dev/null
 echo $?
 ```
 
+## sap process monitoring tool 
+```
+dpmon -s pf=QAS_DVEBMGS00_SAPQAS01 l
+```

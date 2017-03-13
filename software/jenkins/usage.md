@@ -7,4 +7,13 @@
     "JAVA_HOME" "/path/to/jdk_home"
 5. Tool Locations
     Maven  /home/tool/maven-3.3.9
+```
 
+## start jenkins
+```
+nohup java -jar /home/jenkins/jenkins.war --httpPort=9090 --prefix=/jenkins > /home/jenkins/jenkins.log 2>&1 &
+
+```
+
+## Topic
+1. global variable definition
