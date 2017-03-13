@@ -1528,3 +1528,21 @@ PURGE { BINARY|MASTER } LOGS { TO 'log_name'| BEFORE 'datetime_expr' }
 SET GLOBAL innodb_file_per_table=1;
 ALTER TABLE table_name ENGINE=InnoDB;
 ```
+
+
+## create backup table
+```
+Insert into Table2(field1,field2,...) select value1,value2,... from Table1
+
+
+
+CREATE TABLE `user_new` (
+  `id` int(11) NOT NULL,
+  `name` varchar(30) DEFAULT NULL,
+  `password` varchar(60) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
+insert into user_bak select * from user;
+```
+
+
