@@ -20,7 +20,7 @@ daemonize yes
 supervised no
 pidfile /var/run/redis_6379.pid
 loglevel notice
-logfile ""
+logfile "/tmp/redis.log"
 databases 16
 save 900 1
 save 300 10
@@ -62,4 +62,12 @@ client-output-buffer-limit slave 256mb 64mb 60
 client-output-buffer-limit pubsub 32mb 8mb 60
 hz 10
 aof-rewrite-incremental-fsync yes
+```
+
+
+## kernel parameter
+```
+echo "vm.overcommit_memory = 1" >> /etc/sysctl.conf
+sysctl -p
+echo never > /sys/kernel/mm/transparent_hugepage/enabled
 ```
