@@ -70,3 +70,9 @@ UserParameter=<key>,<command>
 zabbix_sender -z zabbix -s "Linux DB3" -k db.connections -o 43
 zabbix_get -s 127.0.0.1 -p 10050 -I 127.0.0.1 -k "system.hostname"
 ```
+
+## web scenario 
+```
+配置-->主机-->web监控-->添加--> 客户端（chrome) --> 步骤 --> 200 or string
+触发器 {10.30.95.34:web.test.fail[web1].avg(#3)}=1
+```
