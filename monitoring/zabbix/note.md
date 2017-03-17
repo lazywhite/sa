@@ -64,3 +64,9 @@ UserParameter=<key>,<command>
 
 ## user defined macro
 {$MACRONAME} 
+
+## command line tool
+```
+zabbix_sender -z zabbix -s "Linux DB3" -k db.connections -o 43
+zabbix_get -s 127.0.0.1 -p 10050 -I 127.0.0.1 -k "system.hostname"
+```

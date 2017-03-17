@@ -1,0 +1,24 @@
+enable
+    conf t
+        snmp-server community public ro
+        snmp-server enable traps 
+
+snmpwalk -c public -v 2c 192.168.102.244:161
+snmpwalk -c public -v 2c 192.168.102.244:161 system
+snmpwalk -c public -v 2c 192.168.102.244:161 ifDescr
+
+
+cisco 2960x 常用OID
+
+.1.3.6.1.4.1.9.2.1.56  最后5秒
+.1.3.6.1.4.1.9.2.1.57  最后1分钟
+.1.3.6.1.4.1.9.2.1.58  最后5分
+
+1.3.6.1.4.1.9.9.109.1.1.1.1.6 最后5秒所有cpu平均load
+1.3.6.1.4.1.9.9.109.1.1.1.1.7 最后1分钟所有cpu平均load
+1.3.6.1.4.1.9.9.109.1.1.1.1.8 最后5分钟所有cpu平均load
+
+.1.3.6.1.4.1.9.9.48.1.1.1.5. Used Memory 
+.1.3.6.1.4.1.9.9.48.1.1.1.6. Free Memory
+
+.1.3.6.1.4.1.9.9.13.1.3.1.3. 温度
