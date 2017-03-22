@@ -1,0 +1,24 @@
+1. 组策略
+开始->运行-> gpedit.msc
+
+2. 用户密码策略
+本地组策略编辑器----计算机配置-----windows设置------安全设置-------帐户策略------密码策略
+
+gpupdate /force
+
+
+3. 防火墙添加端口
+控制面板--防火墙--高级设置--入站规则--新建规则--端口--tcp+port
+
+4. 本地服务配置
+services.msc
+5. explorer 资源管理器
+6. notepad 记事本
+7. devmgmt.msc 设备管理器
+8. regedit 注册表编辑器
+9. msconfig.exe 系统配置管理器
+10. perfmon.msc 性能监测器
+11. taskmgr 任务管理器
+12. mstsc 远程桌面连接
+13. secpol.msc 本地安全策略
+
