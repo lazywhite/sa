@@ -71,6 +71,14 @@ mysql> call show_all_user(@number);
 ```
 mysql> Drop procedure <name>;
 ```
+## list procedures
+```
+show procedure status where db = 'zabbix';
+```
+## view procedure
+```
+show create procedure <name>
+```
 
 # Function
 ## create function
@@ -532,6 +540,8 @@ show warnings;
 show engine;查看支持的引擎
 show table status like 'user';
 show processlist;Kill ID;
+
+show tables like "history%";
 ```
 ## 2. 计算索引未命中缓存的概率：
 ```

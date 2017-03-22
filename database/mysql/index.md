@@ -15,3 +15,10 @@ Fractal Tree (tokudb) 分型树索引
 7. 非二叉树
 8. 空间数据分割树： R树
 9. 其他树： 散列树
+
+## command
+```
+show index from <table name>
+create index idx on  table(col1, col2) ## 多列索引
+
+```

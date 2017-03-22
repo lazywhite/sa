@@ -18,3 +18,6 @@ LOCK TABLES t1 WRITE, t2 READ;
 2. 写锁（排他锁）， 只有一个对象的写锁被释放时， 才会允许其他用户进行读写
 3. 隐式锁， create  index等
 4. 显式锁，  LOCK TABLE 语句
+
+
+create index 隐式给表添加读锁， 只能select不能insert，update，delete
