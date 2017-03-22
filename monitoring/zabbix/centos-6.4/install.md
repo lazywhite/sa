@@ -265,6 +265,8 @@ exit $RETVAL
 ```
 ./configure --prefix=/usr/local/zabbix_proxy --enable-proxy --with-net-snmp --with-mysql --with-ssh2
 mysql -uzabbix_user -pzabbix_pwd zabbix < schema.sql  ## only need this
+
+管理-->agent代理程序
 ```
 ## 3.2 /usr/local/zabbix/etc/zabbix_proxy.conf
 ```
@@ -295,7 +297,8 @@ chown -R apache:apache /var/www/html
 
 cp msyh.ttf   /var/www/html/zabbix/fonts/
 ./include/defines.inc.php
-	define('ZBX_FONTPATH',              realpath('fonts'));     	define('ZBX_GRAPH_FONT_NAME',       'msyh'); // font file name
+	define('ZBX_FONTPATH',              realpath('fonts'));     	
+    define('ZBX_GRAPH_FONT_NAME',       'msyh'); // font file name
 	define('ZBX_FONT_NAME', 'msyh');
 
 Configure -- User -- Admin -- Language --> Chinese(zh_CN)
