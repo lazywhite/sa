@@ -1,4 +1,4 @@
-## List
+## 1. List
 CREATE TABLE employees (
     id INT NOT NULL,
     fname VARCHAR(30),
@@ -15,7 +15,7 @@ PARTITION BY LIST(store_id) (
     PARTITION pCentral VALUES IN (7,8,15,16)
 );
 
-## Range
+## 2. Range
 CREATE TABLE employees (
     id INT NOT NULL,
     fname VARCHAR(30),
@@ -31,7 +31,7 @@ PARTITION BY RANGE (store_id) (
     PARTITION p2 VALUES LESS THAN (16),
     PARTITION p3 VALUES LESS THAN MAXVALUE
 );
-## Hash
+## 3. Hash
 CREATE TABLE employees (
     id INT NOT NULL,
     fname VARCHAR(30),
@@ -43,7 +43,7 @@ CREATE TABLE employees (
 )
 PARTITION BY HASH( YEAR(hired) )
 PARTITIONS 4;
-## Key
+## 4. Key
 CREATE TABLE tk (
     col1 INT NOT NULL,
     col2 CHAR(5),
@@ -52,7 +52,7 @@ CREATE TABLE tk (
 PARTITION BY LINEAR KEY (col1)
 PARTITIONS 3;
 
-## Subpartition
+## 5. Subpartition
 CREATE TABLE ts (id INT, purchased DATE)
     PARTITION BY RANGE( YEAR(purchased) )
     SUBPARTITION BY HASH( TO_DAYS(purchased) ) (
@@ -69,7 +69,7 @@ CREATE TABLE ts (id INT, purchased DATE)
             SUBPARTITION s5
         )
     );
-## Range column
+## 6. Range column
 CREATE TABLE rc1 (
     a INT, 
     b INT
@@ -79,7 +79,7 @@ PARTITION BY RANGE COLUMNS(a, b) (
     PARTITION p3 VALUES LESS THAN (MAXVALUE, MAXVALUE)
 );
 
-## List column
+## 7. List column
 CREATE TABLE customers_1 (
     first_name VARCHAR(25),
     last_name VARCHAR(25),
@@ -95,3 +95,37 @@ PARTITION BY LIST COLUMNS(city) (
     PARTITION pRegion_4 VALUES IN('Uppvidinge', 'Alvesta', 'Växjo')
 );
 
+
+## topic
+1. create partition on tables already have lots of data 
+```
+you can use ALTER TABLE to add partitioning to the table, 
+keep in mind though that this will actually create the 
+new partitioned table first, then copy over all the 
+existing data, and finally drop the old unpartitioned 
+table. So this operation may take a while and will 
+temporarily use twice the disk space (which in the case 
+of InnoDB is not given back to the operating system ...) 
+```
+
+2. "VALUES LESS THAN value must be strictly increasing for each partition"
+partition value 只能递增
+
+
+## command
+```
+create partition 
+    "ALTER TABLE t1 ADD PARTITION (PARTITION p3 VALUES LESS THAN (2002));"
+
+list partitions 
+    show create table <tbname>
+
+    SELECT PARTITION_NAME, TABLE_ROWS
+        FROM INFORMATION_SCHEMA.PARTITIONS
+            WHERE TABLE_NAME = 't1';
+drop partition 
+    alter table <tbname> drop partition <ptname>
+
+check partition 
+    explain partitions select * from location where device_id = 1;
+```
