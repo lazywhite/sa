@@ -22,8 +22,21 @@ networksetup -listallnetworkservices
 networksetup -setv6off Ethernet
 
 ssh tunnel
-    ssh -fN -L 4321:remote_host:80 bridge_user@bridge_host
+    -N Do not execute a shell or command. 
+    -f Fork into background after authentication. 
+
+    ssh -fN -L 4321:remote_host:80 bridge_user@bridge_host 
     curl http://localhost:4321/ 可以访问bridge_host网络内remote_host的80端口
+
+    ssh -C -f -N -g -R 114:127.0.0.1:22 user@Tunnel_Host 
+    ssh -p 114 root@Tunnel_Host 可以通过跳板机登录内网主机
+
+    ssh -C -f -N -g -D listen_port user@Tunnel_Host #动态socket代理
+
+ssh -C -f -N -g -L listen_port:DST_Host:DST_port user@Tunnel_Host 
+ssh -C -f -N -g -R listen_port:DST_Host:DST_port user@Tunnel_Host 
+ssh -C -f -N -g -D listen_port user@Tunnel_Host
+
 
 tcp_wrapper 匹配规则
     /etc/hosts.allow --> /etc/hosts.deny --> permited
@@ -854,3 +867,6 @@ echo $?
 ```
 dpmon -s pf=QAS_DVEBMGS00_SAPQAS01 l
 ```
+
+## filco 键盘配对
+同时摁下键盘的 crtl alt fn 3个按钮 蓝灯 红灯常亮  并选择横排数字 1-4 中的之一 蓝牙信号灯闪烁 

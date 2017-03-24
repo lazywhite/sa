@@ -499,7 +499,11 @@ keepalived: (watchdog)
 
 
 
-
+## Tips
+### 1. 手动触发ip漂移
+```
+node1: /etc/init.d/keepalived stop
+```
 
 
 
