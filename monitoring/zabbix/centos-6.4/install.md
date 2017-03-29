@@ -1,10 +1,12 @@
 ## 1.1 zabbix-server
 ```
-## enable epel.repo, ustc.repo
+## enable epel.repo, aliyun.repo
+wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-6.repo
+rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm
 
-cd zabbix-3.0.3
+cd zabbix-3.0.8
 yum install gcc  libxml2-devel  unixODBC-devel net-snmp-devel libcurl-devel libssh2-devel OpenIPMI-devel openssl-devel mysql++-devel mysql mysql-server
-./configure --prefix=/usr/local --enable-server --enable-agent --with-mysql --with-net-snmp --with-libcurl --with-libxml2 --with-unixodbc --with-ssh2 --with-openipmi --with-openssl
+./configure --prefix=/usr/local/zabbix --enable-server --enable-agent --with-mysql --with-net-snmp --with-libcurl --with-libxml2 --with-unixodbc --with-ssh2 --with-openipmi --with-openssl
 make install 
 
 
@@ -18,6 +20,9 @@ cd database/mysql
 mysql -uzabbix_user -p'zabbix_pwd' zabbix < schema.sql
 mysql -uzabbix_user -p'zabbix_pwd' zabbix < images.sql
 mysql -uzabbix_user -p'zabbix_pwd' zabbix < data.sql
+
+
+useradd -M zabbix
 
 ```
 ## 1.2 /usr/local/zabbix/etc/zabbix_server.conf
@@ -289,11 +294,12 @@ yum -y install php56w-cli php56w-pdo php56w-bcmath php56w php56w-mysql php56w-gd
 ## 4.3 enable multi language support
 ```
 yum -y install gettext 
-locale-gen #set zh_CN as locale
-cd /var/www/html/zabbix/locale; ./make_mo.sh 
+localedef -i zh_CN -c -f UTF-8 zh_CN.UTF-8
 
 cp -ar frontend/php   /var/www/html/zabbix
 chown -R apache:apache /var/www/html
+
+cd /var/www/html/zabbix/locale; ./make_mo.sh 
 
 cp msyh.ttf   /var/www/html/zabbix/fonts/
 ./include/defines.inc.php
@@ -303,6 +309,8 @@ cp msyh.ttf   /var/www/html/zabbix/fonts/
 
 Configure -- User -- Admin -- Language --> Chinese(zh_CN)
 http://localhost/zabbix/setup.php # generate zabbix.conf.php
+
+zabbix_server is disabled by default, enable by Configure-->Host
 ```
 ## 4.4  zabbix.conf.php
 ```
