@@ -45,7 +45,10 @@ mysql> SELECT * FROM table LIMIT 95, 18446744073709551615; skip "offset" to end
 just provide a very large number to "row count"
 ```
 
-
+## Replace
+```
+replace into user(id, name, age) values (10, "Bob", 50);
+```
 
 # Variable
 ```
@@ -358,6 +361,9 @@ Alter Table table Drop Column column1;
 Alter 添加 Foreign Key
 Drop Table table; 与 Delete * from table的区别
 Rename Table table1 TO table1_backup,table2 TO table2_backup;
+alter table <old_name> rename <new_name>;
+
+rename column table.column to new_column
 
 create index [type] on table(column)
 ```
@@ -555,3 +561,7 @@ auto_increment_offset   (默认起始值)
 create table tb() AUTO_INCREMENT=100 (指定起始值)
 ```
 
+## 4. select from n last row
+```
+select * from book_authors order by id desc limit 10;
+```

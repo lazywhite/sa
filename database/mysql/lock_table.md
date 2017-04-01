@@ -6,6 +6,9 @@
 ## Usage
 ```
 LOCK TABLES t1 WRITE, t2 READ;
+flush tables <tbname> READ;
+
+unlock tables;
 ```
 
 
