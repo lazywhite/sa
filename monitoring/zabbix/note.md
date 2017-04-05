@@ -13,11 +13,14 @@ zabbix
                             media
                                 user
 
+history table: store each single point
+trend: store average information on hourly basis
 template
     enclosed
     link
 
 auto discovery
+auto link template
 
 monitor
     snmp
