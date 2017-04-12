@@ -870,3 +870,19 @@ dpmon -s pf=QAS_DVEBMGS00_SAPQAS01 l
 
 ## filco 键盘配对
 同时摁下键盘的 crtl alt fn 3个按钮 蓝灯 红灯常亮  并选择横排数字 1-4 中的之一 蓝牙信号灯闪烁 
+
+## 大陆ntp服务器
+server 0.cn.pool.ntp.org
+server 1.cn.pool.ntp.org
+server 2.cn.pool.ntp.org
+server 3.cn.pool.ntp.org
+
+
+```
+on RHEL6.4
+Error: Cannot retrieve repository metadata (repomd.xml) for repository: epel. Please verify its path and try again
+
+
+$ sudo yum clean all 
+$ sudo yum --disablerepo="epel" update nss
+```
