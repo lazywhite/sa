@@ -1,0 +1,5 @@
+base:
+  '*':
+    - packages
+  'web*':
+    - vim

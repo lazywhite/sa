@@ -65,8 +65,8 @@ salt '*' saltutil.sync_modules
 salt '*' cheng.cheng nae
 
 ## reactor system
+salt-run state.event pretty=True  #display event in forground
 salt-call event.send 'foo' '{orchestrate: refresh}' ## fire an event
-salt-run state.event pretty=True
 
 salt/job/20150213001905721678/new       {
     "_stamp": "2015-02-13T00:19:05.724583",
@@ -158,3 +158,20 @@ service salt-minion restart
 tail /var/log/salt/minion
 for ubuntu-12.04: apt-get purge python-psutil
 ```
+
+## remove a salt minion
+salt-key -D <minion_id>
+
+## change salt master
+rm -rf /etc/salt/pki/minion/*
+
+## auto accept key
+```
+{% if 'act' in data and data['act'] == 'pend' and data['id'].startswith('salt-sy') %}
+key_accept:
+    wheel.key.accept:
+        - match: {{ data['id'] }}
+{% endif %}
+```
+
+salt-run jobs.lookup_jid 20170412100938275448

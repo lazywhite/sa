@@ -73,6 +73,7 @@ support core cloud operations
 ```
 state.apply
 saltutil.sync_modules
+saltutil.sync_grains
 saltutil.sync_all
 ```
 
@@ -132,3 +133,17 @@ must restart salt-master daemon, not salt-syndic daemon
 2. by pillar with match: pillar
 3. by ID with RE or ID list  match: list
 4. compound match  with 'or'
+
+## async 
+```
+salt --async '*' test.ping # return a jid
+salt-run jobs.lookup_jid 20161117163153353501 # check result on minion 
+```
+
+## returner
+```
+mysql
+```
+
+## schedule
+https://docs.saltstack.com/en/latest/topics/jobs/schedule.html

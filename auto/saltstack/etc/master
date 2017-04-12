@@ -1,0 +1,13 @@
+interface: 192.168.10.60
+master_id: saltstackServer
+timeout: 20  #default timeout for salt command and api
+auto_accept: True #auto accept  minion key
+log_level: debug 
+node_groups:
+    group01: 'salt[1234]'
+    group02: 'L@server'
+
+order_masters: True # used in syndic cluster
+
+
+redis.host: 127.0.0.1  # customized setting

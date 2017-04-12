@@ -1,3 +1,15 @@
+## config
+```
+pillar_roots:
+  base:
+      - /srv/pillar
+```
+## access
+```
+git:
+  pkg.installed:
+      - name: {{ pillar['git'] }}
+```
 ## ext_pillar
 1. cmd_json
 2. consul_pillar
