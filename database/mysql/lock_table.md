@@ -24,3 +24,13 @@ unlock tables;
 
 
 create index 隐式给表添加读锁， 只能select不能insert，update，delete
+
+
+```
+show status like 'innodb_row_lock%';
+show engine innodb status\G
+select * from information_schema.innodb_lock_waits;
+innotop 
+
+select for update
+```

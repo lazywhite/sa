@@ -565,3 +565,11 @@ create table tb() AUTO_INCREMENT=100 (指定起始值)
 ```
 select * from book_authors order by id desc limit 10;
 ```
+## change column type
+```
+alter table table_name modify column_name int(5)
+```
+## temporary disable foreign key check
+```
+SET FOREIGN_KEY_CHECKS=0;
+```
