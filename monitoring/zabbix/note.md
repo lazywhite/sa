@@ -56,22 +56,25 @@ monitor
             host
             template
             global
+                管理-->一般-->macro
 
 
-# userparameter
-UserParameter=<key>,<command>
-zabbix_get -s 127.0.0.1 -p 10050 -I 127.0.0.1 -k "system.hostname"
+## userparameter
+不带参数的
+    UserParameter=<key>,<command>
+    zabbix_get -s 127.0.0.1 -p 10050 -I 127.0.0.1 -k "system.hostname"
+
+带参数的
+    UserParameter=key[*],<command> $1 [$2 ...]
+    zabbix_get -s 127.0.0.1 -p 10050 -I 127.0.0.1 -k total_process[DIA]
+
+    <commad>: escape '$' awk '{print $$4}'
 
 
-UserParameter=key[*],<command> $1 [$2 ...]
-zabbix_get -s 127.0.0.1 -p 10050 -I 127.0.0.1 -k total_process[DIA]
+## call macro
+user defined macro: {$MACRONAME} 
+global macro: {TRIGGER.NAME}
 
-
-<commad>: escape '$' awk '{print $$4}'
-
-
-## user defined macro
-{$MACRONAME} 
 
 ## command line tool
 ```

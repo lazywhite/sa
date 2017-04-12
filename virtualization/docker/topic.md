@@ -2,7 +2,7 @@
 ## expose docker api to network
 ```
 dockerd -H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock
-```
+l``
 ## oss storage
 ```
 docker-registry + oss + nginx + ssl
@@ -77,6 +77,8 @@ restart policy
     always: docker will restart the container everytime it exists
 
 ```
+
+## docker port mapping http response very slow at first time
 ## Conclusion
 1. stop a container will keep environment variable, all system setting
 
