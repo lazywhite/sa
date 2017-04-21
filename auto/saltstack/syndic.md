@@ -38,3 +38,4 @@ salt-key -a <syndic-id>
 3. syndic file_roots, pillar_roots 必须与master保持一致
 4. syndic 节点不会回应test.ping
 5. syndic 节点会中继所有publications and events
+6. Each Syndic must provide its own file_roots directory. Files will not be automatically transferred from the Master node.

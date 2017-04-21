@@ -1,3 +1,21 @@
+## Keywrod
+```
+state
+module
+grains
+pillar
+    ext_pillar
+job
+returnner
+schedule
+runner
+syndic
+reactor
+beacon
+roster
+mine
+cloud
+```
 ## Remote Execution
 ```
 salt '<target>' <function> [arguments...]
