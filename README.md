@@ -38,6 +38,7 @@ note for linux system administration
 │   └── varnish
 ├── database
 │   ├── counchdb
+│   ├── greenplum
 │   ├── influxdb
 │   ├── mongodb
 │   ├── mssql_server
@@ -128,10 +129,13 @@ note for linux system administration
 │   ├── cisco-router.md
 │   ├── multi_net_routing.txt
 │   ├── nic-bridge.txt
+│   ├── ntop
 │   ├── route.txt
 │   ├── route_table.md
+│   ├── smokeping
 │   └── switch.txt
 ├── optool
+│   ├── autossh.md
 │   ├── awk.txt
 │   ├── cobbler.md
 │   ├── code-deploy.txt
@@ -139,7 +143,9 @@ note for linux system administration
 │   ├── dstat
 │   ├── experience.txt
 │   ├── find.md
+│   ├── gitbook.md
 │   ├── htop.md
+│   ├── iostat.md
 │   ├── iptables.txt
 │   ├── irc.txt
 │   ├── lsof.md
@@ -155,6 +161,7 @@ note for linux system administration
 │   ├── ss.md
 │   ├── sublime.md
 │   ├── vim.md
+│   ├── vmstat.md
 │   ├── vnc.md
 │   └── weechat.md
 ├── performance
@@ -207,6 +214,7 @@ note for linux system administration
 │   ├── memo.txt
 │   ├── music.txt
 │   ├── todo.txt
+│   ├── upgrade_ssl_ssh_mysql.md
 │   └── work_note.txt
 ├── vcs
 │   ├── git
@@ -217,10 +225,14 @@ note for linux system administration
 │   ├── kvm
 │   ├── openstack
 │   └── vagrant
-└── webserver
-    ├── apache
-    ├── lighttpd
-    ├── nginx
-    └── note.md
+├── webserver
+│   ├── apache
+│   ├── lighttpd
+│   ├── nginx
+│   └── note.md
+└── windows
+    ├── jdk.md
+    ├── note.txt
+    ├── salt-minion.md
+    └── zabbix_agent.md
 ```
-
