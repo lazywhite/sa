@@ -1,5 +1,7 @@
-# Database
-## subquery
+
+## 子查询
+### where 子查询
+```
 ### 标量(单一值)
 SELECT * FROM article WHERE uid = (SELECT uid FROM user WHERE status=1 ORDER BY uid DESC LIMIT 1)
 ### N行一列
@@ -14,61 +16,77 @@ SELECT * FROM table1 WHERE (1,2) = (SELECT column1, column2 FROM table2)
 SELECT * FROM article WHERE (title,content,uid) = (SELECT title,content,uid FROM blog WHERE bid=2)
 ### N行N列(表)
 SELECT * FROM article WHERE (title,content,uid) IN (SELECT title,content,uid FROM blog)
+```
 ### From子句子查询
+```
 SELECT ... FROM (subquery) AS name
+```
 ### EXIST
+```
 SELECT * FROM article WHERE EXISTS (SELECT * FROM user WHERE article.uid = user.uid)
+```
 
-## Join 拼接表
-```
-left join 
-right join
-inner join
-```
-# Mathmatic function
-```
-avg()
-max()
-min()
-count()
-```
+
   
-# Union
+## Union
+```
 UNION 用于把来自多个 SELECT 语句的结果组合到一个结果集合, 自带去重  
 union all 不过滤重复数据
 
+select * from article
+	union [all]
+select * from article
+```
 
-## limit 
+## LIMIT 
 ```
 mysql> SELECT * FROM table LIMIT 5,10;   [offset,]<row count>
-mysql> SELECT * FROM table LIMIT 95, 18446744073709551615; skip "offset" to end
-just provide a very large number to "row count"
+mysql> SELECT * FROM table LIMIT 95, 18446744073709551615; skip "offset" to end 
+just provide a very large number to "row count" 
 ```
 
-## Replace
+## Foreign key
 ```
-replace into user(id, name, age) values (10, "Bob", 50);
-```
+## 1. 创建表的同时定义外键
+CREATE TABLE Persons
+(
+  Id_P int NOT NULL,
+  LastName varchar(255) NOT NULL,
+  FirstName varchar(255),
+  Address varchar(255),
+  City varchar(255),
+  PRIMARY KEY (Id_P)
+)
+CREATE TABLE Orders
+(
+Id_O int NOT NULL,
+OrderNo int NOT NULL,
+Id_P int,
+PRIMARY KEY (Id_O),
+FOREIGN KEY (Id_P) REFERENCES Persons(Id_P)
+) 
 
-# Variable
-```
-1. local variable used in stored program
-create_procedure> declare Number int;
-2. global system variable
-mysql>  set GLOBAL max_connections = 1000;
-3. session variable, can always be used before connection closed
-mysql>  set SESSION max_connections = 1000, @@sql_mode = 'TRADITIONAL';
-4. session-specified user variable
-mysql>  set @x = 10;
-```
 
+## 2. 在已存在的表中添加外键
+alter table orders drop column Id_P;
+alter table orders add column Id_P int not null after OrderNo;
+alter table orders add constraint fk_person_id foreign key (Id_P) references Person(Id_P)
+
+## 3. 删除外键
+show create table Orders #获得外键名称
+set FOREIGN_KEY_CHECKS = 0;
+alter table child drop foreign key orders_ibfk_1; 
+```
 # Procedure
 ## create procedure
 ```
 mysql> delimiter //
 mysql> create procedure show_all_user (OUT number INT) begin select count(*) from user into number; end//
 mysql> delimiter ;
+
+mysql> set @number = 0;
 mysql> call show_all_user(@number);
+mysql> select @number;
 ```
 ## remove procedure
 ```
@@ -84,58 +102,122 @@ show create procedure <name>
 ```
 
 # Function
-## create function
-create function hello(s char(20)) returns char(50) deterministic return concat('hello ', s, '!');
-## function return type
-Deterministic functions always return the same result any time they are called with a specific set of input values.
-Nondeterministic functions may return different results each time they are called with a specific set of input values.
-## use function
-select hello('world');
+## 1. create function
+```
+delimiter//
+create function get_weekday(d datetime) returns varchar(30)
+  begin
+    declare s varchar(30);
+    select weekday(d) into s;
+    return concat("week index of today is: " , s);
+  END;//
+delimiter ;
+```
+## 2. function return type
+```
+Deterministic functions 
+	always return the same result any time they are called with a specific set of input values.
+Nondeterministic functions 
+	may return different results each time they are called with a specific set of input values.
+```
+## 3. call function
+```
+select get_weekday(now());
+```
 
-## remove function
-Drop function <name>
+## 4. remove function
+```
+Drop function if exists db.func_name
+```
 
-## alter function
+## 5. alter function
+```
 alter function <name>
-
-# Useful Commands
 ```
-mysql> select now();
-mysql> show full columns from <table>;
-mysql> select user();
-mysql> select version();
-mysql> show plugins;
-mysql> status; # show information about connected socket etc;
-mysql> select user()|schema()
-mysql> select floor(1.23), ceil(1.23), round(1.6666, 2),  
-mysql> select 5 div 2;  5 / 2;
-mysql> select 5 mod 2; mod(5, 2);
-
-mysql> select ifnull(<exp1>, <exp2>);
+## 6. list all function of current database
+```
+show function status where db = 'test'
+```
+## 7. view function body
+```
+show create function test.get_weekday
 ```
 
-# Tips
-## disable auto-reconnect
-variable lost with connection
-mysql --skip-reconnect
-
-## safe update
-mysql --safe-updates
-
-## PS1
+## While循环
 ```
-shell> export MYSQL_PS1="(\u@\h) [\d]> "
+delimiter $$　　　　// 定义结束符为 $$ 
+drop procedure if exists wk; // 删除 已有的 存储过程 
+
+create procedure wk()　　　　　　//　 创建新的存储过程 
+begin 
+    declare i int;　　　　　　　　　　// 变量声明 
+    set i = 1;　　　　　 
+    while i < 11 do 　　　　　　　　　　// 循环体 
+        insert into user_profile (uid) values (i); 
+        set i = i +1; 
+    end while; 
+end $$　　　　　　　　　　　　　　　// 结束定义语句 
+
+// 调用 
+
+delimiter ;　　　　　　　　　　// 先把结束符 回复为; 
+call wk();
 ```
+## Repeat循环
+```
+delimiter //
+drop procedure if exists looppc;
+create procedure looppc()
+begin 
+    declare i int;
+    set i = 1;
+
+    repeat 
+        insert into user_profile_company (uid) values (i+1);
+        set i = i + 1;
+    until i >= 20
+
+    end repeat;
+end //
+
+---- 调用
+call looppc()
+```
+
+## Loop循环
+```
+delimiter $$
+drop procedure if exists lopp;
+create procedure lopp()
+begin 
+    declare i int ;
+    set i = 1;
+
+    lp1 : LOOP　　　　　　　　　　　　　　//  lp1 为循环体名称   LOOP 为关键字
+        insert into user_profile (uid) values (i);
+        set i = i+1;
+        if i > 30 then
+            leave lp1;　　　　　　　　　　　　　　//  离开循环体
+        end if;
+    end LOOP;　　　　　　　　　　　　　　//  结束循环
+end $$
+```
+
 # Trigger 
 ## create trigger
 ```
-mysql> create table account (acct_num INT, amount DECIMAL(10, 2));
-mysql> create trigger ins_sum BEFORE INSERT ON acount
-->      FOR EACH ROW set @sum = @sum + NEW.amount;
+create trigger c_history before update on article
+  for each row
+    insert into `content_history`(content_before, content_after) values (OLD.content, NEW.content)
 
-mysql> set @sum = 0 ;
-mysql> INSERT INTO account VALUES(137,14.98),(141,1937.50),(97,-100.00); 
-mysql> SELECT @sum AS 'Total amount inserted';
+```
+## list triggers
+```
+show triggers [from|in <db>];
+```
+## remove trigger
+```
+drop trigger if exists c_history;
 ```
 
 # Event Scheduler
@@ -156,6 +238,7 @@ CREATE EVENT myevent
       UPDATE myschema.mytable SET mycol = mycol + 1;
 ```
 
+
 ## grant priviledges
 ```
 mysql> grant event on myschema.* to jon@localhost;
@@ -170,36 +253,40 @@ mysql> Alter event <name> disable/enable;
 ```
 mysql> show events;
 ```
+## remove event
+```
+drop event if exists <event_name>
+```
 
 # View
 ## create view
-create view <name> as select * from test;
+```
+CREATE  VIEW `full` AS select `article`.`id` AS `id`,`article`.`content` AS `content`,`user`.`id` AS `uid`,`user`.`name` AS `name` from (`article` left join `user` on((`article`.`uid` = `user`.`id`)))
+```
 ## show view
+```
 show create view <name>
-## show all views
-select * from views where TABLE_SCHEMA regexp 'test'\G
+```
+## show database views
+```
+select * from information_schema.views where table_schema regexp 'test'\G
 
+```	
+##  remove view
+```
+drop view if exists <view name>
+```
 
 # Prepare statement (since mysql5.5)
+```
 mysql> prepare stmt from 'select sqrt(pow(?, 2) + pow(?, 2)) as mm';
 mysql> set @a = 4;
 mysql> set @b = 3;
 mysql> execute stmt using @a, @b;
-
-# Declare
-
-should be in a compound statement{ begin...end}
-declare variable type [default Value]
+```
 
 
-# Flow control
-
-select count( distinct user_id ) from T_USER_CHARGE where create_ts > DATE('2015-11-10') and create_ts < DATE('2015-11-11');
-
-select count(*) from T_USER where  not isnull(device_type);
-
-
-# transaction
+# Transaction
 ```
 mysql> start transcation [with consistent snapshot];
 mysql> savepoint <p1>;
@@ -207,25 +294,6 @@ mysql> rollback [to <p1>]
 mysql> release savepoint <p1>;
 mysql> commit;
 ```
-
-# change metadata
-```
-mysql>  alter table gg add primary key (id);
-```
-
-# 差集
-mysql> select user from nn where user not in (select user from mysql.user) ;
-
-# JSON datatype
-JSON columns cannot have a default value.
-JSON columns cannot be indexed
-
-## Alter table
-```
-ALTER TABLE tbl_name MODIFY COLUMN col_name BIGINT;
-RENAME TABLE tbl_name TO new_tbl_name, tbl_name2 TO new_tbl_name2;
-```
-
 
 
 # Datatype:
@@ -253,13 +321,15 @@ decimal:可变精度浮点数
 smallint:0-32767
 tinyint:-128 127 or 256
 ```
-## 3.boolean:0 or 1
+## 3.boolean
+```
+same as tinyint(1)
+```
 ## 4.data and time 
 ```
 date:YYY-MM-DD
 datetime:combination of date and time
 time:HH-MM-SS
-year:
 ```
 ## 5.binary datatype
 ```
@@ -268,144 +338,15 @@ mediumblob:max length 16MB
 longblob:max length 4GB
 tinyblob:max length 256 bytes;
 ```
-```
-通配符: *  % _
-REGEXP: . * + ? \\ | [123] [a-z] {n} {n,} {n,m}
-fully qualified name;
-注释:-- ,#
-mariadb>\. filename 在交互模式下运行脚本
-```
 
-## Select
+## 6. JSON
 ```
-select column1,column2... from table;select * from table;
-select distinct  :唯一的
-select column1 from table limit 5;默认第一行为row0
-select column1 from table limit 5,5;从第6行开始的持续5行
-select column1 from table order by column1 desc;
-select column1 from table where column2='sth'
-select column1 from table where column2 between A and B
-select column1 from table where column2 IS NULL
-select column1 from table where column2='A' and|or column3='B'
-select columns from table where column1 IN (start,end) | NOT IN
-select columns from table where column1 like 'jet%'
-select columns from table where column1 REGEXP 'string'
-like 后跟的规则不加通配符的话表示完全匹配
+JSON columns cannot have a default value.  
+JSON columns cannot be indexed
 ```
 
-```
-1.text manipulation function
-rtrim() ltrim() trim() upper() lower() left() length() locate() soundex()
-substring() 
-2.date and time manipulation funciton
-adddate() addtime() curdate() curtime() date() datediff() date_add()
-date_format() day() dayofweek() hour() minute() month() now() second() time()
-year()
-3.numeric manipulation funcitons
-abs() cos() exp() mod() pi() rand() sin() sqrt() tan()
-4.aggregate functions 集合,聚集
-avg() count() max() min() sum()
 
-
-data grouping
-select id,count(*) from table group by id;
-
-```
-full-text search 
-boolean-text search  
-
-Insert:
-full-insert,partial-insert,multiple-insert,insert a result of a query;
-partial-insert 表的列必须允许NULL或者有默认值,否则不能部分插入
-多插入insert into table values (1,2,3,4),(5,6,7,8)
-将查询结果插入表,insert into table1 (column1,column2....)
-select column1,column2... from table2
----------------------------------------
-update
-update table set column1='A' where column2='B'
-
-------------------
-delete
-delete from table where column1='A'
-一定以主键为选择标准,删之前可以用select看一下
-
-mariaDB无法undo
-
-auto_increment  相当于一个会变化的默认值,可不手动赋值
-
-
-DEFAULT 不能为函数,只能为常量->数字或字符串
-
-
-## Foreign key
-```
-在支持事物管理的引擎下创建的表,创建外键才有意义
-a table using one engine cannot have a foreign key referring to a
-table that uses another engine
-```
-
-# Table
-## 1. Create table
-```
-create table Table (
-id int(8),name varchar(24) NOT NULL,
-quality int(8) NOT NULL DEFAULT 1,
-PRIMARY KEY (id));
-```
-## 2. Alter table
-```
-alter table :update the defination of table
-
-Alter Table table Add column3 varchar(20)
-Alter Table table Drop Column column1;
-Alter 添加 Foreign Key
-Drop Table table; 与 Delete * from table的区别
-Rename Table table1 TO table1_backup,table2 TO table2_backup;
-alter table <old_name> rename <new_name>;
-
-rename column table.column to new_column
-
-create index [type] on table(column)
-```
-
-## View
-```
-VIEW :其实只是一个query command,返回一个虚拟的表
-new view 不能与table或其他view重名
-Create View name;
-Show Create View name;显示创建view的语句
-Drop View name;
-Create OR Replace View name;更新一个view
-
-create view ST AS select Concat(RTrim(vend_name),'(',RTrim(vend_country),')')
-AS vend_title From vendors Order By vend_name;
-```
-## Cursor
-```
-Declare name Cursor For select column from table;
-open name;close name;
-```
-## Trigger
-```
-trigger of Insert Delete Update
-```
-## Transaction
-```
-transaction : could only be used for Insert Delete Update
-Transaction processing is used to maintain database integrity by ensuring that
-batches of MariaDB SQL operations execute completely or not at all
-
-MariaDB SQL statements are usually executed and written directly to the data-
-base tables. This is known as an implicit commit—the commit (write or save)
-operation happens automatically.
-Within a transaction block, however, commits do not occur implicitly. To
-force an explicit commit, the COMMIT statement is used
-
-savepoint name;rollback to name;
-
-```
-
-## User 
+## User操作
 ```
 create user name;
 drop user name;
@@ -413,6 +354,9 @@ Rename User name To another
 Show Grants For name;
 Set Password For name=Password('1234')
 Set Password=Password("some");修改用户自己的密码
+
+SHOW GRANTS FOR user@host
+DROP USER 'user'@'host';
 ```
 
 ## Full-text search 
@@ -452,10 +396,10 @@ SELECT * FROM articles WHERE MATCH (title,body)
 ```
 
 ## 中文全文索引
-mysql5.7 支持ngram插件来做中文分词，MyISAM和Innodb可用  
-[doc](http://www.actionsky.com/docs/archives/163)
-```
+mysql5.7 支持ngram插件来做中文分词，MyISAM和Innodb可用    
+[doc](http://www.actionsky.com/docs/archives/163)  
 
+```
 [mysqld]
 ngram_token_size=2
 
@@ -468,18 +412,9 @@ CREATE TABLE articles (
         ) ENGINE=InnoDBCHARACTER SET utf8mb4;
 
 mysql> SETGLOBAL innodb_ft_aux_table="new_feature/articles";
-mysql> SELECT *FROM information_schema.INNODB_FT_INDEX_CACHE LIMIT 20,10;
-
-
-## String function
+mysql> SELECT * FROM information_schema.INNODB_FT_INDEX_CACHE LIMIT 20,10;
 ```
-sql 对大小写不敏感
 
-substring_index(username, '@', 1)
-TRIM(字串): 将所有字串起头或结尾的空白移除
-LTRIM(字串): 将所有字串起头的空白移除.
-RTRIM(字串): 将所有字串结尾的空白移除.
-```
 
 ## Multi Left Join
 ```
@@ -512,8 +447,8 @@ select user.name, article.content, user_info.location from user left join articl
 
 ```
 
-# Topic
-## 1. "SHOW" useful command
+
+## SHOW usage
 ```
 show create database test;
 show databases;
@@ -530,7 +465,6 @@ show create database DBname
 show create table TBname;
 show [storage] engines;
 show innodb status;
-show warnings;
 show master status; 查看主的状态
 show slave status\G; 查看从的状态
 show processlist; 查看mysql的进程状态信息
@@ -549,19 +483,19 @@ show processlist;Kill ID;
 
 show tables like "history%";
 ```
-## 2. 计算索引未命中缓存的概率：
+## 计算索引未命中缓存的概率：
 ```
 key_cache_miss_rate = Key_reads / Key_read_requests * 100%
 ```
 
-## 3. auto increment settings
+## auto increment settings
 ```
 auto_increment_increment (默认间隔值)
 auto_increment_offset   (默认起始值)
 create table tb() AUTO_INCREMENT=100 (指定起始值)
 ```
 
-## 4. select from n last row
+## select from n last row
 ```
 select * from book_authors order by id desc limit 10;
 ```
@@ -573,3 +507,227 @@ alter table table_name modify column_name int(5)
 ```
 SET FOREIGN_KEY_CHECKS=0;
 ```
+
+## Replace用法
+```
+replace into testTable(id, name) values(6, "hello"); 提供的column必须包含主键或者其他unique index, 没有提供值并且没有默认值的字段将以null填充
+如果不存在行则直接insert， 有存在的行将先delete后insert
+```
+
+## 查询mysql server状态
+```
+mysql> show status;
+mysql> show processlist
+mysql> status;
+mysql> select user()
+mysql> select database()
+mysql> show plugins; #可以查看支持的存储引擎
+```
+
+## SQL样例
+
+```
+select * from tt where age between 30 and 80;
+update tt set age = null where id = 7;
+select * from tt where age is null; //null值必须用is null来匹配
+select * from tt where age not between 30 and 80
+select * from employees where employee_salary in (9500, 5500)
+select name, (salary * 12) "年薪" from employee;  #数学运算与别名
+select name from employee where hire_date between '2017-05-01' and '2017-06-01' # 按照日期查询
+
+select * from employee where name regexp ".*song$"; ## 正则匹配默认不区分大小写
+select * from employee where name regexp binary ".*song$"; ## 加binary区分大小写
+select * from employee order by salary [asc, desc];
+select * from employee order by hire_date , salary desc ## 一个升序， 一个降序
+
+select name, salary,
+case
+  when department_id = 1 then salary * 1.1
+  when department_id = 2 then salary * 1.2
+  when department_id = 3 then salary * 1.3
+else 
+    salary
+end as new_salary 
+    from employee;
+
+update employee set hire_date = date('2016-01-01 11:20:30') where `id` = 6;
+```
+
+
+## 表更改
+
+```
+rename table <old_name> to <new_name>;
+alter table <old_name> rename to <new_name>;
+```
+
+## 列操作
+```
+添加列
+    alter table employee add column age int after name; ## 只有after， 没有before
+修改列(类型， 名称等)
+    alter table employee change `employee_name` `name` varchar(50) ##必须有back-quota
+删除列
+    alter table employee drop column employee_sex;
+```
+
+# 內建函数
+## IF
+```
+select if(0, 'true', 'false'); -->false
+select if(1, 'true', 'false'); -->true
+SELECT IF(0 = FALSE, 'true', 'false'); -->true
+SELECT IF(1 = TRUE, 'true', 'false');  -->true
+select if("str", "true", "false"); -->false  
+```
+
+##  IFNULL函数(exp1为null，返回exp2, 否则返回exp1)
+```
+mysql> SELECT IFNULL(1,0);
+        -> 1
+mysql> SELECT IFNULL(NULL,10);
+        -> 10
+mysql> SELECT IFNULL(1/0,10);
+        -> 10
+mysql> SELECT IFNULL(1/0,'yes');
+        -> 'yes'
+
+```
+## NULLIF
+```
+Returns NULL if expr1 = expr2 is true, otherwise returns expr1
+
+mysql> SELECT NULLIF(1,1);
+        -> NULL
+mysql> SELECT NULLIF(1,2);
+        -> 1
+```
+## ISNULL
+```
+If expr is NULL, ISNULL() returns 1, otherwise it returns 0.
+
+mysql> SELECT ISNULL(1+1);
+        -> 0
+mysql> SELECT ISNULL(1/0);
+        -> 1
+```
+
+## 日期相关函数
+```
+set @date = '1987-02-03 12:23:45';
+mysql> SELECT year(@date);
+mysql> SELECT month(@date);
+mysql> SELECT day(@date);
+mysql> SELECT hour(@date);
+mysql> SELECT minute(@date);
+mysql> SELECT second(@date);
+
+mysql> SELECT ADDDATE('2008-01-02', 31);
+        -> '2008-02-02'
+mysql> SELECT CURDATE();
+        -> '2008-06-13'
+mysql> SELECT CURTIME();
+        -> '23:50:26'
+mysql> select date('2017-01-01');
++--------------------+
+| date('2017-01-01') |
++--------------------+
+| 2017-01-01         |
++--------------------+
+
+datediff(exp1, exp2) --> exp1 - exp2 (in days)
+    mysql> select datediff(date('2017-01-01'), date('2013-01-06'));
+    +--------------------------------------------------+
+    | datediff(date('2017-01-01'), date('2013-01-06')) |
+    +--------------------------------------------------+
+    |                                             1456 |
+    +--------------------------------------------------+
+
+mysql> SELECT DATE_ADD('2010-12-31 23:59:59', INTERVAL 1 DAY);
+        -> '2011-01-01 23:59:59'
+
+    select now()  + interval 5 day;
+    select now() - interval 10 month;
+
+
+
+ADDTIME() adds expr2 to expr1 and returns the result. expr1 is a time
+or datetime expression, and expr2 is a time expression.
+    mysql> SELECT ADDTIME('2007-12-31 23:59:59.999999', '1 1:1:1.000002');
+            -> '2008-01-02 01:01:01.000001'
+    mysql> SELECT ADDTIME('01:00:00.999999', '02:00:00.999998');
+            -> '03:00:01.999997'
+
+mysql> select date_format(date(now()), '%Y %m %d') now;
++------------+
+| now        |
++------------+
+| 2017 05 22 |
++------------+
+
+weekday()Returns the weekday index for date (0 = Monday, 1 = Tuesday, ... 6 = Sunday).
+    mysql> SELECT WEEKDAY('2008-02-03 22:23:00');
+            -> 6
+
+
+select last_day(now()); #月份最后一天
+```
+
+## 字符串相关函数
+```
+mysql> select concat("good ", "morning") greeting;
++----------------------------+
+| greeting                   |
++----------------------------+
+| good morning               |
++----------------------------+
+
+rtrim("string") ltrim("string") trim("string") 
+upper("string") lower("string") 
+left("string", length) right("string", length)
+length("string") locate("substr", "string") 
+substring("string", position, length) 
+
+```
+## 数学函数
+```
+avg() max() min() count() floor() ceil() round()
+abs() cos() exp() mod() pi() rand() sin() sqrt() tan()
+```
+
+# Tips
+## safe update
+```
+不带where和limit的update语句禁止执行， SQL_SAFE_UPDATES 属于session变量
+set SQL_SAFE_UPDATES = 1; 或者mysql --safe-updates
+```
+
+## PS1
+```
+shell> export MYSQL_PS1="(\u@\h) [\d]> "
+
+
+```
+## 通配符
+```
+like通配符: %(任意多个） _（任意一个）
+REGEXP: . * + ? \\ | [123] [a-z] {n} {n,} {n,m}
+
+```
+
+# Useful Commands
+```
+mysql> select now();
+mysql> show full columns from <table>;
+mysql> select user();
+mysql> select version();
+mysql> status; # show information about connected socket etc;
+mysql> select user()|schema()
+mysql> select floor(1.23), ceil(1.23), round(1.6666, 2),  
+mysql> select 5 div 2; 整除 
+mysql> select 5 / 2; 除法，结果一定是浮点数
+mysql> select 5 mod 2; mod(5, 2); 求余
+
+```
+
+
