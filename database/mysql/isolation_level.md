@@ -1,3 +1,12 @@
+[Doc](http://anjianshi.net/post/yan-jiu-bi-ji/db_isolation)
+  
+## 脏读
+```
+其他事务进行了回滚，我们就相当于读到了数据库中不再存在的数据（也就是“脏数据”）。
+
+总结: 读到了其他事务中未提交的操作, 隔离级别是read-uncommitted时会发生
+```
+  
 ## 幻读
 
 ```
@@ -5,7 +14,8 @@
 
 SELECT id FROM test;    =>  1,2,5
 SELECT id FROM test;    =>  1,2,5,6 
-出现这种请况一般是因为在第二次 SELECT 执行前，有其他事务进行了 INSERT 或 DELETE 操作，并进行了提交。
+
+总结： 读到了其他事务提交的insert或者delete, 隔离级别是read-committed会发生
 ```
 ## 不可重读
 ```
@@ -13,16 +23,10 @@ SELECT id FROM test;    =>  1,2,5,6
 
 SELECT id, name FROM test;    =>   (1,"n1"), (2, "n2), (5, "n5")
 SELECT id, name FROM test;    =>   (1, "n1"), (2, "David"), (5, "n5")
-原因是在第二次 SELECT 前，其它事务对此条目进行了 UPDATE，并进行了提交。
+
+总结： 读到了其他事务提交的update, 隔离级别是read-committed会发生
 ```
 
-## 脏读
-```
-脏读发生的前提是一个事务能读到其他事务中未提交的操作。
-如果在读取到这样的数据后，那个事务进行了回滚，我们就相当于读到了数据库中不再存在的数据（也就是“脏数据”）。
-
-这三种读现象是并列、互不相关的，例如在某个隔离等级中出现了“不可重复读”，并不意味着就一定也能出现“幻读”。
-```
 
 
 ## 隔离级别
@@ -45,10 +49,12 @@ SELECT id, name FROM test;    =>   (1, "n1"), (2, "David"), (5, "n5")
 ## Topic
 ```
 MySQL 的默认事务级别是 Repeatable read；PG 则是 Read committed
-Repeatable read 级别下，MySQL 和 PG 都使用了 Snapshot isolation
-都不会出现幻读
 
-
-[Doc](http://anjianshi.net/post/yan-jiu-bi-ji/db_isolation)
+mysql repeatable read级别采用MVCC， 避免所有情况
 ```
+
+## 操作
+```
+select @@tx_isolation; 查看当前隔离级别
+set tx_isolation = "read-uncommitted"|"read-committed"|"repeatable-read" 仅对当前session有效
 ```
