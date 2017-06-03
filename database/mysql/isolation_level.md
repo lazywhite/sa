@@ -56,5 +56,6 @@ mysql repeatable read级别采用MVCC， 避免所有情况
 ## 操作
 ```
 select @@tx_isolation; 查看当前隔离级别
-set tx_isolation = "read-uncommitted"|"read-committed"|"repeatable-read" 仅对当前session有效
+set global tx_isolation = "read-uncommitted"|"read-committed"|"repeatable-read" 
+重新开启新的session才会生效
 ```

@@ -1,0 +1,102 @@
+1. 查询部门30中的所有员工信息
+select * from emp where deptno = 30;
+2.列出所有'程序猿'的姓名，编号，入职日期，部门编号
+select ename, empno, hiredate, deptno from emp where job = "程序猿";
+
+3.找出奖金比工资 还要高的员工 的所有信息 
+select * from emp where bonus > salary;
+4.找出既不是 程序猿 也不是 攻城狮 但是工资还大于1万的员工信息
+select * from emp where job not in ("程序猿", "攻城师") and salary > 1000;
+
+5.找出有奖金的员工的不同工作  （ 奖金null ，0）
+select distinct job from emp where ifnull(bonus, 0) > 0;
+
+6.找出各月倒数第三天入职的所有员工
+（例如 1月29日入职  2月26日入职，4月28日入职）
+select * from emp where hiredate =  (last_day(hiredate) - interval 2 day);
+select * from emp where hiredate =  (last_day(hiredate) - 2);
+
+7. 找出早于12年前 入职的员工
+select * from emp where year(hiredate) < 2012;
+
+8. 显示名字中不带'亮'的员工姓名
+select * from emp where ename not like '%亮%';
+
+9.显示满10年服务年限的员工的姓名和入职日期
+select * from emp where year(now()) - year(hiredate) > 5;
+10.显示所有员工的姓名和受雇日期，根据服务年限，将老员工排在前面
+select ename, hiredate from emp order by hiredate;
+11.找出在（任何年份）8月受聘的所有雇员
+select * from emp where month(hiredate) = 8;
+12. 计算每个雇员加入公司的天数
+select datediff(now(), hiredate) from emp;
+
+
+
+select g.total, g.deptno, g.avg_salary, dept.deptname, dept.loc from  
+(select e.deptno, count(*) total, avg(salary) avg_salary  from 
+ emp e left join dept d on e.deptno = d.deptno group by deptno) g, dept 
+where g.deptno = dept.deptno
+
+
+select count(*), avg(salary), max(salary), min(salary) from (select e.deptno, d.deptname, e.salary from emp e left join dept d on e.deptno = d.deptno) g group by deptno having count(*) > 2
+
+
+select e.empno, e.ename, d.deptname, f.ename manager_name from emp e left join dept d on e.deptno = d.deptno left join emp f on e.manager = f.empno
+where e.salary > any(select salary from emp where ename in ("李莫愁", "小龙女"))
+
+select e.empno, e.ename, f.empno manager_id, f.ename manager_name, f.salary manager_salary from emp e left join emp f on e.manager = f.empno order by manager_salary desc
+
+select e.empno, e.ename, e.hiredate  from emp e left join emp f on e.manager = f.empno where e.hiredate < f.hiredate
+
+
+select e.empno, e.ename, e.deptno, d.deptname, d.loc ,(select count(*) from emp g where g.deptno = e.deptno) dept_total from emp e 
+        left join emp f on e.manager = f.empno left join dept d on e.deptno = d.deptno 
+        where e.hiredate < f.hiredate
+
+select e.ename, d.deptname, e.deptno , (select count(*) from emp g where g.deptno = e.deptno) dept_total from emp e left join dept d on e.deptno = d.deptno where job = "程序猿"
+
+## SQL样例
+
+```
+select * from tt where age between 30 and 80;
+update tt set age = null where id = 7;
+select * from tt where age is null; //null值必须用is null来匹配
+select * from tt where age not between 30 and 80
+select * from employees where employee_salary in (9500, 5500)
+select name, (salary * 12) "年薪" from employee;  #数学运算与别名
+select name from employee where hire_date between '2017-05-01' and '2017-06-01' # 按照日期查询
+
+select * from employee where name regexp ".*song$"; ## 正则匹配默认不区分大小写
+select * from employee where name regexp binary ".*song$"; ## 加binary区分大小写
+select * from employee order by salary [asc, desc];
+select * from employee order by hire_date , salary desc ## 一个升序， 一个降序
+
+select name, salary,
+case
+  when department_id = 1 then salary * 1.1
+  when department_id = 2 then salary * 1.2
+  when department_id = 3 then salary * 1.3
+else 
+    salary
+end as new_salary 
+    from employee;
+
+update employee set hire_date = date('2016-01-01 11:20:30') where `id` = 6;
+select * from employee where salary <> 40;
+
+select name from employee where salary =  (select max(salary) from employee) ;
+alter table employee add column `gender` enum('male', 'femal') after age;
+select distinct dept_id from employee; ##去重
+
+select e.ename, d.deptname from emp e, dept d where e.deptno = d.deptno;
+select s.deptname, count(*) from 
+    (select e.empno, e.ename, d.deptname  from emp e left join dept d
+  on e.deptno = d.deptno) s 
+        group by s.deptname 
+            having count(*) > 1
+                order by count(*)
+
+select deptno, count(1) total from emp group by deptno having  total > 3 order by total ; //聚合函数别名
+
+```

@@ -1,6 +1,5 @@
-
 ## 子查询
-### where 子查询
+### where 子查询（无需别名)
 ```
 ### 标量(单一值)
 SELECT * FROM article WHERE uid = (SELECT uid FROM user WHERE status=1 ORDER BY uid DESC LIMIT 1)
@@ -17,7 +16,7 @@ SELECT * FROM article WHERE (title,content,uid) = (SELECT title,content,uid FROM
 ### N行N列(表)
 SELECT * FROM article WHERE (title,content,uid) IN (SELECT title,content,uid FROM blog)
 ```
-### From子句子查询
+### From子句子查询(需要别名)
 ```
 SELECT ... FROM (subquery) AS name
 ```
@@ -26,7 +25,36 @@ SELECT ... FROM (subquery) AS name
 SELECT * FROM article WHERE EXISTS (SELECT * FROM user WHERE article.uid = user.uid)
 ```
 
+## Group by 
+```
+select ... group by column1, column2;
+如果column1有m种， column2有n种， 则最后出现m * n 行
+group by column, 则select时最好要加上这个column
 
+where与having的区别
+1. 作用的对象不同。WHERE 子句作用于表和视图，HAVING 子句作用于组。
+2. WHERE 在分组和聚集计算之前选取输入行（因此，它控制哪些行进入聚集计算）， 而 HAVING 在分组和聚集之后选取分组的行。因此，WHERE 子句不能包含聚集函数； 因为试图用聚集函数判断那些行输入给聚集运算是没有意义的。 相反，HAVING 子句总是包含聚集函数。
+
+select job, sum(salary) from emp group by job;
+select deptno, count(*) from emp group by deptno having count(*) > 3; 
+select deptno, avg(salary) from emp 
+    where job <> '程序猿' 
+        group by deptno 
+            having avg(salary) > 1000 
+                order by avg(salary) desc;
+
+
+select deptno,count(*), avg(salary) from emp 
+    where salary between 10000 and 20000 
+        group by deptno 
+            having count(*) > 1 and deptno <> 10 and avg(salary) < 14000;
+
+
+select * from 
+    (select e.empno, e.ename, e.salary, e.deptno, f.ename mname from emp e left join emp f on e.manager = f.empno) g left join dept d 
+        on g.deptno = d.deptno;
+
+```
   
 ## Union
 ```
@@ -40,9 +68,11 @@ select * from article
 
 ## LIMIT 
 ```
-mysql> SELECT * FROM table LIMIT 5,10;   [offset,]<row count>
-mysql> SELECT * FROM table LIMIT 95, 18446744073709551615; skip "offset" to end 
-just provide a very large number to "row count" 
+mysql> SELECT * FROM table order by id LIMIT 5,10;   [offset,]<row count>
+
+选取某一个行到最后的内容, 提供一个非常大的row count就行
+mysql> SELECT * FROM table order by id LIMIT 95, 18446744073709551615; 
+
 ```
 
 ## Foreign key
@@ -296,55 +326,6 @@ mysql> commit;
 ```
 
 
-# Datatype:
-## 1.string:
-```
-char:fixed-length 1-256 characters
-enum:up to 64K string
-text:max size 64K text 
-mediumtext:max size 16K text;
-longtext:up to 4G text;
-tinytext:up to 255 byte;
-set:up to 64 strings;
-varchar:same as char
-```
-## 2.number
-```
-bit:1-64 byte
-int:
-bigint:
-mediumint:
-Real:4-byte floating values;
-float:single-precision floating point 
-double:double-precision floating point
-decimal:可变精度浮点数
-smallint:0-32767
-tinyint:-128 127 or 256
-```
-## 3.boolean
-```
-same as tinyint(1)
-```
-## 4.data and time 
-```
-date:YYY-MM-DD
-datetime:combination of date and time
-time:HH-MM-SS
-```
-## 5.binary datatype
-```
-blob:max length 64k
-mediumblob:max length 16MB
-longblob:max length 4GB
-tinyblob:max length 256 bytes;
-```
-
-## 6. JSON
-```
-JSON columns cannot have a default value.  
-JSON columns cannot be indexed
-```
-
 
 ## User操作
 ```
@@ -415,9 +396,13 @@ mysql> SETGLOBAL innodb_ft_aux_table="new_feature/articles";
 mysql> SELECT * FROM information_schema.INNODB_FT_INDEX_CACHE LIMIT 20,10;
 ```
 
-
-## Multi Left Join
+## Join
 ```
+类型： 左连， 右连， 内连， 全连， 自连
+1. 没有标明类型的join, 默认是inner join
+2. mysql没有full join， 用left join union right join
+3. inner 和 cross 在mysql中是同义词
+4. Multi Left Join
 CREATE TABLE `user` (
   `id` int(11) NOT NULL,
   `name` varchar(30) DEFAULT NULL,
@@ -445,6 +430,17 @@ select * from user as a inner join article as b on (a.id = b.uid);
 
 select user.name, article.content, user_info.location from user left join article on (user.id = article.uid) left join user_info on (user.id = user_info.id)
 
+
+5. select * from emp, dept; (lines = emp.lines * dept.lines)
+   select * from emp join dept;
+   select * from emp inner join dept; 
+   select * from emp cross join dept; 
+   
+6. 自连结查询
+   select e.empno, e.ename, f.ename from emp e inner join emp f on e.manager = f.empno; 
+
+   select e.empno, e.ename, f.ename from emp e, emp f; //多表联合查询, 仅为inner join的结果
+    
 ```
 
 
@@ -476,7 +472,7 @@ show create database mysql;
 show create table user;
 show grants;
 show errors;
-show warnings;
+show warnings; ##当前一条命令返回结果提示 0 errors, 1 warning时查看
 show engine;查看支持的引擎
 show table status like 'user';
 show processlist;Kill ID;
@@ -524,36 +520,6 @@ mysql> select database()
 mysql> show plugins; #可以查看支持的存储引擎
 ```
 
-## SQL样例
-
-```
-select * from tt where age between 30 and 80;
-update tt set age = null where id = 7;
-select * from tt where age is null; //null值必须用is null来匹配
-select * from tt where age not between 30 and 80
-select * from employees where employee_salary in (9500, 5500)
-select name, (salary * 12) "年薪" from employee;  #数学运算与别名
-select name from employee where hire_date between '2017-05-01' and '2017-06-01' # 按照日期查询
-
-select * from employee where name regexp ".*song$"; ## 正则匹配默认不区分大小写
-select * from employee where name regexp binary ".*song$"; ## 加binary区分大小写
-select * from employee order by salary [asc, desc];
-select * from employee order by hire_date , salary desc ## 一个升序， 一个降序
-
-select name, salary,
-case
-  when department_id = 1 then salary * 1.1
-  when department_id = 2 then salary * 1.2
-  when department_id = 3 then salary * 1.3
-else 
-    salary
-end as new_salary 
-    from employee;
-
-update employee set hire_date = date('2016-01-01 11:20:30') where `id` = 6;
-```
-
-
 ## 表更改
 
 ```
@@ -567,6 +533,7 @@ alter table <old_name> rename to <new_name>;
     alter table employee add column age int after name; ## 只有after， 没有before
 修改列(类型， 名称等)
     alter table employee change `employee_name` `name` varchar(50) ##必须有back-quota
+    alter table employee modify `name` varchar(100); # 仅修改类型
 删除列
     alter table employee drop column employee_sex;
 ```
@@ -574,6 +541,7 @@ alter table <old_name> rename to <new_name>;
 # 內建函数
 ## IF
 ```
+If expr1 is TRUE (expr1 <> 0 and expr1 <> NULL) then IF() returns expr2; otherwise it returns expr3
 select if(0, 'true', 'false'); -->false
 select if(1, 'true', 'false'); -->true
 SELECT IF(0 = FALSE, 'true', 'false'); -->true
@@ -583,6 +551,7 @@ select if("str", "true", "false"); -->false
 
 ##  IFNULL函数(exp1为null，返回exp2, 否则返回exp1)
 ```
+
 mysql> SELECT IFNULL(1,0);
         -> 1
 mysql> SELECT IFNULL(NULL,10);
@@ -682,17 +651,30 @@ mysql> select concat("good ", "morning") greeting;
 | good morning               |
 +----------------------------+
 
+mysql> SELECT STRCMP('text', 'text2');
+        -> -1
+mysql> SELECT STRCMP('text2', 'text');
+        -> 1
+mysql> SELECT STRCMP('text', 'text');
+        -> 0
+
+
 rtrim("string") ltrim("string") trim("string") 
 upper("string") lower("string") 
 left("string", length) right("string", length)
 length("string") locate("substr", "string") 
 substring("string", position, length) 
 
+
 ```
 ## 数学函数
 ```
-avg() max() min() count() floor() ceil() round()
+avg() max() min() 
+count(<column>)  返回非null的总数
+floor() ceil() round()
 abs() cos() exp() mod() pi() rand() sin() sqrt() tan()
+
+聚合函数不能作为where的条件
 ```
 
 # Tips
@@ -730,4 +712,11 @@ mysql> select 5 mod 2; mod(5, 2); 求余
 
 ```
 
+## view Table
+```
+show create table <name>
+show full columns from <name>
+desc <name>
+
+```
 

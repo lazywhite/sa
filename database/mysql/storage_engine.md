@@ -8,6 +8,7 @@ MVCC 支持物理热备
 ### 4. TokuDB 
 分型树索引， 支持压缩， 20x性能提升
 ### 5. MEMORY
+用于存储临时表
 ### 6. Blackhole
 ### 7. CSV
 ### 8. ARIA

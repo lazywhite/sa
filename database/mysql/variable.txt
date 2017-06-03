@@ -1,0 +1,16 @@
+1. 变量类型
+全局变量 
+    select @@version;
+    管理员可以
+用户变量 
+    set @var = 100;
+    select @var;
+会话变量
+    set session 
+局部变量
+    begin
+        declare m = 100;
+    end
+
+
+2. show [global] variables;
