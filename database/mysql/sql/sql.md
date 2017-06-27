@@ -101,11 +101,53 @@ FOREIGN KEY (Id_P) REFERENCES Persons(Id_P)
 alter table orders drop column Id_P;
 alter table orders add column Id_P int not null after OrderNo;
 alter table orders add constraint fk_person_id foreign key (Id_P) references Person(Id_P)
+or
+alter table orders add foreign key(Id_P) references Person(id);
 
 ## 3. 删除外键
 show create table Orders #获得外键名称
 set FOREIGN_KEY_CHECKS = 0;
 alter table child drop foreign key orders_ibfk_1; 
+
+## 4. 外键约束
+外键对于子表而言, 如果父表不存在id, 则子表无法insert记录, 或update uid
+外键对于父表而言, 根据约束类型不同, 会对子表产生不同影响
+alter table orders add constraint fk_person_id foreign key (Id_P) references Person(Id_P) on delete <type>  on update <type>
+
+constraint type
+    on update 
+        cascade: 如果父记录更新了id, 则子记录的uid会改变为新的id
+        set null: 如果父记录更新id, 此时子表中有记录参考此id, 所有子记录的uid字段被设为null, 前提是uid允许为null
+        restrict: 如果父记录更新id, 此时子表中有记录参考此id, 则update失败
+        no action: 同restrict
+    on delete
+        cascade: 删除父记录时, 如果子表中有记录参考此ID, 则所有子记录被删除
+        set null:  删除父记录时, 如果子表中有记录参考此ID, 则所有子记录uid设置为null
+        restrict: 删除父记录时, 如果子表中有记录参考此ID, 则delete失败
+        no action: 同restrict
+
+
+## 5. 查看表定义的外键
+select
+    concat(table_name, '.', column_name) as 'foreign key',
+    concat(referenced_table_name, '.', referenced_column_name) as 'references'
+from
+    information_schema.key_column_usage
+where
+    referenced_table_name is not null;
+and 
+    table_name = "user_info";
+```
+## Index
+```
+## 1. 查看表的索引
+show index from user_info;
+## 1. 删除索引
+alter table user_info drop index `idx_id`;
+
+## 2. 创建索引
+create [unique|fulltext|spatial] index <index_name> on <table>(<column>) [using [btree|hash]];
+create index `idx_uid` on user_info(uid);
 ```
 # Procedure
 ## create procedure
@@ -291,7 +333,9 @@ drop event if exists <event_name>
 # View
 ## create view
 ```
-CREATE  VIEW `full` AS select `article`.`id` AS `id`,`article`.`content` AS `content`,`user`.`id` AS `uid`,`user`.`name` AS `name` from (`article` left join `user` on((`article`.`uid` = `user`.`id`)))
+CREATE  VIEW `full` AS 
+    select `article`.`id` AS `id`,`article`.`content` AS `content`,`user`.`id` AS `uid`,`user`.`name` AS `name` from 
+        `article` left join `user` on `article`.`uid` = `user`.`id`
 ```
 ## show view
 ```
@@ -531,11 +575,12 @@ alter table <old_name> rename to <new_name>;
 ```
 添加列
     alter table employee add column age int after name; ## 只有after， 没有before
+    alter table employee add column age int First; ## 添加到第一列
 修改列(类型， 名称等)
     alter table employee change `employee_name` `name` varchar(50) ##必须有back-quota
     alter table employee modify `name` varchar(100); # 仅修改类型
 删除列
-    alter table employee drop column employee_sex;
+    alter table employee drop [column] employee_sex;
 ```
 
 # 內建函数
@@ -695,6 +740,9 @@ shell> export MYSQL_PS1="(\u@\h) [\d]> "
 like通配符: %(任意多个） _（任意一个）
 REGEXP: . * + ? \\ | [123] [a-z] {n} {n,} {n,m}
 
+like区分大小写
+    select * from piwoker where Worker_Name like binary "%bo%";
+    select * from piwoker where binary Worker_Name binary "%bo%";
 ```
 
 # Useful Commands
@@ -719,4 +767,13 @@ show full columns from <name>
 desc <name>
 
 ```
+## delete 
+```
+delete from bb where id between 0 and 100;
+delete from bb where id in (10, 20, 30);
+```
 
+## set pager
+```
+mysql> pager less
+```
