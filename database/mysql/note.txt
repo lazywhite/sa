@@ -17,9 +17,24 @@ DBA职责：
 	数据库调整
 
 
-索引类型：
-	主索引
-	辅助索引
+索引
+    普通索引 create index 值可以重复
+    唯一索引 create unique index
+    全文索引 create fulltext index
+    空间索引 create spatial index
+        针对point和genomtry等空间数据类型的列建立索引
+        只有myisam和innodb（mysql5.7.5以上版本）的表支持空间索引。
+        被索引的列必须非NULL
+    主键  primary key, 逻辑意义大于物理意义
+        唯一索引的一种, 一张表只能有一个主键, 但可以有多个唯一索引
+        主键不能包含空值, 唯一索引可以有null值
+
+    联合索引 create index <name> on <table>(a, b, c);
+        Mysql从左到右的使用索引中的字段，一个查询可以只使用索引中的一部份，但只能是最左侧部分。例如索引是key index (a,b,c). 可以支持a | a,b| a,b,c 3种组合进行查找，但不支持 b,c进行查找;  并且是where colA  and colB, 否则失去意义
+
+    联合主键 create table tb(xxx, primary key(id, name, age));
+        用多个字段作为主键, 每一列都可以不是unique的, 但放在一起要是unique的
+    
 
 按照索引数据结构，索引类型：
 	树状索引
@@ -179,8 +194,37 @@ mysql 字段 not null 一般需配置default
 	GLOBAL：对当前会话无效，只对新建立的会话有效；
 	SESSION：仅对当前会话有效；
 
-mysql, sql_mode
-	strict_all_tables, strict_trans_tables, tranditional
+sql_mode
+    ONLY_FULL_GROUP_BY
+    对于GROUP BY聚合操作，如果在SELECT中的列，没有在GROUP BY中出现，那么这个SQL是不合法的，因为列不在GROUP BY从句中。
+
+    NO_AUTO_VALUE_ON_ZERO
+    该值影响自增长列的插入。默认设置下，插入0或NULL代表生成下一个自增长值。如果用户希望插入的值为0，该列又是自增长的，那么这个选项就有用了。
+
+    STRICT_TRANS_TABLES
+    在该模式下，如果一个值不能插入到一个事物表中，则中断当前的操作，对非事物表不做限制
+
+    NO_ZERO_IN_DATE
+    在严格模式下，不允许日期和月份为零
+
+    NO_ZERO_DATE
+    设置该值，mysql数据库不允许插入零日期，插入零日期会抛出错误而不是警告。
+
+    ERROR_FOR_DIVISION_BY_ZERO
+    在INSERT或UPDATE过程中，如果数据被零除，则产生错误而非警告。如 果未给出该模式，那么数据被零除时MySQL返回NULL
+
+    NO_AUTO_CREATE_USER
+    禁止GRANT创建密码为空的用户
+
+    NO_ENGINE_SUBSTITUTION
+    如果需要的存储引擎被禁用或未编译，那么抛出错误。不设置此值时，用默认的存储引擎替代，并抛出一个异常
+
+    PIPES_AS_CONCAT
+    将"||"视为字符串的连接操作符而非或运算符，这和Oracle数据库是一样的，也和字符串的拼接函数Concat相类似
+
+    ANSI_QUOTES
+    启用ANSI_QUOTES后，不能用双引号来引用字符串，因为它被解释为识别符
+
 
 数据类型：
 	是否支持索引

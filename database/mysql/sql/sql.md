@@ -144,10 +144,14 @@ and
 show index from user_info;
 ## 1. 删除索引
 alter table user_info drop index `idx_id`;
+DROP INDEX `idx_id` ON user_info;
 
 ## 2. 创建索引
 create [unique|fulltext|spatial] index <index_name> on <table>(<column>) [using [btree|hash]];
 create index `idx_uid` on user_info(uid);
+## 3. 创建联合索引
+create table map_user_role(uid int , rid int,  primary key(uid, rid), foreign key(uid) references user(id), foreign key(rid) references role(id));
+
 ```
 # Procedure
 ## create procedure
@@ -436,7 +440,7 @@ CREATE TABLE articles (
             FULLTEXT (title,body) WITH PARSER ngram
         ) ENGINE=InnoDBCHARACTER SET utf8mb4;
 
-mysql> SETGLOBAL innodb_ft_aux_table="new_feature/articles";
+mysql> SET GLOBAL innodb_ft_aux_table="new_feature/articles";
 mysql> SELECT * FROM information_schema.INNODB_FT_INDEX_CACHE LIMIT 20,10;
 ```
 
