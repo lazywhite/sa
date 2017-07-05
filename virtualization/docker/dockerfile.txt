@@ -1,0 +1,134 @@
+Dockerfile 文件格式
+    instruction  arguments
+    instruction 是不区分大小写的, 约定是大写
+
+ADD  @Deprecated
+    ADD <src>... <dest>
+    ADD "<src>",... "<dest>": double quote is used for paths containing whitespace
+    可以复制url, 文件, 文件夹, 对于不从url下载的压缩格式的文件, 会自动解压
+
+COPY: 更明确的ADD, 官方建议在一般情况下使用
+    COPY <src>... <dest>
+    COPY "<src>",... "<dest>"
+
+ENV: 设置环境变量
+    key value 每行只能写一对
+    key=value 一行可以写多个, 每一对用空格隔开
+
+ENTRYPOINT: 设置容器默认的运行指令
+    ENTRYPOINT ["executable", "param1", "param2"]
+    ENTRYPOINT command param1 param2
+    docker run -it --rm -p 8080:80 nginx
+    
+EXPOSE <port> [<port>...]
+    仅仅注明此container会监听哪些端口, 如果想要从外界访问, 还需要用docker run -p, -P参数制定映射到的主机端口
+
+LABEL: 为镜像设置元数据 
+    LABEL <key>=<value> <key>=<value> 官方推荐将所有label写入一行, 因为每个LABEL指令都会产生一个新的layer
+    会自动从母镜像继承LABEL, 并可以覆盖同名LABEL
+    docker inspect查看镜像的标记
+
+USER <username>  全部是container的内部用户
+    规定Dockerfile中 RUN, CMD, and ENTRYPOINT指令的运行用户
+    规定container被运行时的用户
+
+WORKDIR </path/to/dir> 在容器内部的目录
+    规定接下来的RUN, CMD, ENTRYPOINT, COPY, ADD 指令的工作目录
+    如果目标目录不存在, 则会自动创建, 不管是否有指令会用到
+    接受相对目录, 相对于上一条WORKDIR指令的目录
+
+VOLUME ["/data"]
+    docker采用UFS文件系统, 默认不会持久化新产生的数据,
+    为了能够持久化数据和共享容器间数据, 可以通过volume来实现
+    
+    实现volume的三种方式
+        1. docker run -it --name test -h CONTAINER -v /data debian /bin/bah  会将宿主机
+        "storage root"目录下的随机文件夹挂载到容器的/data目录, 实现与宿主机的数据共享与持久化
+        2. 在Dockerfile中规定  VOLUME ["/data"], 跟第一种方法的效果一致
+        3. docker run -v /host/dir:/container/dir 手动指定使用的宿主机目录, 而不是随机名称目录
+    
+    容器之间共享volumn
+        docker run -it --name test02 -h CONTAINER02 --volumes-from test debian /bin/bash  指定test02使用test的volume
+
+    用docker inspect可查看container VOLUME信息
+
+ARG 构建参数
+    ARG <name>[ =<default value>] 可以规定默认值, 可以写多个
+    配合docker build --build-arg key=value来使用
+    如果传入了Dockerfile里不存在的ARG, 会报warning, 如果没有传值, 也没有默认值, 则为空
+    从命令行传入的参数有最高优先级
+    用ENV或ARG规定的变量, 可以用${name}来访问, ENV规定的变量优先级大于ARG
+
+
+HEALTHCHECK
+    在container内部运行命令以汇报自身的运行状态
+    一个Dockerfile只能有一个生效, 以最后一个为准
+    用法
+        1. HEALTHCHECK [options] CMD command
+            options
+                --interval=duration
+                --timeout=duration
+                --start-period=duration (default 0) 
+                --retries=N (default 3)
+            CMD <command | ["exec", "param1" ...] 
+                指令的退出码标志健康状态
+                    0: success
+                    1: unhealthy
+                    2: reserved
+
+        2. HEALTHCHECK NONE: 禁止从父镜像继承任何健康监测指令
+    用docker inspect可以获取contain的健康状态
+
+
+RUN
+    RUN <command>  shell格式, 调用默认解释器来执行, linux默认是/bin/sh, windows 默认cmd /S /C
+    RUN ["executable", "param1", "param2"] 不会调用默认shell执行, 需要自己指定
+        必须用双引号, 因为指令被解析成json
+    在当前镜像之上创建新的layer, 并且提交, 相当于一次git commit, 可以从镜像历史
+    的任意一点创建出一个新的镜像
+
+CMD
+    为启动后的容器设置默认运行命令
+
+    设置默认运行命令的方式
+        1. Dockerfile CMD 指令
+        2. Dockerfile ENTRYPOINT指令
+        3. docker run .... <image> [command] 优先级最高
+    CMD ["executable", "param1", "param2"] 官方推荐写法
+    CMD ["param1", "param2"] 为ENTRYPOINT传递默认参数, 此时ENTRYPOINT写法也必须为exec-form
+    CMD command param1 param2 shell 写法
+    一个Dockerfile只能有一个CMD生效, 如果有多个CMD, 只有最后一个会生效
+
+.dockerignore
+    当使用ADD, COPY指令时, 规定哪些文件不会被添加进去
+    # 开头表示注释
+    ! 表示排除
+        *.md
+        !README.md  此文件最终会被添加进来
+    可以把.dockerignore, Dockerfile 也写进来
+
+SHELL
+    SHELL ["executable", "param1"] 
+    用来覆盖默认的["/bin/sh", "-c"] or ["cmd", "/S", "/C"]
+    一个Dockerfile可以有多个SHELL指令, 每个都会覆盖前一个并影响后续的
+    只会影响到shell form的指令, 不会影响到exec form的指令   
+
+STOPSIGNAL signal  
+    用来规定让container退出所需的系统信号, 默认是9, SIGKILL
+
+ONBUILD [INSTRUCTION]
+    用来规定当此镜像被作为其他镜像的母镜像时, 会被自动执行的指令, 相当于一个
+    触发器, 仿佛在子镜像dockerfile FROM指令后插入一段指令. 
+    接受任意类型的docker build 指令, 可以规定多个ONBUILD指令
+    不能隔代继承, 当子镜像构建完毕, 会被自动删除
+    
+MAINTAINER <username>
+    废弃写法, 最好写在LABEL指令里面
+
+FROM
+    FROM <image> [AS <name>]
+    FROM <image>:tag [AS <name>]
+    FROM <image>@digest [AS <name>]
+
+    必须放在Dockerfile的最前面
+    一个Dockerfile可以有多个FROM指令, 用来生成多个image或者进入不同的编译阶段

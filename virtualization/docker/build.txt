@@ -1,0 +1,14 @@
+docker build  [PATH|URL]
+    -f <file name>: name of the Dockerfile, default is 'PATH/Dockerfile'
+    --label value: metadata for an image
+    --no-cache: do not use cache when building the image
+    -t, --tag <value>: "value" is in 'image:tag" format
+
+PATH: a directory on your local filesystem
+URL: a git repo location
+
+PATH and URL is a kind of "context", It will search recursively under "context" 
+
+
+Example:
+    docker build -t 'test:v0.1' .
