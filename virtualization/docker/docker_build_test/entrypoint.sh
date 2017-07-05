@@ -5,4 +5,3 @@ exec "$@"
 echo $PGUSER
 echo $PGPASSWORD
 
-/bin/bash

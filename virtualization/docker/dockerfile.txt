@@ -1,6 +1,7 @@
 Dockerfile 文件格式
     instruction  arguments
     instruction 是不区分大小写的, 约定是大写
+    # 开头表示注释
 
 ADD  @Deprecated
     ADD <src>... <dest>
@@ -93,7 +94,9 @@ CMD
     设置默认运行命令的方式
         1. Dockerfile CMD 指令
         2. Dockerfile ENTRYPOINT指令
-        3. docker run .... <image> [command] 优先级最高
+        3. docker run .... <image> [command] 
+        run command > ENTRYPOINT > CMD
+
     CMD ["executable", "param1", "param2"] 官方推荐写法
     CMD ["param1", "param2"] 为ENTRYPOINT传递默认参数, 此时ENTRYPOINT写法也必须为exec-form
     CMD command param1 param2 shell 写法
