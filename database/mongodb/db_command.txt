@@ -1,58 +1,110 @@
-## database methods
-use <dbname> # create new database
-db.dropDatabase() # drop database
-db
+## User & Role
+1. local数据库无法创建用户
+2. 必须有"createUser"权限才能创建用户
+3. 必须有"grantRole"权限才能给用户分配角色
+
+內建角色
+    1. 数据库用户角色：read、readWrite;
+    2. 数据库管理角色：dbAdmin、dbOwner、userAdmin；
+    3. 集群管理角色：clusterAdmin、clusterManager、clusterMonitor、hostManager；
+    4. 备份恢复角色：backup、restore；
+    5. 所有数据库角色：readAnyDatabase、readWriteAnyDatabase、userAdminAnyDatabase、dbAdminAnyDatabase
+    6. 超级用户角色：root  
+    // 这里还有几个角色间接或直接提供了系统超级用户的访问（dbOwner 、userAdmin、userAdminAnyDatabase）
+    7. 内部角色：__system
+
+创建用户
+    db.createUser(
+      {
+        user: "dba",
+        pwd: "dba",
+        roles: [{  //数组, 可以为多个库同时赋值
+            role: "userAdminAnyDatabase",  //一个库对应一个唯一的角色
+            db: "admin" //对应的数据库
+            }]
+      }
+    ) 
+
+查看当前库所有用户
+    show users
+
+
+db.createCollection(name, { size : ..., capped : ..., max : ... } )
+
+db.cloneDatabase(fromhost)
+db.copyDatabase(fromdb, todb, fromhost)
+db.repairDatabase()
+db.dropDatabase() 删除当前数据库
+
+
+db.createUser(userDocument)
+db.dropUser(username)
+
+db.currentOp() displays currently executing operations in the db
+db.killOp(opid) kills the current operation in the db
+
+
+db.eval() - deprecated
+db.loadServerScripts() loads all the scripts in db.system.js
+
+
+db.fsyncLock() flush data to disk and lock server for backups
+db.fsyncUnlock() unlocks server following a db.fsyncLock()
+
+
+db.getCollection(cname) same as db['cname'] or db.cname
+db.getCollectionInfos([filter]) - returns a list that contains the names and options of the db's collections
+db.getCollectionNames() like "show tables"
+
+db.getPrevError()
+db.getLastError() - just returns the err msg string
+db.getLastErrorObj() - return full status object
+db.resetError()
+
+db.getLogComponents()
+db.setLogLevel(level,<component>)
+
+db.setProfilingLevel(level,<slowms>) 0=off 1=slow 2=all
+db.getProfilingLevel() - deprecated
+db.getProfilingStatus() - returns if profiling is on and slow threshold
+
+
+db.getSiblingDB(name) get the db at the same server as this one
+    var other = db.getSiblingDB("other");
+
+db.isMaster() check replica primary status
+db.getReplicationInfo()
+db.getMongo().setSlaveOk() allow queries on a replication slave server
+
+
+
+db.logout()
+db.auth(username, password)
+db.shutdownServer()
+
+
+db.stats()
+db.serverStatus()
+db.printCollectionStats()
+db.printReplicationInfo()
+db.printShardingStatus()
+db.printSlaveReplicationInfo()
+db.hostInfo() get details about the server's host
+db.version() current version of the server
+db.getMongo() get the server connection object
 db.getName()
-db.version()
-db.copyDatabase()
-
-
-## collection methods
-show collections|tables # list collections
-db.getCollectionNames()
-db.getCollection("col").find({})
-db.copyCollection()
-db.col.renameCollection("name")
-db.runCommand({renameCollection: "db.old", to: "db.new"})
-
-## cursor methods
-count
-explain
-forEach
-hasNext
-hint
-itcount
-limit
-map
-maxScan
-max
-min
-next
-pretty
-size
-skip
-    skip a number of documents
-sort
-snapshot
-toArray
-
-showRecordId
-    db.collection.find( { a: 1 }, { $recordId: 1 } ).showRecordId()
-returnKey
+db.setVerboseShell(flag) display extra information in shell output
 
 
 
-## status
-db.status()
-db.getMongo()
-
-## user
-show users
-
-## log
-show logs
-show log <logname>
+db.runCommand(cmdObj) run a database command.  if cmdObj is a string, turns it into { cmdObj : 1 }
+db.listCommands() lists all the db commands
+db.commandHelp(name) returns the help for the command
+db.adminCommand(nameOrDocument) - switches to 'admin' db, and runs command [ just calls db.runCommand(...) ]
 
 
-## Index
->db.col.ensureIndex({KEY:1})
+
+db.getWriteConcern() - returns the write concern used for any operations on this db, inherited from server object if set
+db.setWriteConcern( <write concern doc> ) - sets the write concern for writes to the db
+db.unsetWriteConcern( <write concern doc> ) - unsets the write concern for writes to the db
+
