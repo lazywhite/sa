@@ -1,5 +1,4 @@
-```
-mongodump  <options>
+mongodump  <options>  将数据导出为bson格式, 扩展名为.bson
     --host==
     --port==
     --username=
@@ -21,8 +20,10 @@ mongorestore <options> <direcotry or file to restore>
     -j, --numParallelCollections=<number>: number of collections to restore
                                             in parallel
     --stopOnError: stop restoring if an error is encountered on insert
- 
-mongoexport <options>
+
+-------------------- 
+
+mongoexport <options>  将数据导出为json或CSV格式, 扩展名为.json
     --host=
     --port=
     --username=
@@ -42,4 +43,3 @@ mongoimport <option> <file>
     --collection=
     --out=<filename>
     --drop : drop collection before inserting
-```
