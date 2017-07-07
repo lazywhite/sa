@@ -781,3 +781,27 @@ delete from bb where id in (10, 20, 30);
 ```
 mysql> pager less
 ```
+
+## mysql实现同构表的交集, 差集, 合集
+```
+求交集, 利用inner join
+select s1.id, s1.name from 
+    (select id, name from user where id > 50 ) s1 
+    join 
+    (select id, name from user where id < 160) s2 
+    on s1.id = s2.id;
+
+求差集, 利用left|right join 
+select s1.id, s1.name from 
+    (select id, name from user where id > 50 ) s1 
+    left join 
+    (select id, name from user where id < 120) s2 
+    on s1.id = s2.id
+    where isnull(s2.id);
+
+求并集, 利用union, 自带去重
+select * from
+    (select id, name from user where id < 50
+    union
+    select id, name from user where id > 160) a;
+```
