@@ -1,22 +1,84 @@
+## 数据类型
+```
+String
+Integer
+Boolean
+Double
+Min/Max keys
+Arrays
+Timestamp
+Object
+Null
+Symbol(reserved keyword)
+Date
+ObjectId
+Binary data
+Code: javascript code
+Regular Expression
+```
+
 ## 索引
+```
 1. 没有索引, mongodb会进行全collection扫描
 2. 默认创建_id unique 索引, 并且无法删除
-3. mongodb 默认使用B-Tree索引
-4. Hash索引, 不支持range-base查询, 只支持相等查询
+3. mongodb索引数据结构默认是B-Tree
+4. Hash索引, range-base查询无效, 相等查询才有效
 5. 不能在已经有重复值的field创建unique index
 6. hash索引不能是unique的
 7. 如果一个document不包含被索引的field, 则会被记录为null, 如果有unique限制, 后续的记录会触发duplicate error
 8. partial index 只对符合条件的一部分document的相关field做索引
 9. sparse index 只对包含index field的document做索引, 因为不包含全部, 所以是稀疏的
+10. ensureIndex 在3.0后已被废弃, 使用createIndex
 
-
+索引类型
+    single field 单字段索引
+    compound field 联合索引
+    multikey  针对field value是数组的索引
+    geospatial 针对geospatial coordinate data的索引
+    text  全文
+    hashed  哈希
 索引属性
-    unique
-    partial
-    sparse
-    ttl
+    unique 唯一的
+    partial 部分的
+    sparse 稀疏的
+    ttl 用在会被mongodb按使用时间自动删除的集合中
+
+
+后台建立索引
+    1. 耗时较长
+    2. 索引结构不是很紧凑
+    3. 影响到primary节点的写入性能 
+
+前台建立索引的流程
+    复制集
+        Secondary
+            1. 停止一个secondary, 然后以不同端口, 不加入replset的方式启动
+                mongod --port 47017
+            2. 建立索引
+                db.col.createIndex({username: 1})
+            3. 重启mongod,设置端口,  加入原先的replset
+                mongod --replset rs0 --port 27017
+            重复以上流程, 在所有secondary节点建立索引
+        Primary
+            1. 降为secondary
+                rs.stepDown()
+            2. 按secondary建立索引的流程进行操作
+            
 
 创建索引
+    db.col.createIndex(keys, options)
+        key
+            {field: type}
+        options
+            background //后台建立索引
+            name //索引名称
+            unique = <boolean>
+            expireAfterSeconds
+            partialFilterExpression
+            storageEngine
+            min
+            max
+
     db.col.createIndex({field1: 1})
     db.col.createIndex({field1: 1, field2: 1}) //联合索引
     db.col.createIndex({"add.zip" : 1}) // multikey index
@@ -29,13 +91,70 @@
         { expireAfterSeconds: 3600 } )
     db.collection.createIndex( { _id: "hashed" } ) //哈希索引, 不使用b-tree
 
+    db.col.createIndex({field1: "text"}) //全文索引
+        db.posts.find({$text:{$search:"runoob"}})//使用全文索引
+
 列出索引
     db.col.getIndexes() --> {"name":"_id_"}
 
 删除索引
     db.collection.dropIndex("_id_");
     
+```
 
+## Mongodb 日志
+### 1. Oplog
+```
+operation log, 只会在复制集中才会产生
+复制集中primary节点会产生oplog, 所有从节点会异步执行此oplog
+并且自身会保留一份copy(local.oplog.rs collection), 也可以从其他节点获取oplog entry
+
+oplog本身是一种capped collection, 会按照顺序记录所有对数据库的写入操作
+oplog中所有的操作都是幂等的, 不管执行多少次, 总是产生同样的结果
+```
+
+### 2. Journal
+```
+相当于redo log
+
+开启方法
+    mongod --journal | --nojournal 
+存放位置
+    /data/journal/
+        j._32
+        j._33
+        lsn: last sequence number
+db.shutdownServer() 会删除journal目录下除了preallo的其他文件, 表明是正常关闭
+如果一个journal文件满1G, 会再创建一个journal文件来使用, 如果某个journal文件上
+记录的写操作都被执行过了, 就会把这个journal文件删除
+
+工作原理
+    data file
+    journal file
+    shared view
+    private view
+```
+
+
+### 3. 系统日志
+```
+记录与mongod运行有关的信息
+开启方法
+    mongod --logpath=/data/db/logs/server.log -logappend
+```
+### 4. 慢查询日志
+```
+mongod --profile=1 --slowms=5(ms) 
+    profile level
+        0: 不开启
+        1: 记录慢日志, 默认为>100ms
+        2: 记录所有日志
+    profile级别操作
+        db.getProfilingLevel()
+        db.setProfilingLevel(level, duration(单位毫秒))
+
+慢查询日志是针对单个数据库的, 开启后默认存放在db.system.profile 这个collection
+```
 ## ObjectId
 ```
 如果新增document的时候, 不指定_id, 或者允许生成_id列, 则会自动生成一个ObjectId()
@@ -105,10 +224,11 @@ mongofiles <options> <command> <filename or _id>
     >db.fs.chunks.find({files_id: ObjectId('534a811bf8b4aa4d33fdf94d')})
 
 ```
+## 特殊的数据库
 
-## "config" database
+### 1. "config" database
 
-1. 用来保存分片集群信息并进行分片集群的操作, 最好不要插入其他数据
+1. 分片集群的配置信息存放在config数据库
 2. 连接mongos实例来使用config数据库
 3. 相关集合
 ```
@@ -138,10 +258,11 @@ config.version
 ```
 
 
-## "local" database
+### 2. "local" database
 ```
-所有在local库的collection都不会被复制
-local库可以用来存储自身特有的数据, 或者与复制有关的数据
+local库可以用来存储自身特有的数据
+复制集有关的数据存储在local数据库里面
+local数据库不参与复制
 
 local.startup_log
 local.system.replset
@@ -150,7 +271,15 @@ local.replset.minvalid
 local.slaves
 ```
 
-### 多collection关联
+### 3. "admin" database
+
+```
+进行系统维护的数据库
+    use admin; db.shutdownServer()
+```
+
+
+## 多collection关联
 ```
 localhost(mongod-3.2.3) new> var user = {
 ... "_id": 1,
@@ -163,7 +292,8 @@ localhost(mongod-3.2.3) new> var p = {
 ... content: "haaldkfj",
 ... author: {
 ... $ref: "user",
-... $id: 1
+... $id: 1, 
+... $db: "new"  //可选参数
 ... }}
 localhost(mongod-3.2.3) new> db.post.insert(p)
 
@@ -180,6 +310,22 @@ cfg.members[2].priority = 2
 rs.reconfig(cfg)
 ```
 
+## 聚合操作
+aggregate()
+    $sum
+    $max
+    $min
+    $avg
+    $push
+    $addToSet
+    $first
+    $last
+    $group
+
+count()
+distinct()
+group() @deprecated
+mapreduce()
 ## 经验
 ```
 设置mongodb最大可用内存, 新版默认为系统内存的一半
@@ -202,5 +348,35 @@ mongodb每个document最大为16MB, 所以使用embbed document要小心, 最好
 分片集群中一个chunk默认最大为64MB
 use <dbname> # 在内存中创建数据库, 没有写入数据就离开, 会被销毁
 
+mongodb为单个文档提供原子操作
+    db.col.findAndModify() 
+
+mongod进程cpu占用率较高, 可能是缺少索引
 ```
 
+
+## 实现自增_id
+```
+//创建产生自增编号的sequence
+db.counters.insert({
+    _id: "productid",
+    "sequence_value": 0
+})
+
+//定义获得自增编号的函数
+>function getNextSequenceValue(sequenceName){
+   var sequenceDocument = db.counters.findAndModify(
+      {
+         query:{_id: sequenceName },
+         update: {$inc:{sequence_value:1}},
+         new:true
+      });
+   return sequenceDocument.sequence_value;
+}
+
+//实现自增
+db.products.insert({
+   "_id":getNextSequenceValue("productid"),
+   "product_name":"Apple iPhone",
+   "category":"mobiles"})
+```

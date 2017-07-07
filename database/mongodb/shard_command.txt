@@ -1,0 +1,53 @@
+sh.enableSharding("database name")
+    使数据库支持分片
+sh.addShard("hostname"|"hostname:port"|"replname/hostname"|"replname/hostname:port")
+    添加分片节点或replset
+shardCollection("namespace", key, unique, options)
+    namespace: database.collection
+    key: {zipcode: 1}
+    unique: <boolean> hashed shard can't be unique, default to false
+    options:
+        {numInitialChunks: 5, collation:{locale: "simple"}}
+
+
+sh.addShardTag("shardname", "tagname")             
+    alias sh.addShardToZone("shardname", "zonename")
+        
+sh.addTagRange(             
+    alias sh.updateZoneKeyRange("namespace", "min", "max", "zone") 
+        sh.updateZoneKeyRange("exampledb.collection", {a: 1}, {a: 10}, "alpha")
+        
+sh.removeShardTag(          
+    alias sh.removeShardFromZone("shardname", "zonename")
+        sh.removeShardFromZone("shard000", "NYC")
+
+sh.removeTagRange(          
+    alias sh.removeRangeFromZone("namespace", "min", "max")
+        sh.removeRangeFromZone("exampledb.collection", {a:1, b:1}, {a:10, b:10})
+        
+
+sh.splitFind("namespace", <query>)
+    找到包含query的chunk, 将其分裂为大小相等的两个chunk 
+sh.splitAt("namespace", <query>)
+    将一个chunk分为[low, point], [point, high]两个chunk, 两个chunk的size可能不同
+sh.moveChunk("namespace", <query>, destination)
+    sh.moveChunk("records.people", {zipcode: 41243}, "shard018")
+    将包含<query>的chunk移动到另外一个shard
+
+sh.status()
+    打印分片集群信息
+
+
+sh.isBalancerRunning(       
+sh.startBalancer(
+sh.stopBalancer(
+sh.getBalancerState(        
+sh.setBalancerState(        
+sh.getBalancerWindow(       
+sh.getBalancerLockDetails(  
+sh.waitForBalancer(
+sh.waitForBalancerOff(
+sh.getBalancerHost(         
+
+sh.enableBalancing(         
+sh.disableBalancing(        

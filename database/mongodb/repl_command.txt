@@ -1,0 +1,31 @@
+rs.add("hostname:port")  
+    添加节点
+rs.remove("hostname")
+    删除节点 
+rs.addArb("hostname:port")                    
+    添加仲裁
+
+rs.printSlaveReplicationInfo(
+    打印当前secondary节点的复制状态
+rs.printReplicationInfo(
+    打印复制集oplog状态
+rs.status()
+    当前复制集简短的健康状态
+
+rs.reconfig(config)
+    复制集重新应用配置
+rs.conf()                      
+    返回当前复制集配置
+rs.initiate()                   
+
+rs.slaveOk()
+    使当前secondary可以处理读请求
+
+rs.isMaster(
+rs.stepDown(
+    当前节点降级为secondary
+rs.freeze(                     
+    使当前节点无法成为primary
+
+rs.syncFrom("host:port")
+    改变当前secondary的复制对象
