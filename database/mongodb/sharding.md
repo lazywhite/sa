@@ -26,6 +26,13 @@
 zone管理的range不能与其他zone不能有任何交叉
 ```
 
+## 如何搭建一个shard cluster
+```
+1. 创建shard1 replset, shard2 replset ...
+2. 创建config replset
+3. 启动mongos 并指定config server   mongos --configdb=<host1>:<port1>,<host2>:<port2>...
+4. 连接mongos, 添加shard   use admin; sh.addShard()
+```
 ## 如何shard一个集合
 ```
 1. 连接mongos节点进行操作
