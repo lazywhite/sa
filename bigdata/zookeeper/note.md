@@ -1,68 +1,95 @@
+## Introduction
+为分布式应用提供协调服务, 自身也是分布式集群  
+主要基于观察者模式工作
+
 ## Keyword
 ```
-znode: data, properties, children
-    ephemeral node: deleted when session end
-        sequential: append 10digit to end of node name
-    normal node
-        data  has version
+znode: data, property, children
+    ephemeral node
+        临时节点, session关闭就会被删除
+    persistence node
+        持久节点
+    sequential node
+        名称后面有10位的数字
+        如果并发创建, zookeeper保证数字不会重复
+        常用在锁与同步中
+
 ensemble
-   hosts  
+    server
         leader  
         follower  
-Zab protocol
+
+getData()
+getChildren()
+exists()
+    watches
+        data watches
+        child watches
+
+ACL
+    scheme
+        world
+            只有一个id: anyone, 
+        auth
+            无需id, 只要通过authentication的user都有权限
+        digest
+            id为 username:BASE64(sha1(password)), 需要先通过authentication
+        ip
+            id为一个网段或单个ip
+        super
+    id
+    permission
+        create(c)
+        delete(d)
+        read(r)
+        write(w)
+        admin(a)
+集群通信
+    Zab protocol
 ```
 
-## API
-```
-create: create a node at a location of tree
-delete: delete a node
-exists: test if node exists on a location
-getData: read data from a node
-setData: writes data to a node
-getChildren: retrive a list of children nodes
-sync: wait for data to be propagated
-```
 
-## Introduction
-Zookeeper 从设计模式角度来看，是一个基于观察者模式设计的分布式服务管理框架，它负责存储和管理大家都关心的数据，然后接受观察者的注册，一旦这些数据的状态发生变化，Zookeeper 就将负责通知已经在 Zookeeper 上注册的那些观察者做出相应的反应，从而实现集群中类似 Master/Slave 管理模式
 
-Zookeeper 作为 Hadoop 项目中的一个子项目，是 Hadoop 集群管理的一个必不可少的模块，它主要用来控制集群中的数据，如它管理 Hadoop 集群中的 NameNode，还有 Hbase 中 Master Election、Server 之间状态同步等。  
-
-## 主要功能
+## 使用场景
 ### 1. Name Service
-znode FQDN
-### 2. Configuration management
-将配置信息保存在 Zookeeper 的某个目录节点中，然后将所有需要修改的应用机器监控配置信息的状态，一旦配置信息发生变化，每台应用机器就会收到 Zookeeper 的通知，然后从 Zookeeper 获取新的配置信息应用到系统中
-### 3. Cluster management
-Zookeeper 能够很容易的实现集群管理的功能，如有多台 Server 组成一个服务集群，那么必须要一个“总管”知道当前集群中每台机器的服务状态，一旦有机器不能提供服务，集群中其它集群必须知道，从而做出调整重新分配服务策略。同样当增加集群的服务能力时，就会增加一台或多台 Server，同样也必须让“总管”知道。
-Zookeeper 不仅能够帮你维护当前的集群中机器的服务状态，而且能够帮你选出一个“总管”，让这个总管来管理集群，这就是 Zookeeper 的另一个功能 Leader Election。
-
-
-它们的实现方式都是在 Zookeeper 上创建一个 EPHEMERAL 类型的目录节点，然后每个 Server 在它们创建目录节点的父目录节点上调用 getChildren(String path, boolean watch) 方法并设置 watch 为 true，由于是 EPHEMERAL 目录节点，当创建它的 Server 死去，这个目录节点也随之被删除，所以 Children 将会变化，这时 getChildren上的 Watch 将会被调用，所以其它 Server 就知道已经有某台 Server 死去了。新增 Server 也是同样的原理。
-### 4. Leader election
+将zookeeper中一个全局唯一的path映射给一个节点, 达到命名的目的
+### 2. 配置管理
+所有server在同一个znode上调用getData(watches), 一旦znode data发生变化, 所有server将会得到通知, 从而拉取最新的配置  
+### 3. leader选举流程
 ```
-All the nodes create a sequential, ephemeral znode with the same path, /app/leader_election/guid_.
-
-ZooKeeper ensemble will append the 10-digit sequence number to the path and the znode created will be /app/leader_election/guid_0000000001, /app/leader_election/guid_0000000002, etc.
-
-For a given instance, the node which creates the smallest number in the znode becomes the leader and all the other nodes are followers.
-
-Each follower node watches the znode having the next smallest number. For example, the node which creates znode /app/leader_election/guid_0000000008 will watch the znode /app/leader_election/guid_0000000007 and the node which creates the znode /app/leader_election/guid_0000000007 will watch the znode /app/leader_election/guid_0000000006.
-
-If the leader goes down, then its corresponding znode /app/leader_electionN gets deleted.
-
-The next in line follower node will get the notification through watcher about the leader removal.
-
-The next in line follower node will check if there are other znodes with the smallest number. If none, then it will assume the role of the leader. Otherwise, it finds the node which created the znode with the smallest number as leader.
-
-Similarly, all other follower nodes elect the node which created the znode with the smallest number as leader.
+所有节点在同一个目录创建一个sequential ephemeral类型的znode, 由zookeeper ensemble 来保证节点的唯一性
+哪个节点创建的znode末尾的数字最小, 就成为集群的leader, 其他成为follower
+如果leader宕机, 与它对应的sequential ephemeral node会被删除, 
+每个node都会检测比自己小1的znode, 集群将会选取拥有最小znode的server作为leader
 ```
-### 5. Locking and synchronization
-共享锁在同一个进程中很容易实现，但是在跨进程或者在不同 Server 之间就不好实现了。Zookeeper 却很容易实现这个功能，实现方式也是需要获得锁的 Server 创建一个 EPHEMERAL_SEQUENTIAL 目录节点，然后调用 getChildren方法获取当前的目录节点列表中最小的目录节点是不是就是自己创建的目录节点，如果正是自己创建的，那么它就获得了这个锁，如果不是那么它就调用 exists(String path, boolean watch) 方法并监控 Zookeeper 上目录节点列表的变化，一直到自己创建的节点是列表中最小编号的目录节点，从而获得锁，释放锁很简单，只要删除前面它自己所创建的目录节点就行了。
+### 4. 分布式锁
+```
+独占锁: 竞争锁
+    所有client都去创建/distribute_lock, 成功创建的就视为拿到锁, 释放时删除节点即可
+有序锁: 所有来获取锁的, 最终会按照顺序拿到锁
+    所有client都在/distribute_lock下创建sequential ephemeral node, 最终可按照znode的大小进行排序
+    
+```
+### 5. 队列管理
+```
+同步队列    
+    一个大任务, 需要在很多小任务执行完毕时才能执行, 可以让小任务完毕后在/sync_queue/注册一个sequential ephemeral node 
+    大任务通过watch获取/sync_queue下面节点的数量, 满足条件即可执行
+FIFO队列   
+    跟有序锁实现思路相同
+```
+### 6. 负载均衡
+```
+生产者负载均衡
+消费者负载均衡
+```
+    
 
-### 6. 队列管理
-Zookeeper 可以处理两种类型的队列：  
-同步队列  
-FIFO队列  
-
-
+## 结论
+1. node data被更新, dataVersion将会增加1
+2. 每个znode默认可存储1MB的数据
+3. 每个与server建立连接的client, 将会得到一个session id, 同一个session发送的请求将会以FIFO的方式执行
+client会发送heartbeat来保持session, server在session timeout后会删除跟session关联的所有ephemeral node
+4. client可以注册watcher来得到关于znode或其children的 znode data变化的事件, 从而采取动作
+5. znode acl无法继承, 只能针对每一个znode设置acl
+6. znode quota 支持node数目(包括自身), data size (in bytes)设置, 若果超限正常执行, zookeeper.log将会有quota exceeded提示
