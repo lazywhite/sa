@@ -1,7 +1,18 @@
 错误日志
-查询日志   
-    set global general_log=on;
+    保存mysqld的错误信息, 默认/datadir/hostname.err
+通用查询日志   
+    默认不开启, 按照接收顺序记录所有连接和语句, 不是执行顺序
+    general_log=on;
+    general_log_file = /path/to/hostname.log
 慢查询日志
+    slow_query_log=1
+    slow_query_log_file=/path/to/hostname-slow.log
+    long_query_time=0.5 (单位秒, 默认10)
 事务日志
+    innodb特有的日志, 预写式日志, 用来提高事务效率
 二进制日志
-中继日志
+    记录已经提交的DML, DDL语句, 不记录select语句
+relay log
+    从节点已经被sql thread应用的语句记录
+redo log
+    记录正在执行中的DML, DDL语句
