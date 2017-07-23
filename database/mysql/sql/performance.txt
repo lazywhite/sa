@@ -1,0 +1,3 @@
+表连接查询  user left join user_info on user.id = user_info.uid , 两个字段都要加索引
+explain <sql> 可查询sql执行情况
+

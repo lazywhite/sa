@@ -25,11 +25,10 @@ SELECT ... FROM (subquery) AS name
 SELECT * FROM article WHERE EXISTS (SELECT * FROM user WHERE article.uid = user.uid)
 ```
 
-## Group by 
+## Group by<colume1>[<column2]<colume1>[<column2<colume1>[<column2]<colume1>[<column2]] 
 ```
-select ... group by column1, column2;
+select .. group by column1, column2;  select 的字段至少包含一个group by的字段, 其他字段是聚合函数
 如果column1有m种， column2有n种， 则最后出现m * n 行
-group by column, 则select时最好要加上这个column
 
 where与having的区别
 1. 作用的对象不同。WHERE 子句作用于表和视图，HAVING 子句作用于组。
@@ -54,12 +53,25 @@ select * from
     (select e.empno, e.ename, e.salary, e.deptno, f.ename mname from emp e left join emp f on e.manager = f.empno) g left join dept d 
         on g.deptno = d.deptno;
 
+
+select name, count(distinct(score)) from t4 group by name;
+select name, group_concat(score) from t4 group by name;
+
 ```
   
+## Distinct
+```
+select distinct(name) from user;
+select distinct name from user; 
+
+select distinct name, age from user; 多字段去重
+select count(distinct(name)) from user;
+```
+
 ## Union
 ```
-UNION 用于把来自多个 SELECT 语句的结果组合到一个结果集合, 自带去重  
-union all 不过滤重复数据
+1. select语句无需别名
+2. union all 不过滤重复数据
 
 select * from article
 	union [all]
@@ -147,7 +159,7 @@ alter table user_info drop index `idx_id`;
 DROP INDEX `idx_id` ON user_info;
 
 ## 2. 创建索引
-create [unique|fulltext|spatial] index <index_name> on <table>(<column>) [using [btree|hash]];
+create [unique|fulltext|spatial] index <index_name> on <table>(<column>[length]) [using [btree|hash]];
 create index `idx_uid` on user_info(uid);
 ## 3. 创建联合索引
 create table map_user_role(uid int , rid int,  primary key(uid, rid), foreign key(uid) references user(id), foreign key(rid) references role(id));
@@ -479,16 +491,18 @@ select * from user as a inner join article as b on (a.id = b.uid);
 select user.name, article.content, user_info.location from user left join article on (user.id = article.uid) left join user_info on (user.id = user_info.id)
 
 
-5. select * from emp, dept; (lines = emp.lines * dept.lines)
-   select * from emp join dept;
-   select * from emp inner join dept; 
-   select * from emp cross join dept; 
+5. 笛卡尔积 (result.rows  = emp.rows * dept.rows)
+    select * from emp, dept; 
+    select * from emp join dept;
+    select * from emp inner join dept; 
+    select * from emp cross join dept; 
    
+    join on 其实就是带条件过滤的笛卡尔积
 6. 自连结查询
    select e.empno, e.ename, f.ename from emp e inner join emp f on e.manager = f.empno; 
 
    select e.empno, e.ename, f.ename from emp e, emp f; //多表联合查询, 仅为inner join的结果
-    
+
 ```
 
 
@@ -726,19 +740,12 @@ abs() cos() exp() mod() pi() rand() sin() sqrt() tan()
 聚合函数不能作为where的条件
 ```
 
-# Tips
-## safe update
-```
-不带where和limit的update语句禁止执行， SQL_SAFE_UPDATES 属于session变量
-set SQL_SAFE_UPDATES = 1; 或者mysql --safe-updates
-```
 
 ## PS1
 ```
 shell> export MYSQL_PS1="(\u@\h) [\d]> "
-
-
 ```
+
 ## 通配符
 ```
 like通配符: %(任意多个） _（任意一个）
@@ -761,6 +768,7 @@ mysql> select floor(1.23), ceil(1.23), round(1.6666, 2),
 mysql> select 5 div 2; 整除 
 mysql> select 5 / 2; 除法，结果一定是浮点数
 mysql> select 5 mod 2; mod(5, 2); 求余
+mysql> select repeat('a', 10); 重复10次字符串
 
 ```
 
@@ -780,6 +788,12 @@ delete from bb where id in (10, 20, 30);
 ## set pager
 ```
 mysql> pager less
+```
+
+## safe update
+```
+不带where和limit的update语句禁止执行， SQL_SAFE_UPDATES 属于session变量
+set SQL_SAFE_UPDATES = 1; 或者mysql --safe-updates
 ```
 
 ## mysql实现同构表的交集, 差集, 合集
@@ -805,3 +819,71 @@ select * from
     union
     select id, name from user where id > 160) a;
 ```
+
+```
++-------+--------+-------+
+| name  | course | score |
++-------+--------+-------+
+| bob   | 语文   |   100 |
+| bob   | 数学   |   100 |
+| bob   | 英语   |   100 |
+| alice | 英语   |    10 |
+| alice | 数学   |    10 |
+| alice | 语文   |    10 |
++-------+--------+-------+
+
++-------+--------+--------+--------+
+| name  | 语文   | 数学   | 英语   |
++-------+--------+--------+--------+
+| alice |     40 |     70 |     90 |
+| bob   |    100 |     80 |     50 |
++-------+--------+--------+--------+
+
+# select name from t4 t group by name;
+
+select name,
+    (select score from t4 where name = t.name and course = '语文') 语文,
+    (select score from t4 where name = t.name and course = '数学') 数学,
+    (select score from t4 where name = t.name and course = '英语') 英语
+    from t4 t group by t.name
+```
+
+```
+select name, course, case
+	when score < 60 then  '不及格'
+	when score >= 60 and score < 80 then '良好'
+	when score >= 80 and score <= 100 then '优秀'
+    else '未知'
+	end as level
+	from t4
+```
+
+```
++------+------+--------+
+| id   | game | result |
++------+------+--------+
+|    1 | A    | WIN    |
+|    2 | A    | LOSE   |
+|    3 | B    | WIN    |
+|    4 | B    | LOSE   |
+|    5 | A    | WIN    |
+|    6 | A    | LOSE   |
+|    7 | B    | WIN    |
+|    8 | B    | LOSE   |
++------+------+--------+
+
++------+------+------+
+| game | win  | lose |
++------+------+------+
+| A    |    2 |    2 |
+| B    |    2 |    2 |
++------+------+------+
+
+
+select game,
+    (select count(*) from t1 where t1.game = t.game and result = 'WIN' group by game, result)win,
+    (select count(*) from t1 where t1.game = t.game and result = 'LOSE' group by game, result)lose
+from t1 t group by game
+
+```
+

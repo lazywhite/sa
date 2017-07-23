@@ -1,0 +1,77 @@
+
+--1列出emp表中各部门的部门号，最高工资，最低工资
+
+select deptno, max(salary), min(salary) from emp group by deptno
+
+--2 列出emp表中各部门job为'攻城师'的员工的最低工资，最高工资
+
+select deptno, max(salary), min(salary) from emp where job = "攻城师" group by deptno 
+
+--3 对于emp中最低工资小于2000的部门，列出job为'攻城师'的员工的部门号，最低工资，最高工资
+select deptno, ename, salary from emp 
+	where 
+		job = '攻城师'
+	and 
+        deptno in 
+            (select deptno 
+                from emp 
+                group by deptno
+                    having min(salary) < 50000)
+--4 根据部门号由高而低，工资有低而高列出每个员工的姓名，部门号，工资 
+
+select ename, deptno, salary from emp order by deptno desc, salary;
+
+--5 列出'张三丰'所在部门中每个员工的姓名与部门号
+
+select ename, deptno from emp where  deptno = (select deptno from emp where ename = '张三丰');
+
+--6 列出每个员工的姓名，工作，部门号，部门名
+
+select ename, job, emp.deptno, deptname from emp left join dept on emp.deptno = dept.deptno
+
+--7列出emp中工作为'攻城师'的员工的姓名，工作，部门号，部门名
+
+select ename, job, emp.deptno, deptname from emp left join dept on emp.deptno = dept.deptno where job = "攻城师"
+
+
+--8对于emp中有管理者的员工，列出姓名，管理者姓名
+
+select  emp.ename, (A.ename) manager from   emp join emp A
+	on emp.manager =  A.empno
+
+--9 对于dept表中，列出所有部门名，部门号，同时列出各部门工作为'攻城师'的员工名与工作
+
+select * from emp e left join dept d on e.deptno = d.deptno where e.job = '攻城师';
+
+
+--10 对于工资高于本部门平均水平的员工，列出部门号，姓名，工资，按部门号排序
+
+select emp.ename, emp.deptno, emp.salary from 
+    (select deptno, avg(salary) average from emp  group by deptno) A
+     join emp on A.deptno = emp.deptno
+where emp.salary > A.average order by emp.deptno
+
+--11对于emp，列出各个部门中工资高于本部门平均工资的员工数和部门号，按部门号排序
+
+select emp.deptno, count(*) from 
+    (select deptno, avg(salary) _avg from emp group by deptno) A
+    join emp on A.deptno = emp.deptno
+where salary > A._avg group by emp.deptno order by emp.deptno
+
+
+--12对于emp中工资高于本部门平均水平，人数多与1人的，列出部门号，人数，平均工资，按部门号排序
+
+select x.deptno , count(*), avg(salary) from emp x 
+    where deptno in 
+        (select emp.deptno from 
+        (select deptno, avg(salary) avg_salary from emp group by deptno) A 
+        join emp on A.deptno = emp.deptno
+        where salary > A.avg_salary  group by emp.deptno having count(*) > 0)
+    group by x.deptno  order by x.deptno
+
+--13对于emp中低于自己工资至少5人的员工，列出其部门号，姓名，工资，以及工资少于自己的人数
+
+select A.ename, A.total, emp.deptno, emp.salary from 
+    (select a.ename, count(*) total  from emp a , emp b 
+    where a.salary > b.salary group by a.ename having total > 5) A , emp 
+where emp.ename = A.ename
