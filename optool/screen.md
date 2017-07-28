@@ -1,5 +1,7 @@
 ## change default "escape" key-binding 
 ```
-/root/.screenrc
+~/.screenrc
+    defescape ^Bb
     escape ^Bb
 ```
+

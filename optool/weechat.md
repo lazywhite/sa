@@ -12,6 +12,8 @@
 
 /join <channel>
 
+alt + 方向键 切换频道
+
 ```
 ## Configure
 ```
