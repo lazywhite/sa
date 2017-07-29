@@ -17,6 +17,4 @@ cat > /etc/ld.so.conf.d/gluster.conf/gluster-3.7.3.conf <<EOF
 /usr/lib
 EOF
 ldconfig
-
-
 ```
