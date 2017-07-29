@@ -28,3 +28,24 @@ catalina.sh
     redirectPort="8443" 
   />
 ```
+### 配置虚拟目录
+```
+conf/server.xml
+    <Host>
+        <Context docBase="/abs/path" path="/upload" reloadable="false" />
+
+conf/web.xml
+    <servlet>
+        <servlet-name>default</servlet-name>
+        <servlet-class>org.apache.catalina.servlets.DefaultServlet</servlet-class>
+        <init-param>
+            <param-name>debug</param-name>
+            <param-value>0</param-value>
+        </init-param>
+        <init-param>
+            <param-name>listings</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+```
