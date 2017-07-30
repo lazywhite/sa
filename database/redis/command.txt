@@ -1,146 +1,311 @@
-======= client side =======
-client list
-client kill [ip:port]
-client setname|getname
-ping: test connection
-quit:
-role: return replication role 
-slaveof no one: reset replication to none
+======= client =======
+client list  列出客户端列表
+client kill [ip:port]  关闭某个连接
+client setname|getname  设置/获取当前连接
+ping: 检测当前连接是否正常
+quit: 关闭当前连接
+role: 返回当前节点在复制集的角色
+slaveof host port]: 将当前节点设置为master的slave
+slaveof no one: 脱离slave角色
 ======== Cluster =========
-cluster info
-cluster slaves
+节点状态
+    PFAIL: 当有节点报告node-id not reachable时
+    FAIL: 当所有master节点都认为node-id not reachable时
+slot state
+    migrating
+    importing
+    stable
+    pfail
+    fail
+
 cluster nodes
-cluster slots
+    当前节点看到的集群节点配置， 包含所有节点的connection, flag, properties, assigned slots
+
+cluster reset [HARD|SOFT]: 重置当前节点
+    无法作用在hold key的master节点， 必须把key转移或remove掉
+    effects
+        集群中所有其他节点都被forgotten
+        slots-to-nodes mapping table被清空
+        如果当前节点为slave， 则会转变为master
+        hard reset会产生新的node-id, soft reset不会
+        currentEpoch, configEpoch重置为0
+        产生新的集群配置文件
+
+cluster slots: 查看集群slots映射信息
+cluster addslots <slot> [slot ...]
+    为当前节点添加负责的slots， 如果成功则广播新的配置
+    如果slot已经被assigned， 则命令失败
+
+cluster delslots slot [slot ...]
+    当前节点不负责slot， slot变为"unbound"状态
+
+cluster keyslot <key>: 返回key的slot id
+cluster forget <node>: remove node from node table
+cluster replica <node>: 将当前节点设置为node的slave
+cluster count-failure-reports <node-id>: 
+    获取node-id不可用的统计次数，用来作为将节点状态从PFAIL转换为FAIL的依据
+
+cluster getkeysinslot <slot> <count>： 从slot获取count个key， 以列表返回
+
+cluster countkeysinslot <slot>: 统计slot中key的数量
+
+cluster info
+    cluster_state: 如果cluster存在unbound slot或者有FAIL node, 则为fail，否则ok
+    cluster_slots_assigned:16384
+    cluster_slots_ok:16384
+    cluster_slots_pfail:0
+    cluster_slots_fail:0
+    cluster_known_nodes:6
+    cluster_size:3
+    cluster_current_epoch:6   #集群状态每次改变， 都将产生新的递增epoch
+    cluster_my_epoch:2
+    cluster_stats_messages_sent:1483972
+    cluster_stats_messages_received:1483968
+
+cluster meet <ip> <port>: 将另外的node添加进cluster
+cluster saveconfig 将集群配置持久化到本机磁盘
+cluster set-config-epoch <config-epoch>: 
+
+cluster failover [FORCE|TAKEOVER]
+    只能在slave节点使用， 将当前slave节点提升为master
+    FORCE 当master节点not reachable时使用, 需要跟cluster其他master认证协商
+    TAKEOVER: 不跟cluster协商， 将自己提升为master
+
+cluster setslot <slot> <IMPORTING|MIGRATING|STABLE|NODE] <node-id>
+    #TODO
+
+cluster slaves <node-id>: 列出node-id所有的slave节点， node-id必须为master
+
+readonly: 使集群所有的slave node可以处理读操作
+readwrite: 此命令reset readonly flag , slave node默认不可以处理读操作，
+
 ======== string Key ===========
-append: add value to a key holding string
+append key value: 为string类型的key的value添加字符串
 get <key>
-mget <key1> [<key2> ...]
+mget <key1> [<key2> ...]: 同时获取多个string key， 返回一个数组
 set <key> <value>
-mset <key1> <value1> [<key2> <value2> ...]
-msetnx: only if none of keys exist
+mset <key1> <value1> [<key2> <value2> ...]: 同时为多个string key赋值
+setnx key value: 当key不存在时， 为其赋值
+msetnx key1 value1 [key2 value2...]: 同时为多个不存在的key赋值
 
-strlen <key>: return string length of key
-type <key>: return type of key
-getrange <key> <start> <end>: get substring of string stored in key
+strlen <key>: 获取string key字符串长度
+getrange <key> <start> <end>: 获取string key的substring, 包含边界
 
-getset <key> <new value>: set key to new value and return old value
+getset <key> <new value>: 原子操作，赋新值的同时返回旧值
 
-expireat key <timestamp>
-expire key <seconds>
-pexpire key <milliseconds>
-ttl key : return ttl in seconds
-pttl <key> : return ttl in milliseconds
-persist <key> remove expiration from key
+decr <key>: 将整数值减一，原子操作, 要求存储的必须是整数
+decrby <key> <decrement>: 将整数值减少指定的量
+incr <key>: 
+incrby <key> <increment>: 
+incrbyfloat <key> <increment>: 增加浮点value
 
-randomkey: return a random key from keyspace
-rename <key> <new name> 
-renamenx <key> <new name>: only if <new name> not exist
-
-decr <key> : decrease the integer value of one key by 1
-decrby <key> <decrement> 
-
-incr <key>
-incrby <key> <increment>
-incrbyfloat <key> <increment>
-
-del <key> [key ...]: delete a key
-dump <key> : return the serialized version of value stored in key
-echo <msg>
-
-===== geo ==========
-geoadd <key> <longitude> <latitude> <member> [...]
 ======= Hash ============
+通过hset, hmset创建hash
+
 hset <key> <field> <value>
-hsetnx <key> <field> <value>: only if field does not exists
-hmset <key> <field 1> <value 1> <filed 2> <value 2>
-hmget <key> <field 1> <field 2> ...
+hsetnx <key> <field> <value>: 当hash field不存在时才赋值
+hmset <key> <field 1> <value 1> [<filed 2> <value 2>...]
+hmget <key> <field 1> [<field 2> ...]
 hget <key> <field>
-hgetall <key>
-hdel <key> <field 1>  [<field 2> ...]
-hkeys <key>: get all keys in same hash 
-hvals <key>
-hexists <key> <field>
+hgetall <key>: 获取hash所有field和value
+hdel <key> <field 1>  [<field 2> ...]: 删除一个或多个field
+hkeys <key>: 获取所有field name
+hvals <key>: 获取所有field value
+hexists <key> <field>: 检测key是否存在field
 hincreby <key> <field> <value>
 hincrebyfloat <key> <field> <value>
-hlen <key>
-hstrlen <key> <field> : return string length of field
+hlen <key>: 获取field数量
+hstrlen <key> <field>: 获取field value的字符串长度
 =========Server side ===
 shutdown <save|nosave>: shutdown redis instance
-info [section]: return status information of server
-config get <parameter>
-config set <parameter> <value>
-lastsave: return timestamp of last successfully save
-monitor: list received request in real time
-move <key> <db>: move key to another db
-time: return current timestamp of server
-bgrewirteaof: async rewrite aof 
+info [section]: 获取服务器某个section的状态
+    > info server
+config get <parameter>: 获取配置值
+config set <parameter> <value>: 设置配置值
+lastsave: 返回上一次成功保存到磁盘的timestamp
+monitor: 实时监听服务器接受到的所有命令
+    1501340528.340256 [0 127.0.0.1:54827] "keys" "*"
+    1501340548.964527 [0 127.0.0.1:54836] "keys" "*"
+
+move <key> <db>: 移动key到其他的database
+select <db>: 切换数据库
+time: 返回timestamp 正数部分和微秒
 keys [pattern]
-flushdb: clear all keys in current db
-flushall: clear all keys in all dbs
-save: sync save data to disk
+flushdb: 清空当前db
+flushall: 清空所有db
+save: 阻塞式将数据刷到磁盘
+type <key>: 获取key类型
+expire <key> <seconds>: 以秒为单位，设置key的TTL
+    1. 可以为设置了ttl的key重新设置ttl
+    2. 为设置了ttl的key重新赋值， 将清除其TTL，变为persist
+expireat key <timestamp>: 在指定ts过期
+pexpire key <milliseconds>: 以毫秒为单位，设置TTL
+
+ttl key: 以秒为单位，获取TTL, -1表示永不过期
+pttl <key>: 以毫秒为单位，获取TTL, -2表示永不过期
+persist <key>: 清除key的TTL
+
+randomkey: 从当前keyspace返回一个任意的key
+rename <key> <new name>: 重命名key
+renamenx <key> <new name>: 当新名字不存在时才重命名
+
+del <key> [key ...]: 删除key
+dump <key>: 返回key中存储的value的序列化版本
+echo <msg>: 打印字符串
 
 ========List =============
-lindex <list> <index>: return  list[index]
-lpush <list> <value>
-lpushx <list> <value>: only if list already exists
-lpop <list>: remove and return first element of list
-rpush <list> <value>
-rpushx <list> <value>: only if list already exists
-rpop <list>: remove and return last element  
-linsert <list> <before|after> <pivot> <value>
+通过lpush， rpush才能创建list
+lindex <list> <index>: 通过index获得member
+lpush <list> <value> [value2 ...]:
+    如果list不存在则新建
+    prepend value or multiple value
+lpushx <list> <value>: 当list存在时prepend value
+rpush <list> <value> [value2 ...]:
+    如果list不存在则新建
+     append value or multiple value
+rpushx <list> <value>: 当list存在时, append value
+linsert <list> <before|after> <pivot> <value>: 在pivot前、后插入
+    如果pivot不存在， 则返回-1
+    如果list不存在， 则ignore
+    如果根据pivot匹配到多个index， 则使用最小的
 llen <list> : length of list
-lrange <list> <start> <end>  # position could be negative
-rpoplpush <list 1> <list 2>: remove last element of list_1 and push
-                            to first of list_2
-
-lrem <list> <count> <pivot>: remove count number of pivot from list
+lrange <list> <start> <end>: 支持负数下标， 包含start， end边界
+lrem <list> <count> <value>: remove count number of pivot from list
+    count = 0: 删除所有等于value的元素
+    count < 0: 从后向前删除count个等于value的元素
+    count > 0: 从前向后删除count个等于value的元素
 lset <list> <index> <value>: set list[index] = value
-ltrim <list> <start> <end>: only element between start and end will be remained
+ltrim <list> <start> <end>: 仅保留start到end之间的元素， 包括边界
 
-blpop
-brpop
-brpoplpush
+lpop <list>: 删除并返回list[0], 如果list为空， 返回nil
+blpop key [key2 ...]: 删除并返回list[0], 如果key为空，则block connection
+rpop <list>: 删除并返回list[-1], 如果list为空， 返回nil
+brpop: 删除并返回list[-1], 如果key为空，则block connection
+rpoplpush <source> <dest> 
+    删除source[-1], prepend到dest, 如果source没有元素可pop， 则返回nil
+    source, dest可以相同，视为将source[-1]移动至source[0]
+
+brpoplpush <list1> <list2>: 
+    删除source[-1], prepend到dest, 如果source没有元素可pop， 则block
+
 =======Set =========
-scard <set>: return cardinality (number of elements) of a set
-sadd <set> <member>: 
-smembers <set>
-sismember <set> <member>: test if member is in set 
-spop <set> [count]: remove and return [count] random element from set 
-sdiff <set1> <set2> [<set3> ...]: return memeber in set1 not in set2 and set3 
-sdiffstore <dest> <set1> <set2> ...: store diff memebers in <dest>
-sinter <set1> <set2>[ ...]: return intersection of all sets
-sinterstore <dest> <set1> <set2> ...: store intersection into <dest>
-smove <src> <dest> <member>: move member of src to dest
-srandomember <set> [count]: return count random member of set 
-                            if count is positive, return distinct
-                            if count is negative, return not distinct 
-srem <set> <member>: remove member from set
-sunion <set1> <set2> [<set3> ...]: return union of all 
-sunionstore <dest> <set1> <set2> [<set3> ...]: store union into dest
+通过sadd来创建set
+
+scard <set>: 返回集合的元素个数
+sadd <set> <member> [member2 ...]: 添加元素到集合
+smembers <set>: 列出set所有元素s
+sismember <set> <member>: 检查member是否在set，返回0 false， 返回1 true
+spop <set> [count]: 删除并返回count个任意的member
+sdiff <set1> <set2> [<set3> ...]: 返回在set1中， 不在其余所有set中的member
+sdiffstore <dest> <set1> <set2> ...: 存储set1与set2的差集到dest中
+sinter <set1> <set2>[ ...]: 返回同时存在于所有set中的元素
+sinterstore <dest> <set1> <set2> ...: 存储所有set的交集到dest中
+smove <src> <dest> <member>: 将src的member移动到dest中， 原子操作
+srandomember <set> [count]: 
+    只返回， 不修改set
+    如果count>0, 返回count个不同的member
+    如果count<0, 返回count个可以相同的member
+srem <key> <member> [member2...]
+    如果member不在key中， 则忽略
+    如果key不存在，则返回0
+    如果key不是set类型， 则会报错
+    返回成功删除的member个数
+sunion <set1> <set2> [<set3> ...]: 返回所有set的合集
+sunionstore <dest> <set1> <set2> [<set3> ...]: 保存所有set交集到dest中
 
 =======Sorted Set =======
-zadd <sset> <score> <member> [<score> <member>]
-zcard <sset>: total members of sset
-zcount <sset> <start> <end>: return count of members which score between start and end
-zincrby <sset> <increment> <member>: 
-zlexcount
-zrange <sset> <start> <end>: return members base on rank 
-zrangebyscore <sset> <start> <end>: return members base on score 
-zrangebylex: return members have same score by lex
+keyword
+    lex
+    rank
+    score
+    rem
+    add
+    range
+
+zadd <sset> [NX|XX|CH] <score> <member> [<score> <member>]
+    score是双精度浮点型, -inf, +inf代表极限
+    XX: 只有当member存在时进行update， 不会添加member
+    NX: 只有当member不存在时才进行添加， 而不会update
+    CH: 返回受影响的(add or updated)member个数
+    INCR: 为member增加score， 只接受一对member， score
+
+zcard <sset>: 返回member个数
+zcount <sset> <start> <end>: 返回score介于start，end之间的member个数, 包含边界
+zincrby <sset> <increment> <member>: 为member添加score, 如果member不存在则添加， increment视为score
+zrange <sset> <start> <end> [WITHSCORES] : 通过rank返回member
+    start, end: 必须为正数
+zrangebyscore <sset> <start> <end> [WITHSCORES] [LIMIT offset]
+    通过score返回member
+    start, end: '(' 表示开区间
+
+zrangebylex <key> <min> <max> [LIMIT offset]
+    (b: 不包含b开头的
+    [b: 包含b开头的
+    -， +： 视为string的正负无穷
+    如果string1 = string2[0, string1.length]则  string2 > string1
+    字符串比较是将string转化为byte比较， 因此'caaa' > 'bcccc'
+zlexcount <sset> <min> <max>
+zremrangebylex
+zrevrangebylex
+
 zrank <sset> <member>: return rank of member, scores from low to high
 zrevrank <sset> <member>: return rank of member, scores from high to low
-zrem <sset> <member>: remove member from sset
-zremrangebyrank
-zremrangebylex
-zremrangebyscore
+zrem <sset> <member>: remove member from sset, 如果member不存在则忽略
+zremrangebyrank <sset> <min> <max>: 按语义大小删除member，返回删除的个数
+zremrangebyscore <sset> <min> <max>： 按score删除
 zrevrange <sset> <start> <end>: return members base on reversed rank
-zrevrangebylex
-zrevrangebyscore
+zrevrangebyscore: return members base on reversed score
 zscore <sset> <member>: return score of member 
+
+zinterstore <dest> <numkeys> <key1> [key2 ...] [WEIGHTS weight1 weight2 ..] [AGGREGATE SUM|MIN|MAX]
+    求numkeys个sset的交集 
+    AGGREGATE: 默认为sum
+    score of member = (score in key1) * weigth1 AGGREGATE (score in key2) * weight2
+zunionstore <dest> <numkeys> <key1> [key2 ...] [WEIGHTS weight1 weight2 ..] [AGGREGATE SUM|MIN|MAX]
+    求numkeys个sset的并集
+    AGGREGATE: 默认为sum
 ====== Transaction =========
-multi:mark the start of a transaction block  
-discard: flush all previously queued commands, unwatch every watched keys 
-watch: marks the given key to be watched for transaction, if watched key changed,
-        transaction will fail
-exec: execute all queued commands
+事务保证有序性， 原子性
+multi: 标记事务的开始
+discard: 回滚事务
+watch <key>: 如果key发生改变， 则事务退出
+exec: 提交事务
+
+
+====== cursor =========
+scan 迭代当前database的所有key
+scan cursor [MATCH pattern] [COUNT count]: 
+    cursor: an iteration starts when <cursor> is set to "0" and terminate when cursor returned by server is "0"
+    COUNT: 
+        default is 10
+        每次返回大于等于count的element
+        当迭代对象为intset, size比较小的hashes, sorted set时， count被忽略， 一次性全被返回
+    Match: default to "*"
+
+> scan 0 match my* count 3
+1) "6"
+2) 1) "myset"
+> scan 6 match my* count 1
+1) "0"
+2) 1) "mylist"
+
+
+sscan 迭代set
+    > sscan myset 0 match foo* count 1
+    1) "4"
+    2) (empty list or set)
+    > sscan myset 4 match foo* count 1
+    1) "0"
+    2) (empty list or set)
+
+hscan 迭代hash field, value
+    > hscan myhash 0 count 1
+    1) "0"
+    2) 1) "name"
+       2) "jack"
+       3) "age"
+       4) "23"
+
+zscan 迭代sorted set, 按member name进行匹配
+    > zscan myss 0 match b*
 

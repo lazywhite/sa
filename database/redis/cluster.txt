@@ -1,18 +1,66 @@
-1. redis 3.0 or above
-2. two tcp port, one for client and one for cluster bus
-3. hash slot
-4. ./redis-trib.rb create --replicas 1 127.0.0.1:7000 127.0.0.1:7001 \
-127.0.0.1:7002 127.0.0.1:7003 127.0.0.1:7004 127.0.0.1:7005
-==============
-utils/create-cluster start
-utils/create-cluster create 
-utils/create-cluster stop 
----------------
-create-cluster start 报错
-/usr/lib/ruby/site_ruby/1.8/rubygems/custom_require.rb:31:in `gem_original_require': no such file to load -- redis
-gem sources --remove http://rubygems.org/
-gem sources -a https://ruby.taobao.org/
-gem install redis
-===============
-cluster commands
+## Redis cluster Goals
+1. 高性能， 高扩展，无需代理， 异步复制
+2. 可接受的写安全性
+
+## redis cluster tcp ports
+every redis cluster node requires two tcp connection open
+    6379: the normal redis tcp port used to serve clients, 
+    16379: cluster bus port, 使用cluster bus binary protocol进行集群通信
+
+
+## key hash tags(只取第一个合法的{}之间的内容)
+    user{old}.follower   user{old}.following "old"将会被hash， 两者会分到同一个slot
+    foo{}{bar}   因为第一个{}中间为空， 所以视为没有tag， 将会对整个key name计算
+    foo{{bar}}   "{bar" 将被作为hash tag进行计算
+    foo{bar}{zip}  bar将被计算，忽略{zip}
+
+
+## slot迁移
+B> CLUSTER SETSLOT 8 IMPORTING A
+A> CLUSTER SETSLOT 8 MIGRATING B
+
+迁移流程
+    slot 8中所有的key，对每个key进行migrate(过程是原子性)
+migrate流程
+    1. B中创建对应key的serialize value，
+    2. 上一步返回ok则从A删除key
+
+迁移期间request处理流程
+    1. 所有对slot 8的操作都指向A，如果key仍在A中则处理，支持读写操作，不在就重定向client到B
+    2. 新建key直接给B进行处理
+
+迁移丢失key bug
+    当slot中存在ttl key时， 因为脚本问题会让一些persistent的key具有ttl, 4.0rc2已修复
+## redirection
+    MOVED: 永久重定向
+    ASK: 临时重定向
+
+### 从节点选举
+一旦某个主节点进入 FAIL 状态， 如果这个主节点有一个或多个从节点存在， 那么其中一个从节点会被升级为新的主节点， 而其他从节点则会开始对这个新的主节点进行复制。
+
+在集群的生命周期中， 如果一个带有 PROMOTED 标识的主节点因为某些原因转变成了从节点， 那么该节点将丢失它所带有的 PROMOTED 标识。
+
+### 发布订阅
+在一个 Redis 集群中， 客户端可以订阅任意一个节点， 也可以向任意一个节点发送信息， 节点会对客户端所发送的信息进行转发。
+
+### 结论
+由于采用异步复制，master接受到写命令还没同步至slave节点就宕机的话， 会造成写丢失
+
+如果client需要的key不在连接的节点上，client将会被重定向到正确的节点，client会缓存
+slot-node-mapping, 下次请求直接连接正确的节点
+
+redis slots只有16384个， 因此节点最多也只能有16384个，但官方建议数量少于1000个
+
+取得slot-id的算法  
+    HASH_SLOT = CRC16(key) mod 16384
+
+cluster只有两种状态: FAIL, OK
+
+即使集群中只有一部分hash slot不能使用, 集群也会停止处理任何命令
+
+集群进入FAIL状态的两种情况
+    1. 至少有一个hash slot不能使用
+    2. 集群中大部分master节点都进入PFAIL状态, 集群也会进入FAIL状态
+
+gossip protocol进行集群状态通知
 
