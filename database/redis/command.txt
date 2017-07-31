@@ -117,11 +117,15 @@ hincrebyfloat <key> <field> <value>
 hlen <key>: 获取field数量
 hstrlen <key> <field>: 获取field value的字符串长度
 =========Server side ===
+
 shutdown <save|nosave>: shutdown redis instance
 info [section]: 获取服务器某个section的状态
     > info server
 config get <parameter>: 获取配置值
+    
 config set <parameter> <value>: 设置配置值
+    >config set requirepass "pass"
+    >auth "pass"
 lastsave: 返回上一次成功保存到磁盘的timestamp
 monitor: 实时监听服务器接受到的所有命令
     1501340528.340256 [0 127.0.0.1:54827] "keys" "*"

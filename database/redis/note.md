@@ -35,3 +35,6 @@ redis keyspace notification
 
     $ redis-cli config set notify-keyspace-events KEA
     $ redis-cli --csv psubscribe '__key*__:*'
+
+
+redis-cli -c (cluster mode, follow ASK, MOVED redirection)

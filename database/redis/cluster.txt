@@ -64,3 +64,28 @@ cluster只有两种状态: FAIL, OK
 
 gossip protocol进行集群状态通知
 
+
+
+## 集群搭建流程
+1. 安装ruby rubygems包
+2. 以集群模式启动所有redis实例
+3. ./redis-trib.rb create --replicas <num> <ip:port> <ip:port> ...
+
+## 集群添加主节点
+./redis-trib.rb add-node <被添加节点 ip:port>  <目标集群某个node ip:port>
+
+重新分配slot, 需要输入迁移的数量和目标node,来源node(可以为all)
+./redis-trib.rb reshard <集群任意一个node ip:port> 
+
+检查节点slot
+./redis-trib.rb check <ip:port>
+
+## 集群添加从节点
+./redis-trib.rb add-node --slave --master-id <主节点node-id> <被添加节点 ip:port> <集群中任意node ip:port>
+
+## 删除主节点
+需要事前迁移走slot
+redis-trib del-node <集群任意节点 ip:port> <node-id>
+
+## 删除从节点
+./redis-trib.rb del-node <集群任意节点 ip:port> <node-id>
