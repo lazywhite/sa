@@ -1,3 +1,5 @@
+## code
+```
 from pyspark import SparkContext
 
 logfile = 'note.md'
@@ -12,5 +14,5 @@ num_b = logdata.filter(lambda line: 'b' in line).count()
 print num_a, num_b
 
 
-
-## pyspark simpleapp.py
+运行: pyspark simpleapp.py
+```
