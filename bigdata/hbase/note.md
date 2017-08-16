@@ -6,85 +6,31 @@ Stores
     Memstore
     HFile
 Regions
-    Regions are nothing but tables that are split up and spread across the region servers.
+Table:  a collection of rows
+row: a collection of column families
+column family: a collection of column
+column: a collection of key/value pair
 
-Random Access Databases
 ```
 
-## Concept
-HBASE is the hadoop database, a distribute, scalable, big data store  
-Use hbase when you need random, realtime read/write access to your BigData  
-Hbase is distributed, versioned, non-relational database 
-
-HBase is a data model that is similar to Google’s big table designed to provide quick random access to huge amounts of structured data.
-
-It leverages the fault tolerance provided by the Hadoop File System (HDFS).
-
-## Features
-strictly consistent reads and writes  
-automatic and configurable sharding of tables  
-automatic failover support between RegionServers  
-Convenient base classes for backing MapReduce jobs with Hbase Tables  
-Block cache and Bloom Filters for real-time queries  
-query predicate push down via server-side filters  
-thrift gateway and a rest-full web service that support XML, Protobuf and Binary data encoding options  
-Jruby-based(JIRB) shell  
-Support for exporting metrics via Hadoop metrics subsystem to files or Ganglia  
+## 特点
+1. Hbase建立在HDFS之上, 依靠HDFS来获得水平扩展和错误容忍能力
+2. HDFS只能顺序处理数据, Hbase是为了解决数据的Random Access问题
+3. 不支持事务
+4. schema-less
+5. 面向列, 便于水平扩容
 
 
-## Installation
-```
-#brew install hbase
-#export HBASE_HOME="/usr/local/Cellar/hbase/1.1.2/libexec"
-##conf/hbase-site.xml
-<configuration>
-    <property>
-        <name>hbase.rootdir</name>
-        <value>hdfs://localhost:9000/hbase</value>
-    </property>
+## HMaster的职责
+1. 借助zookeeper, 为RegionServer分配Region
+2. 为region实现负载均衡, 调度过度繁忙的region到其他的RegionServer
+3. 管理database metadata, 如表和column family的创建  
+4. hbase会为数据做哈希索引, 以加快检索速度
 
-   <property>
-      <name>hbase.zookeeper.property.clientPort</name>
-      <value>2181</value>
-      <description>Property from ZooKeeper's config zoo.cfg.
-      The port at which the clients will connect.
-      </description>
-    </property>
-    <property>
-      <name>hbase.zookeeper.quorum</name>
-      <value></value>
-      <description>Comma separated list of servers in the ZooKeeper Quorum.
-      For example, "host1.mydomain.com,host2.mydomain.com,host3.mydomain.com".
-      By default this is set to localhost for local and pseudo-distributed modes
-      of operation. For a fully-distributed setup, this should be set to a full
-      list of ZooKeeper quorum servers. If HBASE_MANAGES_ZK is set in hbase-env.sh
-      this is the list of servers which we will start/stop ZooKeeper on.
-      </description>
-    </property>
-    <property>
-      <name>hbase.zookeeper.property.dataDir</name>
-      <value>/usr/local/zookeeper</value>
-      <description>Property from ZooKeeper's config zoo.cfg.
-      The directory where the snapshot is stored.
-      </description>
-    </property>
-</configuration>u
-## hbase-env.sh
-export JAVA_HOME="$(/usr/libexec/java_home)"
-export HBASE_MANAGES_ZK=true
+  
+## RegionServer的职责
+1. 接受client请求处理数据
+2. client通过zookeeper找到与region对应的regionServer
 
-mkdir /usr/local/zookeeper
-# start hbase service 
-start-hbase.sh
-or 
-hbase shell
-```
-
-## Topic
-### How hbase modify data
-```
-HBase stores data in HDFS in an indexed form. Oversimplifying things, the HDFS files have the keys stored in sorted order so that looking up a particular key is fast. HBase data storage is taken care of in the RegionServers (RS).
-
-In the RS, the keys are first written to an in-memory store (called memstore). The memstore stores the new keys/updates an deletes. After a certain threshold, these keys are pushed to HDFS as a new index file. Updates are taken care of by timestamps - the assumption is that the latest version is the only valid version. So if the previous index file has the same key, it will be ignored. Deletes are the same as updates, the only difference is that deletes have a special type field which have a flag marking the key as deleted.
-```
-
+## HMaster高可用
+同时启动多个hmaster, 依靠zookeeper做选举和failover

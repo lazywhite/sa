@@ -1,20 +1,12 @@
-## Concept and Keyword
+## Tips
 1. tables are horizonal split into 'regions' and are served by RegionServers  
 2. 'Regions' are vertically divided by column families into 'Stores'  
 3. 'Stores' are saved as files in HDFS    
-4. 'Stores' contain 'MemStore' and 'Hfiles'  
-  
-```
-HMaster: 
-    assign regions to regionServer
-    zookeeper to make HA
-RegionServer
-```
-## start stop hbase 
-```
-start-hbase.sh
-stop-hbase.sh
-```
+4. 'Store'包含MemStore和HFiles
+5. 'Memstore' 充当HFiles与接口之间的缓存层
+6. 更新数据底层其实只是创建了cell的一个新版本数据
+
+
 
 ## Hbase shell
 ```
@@ -26,7 +18,8 @@ stop-hbase.sh
 6. is_enabled <table> : check if table is enabled  
 7. alter <table>: alter a table  
 8. drop_all <regexp>: drop all tables matching 'regexp'  
-```  
+9. table_help 获取表操作相关帮助
+``` 
 
 ## Create a table
 ```
@@ -40,9 +33,11 @@ exists 'emp'
 ```
 
 ## Insert or Update data
-row_key could be number or 'string'  
 
 ```
+row_key could be number or 'string'  
+
+
 put 'emp', '1', 'personal:name', 'Bob'
 put 'emp', '1', 'personal:age', 34
 
@@ -87,14 +82,18 @@ deleteall 'emp',1
 ```
 
 
-## Topic
-sql phrase end with "newline" not semi-colon  
+## 权限
+```
+# 权限用五个字母表示： "RWXCA".
+# READ('R'), WRITE('W'), EXEC('X'), CREATE('C'), ADMIN('A')
+grant 'test','RW','t1' ## 分配权限
 
-### 1. Change the maxium number of cells of a column family, default is 1
+user_permission 't1'  ## 查看权限
 ```
-alter 't1', NAME => 'f1', VERSIONS => 5
+
+## Column Family
 ```
-### 2. Delete a column family
+alter 't1', NAME => 'f1', VERSIONS => 5 ### 添加column family, 规定每个cell只能存储最近5个版本的历史数据
+alter 'table name', 'delete' => 'column family'  ### 删除 column family
 ```
-alter 'table name', 'delete' ⇒ 'column family'
-```
+
