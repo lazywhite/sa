@@ -6,67 +6,98 @@ Hcatalog
     work on top of hive metastore, share metadata through applications
 trift
     A rest api service for HiveServer2
+  
+table
+partition
+buckets
+join
+HiveServer
+	
 ```
-## Concept
-Hive is a data warehouse infrastructure tool to process structured data in Hadoop. It resides on top of Hadoop to summarize Big Data, and makes querying and analyzing easy.
-the data aggregation actually generate MapReduce tasks
-
-## Installation
-
+## Tips
 ```
-brew install hive
+hive运行于hadoop之上, 目的是处理结构化数据, 提升查询分析的性能. 
+hive有类SQL接口, 每条语句会自动产生一个hadoop job执行, 实时性不高
 
-cp conf/hive-default.xml.template conf/hive-site.xml
-cp hive-log4j.properties.template hive-log4j.properties
+Hive从0.14版本开始支持事务和行级更新，要想支持行级insert、update、delete，需要配置Hive支持事务。
 
-export HADOOP_HOME=/usr/local/Cellar/hadoop/hadoop.version.no
-export HIVE_HOME=/usr/local/Cellar/hive/hive.version.no/libexec
-export JAVA_HOME=$(/usr/libexec/java_home)
-
-curl -L 'http://www.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.22.tar.gz/from/http://mysql.he.net/' | tar xz
-cp mysql-connector-java-5.1.15/mysql-connector-java-5.1.22-bin.jar /usr/local/Cellar/hive/hive.version.no/libexec/lib/
-
-$mysql
-mysql> CREATE DATABASE metastore;
-mysql> Grant ALL on metastore.* to 'hive'@'%' identified by 'hive';
-
-<property>
-  <name>javax.jdo.option.ConnectionURL</name>
-  <value>jdbc:mysql://localhost/metastore</value>
-</property>
-<property>
-  <name>javax.jdo.option.ConnectionDriverName</name>
-  <value>com.mysql.jdbc.Driver</value>
-</property>
-<property>
-  <name>javax.jdo.option.ConnectionUserName</name>
-  <value>hiveuser</value>
-</property>
-<property>
-  <name>javax.jdo.option.ConnectionPassword</name>
-  <value>password</value>
-</property>
-<property>
-  <name>datanucleus.fixedDatastore</name>
-  <value>false</value>
-</property>
-
-
-## create HDFS directories
-## metastore default dir setting in  hive-site.xml
-$ hdfs dfs -mkdir -p /user/hive/warehouse
-$ hdfs dfs -chmod g+w /tmp
-$ hdfs dfs -chmod g+w /user/hive/warehouse
-
-mkdir /tmp/hive_tmp_io
-#change all ${system:java.io.tmpdir} to /tmp/hive_tmp_io
+数据最终存储在HDFS或HBase里面
 
 ```
-## Usage 
+## Hive组件
 ```
-no update and delete operation allowd 
-insert overwrite table my_word  select * from my_word  where id != 100;
+user interface
+	CLI
+	WebUI
+	
+HiveQL process engine
+Execution Engine
+
 ```
+
+## Hive事务配置
+```
+hive-site.xml 
+
+
+<property>  
+    <name>hive.support.concurrency</name>  
+    <value>true</value>  
+</property>  
+<property>  
+    <name>hive.exec.dynamic.partition.mode</name>  
+    <value>nonstrict</value>  
+</property>  
+<property>  
+    <name>hive.txn.manager</name>  
+    <value>org.apache.hadoop.hive.ql.lockmgr.DbTxnManager</value>  
+</property>  
+<property>  
+    <name>hive.compactor.initiator.on</name>  
+    <value>true</value>  
+</property>  
+<property>  
+    <name>hive.compactor.worker.threads</name>  
+    <value>1</value>  
+</property>  
+```
+
 
 ## Partition
-it is a way of dividing a table into related parts base on the values of partitioned columns such as date, city, and department
+```
+1. 创建一个分区表，以 ds 为分区列： 
+	create table invites (id int, name string) partitioned by (ds string) row format delimited fields terminated by 't' stored as textfile; 
+2. 将数据添加到时间为 2013-08-16 这个分区中： 
+	load data local inpath '/home/hadoop/Desktop/data.txt' overwrite into table invites partition (ds='2013-08-16'); 
+3. 将数据添加到时间为 2013-08-20 这个分区中： 
+	load data local inpath '/home/hadoop/Desktop/data.txt' overwrite into table invites partition (ds='2013-08-20'); 
+4. 从一个分区中查询数据： 
+	select * from invites where ds ='2013-08-12'; 
+5.  往一个分区表的某一个分区中添加数据： 
+	insert overwrite table invites partition (ds='2013-08-12') select id,max(name) from test group by id; 
+6. 可以查看分区的具体情况
+	show partitions invites;
+```
+
+## Bucket
+```
+对于每一个表（table）或者分区， Hive可以进一步组织成桶，也就是说桶是更为细粒度的数据范围划分。划分依据是某一列的值.
+
+create table bucketed_user(id int,name string) clustered by (id) sorted by(name) into 4 buckets row format delimited fields terminated by '\t' stored as textfile; 
+```
+
+## Join
+```
+inner join
+   select * from aa a join bb b on a.c=b.a;
+left join
+	select * from aa a left outer join bb b on a.c=b.a;
+right join
+	select * from aa a right outer join bb b on a.c=b.a;
+full join
+	select * from aa a full outer join bb b on a.c=b.a;
+left semi join
+	select * from aa a left semi join bb b on a.c=b.a;
+笛卡尔集
+	 select * from aa join bb;
+```
