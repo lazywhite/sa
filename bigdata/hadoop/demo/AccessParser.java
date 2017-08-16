@@ -25,7 +25,6 @@ public class AccessParser {
         FileInputFormat.addInputPath(job, new Path(args[0]));
         FileOutputFormat.setOutputPath(job, new Path(args[1]));
         System.exit(job.waitForCompletion(true) ? 0 : 1);
-
     }
 
     public static class AccessMapper extends Mapper<Object, Text, Text, IntWritable>{
@@ -34,9 +33,6 @@ public class AccessParser {
 
         public void map(Object key, Text value, Context context) throws IOException, InterruptedException{
             StringTokenizer iter = new StringTokenizer(value.toString());
-//            while (iter.hasMoreTokens()){
-//                all.append(iter.nextToken());
-//            }
             word.set(iter.nextToken());
             context.write(word, one);
         }

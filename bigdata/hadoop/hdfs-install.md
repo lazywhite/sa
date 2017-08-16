@@ -1,4 +1,4 @@
-## Single Node Installation
+## 单节点模式
 
 ```
 hadoop namenode -format
@@ -16,12 +16,14 @@ stop-dfs.sh
 hdfs dfs -setrep 2 passwd 
 ```
 
-## Cluster installation
+## 分布式模式
 ```
-ssh-key authorized
+1. 规定slave node列表
+    $HADOOP_HOME/etc/hadoop/slaves
+        localhost
+        datanode1
+        datanode2
 
-$HADOOP_HOME/etc/hadoop/slaves
-    localhost
-    datanode1
-    datanode2
+2. 所有data node配置ssh公钥免密码登录
+3. namenode# start-dfs.sh
 ```
