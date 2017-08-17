@@ -1,28 +1,22 @@
 ## 结论
-1. 需要一个sharding key才能创建分片集群
-2. sharding key 可以是single field 或compound field类型的
-3. sharding 的类型分为两种B-Tree(ranged), Hashed
-4. 一旦开始shard一个集合, shard key 和 valued就不可变了, 不能挑选另外的shard key 或者更新document "shard key fields"对应的value
-5. 禁止在field value 是float point number的列上创建哈希索引
-6. 如果在一个空集合上创建哈希分片, 则mongodb自动为每个shard创建两个空chunk, 可以通过"numInitialChunks" 来指定
-7. 最好在shard集群中开启auto split
-8. 采用预分裂技术, 有助于提高分片集群性能
-10. Balancer进程默认是开启的, 备份时需要关闭
-11. chunk size默认64MB, 范围在1-1024MB, 如果chunk size较小, 则会触发频发的chunk migration
+1. 给collection创建分片, 需要collection已经存在索引, sharding的类别就是索引的类别
+1. 一旦开始shard一个集合, shard key 和 valued就不可变了, 不能挑选另外的shard key 或者更新document "shard key fields"对应的value
+1. 最好在shard集群中开启auto split
+1. Balancer进程默认是开启的, 备份时需要关闭
+1. chunk size默认64MB, 范围在1-1024MB, 如果chunk size较小, 则会触发频发的chunk migration
     调整chunk大小: use config; db.settings.save({_id:"chunksize", value: <size in MB> })
-12. 可以在添加一个shard的时候规定数据最大值, 默认不限制   
-13. mongos路由时, 会根据shard key value来决定属于哪个zone, 然后路由给zone中的shard
-14. 分片集群中第一个shard往往是primary shard
-15. database中没有开启shard的collection, 全部存放在primary shard
-16. 如果采用hash sharding, 可考虑采用预分片技术, 指定numInitialChunks, 均匀分布到各个shard, 如果采用range sharding, 预分片效果不大, 可能会产生空chunk
-
+1. mongos路由时, 会根据shard key value来决定属于哪个zone, 然后路由给zone中的shard
+1. 分片集群中第一个shard往往是primary shard
+1. database中没有开启shard的collection, 全部存放在primary shard
+1. 如果采用hash sharding, 可考虑采用预分片技术, 指定numInitialChunks, 均匀分布到各个shard, 如果采用range sharding, 预分片效果不大, 可能会产生空chunk
 
 
 ## Zone (new in 3.4, successor of "tag aware shard")
 ```
-基于shard key 可以创建zone, zone跟shard之间是多对多关系
+一个shard上所有的sharding key value可以分为多个range或单个range
+一个range只能分配给一个zone
+由于一个shard上可以有多个range, 因此shard跟zone是多对多关系
 每个zone覆盖一个或多个shard key value range, 每个range都是包含下限, 不包含上限
-单个shard可能只有一个range
 zone管理的range不能与其他zone不能有任何交叉
 ```
 

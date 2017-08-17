@@ -31,9 +31,6 @@ $exists
     { field: { $exists: <boolean> } }
     查询包含或者不包含对应字段的document
 
-$all
-    { <field>: { $all: [ <value1> , <value2> ... ] } }
-    当对应的字段为数组时, 要求所有值都匹配
 
 $mod
     { field: { $mod: [ divisor, remainder ] } }
@@ -47,10 +44,15 @@ $nin
     { field: { $nin: [ <value1>, <value2> ... <valueN> ]} }
     查询不存在此字段或者字段的数组中不包含查询值的document
 
+
+===== 针对value是数组的查询 ====
 $size
     { field: { $size: <count> } } 
     查询对应字段是数组, 并且数组的长度是count的document
 
+$all
+    { <field>: { $all: [ <value1> , <value2> ... ] } }
+    当对应的字段为数组时, 要求所有值都匹配
 ```
 
 ### 2. 游标方法
@@ -98,7 +100,7 @@ db.users.update(
 	{ age: { $gt: 18} },		# 匹配规则
 	{ $set: { status: "A"} , $inc: { stock: 5 }},
 	{ multi: true ,            # 更改所有符合条件的doc, 没有则只修改一行, 
-      upsert: true             # 如果匹配不到document, 则insert一条document
+      upsert: true             # 如果匹配不到document, 则insert一条document(replace into)
     }				
 )
 ```
@@ -111,12 +113,11 @@ db.col.remove(
 )
 db.users.remove(
     { status: "D" },  # remove cretiria
-    { justOne: false}  # 删除所有匹配的document
+    { justOne: false}  # 删除所有匹配的document, 默认全部删除
 )
-db.col.remove() 将删除所有document
-
-db.col.deleteOne()
-db.col.deleteMany()
+db.col.remove()  # truncate table col;
+db.col.deleteOne({name: "bob"})  # 即使有多条document匹配, 只删除一个
+db.col.deleteMany({name: "bob"}) # 删除所有匹配的document
 
 ```
 

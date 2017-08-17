@@ -20,15 +20,16 @@ Regular Expression
 ## 索引
 ```
 1. 没有索引, mongodb会进行全collection扫描
-2. 默认创建_id unique 索引, 并且无法删除
+2. 默认创建 unique "_id"索引, 并且无法删除
 3. mongodb索引数据结构默认是B-Tree
 4. Hash索引, range-base查询无效, 相等查询才有效
 5. 不能在已经有重复值的field创建unique index
 6. hash索引不能是unique的
-7. 如果一个document不包含被索引的field, 则会被记录为null, 如果有unique限制, 后续的记录会触发duplicate error
-8. partial index 只对符合条件的一部分document的相关field做索引
-9. sparse index 只对包含index field的document做索引, 因为不包含全部, 所以是稀疏的
-10. ensureIndex 在3.0后已被废弃, 使用createIndex
+7. partial index 只对符合条件的一部分document的相关field做索引
+8. sparse index 只对包含index field的document做索引, 因为不包含全部, 所以是稀疏的
+9. ensureIndex 在3.0后已被废弃, 使用createIndex
+10. 禁止在field value 是float point number的列上创建哈希索引
+11. db.users.stats() 查看索引状态
 
 索引类型
     single field 单字段索引
@@ -115,7 +116,7 @@ oplog中所有的操作都是幂等的, 不管执行多少次, 总是产生同�
 
 ### 2. Journal
 ```
-相当于redo log
+相当于mysql redo log, 写操作之前先写入journal, 保证写的持久化和灾难恢复
 
 开启方法
     mongod --journal | --nojournal 
@@ -127,22 +128,16 @@ oplog中所有的操作都是幂等的, 不管执行多少次, 总是产生同�
 db.shutdownServer() 会删除journal目录下除了preallo的其他文件, 表明是正常关闭
 如果一个journal文件满1G, 会再创建一个journal文件来使用, 如果某个journal文件上
 记录的写操作都被执行过了, 就会把这个journal文件删除
-
-工作原理
-    data file
-    journal file
-    shared view
-    private view
 ```
 
 
-### 3. 系统日志
+### 3. server log
 ```
 记录与mongod运行有关的信息
 开启方法
     mongod --logpath=/data/db/logs/server.log -logappend
 ```
-### 4. 慢查询日志
+### 4. slow query log
 ```
 mongod --profile=1 --slowms=5(ms) 
     profile level
@@ -153,7 +148,7 @@ mongod --profile=1 --slowms=5(ms)
         db.getProfilingLevel()
         db.setProfilingLevel(level, duration(单位毫秒))
 
-慢查询日志是针对单个数据库的, 开启后默认存放在db.system.profile 这个collection
+慢查询日志是针对单个数据库的, 开启后默认存放在system.profile 这个collection
 ```
 ## ObjectId
 ```
@@ -182,7 +177,6 @@ mongod --profile=1 --slowms=5(ms)
 
 无法从capped collection中删除单条记录, 只能全部删除
 没有默认索引, 即使是_id列
-
 32位系统一个capped collection有最大大小限制, 64位则无, 需要人工指定
 ```
 
@@ -191,7 +185,7 @@ mongod --profile=1 --slowms=5(ms)
 mongodb bson格式的collection默认最大16MB
 上传的文件会被分为chunk, 每个chunk会被存储到一个document(最大为255k)里面 
 
-默认使用fs.files,来存储元数据,  fs.chunks来存储文件的chunk, fs为前缀
+会在文件制定上传的数据库创两个连个collection <prefix>.files来存储元数据,  <prefix>.chunks来存储文件的chunk, 默认前缀为fs
 
 mongofiles <options> <command> <filename or _id>
     command:
@@ -208,8 +202,7 @@ mongofiles <options> <command> <filename or _id>
         -d, --db=<database-name> 指定上传到的数据库
         -t, --type=  content/MIME type for put
         -r, --replace  删除其他同名的文件
-        --prefix=<prefix> GridFS前缀, 默认为fs
-
+        --prefix=<prefix> GridFS前缀
 
 查询文件元数据
     >db.fs.files.find()
@@ -217,7 +210,8 @@ mongofiles <options> <command> <filename or _id>
        _id: ObjectId('534a811bf8b4aa4d33fdf94d'),
        filename: "song.mp3",
        chunkSize: 261120,
-       uploadDate: new Date(1397391643474), md5: "e4f53379c909f7bed2e9d631e15c1c41",
+       uploadDate: new Date(1397391643474), 
+       md5: "e4f53379c909f7bed2e9d631e15c1c41",
        length: 10401959
     }
 
@@ -281,6 +275,8 @@ local.slaves
 
 ## 多collection关联
 ```
+mongodb不支持多collection join操作, collection关联使用DBRef
+
 localhost(mongod-3.2.3) new> var user = {
 ... "_id": 1,
 ... "name": "bob"
@@ -301,7 +297,7 @@ db.post.findOne().author.fetch()
 
 ```
 
-### 修改replset优先级
+## 修改replset优先级
 ```
 cfg = rs.conf()
 cfg.members[0].priority = 0.5
@@ -311,6 +307,7 @@ rs.reconfig(cfg)
 ```
 
 ## 聚合操作
+```
 aggregate()
     $sum
     $max
@@ -326,8 +323,11 @@ count()
 distinct()
 group() @deprecated
 mapreduce()
+```
 ## 经验
 ```
+mongodb没有类似于mysql binlog的日志
+
 设置mongodb最大可用内存, 新版默认为系统内存的一半
     mongod.conf
         wiredTigerCacheSizeGB = 1
@@ -379,4 +379,22 @@ db.products.insert({
    "_id":getNextSequenceValue("productid"),
    "product_name":"Apple iPhone",
    "category":"mobiles"})
+```
+
+
+## mongod系统参数优化 
+
+```
+numactl --interleave=all mongod --config /data/mongodb/mongodb.conf
+
+sysctl -w vm.overcommit_memory=1
+//or 
+$pid=`pidof mongod` echo -17 >  /proc/$pid/oom_adj
+
+
+//disable swappiness
+sysctl -w vm.swappiness=0
+
+//change ssd io scheduler
+echo noop > /sys/block/sda/queue/scheduler
 ```
