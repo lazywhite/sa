@@ -1,30 +1,34 @@
 ## Introduction
-为分布式应用提供协调服务, 自身也是分布式集群  
+为分布式应用提供协调服务, 自身也是分布式集群,  集群分为leader, follower两种角色, client可以跟任何server进行通信  
 主要基于观察者模式工作
+
 
 ## Keyword
 ```
-znode: data, property, children
-    ephemeral node
-        临时节点, session关闭就会被删除
-    persistence node
-        持久节点
-    sequential node
-        名称后面有10位的数字
-        如果并发创建, zookeeper保证数字不会重复
-        常用在锁与同步中
-
-ensemble
+znode: 
+    类型(默认是persistent node)
+        ephemeral node
+            临时节点, session关闭就会被删除
+        sequential node
+            名称后面有10位的数字
+            如果并发创建, zookeeper保证数字不会重复
+            常用在锁与同步中
+            不同类型的znode都可以是普通或顺序型的
+     
+	version number: 每当znode有更改, 版本号会递增
+	ACL: 每个znode可以设置权限
+	Timestamp
+		created: 创建时间戳
+		modified: 更改时间戳
+	Data length: 数据长度
+	Children: 子节点数目
+	
+ensemble(server group)
     server
         leader  
         follower  
 
-getData()
-getChildren()
-exists()
-    watches
-        data watches
-        child watches
+watch: 事件通知机制
 
 ACL
     scheme
@@ -92,4 +96,4 @@ FIFO队列
 client会发送heartbeat来保持session, server在session timeout后会删除跟session关联的所有ephemeral node
 4. client可以注册watcher来得到关于znode或其children的 znode data变化的事件, 从而采取动作
 5. znode acl无法继承, 只能针对每一个znode设置acl
-6. znode quota 支持node数目(包括自身), data size (in bytes)设置, 若果超限正常执行, zookeeper.log将会有quota exceeded提示
+6. znode quota 支持node数目(包括自身), data size (in bytes)设置, 若超限还是会正常执行, zookeeper.log将会有quota exceeded提示
