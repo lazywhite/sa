@@ -1,7 +1,6 @@
-#<center>Vagrant</center>
-
 ##Introduction
-The command line utility for managing the lifecycle of virtual machines
+A command line utility for managing the lifecycle of virtual machines  
+
 ##Provider
 1. virtualbox `default`
 2. vmware
@@ -13,7 +12,7 @@ The command line utility for managing the lifecycle of virtual machines
 (host)#export VAGRANT_DEFAULT_PROVIDER=vmware
 ```  
 
-##Box
+##Box  
 ```
 $ vagrant box
 Usage: vagrant box <subcommand> [<args>]
@@ -29,11 +28,11 @@ Available subcommands:
 For help on any individual subcommand run `vagrant box <subcommand> -h`
 ```  
 ##VagrantFile
-1. config.vm  
-2. config.ssh 
 
 ```
 $ cat Vagrantfile
+
+
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 Vagrant.configure("2") do |config|
@@ -134,11 +133,3 @@ Common commands:
      up              starts and provisions the vagrant environment
      version         prints current and latest Vagrant version
 ```
-##Topic
-```
-create customized box
-```
-##Other
-1. push
-2. share
-3. plugin
