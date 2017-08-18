@@ -236,3 +236,38 @@ this upstream
 6. basic_consume(ack=true) 当消费者处理完消息并向server发送ack后, 消息才被删除
 7. 添加queue出错, 可能是erlang 与rabbitmq版本不兼容导致
 8. 如果开启了federation的exchange/queue 在upstream找不到同名的exchange/queue进行复制会报错
+
+
+
+###  集群搭建流程
+```
+## 1.on node1  
+
+yum install rabbitmq-server
+scp /var/lib/rabbimq/.erlang.cookie  node2:/var/lib/rabbitmq
+chown rabbitmq:rabbitmq /var/lib/rabbitmq/.erlang.cookie
+rabbitmq-server -detached   #all node
+     
+## 2.on node2  
+
+rabbitmqctl  stop_app
+rabbitmqctl  cluster --disc|ram  rabbit@node1
+rabbitmqctl  start_app
+```
+
+## 清理rabbitmq
+  
+```
+ps aux | grep epmd
+ps aux | grep erl
+rm -rf /var/lib/rabbitmq/mnesia/*
+rm -r /var/lib/rabbitmq/erlang.dump  
+```
+    
+## 监听本地网卡
+```  
+[root@192_168_183_7 ~]# cat /etc/rabbitmq/rabbitmq-env.conf 
+export RABBITMQ_NODENAME=rabbit@192_168_183_7  
+export RABBITMQ_NODE_IP_ADDRESS=192.168.183.7
+export ERL_EPMD_ADDRESS=192.168.183.7
+```
