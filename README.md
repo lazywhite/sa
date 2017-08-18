@@ -5,11 +5,10 @@ note for linux system administration
 
 ```  
 ├── android
-│   ├── build.gradle
-│   ├── jenkins-jixiang-android-cos.sh
-│   ├── jenkins_android.md
+│   ├── jenkins_android.sh
 │   └── note.md
 ├── appserver
+│   ├── jetty
 │   └── tomcat
 ├── auto
 │   ├── ansible
@@ -21,7 +20,6 @@ note for linux system administration
 │   ├── hadoop
 │   ├── hbase
 │   ├── hcatalog
-│   ├── hdfs
 │   ├── hive
 │   ├── impala
 │   ├── kylin
@@ -50,6 +48,8 @@ note for linux system administration
 │   ├── sqlite
 │   ├── sybase
 │   └── tools
+├── dns
+│   └── dnsmasq.md
 ├── firewalls
 │   ├── firewalld
 │   ├── iptables
@@ -67,6 +67,7 @@ note for linux system administration
 │   ├── Cluster.txt
 │   ├── corosync.txt
 │   ├── corosync_configure.md
+│   ├── cpc.md
 │   ├── drbd+pacemaker.txt
 │   ├── keepalived
 │   ├── pcs-corosync.txt
@@ -84,6 +85,15 @@ note for linux system administration
 ├── library
 │   └── openssl.md
 ├── linux
+│   ├── 143256261.jpg
+│   ├── 2033581_1369962477MN7p.jpg
+│   ├── 2033581_13699627772B10.jpg
+│   ├── 2033581_1369962848eEh1.jpg
+│   ├── 2033581_1369962958hvxf.jpg
+│   ├── 2033581_1369963124kxNd.jpg
+│   ├── 2033581_1369963308D7At.jpg
+│   ├── 2033581_1369963393EOGB.jpg
+│   ├── 2033581_1370221372VEAi.jpg
 │   ├── cent7
 │   ├── course.txt
 │   ├── cronolog.md
@@ -111,6 +121,7 @@ note for linux system administration
 │   ├── eureka
 │   ├── hystrix
 │   ├── note.md
+│   ├── smartstack.md
 │   └── zuul
 ├── monitoring
 │   ├── bosun
@@ -136,6 +147,7 @@ note for linux system administration
 │   └── switch.txt
 ├── optool
 │   ├── autossh.md
+│   ├── awk.md
 │   ├── awk.txt
 │   ├── cobbler.md
 │   ├── code-deploy.txt
@@ -144,6 +156,7 @@ note for linux system administration
 │   ├── experience.txt
 │   ├── find.md
 │   ├── gitbook.md
+│   ├── grep.md
 │   ├── htop.md
 │   ├── iostat.md
 │   ├── iptables.txt
@@ -153,9 +166,11 @@ note for linux system administration
 │   ├── nmap.md
 │   ├── oh-my-zsh.md
 │   ├── pxe.md
+│   ├── rpm.md
 │   ├── rsync.md
 │   ├── sar.md
 │   ├── screen.md
+│   ├── sed.md
 │   ├── seq.md
 │   ├── slack.md
 │   ├── ss.md
@@ -213,6 +228,7 @@ note for linux system administration
 │   ├── goal.txt
 │   ├── memo.txt
 │   ├── music.txt
+│   ├── punctuation
 │   ├── todo.txt
 │   ├── upgrade_ssl_ssh_mysql.md
 │   └── work_note.txt
@@ -236,3 +252,4 @@ note for linux system administration
     ├── salt-minion.md
     └── zabbix_agent.md
 ```
+

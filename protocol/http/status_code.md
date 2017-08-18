@@ -17,6 +17,7 @@
 403: Forbidden 服务器理解请求, 但拒绝执行
 404: Not Found 请求的资源在服务器不存在
 405: Method not Allowed 请求的方法(request method)不能用于请求的资源(url)
+406: Not Acceptable 服务器无法按照请求的内容类型进行返回
 408: Request timeout 客户端请求超时
 409: Conflict 被请求的资源当前状态存在冲突
 410: Gone 请求的资源在服务器已经不再可用  

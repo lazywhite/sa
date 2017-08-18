@@ -76,4 +76,24 @@ vim -p file1 file2 ...   用tab模式打开文件
 为某个文件类型单独进行配置
     .vimrc
         au FileType yaml setl noai sw=2 sts=2 et
+
+可视模式
+    多行按行首字母顺序排序 :sort 
+    行尾添加;  :normal A;
+    重复之前命令 :normal .
+
+插入模式下
+    粘贴文本  <C-r>0
+    删除光标到行首的内容  <C-u> 
+    删除光标到行尾的内容  <C-k> 
+    删除字符 <C-h>
+    删除单词 <C-w>
+
+窗口绑定滚动
+    <win1, wind2> :set scrollbind
+
+对齐当前行
+    zt  当前行设置为window首行
+    zz  当前行设置为window居中
+    zb  当前行设置为window尾行
 ```

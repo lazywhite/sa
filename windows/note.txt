@@ -12,6 +12,7 @@ gpupdate /force
 
 4. 本地服务配置
 services.msc
+    sc delete <服务名>
 5. explorer 资源管理器
 6. notepad 记事本
 7. devmgmt.msc 设备管理器
@@ -22,3 +23,5 @@ services.msc
 12. mstsc 远程桌面连接
 13. secpol.msc 本地安全策略
 
+查看监听端口
+    netstat -ano

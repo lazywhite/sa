@@ -1,0 +1,28 @@
+. dot
+, comma
+: colon
+; semicolon
+! exclamation mark
+? question mark
+- hyphen
+* asterisk
+_ underscore
+' single quotation marks
+" double quotation marks
+() round brackets
+[] square brackets
+<> angle brackets
+{} curly brackets 
+... ellipsis
+/ slash
+\ back slash
+& ampersand
+| vertical bar
++ plus 
+- minus
+x multiplyied
+= equal
+< less than
+> bigger than
+% percent
+# hash

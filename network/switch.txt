@@ -134,3 +134,31 @@ any VLAN or from one or more VLANs to a destination port for analysis
 　　2940(config)#monitor session 1 source interface fa 0/1 
 　　2940(config)#monitor session 1 destination interface fa 0/4
 ```
+### 配置流程
+```
+switch#show ip route (L3 switch)
+switch#conf t
+switch(config)#interface vlan 1
+switch(config-if)# ip address 192.168.1.1 255.255.255.0
+switch(config-if)# exit
+switch(config)# ip default-gateway 192.168.1.254
+switch(config)# end
+switch# copy running-config startup-config
+switch# show startup-config
+switch# show version
+switch# show interface ge0/1
+switch# show mac address-table dynamic
+
+sw-outside(config)#enable password level1 cisco
+sw-outside(config-if)#description "this is business network"
+sw-outside(config-if-range)#duplex auto
+sw-outside(config)#interface range gigabitEthernet 0/10-20
+sw-outside(config-if-range)#switchport mode access|trunk
+sw-outside(config-if-range)#switchport access vlan 30
+
+sw-outside(config)#line ?
+  <0-16>   First Line number
+  console  Primary terminal line
+  vty      Virtual terminal
+
+```

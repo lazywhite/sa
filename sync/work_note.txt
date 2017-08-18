@@ -886,3 +886,9 @@ Error: Cannot retrieve repository metadata (repomd.xml) for repository: epel. Pl
 $ sudo yum clean all 
 $ sudo yum --disablerepo="epel" update nss
 ```
+
+挂载qcow2磁盘
+# modeprobe nbd
+# qemu-nbd -c /dev/nbd0 xp.img
+# mount /dev/nbd0s1 /mnt
+# qemu-nbd -d /dev/nbd0

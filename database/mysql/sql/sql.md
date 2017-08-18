@@ -25,7 +25,7 @@ SELECT ... FROM (subquery) AS name
 SELECT * FROM article WHERE EXISTS (SELECT * FROM user WHERE article.uid = user.uid)
 ```
 
-## Group by<colume1>[<column2]<colume1>[<column2<colume1>[<column2]<colume1>[<column2]] 
+## Group by \<colume1>[, <column2]
 ```
 select .. group by column1, column2;  select 的字段至少包含一个group by的字段, 其他字段是聚合函数
 如果column1有m种， column2有n种， 则最后出现m * n 行

@@ -17,3 +17,6 @@ nohup java -jar /home/jenkins/jenkins.war --httpPort=9090 --prefix=/jenkins > /h
 
 ## Topic
 1. global variable definition
+2. run job on specified node
+3. multi-job plugin
+4. run job in sequence

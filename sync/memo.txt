@@ -108,3 +108,8 @@ RHEL support mount nfs with tcp protocol,so we can mount it with this command
 
 - bash scp command not found
     yum -y install openssh-clients  # in remote server
+
+- linux软件编译相关环境变量
+C_INCLUDE_PATH: c头文件地址
+CPP_INCLUDE_PATH cpp头文件地址
+LD_LIBRARY_PATH  动态链接库地址
