@@ -75,17 +75,8 @@ create database zabbix_proxy charset utf8;
 grant all on zabbix_proxy.* to 'zabbix_user'@'%' identified by 'zabbix_pwd'
 mysql -uzabbix_user -p'zabbix_pwd' zabbix_proxy < schema.sql
 
-# configure zabbix_proxy.conf
-
 /etc/init.d/zabbix_proxy start
 ```
 
-### Topic
-1. host not found
-```
-zabbix_proxy 主机必须配置内网被监控主机的ip-host绑定
-被监控主机也要有本机的ip-host绑定
-确保Agent配置文件的Hostname与dashboard添加的hostname一致，确保proxy和agent解析hostname为同一个ip
-```
 
 

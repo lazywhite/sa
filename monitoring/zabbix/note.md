@@ -95,3 +95,18 @@ zabbix_sender -z zabbix -s "Linux DB3" -k db.connections -o 43
     overview by proxy
     detail
 ```
+## zabbix代理模式配置问题
+```
+zabbix proxy日志显示host not found
+
+通过hostnamectl set-hostname设置主机名, proxy跟node都需要设置
+zabbix_proxy 主机与被监控节点需要使用相同的/etc/hosts
+Agent配置文件的Hostname与dashboard添加的hostname一致, 使用DNS:port进行连接
+
+zabbix-proxy如果是被动模式, zabbix-master添加如下配置
+StartProxyPollers=5
+ProxyConfigFrequency=30
+ProxyDataFrequency=1
+
+重启zabbix-master服务
+```

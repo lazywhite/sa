@@ -38,6 +38,12 @@ ListenIP=0.0.0.0
 Timeout=4
 LogSlowQueries=3000
 Include=/usr/local/zabbix/etc/zabbix_server.conf.d/*.conf
+
+## proxy被动模式配置
+StartProxyPollers=5
+ProxyConfigFrequency=30
+ProxyDataFrequency=1
+
 ```
 
 ## 1.3 zabbix-server upstart
@@ -152,6 +158,8 @@ exit $RETVAL
 
 ## 2.1 zabbix-agent
 ```
+yum -y install pcre-devel
+useradd -M zabbix -s /sbin/nologin 
 ./configure --prefix=/usr/local/zabbix --enable-agent
 ```
 ## 2.2 /usr/local/zabbix/etc/zabbix_agent.conf
@@ -161,9 +169,8 @@ EnableRemoteCommands=1
 Server=127.0.0.1,10.90.20.6
 ListenPort=10050
 ListenIP=0.0.0.0
-ServerActive=10.90.20.6
-Hostname=Zabbix_Server
-HostnameItem=system.hostname
+ServerActive=10.90.20.6 #[:10051]
+Hostname=host-10-90-20-18
 AllowRoot=0
 User=zabbix
 Include=/usr/local/zabbix/etc/zabbix_agentd.conf.d/*.conf
@@ -280,7 +287,7 @@ mysql -uzabbix_user -pzabbix_pwd zabbix < schema.sql  ## only need this
 ```
 requirements: php-5.4 or above
 rpm -Uvh https://mirror.webtatic.com/yum/el6/latest.rpm
-yum -y install php56w-cli php56w-pdo php56w-bcmath php56w php56w-mysql php56w-gd php56w-xml php56w-common php56w-mbstring php56w-devel php56w-pear
+yum -y install php56w-cli php56w-pdo php56w-bcmath php56w php56w-mysql php56w-gd php56w-xml php56w-common php56w-mbstring php56w-devel php56w-pear httpd
 ```
 ## 4.2
 ```
@@ -307,8 +314,10 @@ cp msyh.ttf   /var/www/html/zabbix/fonts/
     define('ZBX_GRAPH_FONT_NAME',       'msyh'); // font file name
 	define('ZBX_FONT_NAME', 'msyh');
 
-Configure -- User -- Admin -- Language --> Chinese(zh_CN)
 http://localhost/zabbix/setup.php # generate zabbix.conf.php
+默认登录用户 admin:zabbix
+
+Configure -- User -- Admin -- Language --> Chinese(zh_CN)
 
 zabbix_server is disabled by default, enable by Configure-->Host
 ```
