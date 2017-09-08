@@ -1,0 +1,88 @@
+yum -y install OpenIPMI ipmitool
+service ipmi start
+
+ipmitool shell # 交互式
+
+user 
+    list 2
+    summary 2 
+    set name 3  "bob"
+    set password 3 "goodmorning"
+    diable 3
+    enable 3 
+    set name 3 "(Empty User)"
+    priv  3 ADMINISTRATOR #设置为管理员
+
+mc (management controller)
+    info
+    getsysinfo
+    setsysinfo
+        os_name
+        primary_os_name
+        system_name #获取服务器型号
+        delloem_os_version
+        delloem_os_url
+
+sel (system event log)
+
+channel
+    getaccess <channel id> [user id]
+    setaccess <channel id> [user id] privilege=<level>
+    getciphers <ipmi|sol> 2
+session
+    info all
+
+sol (serial over lan) # 可以将串口信息通过IP进行传输的一种机制 
+    info
+
+dcmi (data center managemetn interface)
+    power reading # 电源功率 
+
+sdr (sensor data repository)
+fru (field replacable unit) # 现场可更换单元, 打印信息并获取sdr中对应的信息
+    
+lan 
+    print <channel id> #打印信息
+    set
+      ipaddr <x.x.x.x>               Set channel IP address
+      netmask <x.x.x.x>              Set channel IP netmask
+      macaddr <x:x:x:x:x:x>          Set channel MAC address
+      defgw ipaddr <x.x.x.x>         Set default gateway IP address
+      defgw macaddr <x:x:x:x:x:x>    Set default gateway MAC address
+      bakgw ipaddr <x.x.x.x>         Set backup gateway IP address
+      bakgw macaddr <x:x:x:x:x:x>    Set backup gateway MAC address
+      password <password>            Set session password for this channel
+      snmp <community string>        Set SNMP public community string
+      user                           Enable default user for this channel
+      access <on|off>                Enable or disable access to this channel
+      alert <on|off>                 Enable or disable PEF alerting for this channel
+      arp respond <on|off>           Enable or disable BMC ARP responding
+      arp generate <on|off>          Enable or disable BMC gratuitous ARP generation
+      arp interval <seconds>         Set gratuitous ARP generation interval
+      vlan id <off|<id>>             Disable or enable VLAN and set ID (1-4094)
+      vlan priority <priority>       Set vlan priority (0-7)
+      auth <level> <type,..>         Set channel authentication types
+        level  = CALLBACK, USER, OPERATOR, ADMIN
+        type   = NONE, MD2, MD5, PASSWORD, OEM
+      ipsrc <source>                 Set IP Address source
+        none   = unspecified source
+        static = address manually configured to be static
+        dhcp   = address obtained by BMC running DHCP
+        bios   = address loaded by BIOS or system software
+      cipher_privs XXXXXXXXXXXXXXX   Set RMCP+ cipher suite privilege levels
+        X = Cipher Suite Unused
+        c = CALLBACK
+        u = USER
+        o = OPERATOR
+        a = ADMIN
+        O = OEM
+
+
+chassis 
+    status 
+    power status
+
+
+ipmitool -I lanplus  -H 192.168.41.77 -U admin -P password sdr type
+ipmitool -I lanplus  -H 192.168.41.77 -U admin -P password mc getsysinfo system_name # 获取机器型号
+
