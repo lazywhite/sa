@@ -45,6 +45,10 @@ salt "*" saltutil.refresh_pillar
 salt "*" pillar.items
 salt "*" grain.items
 
+saltutil.sync_modules
+saltutil.sync_grains
+saltutil.sync_all
+
 ## returner system
 /srv/salt/_returners/local.py
     from __future__ import print_function
@@ -175,3 +179,6 @@ key_accept:
 ```
 
 salt-run jobs.lookup_jid 20170412100938275448
+
+### cant get pillar setting from syndic node
+重启salt-master服务, 不是salt-syndic服务

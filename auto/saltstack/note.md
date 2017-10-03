@@ -1,44 +1,47 @@
-## Keywrod
-```
-state
-module
-grains
-pillar
-    ext_pillar
-job
-returnner
-schedule
-runner
-syndic
-reactor
-beacon
-roster
-mine
-cloud
-```
+## State
+state.apply
 ## Remote Execution
 ```
 salt '<target>' <function> [arguments...]
 ```
-## Configuration Management
-1. states
-2. grains
-3. pillars
-4. renders
+## Fileserver backend
+可以配置多个file backend, 默认是roots, 按照backend定义顺序搜索, 返回第一个匹配到的   
+```
+fileserver_backend:
+    - roots
+    - git
+
+file_roots:
+    base:
+        - /srv/salt/prod
+
+gitfs_remotes:
+    - https://domain/repos/first.git
+```
+
+## Render
+负责将sls配置文件解析成python数据类型供salt使用  
+目前支持Jinja + YAML, Mako + YAML, Wempy + YAML, Jinja + json, Mako + json and Wempy + json.  
+可以自定义render实现HTML, XML等文件格式的解析  
 
 ## Events
 ```
-beacons: 
+beacons: 监测salt之外其他进程的状态, 并产生相应的事件
+    文件更改
+    系统负载
+    特定服务状态
+    用户登录
+    网络状态
 ```
 ## Reactor
-```
-reactor:
-```
-## Orchestration
-a kind of 'runner' to  apply 'function', 'state'
+根据相应的事件, 触发相应的动作
 
-## Salt SSH
-execute salt commands and states over ssh with-out installing a salt-minion 
+## Orchestration
+通过runner来进行多个minion之间的联动  
+
+## Salt SSH(Roster)
+无需安装salt-minion, 直接通过ssh传送thin-salt-minion到目标机器/tmp, 执行完毕后  
+可以清空临时文件(可选)  
    
 ```
 /etc/salt/roster
@@ -48,8 +51,7 @@ execute salt commands and states over ssh with-out installing a salt-minion
         password:
 ```
 ## Salt Cloud
-provision systems on cloud hosts/hypervisors and immediately bring them under management    
-
+提供云服务宿主机的交互, 虚拟机的创建过程可配置, 启动的虚拟机可自动连接至salt-master
 ```
 /etc/salt/cloud
 /etc/salt/cloud.providers.d/*.conf
@@ -57,17 +59,13 @@ provision systems on cloud hosts/hypervisors and immediately bring them under ma
 ```
 
 ## Salt Proxy Minion
-proxy minions enables controlling devices that, for whatever reason, cannot run  
-a proprietary OS, devices with limited CPU or memeoy, or devices that could run a  
-minion but for security reasons, will not;   
+为无法运行salt-minion的设备提供代理服务  
 
-## Salt Syndic
 ## Salt Mine
 ```
-The Salt Mine is used to collect arbitrary data from Minions and store it on the Master. 
-This data is then made available to all Minions via the salt.modules.mine module.
-
+从minion收集任意方面的数据, 存储在master端, 供其他minion使用
 "mine data" is more up-to-date than "grain data"
+当一个minion需要其他minion的数据时, 使用mine比grains更快速
 
 /etc/salt/minion.conf
     mine_function
@@ -75,93 +73,60 @@ This data is then made available to all Minions via the salt.modules.mine module
 
 salt['mine.get']('roles:web', 'network.ip_addrs', expr_form='grain') 
 ```
-## Salt Virt
-```
-support core cloud operations
-    virtual machine deployment
-    inspection of deployed VMs
-    Virtual machine migration
-    Network profiling
-    Automatic VM integration with all aspects of salt
-    Image pre-seeding
-```
-## Salt Execution module
-1. functions called by "salt" command on minions
-2. sync module to minions
-```
-state.apply
-saltutil.sync_modules
-saltutil.sync_grains
-saltutil.sync_all
-```
 
-## Salt runner
-Salt runners are convenience applications executed with the salt-run command.  
-Salt runners work similarly to Salt execution modules however they execute on the Salt master itself instead of remote Salt minions.  
-A Salt runner can be a simple client call or a complex application.    
+## Salt Virt  
 
-a runner execute command on master side and manipulate return values like "ls|grep|awk"
-```
-built-in runners  
-    cache
-    cloud
-    ddns
-    doc
-    drac
-    error
-    fileserver
-    git_pillar
-    http
-    jobs
-    manager
-    mine
-    network
-    pillar
-    pkg
-    queue
-    reactor
-    ssh
-    state
-    test
-    thin
-    virt
-```
-
-## Topic
-1. salt-run is always executed on salt-master
-2. salt-call is always executed on salt-minion  
-3. salt-syndic not respond to test.ping  
-4. salt-master can control minions in intranet  
-5. use pgrep or pkill, not to use too many pipe  
-6. only need to open 4505, 4506 for salt-master, no need for salt-minion
+## Salt Runner
+runner是一个在master端执行的模块函数, 封装了一系列的操作, 类似于bash中ls|grep|awk
 
 
-
-### pillar related
-```
-salt '*' saltutil.refresh_pillar 
-salt '*' pillar.items
-```
-
-### cant get pillar setting from syndic node
-must restart salt-master daemon, not salt-syndic daemon
-
-## state target in top.sls
-1. by grains with match: grain 
-2. by pillar with match: pillar
-3. by ID with RE or ID list  match: list
-4. compound match  with 'or'
-
-## async 
+## 异步
 ```
 salt --async '*' test.ping # return a jid
 salt-run jobs.lookup_jid 20161117163153353501 # check result on minion 
 ```
 
-## returner
+## Returner
 ```
-mysql
+默认minion执行的结果会发送回master, 通过配置returner, 可以将结果发送到外部存储以供分析处理
+
+自定义returner
+    1. 定义returner: returner就是包含了returner()函数定义的一个模块, 名称默认是模块名, 可以用__virtualname__覆盖, 保存在/srv/salt/_returners
+    2. 同步至minion
+    3. salt "*" cmd.run "ls" --return mysql[,redis][,mongo] #可以同时使用多个returner
+
+分类
+    mysql
+    redis_return
+    kafka_return
 ```
 
 ## schedule
+```
+/srv/pillar/top.sls
+base:
+    "*":
+        - schedule
+
+/srv/pillar/schedule.sls
+schedule:
+    test-job:
+        function: cmd.run
+        seconds: 10
+        args:
+            - "date >> /tmp/date.log" 
+
+salt "*" saltutil.refresh_pillar
+salt "*" pillar.get schedule
+
+```
 https://docs.saltstack.com/en/latest/topics/jobs/schedule.html
+
+## Topic
+1. salt-run永远在master执行
+2. salt-call永远在minion执行
+3. salt-syndic not respond to test.ping  
+4. salt-master可以直接控制内网中的minion
+5. use pgrep or pkill, not to use too many pipe  
+6. salt-master需要监听4505, 4506, salt-minion无需监听端口
+

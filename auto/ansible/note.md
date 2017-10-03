@@ -13,8 +13,7 @@ ansible <host> -m shell -a
 ansible localhost -m setup  [ -a 'filter=*network*' ]
 ansible-doc module
 
-# ansible command
-```
+# ansible command ```
 ansible -i <inventory_file> '<host pattern>' -m <module> -a <arguments>
 ```
 # playbook
@@ -60,3 +59,8 @@ third-party playbooks of ansible
 
 ## Ansible-container
 >ansible container enable user to build docker images and orchestrate containers
+
+
+## run as sudo user
+ansible all -u admin -b -m ping
+
