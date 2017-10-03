@@ -1,7 +1,7 @@
-##Introduction
+## Introduction
 A command line utility for managing the lifecycle of virtual machines  
 
-##Provider
+## Provider
 1. virtualbox `default`
 2. vmware
 3. hyperv
@@ -12,7 +12,7 @@ A command line utility for managing the lifecycle of virtual machines
 (host)#export VAGRANT_DEFAULT_PROVIDER=vmware
 ```  
 
-##Box  
+## Box  
 ```
 $ vagrant box
 Usage: vagrant box <subcommand> [<args>]
@@ -27,7 +27,7 @@ Available subcommands:
 
 For help on any individual subcommand run `vagrant box <subcommand> -h`
 ```  
-##VagrantFile
+## VagrantFile
 
 ```
 $ cat Vagrantfile
@@ -72,19 +72,19 @@ Vagrant.configure("2") do |config|
 end
 ```
 
-##Provision
+## Provision
 1. ssh
 2. ansible ```local|remote```
 3. puppet
 4. salt
 5. chef  
 
-##Synced Folder
+## Synced Folder
 ```
 1.directory of VagrantFile mapping to /vagrant   
 2.config.vm.synced_folder "src/", "/srv/website"
 ```
-##Multi-machine
+## Multi-machine
 ```
 Vagrant.configure("2") do |config|
   config.vm.provision "shell", inline: "echo Hello"
@@ -98,7 +98,7 @@ Vagrant.configure("2") do |config|
   end
 end
 ```
-##Useful command
+## Useful command
 ```
 $ vagrant help
 Usage: vagrant [options] <command> [<args>]
