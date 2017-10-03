@@ -84,5 +84,12 @@ chassis
 
 
 ipmitool -I lanplus  -H 192.168.41.77 -U admin -P password sdr type
-ipmitool -I lanplus  -H 192.168.41.77 -U admin -P password mc getsysinfo system_name # 获取机器型号
+
+# 获取机器型号
+ipmitool -I lanplus  -H 192.168.41.77 -U admin -P password mc getsysinfo system_name 
+dmidecode|grep Product
+
+-I lanplus对应IPMI v3 / RMCP+ session
+-I open 表示连接本地接口
+-I lan 表示远程连接
 

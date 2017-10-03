@@ -63,6 +63,7 @@ monitor
 不带参数的
     UserParameter=<key>,<command>
     zabbix_get -s 127.0.0.1 -p 10050 -I 127.0.0.1 -k "system.hostname"
+    "$" 无需escape
 
 带参数的
     UserParameter=key[*],<command> $1 [$2 ...]
@@ -108,5 +109,31 @@ StartProxyPollers=5
 ProxyConfigFrequency=30
 ProxyDataFrequency=1
 
-重启zabbix-master服务
+Hostname可以直接写ip
 ```
+
+## Tips
+```
+zabbix-server的agent默认是禁用状态, 需要手动启用
+修改web字体后, 无需重启httpd
+
+如果需要ipmi监控, 必须在master加入如下配置, 默认是0不开启
+StartPollers=5
+添加主机, ipmi接口, ipmi
+
+如果需要自动发现, 必须加入如下配置
+StartDiscoverers=10
+
+
+IPMI checks will not work with the standard OpenIPMI library from Debian/Ubuntu package. 
+To fix, recompile OpenIPMI library with OpenSSL enabled as discussed in ZBX-6139.
+
+
+由不同代理程序监控的主机, 如果跟其他主机的主机名重复, 会导致分组混乱
+
+agent Hostname写IP, agent不可用问题
+```
+
+
+
+

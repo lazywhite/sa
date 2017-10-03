@@ -49,9 +49,9 @@ grant all on zabbix.* to 'zbx_user'@'%' identified by 'zbx_pw';
 
 ## 导入表结构及数据
 cd database/mysql
-mysql -uzabbix_user -p'zabbix_pwd' zabbix < schema.sql
-mysql -uzabbix_user -p'zabbix_pwd' zabbix < images.sql
-mysql -uzabbix_user -p'zabbix_pwd' zabbix < data.sql
+mysql -uzbx_user -p'zbx_pw' zabbix < schema.sql
+mysql -uzbx_user -p'zbx_pw' zabbix < images.sql
+mysql -uzbx_user -p'zbx_pw' zabbix < data.sql
 
 ## 生成zabbix系统用户
 useradd -M zabbix -s /sbin/nologin
@@ -90,6 +90,17 @@ Include=/usr/local/zabbix/etc/zabbix_server.conf.d/*.conf
 StartProxyPollers=5
 ProxyConfigFrequency=30
 ProxyDataFrequency=1
+
+## discovery配置
+StartDiscoverers=10
+
+
+## IPMI监控
+StartIPMIPollers=10
+
+#DebugLevel=4
+
+CacheSize=128M
 ```
 
 ### 1.2.2 zabbix-server服务启动脚本
@@ -213,7 +224,8 @@ Server=127.0.0.1,192.168.33.128  #zabbix_master或者zabbix_proxy的IP
 ListenPort=10050
 ListenIP=0.0.0.0
 ServerActive=192.168.33.128
-Hostname=host-118-118-12-14
+Hostname=118.118.12.13
+HostMetadataItem=system.uname
 AllowRoot=0
 User=zabbix
 Include=/usr/local/zabbix/etc/zabbix_agentd.conf.d/*.conf
@@ -373,10 +385,10 @@ systemctl start httpd
 ## 3.1 整体流程
 ```
 ## 安装依赖包
-yum -y install mariadb mariadb-server mariadb-devel net-snmp-devel libssh2-devel
+yum -y install mariadb mariadb-server mariadb-devel net-snmp-devel libssh2-devel OpenIPMI-devel libevent-devel
 
 ## 编译安装
-./configure --prefix=/usr/local/zabbix_proxy --enable-proxy --with-net-snmp --with-mysql --with-ssh2
+./configure --prefix=/usr/local/zabbix --enable-proxy --enable-agent --with-net-snmp --with-mysql --with-ssh2 --with-openipmi
 
 
 ## 数据库配置
@@ -385,10 +397,11 @@ mysql_secure_installation
 
 /etc/my.cnf
     skip-name-resolve
+systemctl restart mariadb
 
 create database zabbix_proxy charset utf8;
-grant all on zabbix.* to 'zbx_user'@'%' identified by 'zbx_pw';
-mysql -uzabbix_user -pzabbix_pwd zabbix_proxy < database/mysql/schema.sql
+grant all on zabbix_proxy.* to 'zbx_user'@'%' identified by 'zbx_pw';
+mysql -uzbx_user -pzbx_pw zabbix_proxy < database/mysql/schema.sql
 
 ## 添加系统用户
 useradd -M zabbix -s /sbin/nologin
@@ -404,7 +417,7 @@ service zabbix_proxy start
 ```
 ProxyMode=1
 Server=192.168.33.128
-Hostname=host-118-118-12-13
+Hostname=118.118.12.15
 ListenPort=30000
 LogFile=/tmp/zabbix_proxy.log
 DBHost=127.0.0.1
@@ -418,6 +431,10 @@ Timeout=4
 LogSlowQueries=3000
 AllowRoot=0
 User=zabbix
+
+## IPMI监控
+StartIPMIPollers=10
+
 ```
 
 
@@ -446,7 +463,7 @@ RETVAL=0
 
 # Setting up configuration
 ZABBIX_NAME="zabbix_proxy"
-ZABBIX_CONF="/usr/local/zabbix_proxy/etc/$ZABBIX_NAME.conf"
+ZABBIX_CONF="/usr/local/zabbix/etc/$ZABBIX_NAME.conf"
 
 if [ ! -f $ZABBIX_CONF ]
 then
@@ -458,7 +475,7 @@ fi
 . $ZABBIX_CONF
 
 ZABBIX_USER="zabbix"
-ZABBIX_BIND="/usr/local/zabbix_proxy/sbin"
+ZABBIX_BIND="/usr/local/zabbix/sbin"
 ZABBIX_BINF="$ZABBIX_BIND/$ZABBIX_NAME"
 
 if [ ! -x $ZABBIX_BINF ] ; then
