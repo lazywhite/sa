@@ -1,0 +1,7 @@
+@			1D IN SOA	ns1.net12.local. root.net12.local. (
+					2013623		; serial (yyyymmdd##)
+					3H		; refresh
+					15M		; retry
+					1W		; expiry
+					1D )		; minimum ttl
+@		IN	NS  		ns1.net12.local.

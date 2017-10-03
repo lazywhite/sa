@@ -1,0 +1,16 @@
+$TTL 38400
+$GENERATE 10-250 vm$ IN A 118.118.12.$
+@			1D IN SOA	dns root (
+					2013623		; serial (yyyymmdd##)
+					3H		; refresh
+					15M		; retry
+					1W		; expiry
+					1D )		; minimum ttl
+
+			1D IN NS	ns1
+			1D IN NS	ns2
+			1D IN MX 5  	mail
+ns1			1D IN A	 	192.168.33.128
+ns2			1D IN A	 	192.168.33.128
+mail			1D IN A	 	192.168.33.128
+controller		1D IN A		192.168.33.128
