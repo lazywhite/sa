@@ -1,5 +1,12 @@
 ## Topic
 ### 1. rewrite
+```
+flag
+    last – Stops execution of the rewrite directives in the current server or location context, but NGINX Plus searches for locations that match the rewritten URI, and any rewrite directives in the new location are applied (meaning the URI can be changed again).
+    break – Like the break directive, stops processing of rewrite directives in the current context and cancels the search for locations that match the new URI. The rewrite directives in the new location are not executed.
+    redirect 301
+    permanent 302
+```
 
 ### 2. server log file through html 
 ```
@@ -72,4 +79,34 @@ Waiting
     The current number of idle client connections waiting for a request.
 
 ```
+## 6. location匹配
+```
+1. location 匹配的优先级跟在配置文件中定义的顺序无关
+2. @ location别名
+    error_page 404 = @fetch;
+    location @fetch{
+        proxy_pass http://fetch;
+    }
+3. location 参数有两种 "prefix string" , "regular expresion"
+    "prefix string" 从url最开始进行匹配
+4. 匹配顺序
+    = (exact match), 如果匹配, 停止继续匹配
+    ^~ 对"prefix string" 进行最长匹配, 如果成功匹配不进行正则匹配
+    存储longest prefix string
+    对存储的prefix string进行正则匹配
+    在第一个匹配到的正则处break
+    如果没有正则匹配到, 使用前两步存储的location配置
 
+    匹配优先级
+        1. 精确匹配最高
+        2. 最长prefix string匹配次之
+        3. 正则匹配最低
+    
+```
+
+## 7. path alias
+```
+location = /swagger.yaml {
+    alias /root/dashboard/extra/swagger.yaml;
+}
+```
