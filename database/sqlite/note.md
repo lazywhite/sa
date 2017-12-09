@@ -1,17 +1,10 @@
-#sqlite3 database.db
-sqlite> create table admin(username text,age integer);
-sqlite> insert into admin values('kuang',25);
-sqlite> select * from admin;
-sqlite> update admin set username='kk',age=24 where username='kuang' and age=25;
-sqlite> delete from admin where username='kk';
+# 安装使用
+```
+# sqlite3 database.db
+```
 
-
-注：每条sql语句后必须以";"号结尾！
-
-
-2.Sqlite系统命令
-
-
+## 命令
+```
 .bail ON|OFF           Stop after hitting an error.  Default OFF
 .databases             List names and files of attached databases(查看目前挂的数据库)
 .dump ?TABLE? ...      Dump the database in an SQL text format(以SQL格式输出表结构)
@@ -44,3 +37,10 @@ sqlite> delete from admin where username='kk';
 .tables ?PATTERN?      List names of tables matching a LIKE pattern(看看有创建了多少表)
 .timeout MS            Try opening locked tables for MS milliseconds(超时时间,单位:毫秒)
 .width NUM NUM ...     Set column widths for "column" mode(设置列宽)
+```
+
+## Tips
+```
+.header on  显示column name
+.mode line   mysql : select \G
+```

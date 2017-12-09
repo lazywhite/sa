@@ -79,11 +79,6 @@ When writing in large amounts of raw data, you will often want to query a downsa
 
 Continuous queries are created when you issue a select statement with an into clause. Instead of returning the results immediately like a normal select query, InfluxDB will instead store this continuous query and run it periodically as data is collected. Only cluster and database admins are allowed to create continuous queries.
 
-```
-select count(name) from clicks group by time(1h) into clicks.count.1h
-show continuous queries
-drop continuous query <id>
-```
 
 ### Fanout query
 Fanout queries work as a kind of index

@@ -19,6 +19,18 @@
         flush tables <tbname> READ;
 
         unlock tables;
+
+        lock_type
+            read
+                拿到读锁的会话可以从表中读数据, 不能写数据
+                多个会话可同时拿到读锁
+                innodb 中read local 等价于 read
+                
+            write
+                拿到写锁的会话可从表中读写数据
+                其他会话无法访问表
+                在写锁释放前, 其他会话无法获取锁
+                LOW_PRIORITY在mysql5.6.5后已失效
 ```
 
 

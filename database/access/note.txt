@@ -1,0 +1,15 @@
+Datetype
+    char
+    int
+    smallint
+    single
+    double
+    money
+    date
+
+select * from test where ts > #2017-01-01#  ; 日期必须用#包括
+
+
+* 表示任意个字符, ? 表示任意单个字符
+字符串必须用double quote
+select * from test where name like "??pattern*";

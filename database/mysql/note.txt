@@ -1238,3 +1238,6 @@ show engine innodb status;
 
 ## 给timestamp字段自动赋值
 create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+
+## 获取命令行帮助
+mysql> help create table
