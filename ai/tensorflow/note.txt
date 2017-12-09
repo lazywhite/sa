@@ -1,0 +1,3 @@
+installation
+    https://pypi.python.org/pypi/tf-nightly
+    pip install tf.whl

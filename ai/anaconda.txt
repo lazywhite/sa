@@ -1,0 +1,11 @@
+
+conda update conda
+
+conda env create --name ml python=3.6
+
+conda list # 列出软件包
+source activate ml
+source deactive
+
+conda install scikit-learn
+
