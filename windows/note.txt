@@ -25,3 +25,5 @@ services.msc
 
 查看监听端口
     netstat -ano
+
+windows 7 loader
