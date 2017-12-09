@@ -65,6 +65,10 @@ job
         Maven OPTS
     Email notification
 
+    Build
+        Execute shell
+            默认在clone下的repo的顶层执行
+            容器方式运行jenkins, 则目录都在容器内
     
 ## 添加maven tool
 System Config --> Global Tool Configuration --> Maven

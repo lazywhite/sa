@@ -26,3 +26,4 @@ defaults delete com.apple.finder _FXShowPosixPathInTitle;killall Finder
 ```
 ~/Library/Developer/Xcode/iOS DeviceSupport
 ```
+

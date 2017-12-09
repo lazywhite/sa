@@ -97,12 +97,6 @@ RHEL support mount nfs with tcp protocol,so we can mount it with this command
 - puppet variables can't be capitalize
 - module.exports.repl.ignoreUndefined=true
 - grep -I (exclude binary-files)
-- resize vbox disk
-    VBoxManager.exe modifyhd path\to\vd --resize 20000(MB)
-    cfdisk /dev/sda   new sda3 then reboot
-    pvcreate /dev/sda3
-    vgextent VolGroup /dev/sda3
-    lvextent -r -l +100%FREE /dev/VolGroup/lv_root
 - compile py-gunreadline
     yum install readline-devel patch
 

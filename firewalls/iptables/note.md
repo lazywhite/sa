@@ -55,6 +55,8 @@ iptables -t nat -D POSTROUTING 1
 ```
 iptables -t nat -A PREROUTING -i eth0 -d 218.29.30.31 -p tcp --dport 80 -j DNAT --to-destination 192.168.1.7:80
 
+
+sysctl -w net.ipv4.ip_forward=1
 iptables -t nat -A POSTROUTING -s 192.168.1.0/24 -o eth0 -j SNAT --to-source 218.29.30.31
 or
 iptables -t nat -A POSTROUTING -s 192.168.1.0/24 -o ppp0 -j MASQUERADE

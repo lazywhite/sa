@@ -7,14 +7,20 @@ $ sudo apt-get install ansible
 
 ```
 ## Topic
+```
 必须用ssh-copy-id 部署公钥
 ansible all -m ping
 ansible <host> -m shell -a 
 ansible localhost -m setup  [ -a 'filter=*network*' ]
 ansible-doc module
+```
 
-# ansible command ```
+# ansible command 
+
+```
 ansible -i <inventory_file> '<host pattern>' -m <module> -a <arguments>
+ansible all -m copy -a "src=/root/m.deb dest=/root/m.deb"
+ansible all -m shell -a "ls -al"
 ```
 # playbook
 

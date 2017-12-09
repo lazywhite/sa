@@ -10,5 +10,10 @@ service nfs start
 
 ## Configure
 ```
-/path/to/nfs/share <host>(no_root_squash,rw)
+/etc/exports
+    # /path/to/nfs/share <host>(no_root_squash,rw)
+    /share 192.168.0.*(rw,sync)
+
+
+exportfs -avr 
 ```

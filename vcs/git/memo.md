@@ -45,6 +45,9 @@ git cat-file blob  blob-hash
 更改历史提交
 	git rebase -i HEAD~3
 	git rebase --continue
+
+默认不允许修改root commit
+    git rebase -i --root 
 ```
   
 ### push  
@@ -86,6 +89,11 @@ git diff --cached (diff between index and HEAD)
 git diff (diff between work tree and index )  
 git diff HEAD (diff between work tree and HEAD)  
 git diff <branch> (diff between current work tree and branch HEAD)  
+
+
+git diff <src-commit> <dest-commit> 比较两次提交之间的差异
+
+git diff = git diff HEAD   # 比较当前工作目录代码与最近一次提交的差别
 ```
 
 
@@ -231,5 +239,7 @@ git repack -A -d (不直接删除)
   
 git commit -a -F -  从标准输入读取提交信息
 
+git fetch origin [remote_br]:[local_br] 拉取远程分支到本地
 
 ```
+1. 分支的相对路径  HEAD~[n]   HEAD之前的第n此提交
