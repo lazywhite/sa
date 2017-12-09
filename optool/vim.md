@@ -61,6 +61,7 @@ vim -p file1 file2 ...   用tab模式打开文件
 
 ## 使用
 ```
+set nopaste
 搜索介于start与end之间所有的内容, 可以跨行
     /start\_.*end/
 
@@ -96,4 +97,13 @@ vim -p file1 file2 ...   用tab模式打开文件
     zt  当前行设置为window首行
     zz  当前行设置为window居中
     zb  当前行设置为window尾行
+```
+
+## 代码对齐
+```
+:set filetype=xml
+第一种
+    =:10,40
+第二种
+    视图模式选中所有行 =  
 ```

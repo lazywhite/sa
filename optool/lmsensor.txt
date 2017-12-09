@@ -1,0 +1,4 @@
+yum -y install lm-sensors
+
+sensors-detect ## 发现本机传感器信息, 生成配置, 交互式输入
+sensors ## 输出当前传感器数据

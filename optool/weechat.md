@@ -8,6 +8,8 @@
 
 
 /connect freenode
+
+/nick <nickname>
 /msg NickServ identify <password>
 
 /join <channel>
