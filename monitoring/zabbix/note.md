@@ -111,7 +111,13 @@ ProxyDataFrequency=1
 
 Hostname可以直接写ip
 ```
-
+## 实体唯一性原则
+```
+1. item: key
+2. trigger: name and expression
+3. graph: name and items
+4. application: 名称
+```
 ## Tips
 ```
 zabbix-server的agent默认是禁用状态, 需要手动启用
@@ -132,8 +138,20 @@ To fix, recompile OpenIPMI library with OpenSSL enabled as discussed in ZBX-6139
 由不同代理程序监控的主机, 如果跟其他主机的主机名重复, 会导致分组混乱
 
 agent Hostname写IP, agent不可用问题
+
+HP380系列获取IPMI Power为2watt的问题, 是因为power sensor不标准导致, zabbix bug
+
+字符串型的监控项没有历史趋势
+
+执行dmidecode需要root权限, zabbix-agent需要AllowRooT=1
+
+python-dmidecode
+yum -y update dmidecode
+
+item key的参数, 不能包含空格, 需要用其他字符替换
+
+新添加userparameter配置文件, 需要重启agent
+
+zabbix主机, 一种agent可以有多个interface, 主要的interface main=1
+hosts status=1 表示禁用
 ```
-
-
-
-
