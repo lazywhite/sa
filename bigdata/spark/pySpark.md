@@ -1,5 +1,7 @@
 ## code
 ```
+pip install pyspark
+
 from pyspark import SparkContext
 
 logfile = 'note.md'

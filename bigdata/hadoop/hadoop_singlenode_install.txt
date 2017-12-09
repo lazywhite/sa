@@ -1,0 +1,103 @@
+http://hadoop.apache.org/docs/r2.8.2/hadoop-project-dist/hadoop-common/SingleCluster.html
+
+download jdk-1.8.tar.gz  hadoop-2.8.2.tar.gz
+
+export JAVA_HOME=/usr/local/jdk
+export HADOOP_HOME=/usr/local/hadoop
+#export HADOOP_CONF_DIR=/data/hadoop/etc
+
+export PATH=/usr/local/jdk/bin:/usr/local/hadoop/bin:/usr/local/hadoop/sbin:$PATH
+
+
+# hadoop version
+
+yum -y install rsync
+配置免密匙登录 ssh-copy-id root@localhost
+
+
+# 一. 伪分布式
+
+## 1. 配置HDFS
+```
+配置项 
+	https://hadoop.apache.org/docs/r1.2.1/hdfs-default.html
+获取配置
+	hdfs getconf -confKey fs.defaultFS
+```
+### 1. etc/hadoop/core-site.xml
+```
+<configuration>
+    <property>
+        <name>fs.defaultFS</name>
+        <value>hdfs://0.0.0.0:9000</value>
+    </property>
+</configuration>
+```
+### 2. etc/hadoop/hdfs-site.xml
+```
+<configuration>
+    <property>
+        <name>dfs.replication</name>
+        <value>1</value>
+    </property>
+    <property>
+        <name>dfs.data.dir</name>
+        <value>/data/hadoop/data1,/data/hadoop/data2</value>
+    </property>
+
+</configuration>
+```
+### 3. etc/hadoop/slaves
+```
+localhost
+```
+### 4. script
+```
+hdfs namenode -format
+start-dfs.sh # default log dir ${HADOOP_HOME}/logs
+web gui: http://ip:50070
+
+hdfs dfs -mkdir /test
+hdfs dfs -ls /
+hdfs dfs -put  /root/archive/hadoop-2.8.2.tar.gz   /test
+hdfs dfs -rmdir --ignore-fail-on-non-empty /test
+
+hdfs dfs -mkdir /user
+hdfs dfs -mkdir /user/root
+hdfs dfs -put etc/hadoop/  input
+hadoop jar share/hadoop/mapreduce/hadoop-mapreduce-examples-2.8.2.jar grep input output 'dfs[a-z.]+'
+hdfs -ls /user/root
+hdfs dfs -ls  # 默认list /user/root/
+hdfs dfs -cat output/*
+
+```
+
+ 
+## 2. 配置YARN
+### 1. etc/hadoop/mapred-site.xml
+```
+<configuration>
+    <property>
+        <name>mapreduce.framework.name</name>
+        <value>yarn</value>
+    </property>
+</configuration>
+```
+### 2. etc/hadoop/yarn-site.xml
+```
+<configuration>
+    <property>
+        <name>yarn.nodemanager.aux-services</name>
+        <value>mapreduce_shuffle</value>
+    </property>
+</configuration>
+```
+### 3. script
+```
+start-yarn.sh
+```
+## 3. 启动job history server
+```
+mr-jobhistory-daemon.sh  start historyserver
+ip:19888
+```

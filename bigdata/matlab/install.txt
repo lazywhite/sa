@@ -1,0 +1,18 @@
+一 下载matlab
+
+二、下载完成后将iso文件挂载到Linux
+
+sudo mkdir /media/matlab
+mount -o loop matlab.iso /media/matlab
+cd /media/matlab
+sudo ./install
+
+三、安装过程中使用readme.txt中的序列号。
+
+四、破解
+
+1 安装完成后使用crack下的 license.lic进行激活；
+
+2 将crack文件夹下的libmwservices.so copy到 /usr/local/MATLAB/R2014A/bin/glnxa64。
+
+五、完成安装，命令行下使用sudo matlab即可启动使用。

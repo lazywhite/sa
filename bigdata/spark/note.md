@@ -25,7 +25,9 @@ Stage
 Task
 	被送到某个Executor上的工作任务；
 	
-Transformation, Action
+Transformation
+    
+Action
 
 RDD
     Resilient Distribute Dataset 弹性分布式数据集

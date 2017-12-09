@@ -26,8 +26,3 @@ Combiner
 Reducer
 	1. Shuffle and Sort  将需要处理的grouped tuple下载到本地并进行排序
 	2. 将reduce function应用在tuple上
-	
-
-
-
-

@@ -23,6 +23,7 @@ Quorum Journal Manager用来在namenode间共享edits
 file in the filesystem will be devided into one or more segments  called blocks  
 default block size is 64MB
 
+### Volume
 
 ## Feature
 ```

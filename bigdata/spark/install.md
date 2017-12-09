@@ -1,9 +1,11 @@
 # 分布式集群安装
 ## 环境准备
+```
 1. jdk
 2. scala
-3. hadoop [Hadoop Install Guild](http://zhongyaonan.com/hadoop-tutorial/setting-up-hadoop-2-6-on-mac-osx-yosemite.html)
+3. hadoop 
 4. master节点到worker节点配置免密码登录  
+```
 
 
 ## conf/spark-env.sh
