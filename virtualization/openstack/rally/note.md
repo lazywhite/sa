@@ -59,9 +59,6 @@ alembic
 plugin
     scenarios, runners, context, html report all are pluggable
 ```
+源码目录
+    /usr/share/rally/samples
 
-
-openstack image list
-openstack host list
-openstack network list
-openstack router list

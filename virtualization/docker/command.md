@@ -34,4 +34,6 @@ docker wait: block until a container stops then print its exit code
 
 docker inspect <container> 
     -f: format
+
+docker import rally.tar rally:latest
 ```

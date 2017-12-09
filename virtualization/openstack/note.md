@@ -72,5 +72,11 @@ Init.py可以读取注入的元数据(meta.js)比如
 ｛"url": "http://example.com/init.sh"}
 
 ```
+## Openstack 命令
+```
+openstack image list
+openstack host list
+openstack network list
+openstack router list
 
-
+```

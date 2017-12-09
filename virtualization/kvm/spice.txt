@@ -1,0 +1,27 @@
+## guest 开启spice
+
+1. video model选择QXL
+2. Display driver选择spice, port不使用自动, TLS port使用自动
+
+3. 关闭spice的tls port功能
+    /etc/libvirtd/qemu.conf
+        spice_tls = 0
+
+4. 更改客户机的配置
+    virsh 
+        shutdown win7
+        edit win7
+        
+       <graphics type='spice' port='6900' autoport='no' listen='0.0.0.0' keymap='en-us' tls-port="-1">
+          <listen type='address' address='0.0.0.0'/>
+        </graphics>
+
+        删除tls-port属性
+
+5. 如果guest为redhat系列, 安装驱动包
+    # yum install spice-vdagent
+    # chkconfig --add spice-vdagentd
+    # service start spice-vdagentd
+
+
+6. url spice://192.168.0.1:6900

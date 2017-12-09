@@ -1,0 +1,21 @@
+openstack network create rally_test_network
+openstack subnet create --network rally_test_network --subnet-range 10.0.10.0/24  rally_test_sub
+openstack  floating ip create admin_floating_net
+openstack  router create rally_test_router
+openstack  router add subnet rally_test_router rally_sub
+
+openstack  server create --nic net-id=2c181667-2a08-4c30-a512-a7ec2f3a7a0e --flavor m1.tiny --image  ohc-cirrors vm1
+openstack  port list
+
+openstack  floating ip list
+openstack  floating ip set --port  133e0341-b807-4c19-81df-4b2ce8d8a6b1 192.168.250.146
+
+openstack floating ip create admin_floating_net --fixed-ip-address 10.0.0.2 --port 523331cf-5636-4298-a14c-f545bb32abcf
+
+openstack floating ip unset 192.168.250.146
+
+
+openstack subnet delete ${SUBNET_NAME}
+openstack network delete ${NETWORK_NAME}
+openstack image delete ${IAMGE_NAME}
+

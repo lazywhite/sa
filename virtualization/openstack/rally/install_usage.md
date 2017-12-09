@@ -7,15 +7,31 @@ echo >>~/.bashrc <<EOF
 alias wrally="docker run -it --rm -v /root/volumn:/home/rally rally"
 EOF
 
-wrally
+# 开启远程ssh
+docker run -d -p 8022:22 -v ~/rally_container:/home/rally rally sudo /usr/sbin/sshd -D
+
+# 可以在rally_container里面编辑文件
+ssh -p 8022 rally@ip   #123456
+
+bash --login
 
 source openrc
 rally-manage db recreate
+
 rally deployment create --name="dev" --fromenv
-rally deployment use "dev"
+
+rally deployment create --name="dev" --file env.json
+. ~/.rally/openrc #可以使用openstack命令
+
+rally deployment config # 查看当前环境
+
+# rally deployment use "dev" # 指定被测的os集群
 rally deployment check
+
 rally task start /path/to/boot-and-delete.json
-rally task report <task-uuid> --out boot-and-delete.html
+rally task report <task-uuid> --out output.html
+
+rally task results <task-uuid> # 生成task的json格式结果
 
 
 rally verify create-verifier --type tempest --name tempest-verifier --version 15.0.0
