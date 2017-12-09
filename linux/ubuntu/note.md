@@ -1,5 +1,7 @@
 ## 安装特定版本
+```
 apt-get install package=version
+```
 ## 清空source缓存
 ```
 Hash Sum mismatch
@@ -8,20 +10,28 @@ rm -rf /var/lib/apt/lists/*
 ```
 
 ## 添加第三方源
+```
 /et/apt/sources.list.d/<third>.list
+```
 
 
 ## 删除无依赖的包
+```
 apt-get autoremove
+```
 
 ## 删除包和配置文件
+```
 apt-get purge <package>
+```
 
 
 ## 查看某个文件属于哪个deb package
+```
 apt-get install apt-file
 apt-file update
 apt-file search <file-path>
+```
 
 
 ## 启动脚本
@@ -112,4 +122,32 @@ esac
 exit 0
 ```
 ## disable service on startup
+```
 update-rc.d apache2 disable
+```
+## 网卡配置
+```
+/etc/network/interfaces.d/ifcfg-eth0
+    auto eth0
+    iface eth0 inet static
+    address 192.168.0.117
+    netmask 255.255.255.0
+    gateway 192.168.0.1 
+    network 192.168.0.0
+    broadcast 192.168.0.255
+```
+
+## Iptables 
+```
+iptables-save
+service iptables-persistent  save
+```
+
+
+## dpkg
+```
+dpkg -i /path/to/file.deb
+dpkg -r <package>
+dpkg -l|grep <package>
+dpkg -L <package> # 列出文件列表
+```
