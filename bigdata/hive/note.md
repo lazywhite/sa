@@ -1,7 +1,11 @@
 ## Keywords
 ```
-derby
-    metastore of hive
+metastore
+    local
+        derby
+    remote
+        mysql
+        postgresql
 Hcatalog
     work on top of hive metastore, share metadata through applications
 trift
@@ -10,9 +14,6 @@ trift
 table
 partition
 buckets
-join
-HiveServer
-	
 ```
 ## Tips
 ```
@@ -22,6 +23,9 @@ hive有类SQL接口, 每条语句会自动产生一个hadoop job执行, 实时�
 Hive从0.14版本开始支持事务和行级更新，要想支持行级insert、update、delete，需要配置Hive支持事务。
 
 数据最终存储在HDFS或HBase里面
+
+beeline配合hiveserver2使用
+使用remote metastore server, 必须保证metastore service运行
 
 ```
 ## Hive组件
