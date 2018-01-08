@@ -51,7 +51,7 @@ psql -U <username> -h <hostname> -p <port> -[W|w] <dbname>
 \ds: display sequences
 \dtS+: display relations in all schema
 \encoding [ENCODING]
-\password [USERNAME]
+\password [USERNAME] # 修改用户密码
 
 
 \conninfo: show connection information  
@@ -273,12 +273,13 @@ SELECT pg_cancel_backend(pid of the postgres process);
 ## change database owner
 ```
 alter database <dbname> owner to <username>
-\password <username>
 ```
 
 
 ## show database triggers
+```
 select * from pg_proc;
+```
 
 ## declare default value for column 
 ```
