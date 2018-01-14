@@ -1241,3 +1241,8 @@ create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 
 ## 获取命令行帮助
 mysql> help create table
+
+使用外键约束时, 必须保持父子表中的列类型一样, 出现创建foreign key失败errno 150的情况, 一般就是字段定义不一样
+
+
+select round(3.123231, 2); # 小数精度

@@ -796,6 +796,14 @@ mysql> pager less
 set SQL_SAFE_UPDATES = 1; 或者mysql --safe-updates
 ```
 
+## 日期时间函数
+```
+select now();
+select current_timestamp(); # 结果为datetime
+select unix_timestamp(); # 结果为整数
+select from_unixtime(unix_timestamp()[, format]);
+select from_unixtime(unix_timestamp(), '%Y-%m');
+```
 ## mysql实现同构表的交集, 差集, 合集
 ```
 求交集, 利用inner join

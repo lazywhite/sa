@@ -1,0 +1,2 @@
+redis-cli bgsave
+/var/lib/redis/dump.db
