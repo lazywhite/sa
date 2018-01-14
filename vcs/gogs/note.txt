@@ -1,0 +1,4 @@
+https://gogs.io/docs/advanced/configuration_cheat_sheet
+
+OFFLINE_MODE = true
+DISABLE_GRAVATAR = true
