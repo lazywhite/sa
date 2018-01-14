@@ -9,6 +9,11 @@ Driver
 Executor
 	Application运行在Worker 节点上的一个进程，该进程负责运行Task，并且负责将数据存在内存或者磁盘上，每个Application都有各自独立的一批Executor。在Spark on Yarn模式下，其进程名称为CoarseGrainedExecutorBackend，类似于Hadoop MapReduce中的YarnChild。一个CoarseGrainedExecutorBackend进程有且仅有一个executor对象，它负责将Task包装成taskRunner，并从线程池中抽取出一个空闲线程运行Task。每个CoarseGrainedExecutorBackend能并行运行Task的数量就取决于分配给它的CPU的个数了；
 
+Cluster Mode
+    standalone
+    mesos
+    hadoop yarn
+
 Cluster Manager
 	指的是在集群上获取资源的外部服务，目前有：
 		Standalone：Spark原生的资源管理，由Master负责资源的分配；
@@ -55,6 +60,15 @@ DataSet
 
 DStream
     Discretized Streams 
+
+cluster
+    SparkContext(Driver program)
+    cluster manager
+    worker node
+        (executor)
+    standby master
+
+
 ```
 
 
@@ -103,6 +117,39 @@ Spark
 
 ```
 
-## Topic
+## Tips
+```
 1. Broadcast variables allow the programmer to keep a read-only variable cached on each machine rather than shipping a copy of it with tasks. 
+2. sqlDF.show()
+    UnicodeEncodeError: 'ascii' codec can't encode characters in position 641-645: ordinal not in range(128)
+    解决方法
+        export PYTHONIOENCODING=utf8
+
+
+3. 增加自定义column
+    from pyspark.sql.types import *
+    from pyspark.sql.functions import udf
+
+    get_pool_id = udf(
+        lambda val: '-'.join(val.split('-')[:4]),
+        StringType()
+    )
+
+    df_with_pool_id_DF = pserverDF.withColumn('pool_id', get_pool_id(pserverDF.resource_id))
+
+4. rename column
+5. ignore column
+```
+# Hardware provisioning
+1. storeage system
+    1. run spark on same node of hdfs
+    2. in same local network of hdfs
+2. local disk 
+    no raid controller
+    mount disk with -noatime
+    spark.local.dir  multi mount point
+3. memory
+    75%
+4. cpu
+5. network
 
