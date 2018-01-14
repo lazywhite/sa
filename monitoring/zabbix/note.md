@@ -154,4 +154,12 @@ item key的参数, 不能包含空格, 需要用其他字符替换
 
 zabbix主机, 一种agent可以有多个interface, 主要的interface main=1
 hosts status=1 表示禁用
+
+can't send list of active check to [], 有可能是因为没有链接linux os模板
+
+system.cpu.discovery
+system.cpu.num[online]
+
+ids表保存zabbix自己维护的主键nextid
 ```
+

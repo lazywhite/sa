@@ -1,0 +1,94 @@
+#!/bin/bash
+#
+# zabbix_agentd         This shell script takes care of starting
+#                       and stopping Zabbix Agent daemon
+#
+# chkconfig:            35 95 15
+# description:          ZABBIX is an all-in-one 24x7 monitoring system
+#
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+# Source networking configuration.
+. /etc/sysconfig/network
+
+# Check that networking is up.
+[ ${NETWORKING} = "no" ] && exit 0
+
+
+RETVAL=0
+
+# Setting up configuration
+ZABBIX_NAME="zabbix_agentd"
+ZABBIX_CONF="/usr/local/zabbix/etc/$ZABBIX_NAME.conf"
+
+if [ ! -f $ZABBIX_CONF ]
+then
+    echo "$ZABBIX_NAME configuration file $ZABBIX_CONF does not exist. "
+    exit 3
+fi
+
+# Source config file to load configuration
+. $ZABBIX_CONF
+
+ZABBIX_USER="zabbix"
+ZABBIX_BIND="/usr/local/zabbix/sbin"
+ZABBIX_BINF="$ZABBIX_BIND/$ZABBIX_NAME"
+
+if [ ! -x $ZABBIX_BINF ] ; then
+    echo "$ZABBIX_BINF not installed! "
+    exit 4
+fi
+
+start() {
+    # Start daemons.
+    echo -n $"Starting $ZABBIX_NAME: "
+    daemon --user $ZABBIX_USER $ZABBIX_BINF -c $ZABBIX_CONF
+    RETVAL=$?
+    [ $RETVAL -eq 0 ] && touch /var/lock/subsys/$ZABBIX_NAME
+    return $RETVAL
+}
+
+stop() {
+    # Stop daemons.
+    echo -n $"Shutting down $ZABBIX_NAME: "
+    killproc $ZABBIX_NAME
+    RETVAL=$?
+    echo
+    [ $RETVAL -eq 0 ] && rm -f /var/lock/subsys/$ZABBIX_NAME
+    return $RETVAL
+}
+
+# See how we were called.
+case "$1" in
+  start)
+        start
+        ;;
+  stop)
+        stop
+        ;;
+  restart|reload)
+        stop
+        usleep 1000000
+        start
+        RETVAL=$?
+        ;;
+  condrestart)
+        if [ -f /var/lock/subsys/$ZABBIX_NAME ]; then
+            stop
+            usleep 1000000
+            start
+            RETVAL=$?
+        fi
+        ;;
+  status)
+        status $ZABBIX_NAME
+        RETVAL=$?
+        ;;
+  *)
+        echo $"Usage: $0 {start|stop|restart|condrestart|status}"
+        exit 1
+esac
+
+exit $RETVAL

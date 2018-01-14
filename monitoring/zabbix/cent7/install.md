@@ -411,6 +411,7 @@ useradd -M zabbix -s /sbin/nologin
 ##  proxy启动脚本, 参考3.3
 
 ## 启动proxy进程
+```
 service zabbix_proxy start
 ```
 ## 3.2 proxy配置文件
