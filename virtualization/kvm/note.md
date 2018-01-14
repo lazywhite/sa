@@ -80,4 +80,37 @@ vnc开启密码验证
 <graphics type='vnc' port='-1' autoport='yes' listen='192.168.1.5' passwd='YOUR-PASSWORD-HERE' keymap='en-us'/>
 ```
 
+## power
+```
+virsh shutdown <domain> # gracefully
+virsh destroy <domain> # forcefully
+```
 
+## rename a domain
+```
+virsh shutdown <domaiin>
+virsh domrename <origin> <dest> # 必须在关机状态下执行
+virsh start dest
+```
+
+## make virsh console <domain> work
+```
+virsh shutdown <domain>
+virsh edit <domain>
+    <serial type='pty'>
+      <target port='0'/>
+    </serial>
+    <console type='pty'>
+      <target type='serial' port='0'/>
+    </console>
+
+centos-7
+    /boot/grub2/grub.cfg
+        menuentry
+            Centos7-core
+                console=ttyS0
+
+virsh  start <domain>
+virsh console <domain>
+`Ctr+]` leave console
+```

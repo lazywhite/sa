@@ -1,0 +1,5 @@
+fuel-utils check_all
+fuel-utils check <service>
+    nginx
+    keytone
+

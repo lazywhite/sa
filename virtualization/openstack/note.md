@@ -80,3 +80,7 @@ openstack network list
 openstack router list
 
 ```
+## Tips
+```
+keystone adminurl 默认是内网地址, 没有暴露在外部, 需要配置反向代理
+```
