@@ -71,20 +71,6 @@ cluster
 
 ```
 
-
-## 特点
-```
-内存运算, 支持交互式查询, 流式处理  
-交互式分析
-    spark-shell(scala)
-    pyspark(python)
-
-运行
-    spark-context
-    spark-submit <scala|java>
-```
-
-
 ### Spark Library
 ```
 Spark Core
@@ -137,19 +123,33 @@ Spark
 
     df_with_pool_id_DF = pserverDF.withColumn('pool_id', get_pool_id(pserverDF.resource_id))
 
-4. rename column
-5. ignore column
-```
-# Hardware provisioning
-1. storeage system
-    1. run spark on same node of hdfs
-    2. in same local network of hdfs
-2. local disk 
-    no raid controller
-    mount disk with -noatime
-    spark.local.dir  multi mount point
-3. memory
-    75%
-4. cpu
-5. network
+csv文件操作
+    df = spark.read.option("header", True).csv('file.csv')
+    spark.write.option('header', True).save('file', format='csv')
+    dataframe保存的结果是分成了很多part, 是计算的分布式导致的, 需要人工merge为单一文件
 
+spark.sql(sql) 
+    sql 不支持from之前有包含where的子查询
+    sql 不支持中文column name
+
+dataframe join duplicate column
+    df1.join(df2, ['col1', 'col2'], 'inner') # 可以避免同名join字段, 无法避免非join同名字段
+
+更改column dtype
+    df = df.withColumn('data', df.data.cast('double'))
+
+spark-sql insert不能指定字段, 必须插入全列, 空值传Null
+
+CLI工具
+    pyspark: python环境交互式
+    spark-shell: scala环境交互式
+    sparkR: R环境交互式
+    spark-sql: 操作hive table
+
+spark执行资源设置
+    too many open files
+        ulimit -n 65535
+    内存设置
+        spark-submit --executor-memory 60G --driver-memory 60G run.py
+
+```

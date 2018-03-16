@@ -7,6 +7,11 @@
 	export JAVA_HOME=/usr/jdk1.8.0_121
 	export SCALA_HOME=/usr/scala-2.12.1
 	export HADOOP_CONF_DIR=/usr/hadoop-2.7.3/etc/hadoop
+
+注意
+    最好跟hdfs部署在相同节点
+    hdfs最好使用裸盘, 使用-noatime进行挂载, spark.local.dir配置多个挂载点
+    最大内存占用设置为总内存75%
 ```
 
 ## 配置
