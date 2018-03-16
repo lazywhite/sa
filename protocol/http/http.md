@@ -6,6 +6,7 @@ http协议是无状态的, web程序引入cookie机制来维护状态
 cookie可以人为禁止, 服务端引入session来保存状态  
 header与body之间有空行  
 request Method 区分大小写, header不区分大小写  
+通过 XMLHttpRequest 请求的地址不会被记录到浏览器的地址栏  
 
 ## Get和Post方法的区别
 1. get提交的数据会放在url之后, 以?分隔url和传输数据, url长度有限制

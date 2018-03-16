@@ -1,0 +1,1 @@
+一个domain无法获取另外一个domain的cookie
