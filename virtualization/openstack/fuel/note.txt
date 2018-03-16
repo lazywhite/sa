@@ -1,5 +1,7 @@
-fuel-utils check_all
-fuel-utils check <service>
-    nginx
-    keytone
+列出节点
+    fuel node list
+检查所有服务
+    fuel-utils check_all
 
+检查某项服务
+    fuel-utils check_service <service>

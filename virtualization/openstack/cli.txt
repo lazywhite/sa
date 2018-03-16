@@ -19,3 +19,6 @@ openstack subnet delete ${SUBNET_NAME}
 openstack network delete ${NETWORK_NAME}
 openstack image delete ${IAMGE_NAME}
 
+
+openstack image save --file centos7-base.img CentOS-7-Base 
+

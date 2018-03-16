@@ -47,3 +47,9 @@ rally verify start
 rally verify start --pattern set=compute
 
 rally verify delete-verifier --id=207763bc-2001-40f5-b08d-68381f6e923c --force
+
+
+# task配置文件
+times: 指总的测试次数
+concurrency: 指并发数
+times要大于等于concurrency

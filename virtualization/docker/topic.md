@@ -2,7 +2,7 @@
 ## expose docker api to network
 ```
 dockerd -H tcp://0.0.0.0:2375 -H unix:///var/run/docker.sock
-l``
+```
 ## oss storage
 ```
 docker-registry + oss + nginx + ssl
@@ -23,20 +23,25 @@ DOCKER_OPTS="--userland-proxy=false"
 
 ## pulling from a different registry
 ```
-docker use "https://" protocol to communicate with a registry
-
-# docker pull myregistry.local:5000/testing/test-image
+docker client使用https协议与registry进行通信
+docker pull myregistry.local:5000/testing/test-image
 
 ```
   
 ## image digest
+```
 docker pull [OPTIONS] NAME[:TAG|@DIGEST]
+```
 
 ## docker-proxy
+```
 a process to do DNAT in host
+```
 
 ## expose a range of ports
+```
 docker run -p 7000-8000:7000-8000
+```
 
 ## docker port mapping set host ip
 ```
