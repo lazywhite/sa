@@ -1,0 +1,11 @@
+# 启动服务
+rsync --daemon --config=/etc/rsyncd.conf
+
+# 客户端同步
+rsync -avrz --delete test --password-file=/root/rsync.pass  rsync@192.168.0.125::disk/test/
+
+# Tips
+1. 服务端的密码文件为user:password, 不要使用root, 会导致认证失败
+2. /etc/rsyncd.secrets 权限必须是600
+3. /root/rsync.pass 权限必须是600
+4. rsync服务默认端口为873
