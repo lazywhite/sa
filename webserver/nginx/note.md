@@ -110,3 +110,9 @@ location = /swagger.yaml {
     alias /root/dashboard/extra/swagger.yaml;
 }
 ```
+
+## 8 .nginx-1.8.1 编译安装
+```
+yum -y install pcre-devel zlib-devel openssl-devel
+./configure --prefix=/usr/local/nginx
+```
