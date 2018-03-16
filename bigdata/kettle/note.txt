@@ -1,0 +1,42 @@
+# enable epel
+yum install webkitgtk
+
+unzip pdi-ce.zip
+./spoon.sh  #需在图形界面启动
+
+# install mariadb driver(need restart spoon.sh)
+data-integration/lib/mariadb-java-client-2.2.2.jar
+
+
+transformation
+    step
+        input
+            csv
+            text file
+        output
+            table output
+                database connection
+        flow
+            filter rows
+        transform
+            select values
+            denormalizer
+        lookup
+            stream lookup
+    hop
+job
+    general
+        start
+        transformation
+    
+
+cluster
+    静态集群
+    动态集群
+    carte slave node
+    ./carte.sh 0.0.0.0 8081  # default auth: cluster/cluster
+
+pan.sh
+    ./pan.sh -file="/path/to/tr.ktr"
+    ./pan.sh -file="/path/to/tr.xml"
+

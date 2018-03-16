@@ -1,0 +1,7 @@
+volume: 数据量巨大
+variety: 数据类型众多
+value: 价值密度低
+velocity: 处理速度快
+
+ETL
+    extraction transformation loading
