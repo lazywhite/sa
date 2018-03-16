@@ -36,4 +36,11 @@ grep,egrep,fgrep - print lines matching a pattern
 $
 \< \> \b \B \W \w
 ? * + {n} {n,} {,m} {n,m}
+
+-H with-fileName  # 搜索多个文件时需要
+-n with-line-number # 带行号
+
+
+grep -nHro '"resource_id":"[^"]*"' /root/lucci|grep -v 'CPC'
+
 ```

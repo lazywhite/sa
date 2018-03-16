@@ -97,4 +97,8 @@ find . -perm 644
 
 find . -type f -size +4096c  # larger than size 
 find . -type f -size -4096k # smaller than size 
+
+find . -name "*.py" -or -name "*.sh"
+
+find . -path ./migrations -prune -o -name "*.py" # 排除某些文件夹
 ```

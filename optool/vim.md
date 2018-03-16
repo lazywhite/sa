@@ -107,3 +107,15 @@ set nopaste
 第二种
     视图模式选中所有行 =  
 ```
+
+## YCM pluggin
+```
+检查vim 版本最低7.4
+yum -y install cmake python-devel
+./install.py
+```
+## Upgrade vim
+```
+curl -L https://copr.fedorainfracloud.org/coprs/mcepl/vim8/repo/epel-7/mcepl-vim8-epel-7.repo -o /etc/yum.repos.d/mcepl-vim8-epel-7.repo
+yum update vim*
+```
