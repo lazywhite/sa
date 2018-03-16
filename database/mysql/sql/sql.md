@@ -561,6 +561,10 @@ select * from book_authors order by id desc limit 10;
 ```
 alter table table_name modify column_name int(5)
 ```
+## change column name
+```
+alter table table_name change column `origin` `modified` varchar(30);
+```
 ## temporary disable foreign key check
 ```
 SET FOREIGN_KEY_CHECKS=0;

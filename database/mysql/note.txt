@@ -1237,7 +1237,7 @@ show engine innodb status;
 ```
 
 ## 给timestamp字段自动赋值
-create_time TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+create table test(id int not null primary key, value varchar(30), change_time timestamp default current_timestamp); # 只能是timestamp不能是datetime
 
 ## 获取命令行帮助
 mysql> help create table
