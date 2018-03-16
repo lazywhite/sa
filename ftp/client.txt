@@ -1,0 +1,22 @@
+yum -y install ftp
+
+ftp <ip>
+    -p passive mode
+    -A active mode 
+    -d debug
+    -v verbose
+
+username: anonymous  # 匿名用户限定名
+
+ftp>
+    dir # 列出目录
+    cd
+    cdup # 返回上一级目录
+    close # 退出
+    get
+    mget
+    put  /local/path  remote/path
+    mput
+    delete
+    mdelete
+    rename 重命名
