@@ -1,0 +1,14 @@
+cross-origin resource sharing
+
+浏览器发现请求跨域资源, 先做一次OPTIONS request, 查看跨域设置
+
+规定可以被浏览器访问的reponse header列表
+    "Access-Control-Expose-Headers": "Authorization,Origin, X-Requested-With, Content-Type, Accept"
+
+声明后端允许的request method
+    "Access-Control-Allow-Methods":"GET,POST"
+
+允许request携带cookie, 并且response能set-cookie时后端的需求
+    response header
+        Access-Control-Allow-Credentials:true
+        Access-Control-Allow-Origin不可以为 '*'，需配置指定的地址
