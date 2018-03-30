@@ -19,6 +19,6 @@ test = spark.createDataFrame([
     (7, "apache hadoop")
 ], ["id", "text"])
 
-predication = model.transform(test)
+prediction = model.transform(test)
 
-predication.show(100, False)
+prediction.show(100, False)

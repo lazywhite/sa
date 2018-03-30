@@ -33,9 +33,9 @@ test = spark.createDataFrame([
     (7, "apache hadoop")
 ], ["id", "text"])
 
-predication = model.transform(test)
-#predication.show(100, False)
-selected = predication.select("id", "text", "probability", "prediction")
+prediction = model.transform(test)
+#prediction.show(100, False)
+selected = prediction.select("id", "text", "probability", "prediction")
 for row in selected.collect():
     rid, text, prob, prediction = row
     print("(%d, %s) --> prob=%s, prediction=%f" % (rid, text, str(prob), prediction))
