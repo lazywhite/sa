@@ -4,10 +4,8 @@
 #
 # Distributed under terms of the MIT license.
 from pyspark.ml import PipelineModel
-from pyspark import SparkContext
 from pyspark.sql import SparkSession
 
-sc = SparkContext.getOrCreate()
 spark = SparkSession.builder.appName("main").getOrCreate()
 model = PipelineModel.load("/Users/white/local/ml_model")
 
