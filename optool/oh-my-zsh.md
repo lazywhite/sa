@@ -3,3 +3,5 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/mas
 plugins=(git bundler osx rake ruby)
 ZSH_THEME="robbyrussell"
 
+## Usage
+d: list access path

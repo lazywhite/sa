@@ -24,5 +24,6 @@ config/server.properties
     group.initial.rebalance.delay.ms=0
 
 3. kafka把接受到的消息存储在log.dirs
-4. kafka-server-start.sh -daemon connfig/server.properties # 后台运行
-5. zookeeper-cli>get /broker/ids  # 获取broker列表
+4. kafka-server-start.sh config/server.properties # 前台运行
+4. kafka-server-start.sh -daemon config/server.properties # 后台运行, 默认端口9092
+5. zookeeper-cli>ls /broker/ids  # 获取broker列表

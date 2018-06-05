@@ -105,3 +105,35 @@ left semi join
 笛卡尔集
 	 select * from aa join bb;
 ```
+
+## External Table
+```
+location必须是文件夹, 不能是单个文件
+
+location中新增文件时hive可以自动加载
+数据跟字段的类型不匹配时, 会被加载为NULL
+### load parquet 
+
+create external table log_data(`key` varchar(30), `value` varchar(100)) 
+    stored as parquet 
+    location "/user/root/s1"; //HDFS
+
+
+### load csv
+create external table sd_data_sample(
+user_id int ,
+`date` char(30) ,
+gprs_flow1 double ,
+gprs_fee1 double ,
+priv_flow double ,
+pkg_used_flow double ,
+pkg_all_flow double )
+
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+location "/user/root/input/";
+tblproperties ("skip.header.line.count"="1");
+
+
+drop table sd_data_sample; # 删除external表
+```

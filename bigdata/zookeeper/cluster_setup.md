@@ -14,12 +14,12 @@ version: 3.4.11
     tar xf zookeeper.tar.gz -C /usr/local
     export PATH=/usr/local/zookeeper/bin:/usr/local/jdk/bin:$PATH
 
-3. run script
+3. run command
 ```
 mkdir /var/lib/zookeeper
 echo '1' > $dataDir/myid   # server.<myid> 
 ```
-4. modify etc/zoo.cfg
+4. modify conf/zoo.cfg
     initLimit=10
     syncLimit=5
     dataDir=/var/lib/zookeeper
@@ -39,4 +39,6 @@ echo '1' > $dataDir/myid   # server.<myid>
     every node
         zkServer.sh start-foreground # debug 
         zkServer.sh start
+7. 查看当前节点role
+    zkServer.sh status
 ```

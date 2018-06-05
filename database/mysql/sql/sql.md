@@ -899,3 +899,7 @@ from t1 t group by game
 
 ```
 
+### count 特定值的个数
+```
+select user_id, count(*), sum(case when gender=1 1 else 0 end) from user group by user_id;
+```

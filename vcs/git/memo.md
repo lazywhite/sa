@@ -11,6 +11,11 @@ git stash apply [default stash:{0}]
 
 ```  
 
+## config
+```
+git config -l   列出所有配置项
+```
+
   
 ### submodule 
 ``` 
@@ -140,6 +145,9 @@ git checkout HEAD -- <filename> (from repo)
 git rm --cached <file> (remove  from index, but not work directory)  
 git checkout HEAD -- file (restore from repo)  
 git checkout -- file (restore from index)  
+
+
+git checkout -b dev -t origin/dev  创建一个跟踪远程分支的本地分支
 ```
 
 
@@ -243,3 +251,5 @@ git fetch origin [remote_br]:[local_br] 拉取远程分支到本地
 
 ```
 1. 分支的相对路径  HEAD~[n]   HEAD之前的第n此提交
+2. git clone Peer reports incompatible or unsupported protocol version.
+    yum -y update nss curl libcurl

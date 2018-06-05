@@ -24,6 +24,9 @@ services.msc
 13. secpol.msc 本地安全策略
 
 查看监听端口
-    netstat -ano
+    netstat -ano|findstr 8080
+    tasklist|findstr <pid>
+    taskkill /f /t /im <java.exe>
 
-windows 7 loader
+
+jnlp webstart文件使用javaws.exe打开

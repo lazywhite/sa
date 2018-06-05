@@ -3,12 +3,12 @@
 
 ```
 # yum -y install postgresql-server postgresql-contrib postgresql
-# postgresql-setup initdb --pgdata=/var/lib/pgsql/data --encoding=UTF-8
+# postgresql-setup initdb 
 # vim /var/lib/pgsql/data/pg_hba.conf
     host    all             all             127.0.0.1/32            md5
     host    all             all             ::1/128                 md5
 # vim /var/lib/pgsql/data/postgresql.conf
-    listen_addresses = '*'
+    listen_addresses = '*'  # 必须单引号
  
 # systemctl start postgresql
 # su - postgres

@@ -1,3 +1,36 @@
 installation
     https://pypi.python.org/pypi/tf-nightly
     pip install tf.whl
+
+    pip install tensorflow
+
+Keyword
+    graph: 计算任务
+    op (operation, 节点), 接受n个tensor, 产生m个tensor
+    session: graph执行的上下文
+    tensor: 多维数组
+        rank
+        shape
+        type
+    variable: 维护图执行过程中的状态信息
+    placeholder
+    feed, fetch: 从arbitrary operation赋值或获取值
+
+
+
+每个session初始化后有default graph
+source op: 不接受输入, 产生输出并传递给其他op
+为graph添加op
+
+
+运算
+    tf.mul(a, b) 乘
+    tf.add(a, b) 加
+    tf.assign(a, b) 赋值
+    tf.multiply(a, b) 乘
+    tf.subtract(a, b) 减
+
+Session支持with协议
+    with tf.Session() as sess:
+        result = sess.run(product)
+

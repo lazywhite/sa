@@ -22,7 +22,7 @@ every node
     export HADOOP_CONF_DIR=${HADOOP_HOME}/etc/hadoop
     export HADOOP_OPTS=-Djava.net.preferIPv4Stack=true
 
-    export PATH=/usr/local/jdk/bin:/usr/local/hadoop/bin:/usr/local/hadoop/sbin:$PATH
+    export PATH=${JAVA_HOME}/bin:${HADOOP_HOME}/bin:${HADOOP_HOME}/sbin:$PATH
 
 master node
     ssh-copy-id root@hadoop1
@@ -55,12 +55,25 @@ master node
         <name>hadoop.native.lib</name>
         <value>false</value>
     </property>
+    <property>
+      <name>hadoop.proxyuser.root.groups</name>
+      <value>*</value>
+    </property>
+    <property>
+      <name>hadoop.proxyuser.root.hosts</name>
+      <value>*</value>
+    </property>
 
 </configuration>
 ```
 #### 3.1.1.2. etc/hadoop/hdfs-site.xml
 ```
 <configuration>
+   <property>
+       <name>dfs.webhdfs.enabled</name>
+       <value>true</value>
+   </property>
+
    <property>
       <name>dfs.data.dir</name>
       <value>/data/hadoop/dfs/datanode</value>
@@ -130,12 +143,32 @@ hdfs dfs -rmdir --ignore-fail-on-non-empty /test
         <name>yarn.nodemanager.aux-services</name>
         <value>mapreduce_shuffle</value>
     </property>
+
+    <property>
+		<!-- 防止卡在running job -->
+        <name>yarn.resourcemanager.hostname</name>
+        <value>hadoop1</value>
+    </property>
+
     <property>
         <name>yarn.acl.enable</name>
         <value>false</value>
     </property>
+    <property>
+        <name>yarn.resourcemanager.address</name>
+        <value>hadoop1:8032</value>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.scheduler.address</name>
+        <value>hadoop1:8030</value>
+    </property>
+    <property>
+        <name>yarn.resourcemanager.resource-tracker.address</name>
+        <value>hadoop1:8031</value>
+    </property>
 
 </configuration>
+
 ```
 ### 3.2.2 data node
 
@@ -155,7 +188,7 @@ hdfs dfs -mkdir /user
 hdfs dfs -mkdir /user/root
 hdfs dfs -put etc/hadoop/  input
 
-
+# 路径必须正确
 hadoop jar share/hadoop/mapreduce/hadoop-mapreduce-examples-2.8.3.jar grep input output 'dfs[a-z.]+'
 hdfs -ls /user/root
 hdfs dfs -ls  # 默认list /user/root/
@@ -164,6 +197,6 @@ hdfs dfs -cat output/*
 ## 3.2.4 启动job history server
 ```
 master
-	mr-jobhistory-daemon.sh  start historyserver
+	mr-jobhistory-daemon.sh  --config /usr/local/hadoop/etc start historyserver # 启动非常慢
 	web-gui: hadoop1:19888
 ```

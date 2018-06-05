@@ -1,0 +1,9 @@
+# 将zabbix用户的组列表设置为zabbix,0
+usermod -G zabbix,0 zabbix
+# 将组wheel添加给zabbix用户
+usermod -a -G wheel zabbix
+# 设置user的primary group
+usermod -g zabbix zabbix
+# 查看user的组
+groups <user>
+

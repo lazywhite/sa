@@ -4,20 +4,16 @@ Application
 	Spark Application的概念和Hadoop MapReduce中的类似，指的是用户编写的Spark应用程序，包含了一个Driver 功能的代码和分布在集群中多个节点上运行的Executor代码；
 
 Driver
-	Spark中的Driver即运行上述Application的main()函数并且创建SparkContext，其中创建SparkContext的目的是为了准备Spark应用程序的运行环境。在Spark中由SparkContext负责和ClusterManager通信，进行资源的申请、任务的分配和监控等；当Executor部分运行完毕后，Driver负责将SparkContext关闭。通常用SparkContext代表Drive；
+	Spark中的Driver即运行上述Application的main()函数并且创建SparkContext，其中创建SparkContext的目的是为了准备Spark应用程序的运行环境。在Spark中由SparkContext负责和ClusterManager通信，进行资源的申请、任务的分配和监控等；当Executor部分运行完毕后，Driver负责将SparkContext关闭。通常用SparkContext代表Driver;
 
 Executor
 	Application运行在Worker 节点上的一个进程，该进程负责运行Task，并且负责将数据存在内存或者磁盘上，每个Application都有各自独立的一批Executor。在Spark on Yarn模式下，其进程名称为CoarseGrainedExecutorBackend，类似于Hadoop MapReduce中的YarnChild。一个CoarseGrainedExecutorBackend进程有且仅有一个executor对象，它负责将Task包装成taskRunner，并从线程池中抽取出一个空闲线程运行Task。每个CoarseGrainedExecutorBackend能并行运行Task的数量就取决于分配给它的CPU的个数了；
-
-Cluster Mode
-    standalone
-    mesos
-    hadoop yarn
 
 Cluster Manager
 	指的是在集群上获取资源的外部服务，目前有：
 		Standalone：Spark原生的资源管理，由Master负责资源的分配；
 		Hadoop Yarn：由YARN中的ResourceManager负责资源的分配；
+
 Worker
 	集群中任何可以运行Application代码的节点，类似于YARN中的NodeManager节点。在Standalone模式中指的就是通过Slave文件配置的Worker节点，在Spark on Yarn模式中指的就是NodeManager节点；
 
@@ -31,8 +27,12 @@ Task
 	被送到某个Executor上的工作任务；
 	
 Transformation
+    将dataset转换为另一个dataset
     
 Action
+    根据dataset返回计算结果
+
+Parallelized Collections
 
 RDD
     Resilient Distribute Dataset 弹性分布式数据集
@@ -42,6 +42,11 @@ RDD
         编译时类型安全
         面向对象接口
         任何IO操作都需要对象全部序列化或反序列化
+    特点
+        resilient: fault tolerant
+        distribute
+        partitioned: breaks into chunks of data
+        immutable: read only
 
 DataFrame
     off-heap: jvm堆内存之外的内存, 可以跳出jvm的限制
@@ -62,13 +67,16 @@ DStream
     Discretized Streams 
 
 cluster
-    SparkContext(Driver program)
-    cluster manager
-    worker node
-        (executor)
+    Master
+        SparkContext(Driver program)
     standby master
-
-
+        HA
+    resource manager
+        Yarn
+        spark
+        kubernate
+    Slave
+        executor
 ```
 
 ### Spark Library
@@ -85,11 +93,6 @@ Graphx(graph)
 	图计算
 ```
 
-## Hadoop集成
-1. Standalone  只使用HDFS  
-2. Hadoop Yarn 替代MapReduce  
-
-
 ## Hadoop, Spark性能对比
 ```
 Hadoop
@@ -103,13 +106,106 @@ Spark
 
 ```
 
+## MLlib
+```
+Classification
+    DecisionTree
+    RandomForest
+    MultiLayer perceptron
+    Linear Support Vector Machine
+    Naive Bayes
+Regression
+    Linear
+    Logisitc
+    GBT
+
+Clustering
+    K-Means
+    Bisecting K-Means
+    LDA
+    GMM
+
+Feature
+    extraction
+        FeatureHasher
+    selection
+        VectorSlicer
+        ChiSqSelector(按卡方测试筛选)
+            numTopFeatures: 按固定数量挑选
+            percentile: 按全部feature的百分比挑选
+            fpr: 选取低于阈值的所有feature
+            fdr
+            fwe
+        QuantileDiscretizer(多分离散器, 自动划分)
+            numBuckets
+        Binarizer(两分离散器)
+            threshold
+        Bucketizer(多分离散器, 需要手动指定区间)
+            splits=[-float("inf"), -50, 0, 50, float("inf")]
+    transformation
+        VectorAssembler
+        Tokenizer
+
+```
+## Streaming
+```
+structured 
+unstructured
+
+DStream: discreted stream
+
+input table
+output table
+output mode
+    complete
+    append
+    update
+query
+```
+
+## Hive交互
+```
+关闭schema验证
+hive/conf/hive-site.xml
+    <property>
+       <name>hive.metastore.schema.verification</name>
+       <value>false</value>
+    </property>
+
+每个节点执行
+    ln -s /usr/local/hadoop/etc/hadoop/core-site.xml  /usr/local/spark/conf/
+    ln -s /usr/local/hadoop/etc/hadoop/hdfs-site.xml  /usr/local/spark/conf/
+在master节点执行
+    ln -s /usr/local/hive/conf/hive-site.xml  /usr/local/spark/conf/
+
+spark-sql --master spark://<ip>:<port> -S 
+    如果正确配置, 不会在当前目录生成metastore_db, spark-warehouse文件夹
+
+client mode
+    df = spark.sql("select * from <hivedb>.<table>") # 从hive table加载数据
+    df.write.mode("overwrite").saveAsTable("db.result") # 写入hive table, 默认为parquet格式
+cluster mode
+    spark = SparkSession.builder.appName("main").enableHiveSupport().getOrCreate()
+
+pyspark和spark-sql无法同时操作同一张表, beeline和spark-sql可以
+
+```
 ## Tips
 ```
-1. Broadcast variables allow the programmer to keep a read-only variable cached on each machine rather than shipping a copy of it with tasks. 
+1. Shared Variable
+    Broadcast variable: 全局只读共享变量
+        val bv = sc.broadcast(Array(1, 2, 3))
+        bv.value
+        每个executor可以缓存一个变量, 不需要为每个task进行copy
+    Accumulator: 只能增加的变量, 用来做计数器或sum
+        val accum = sc.longAccumulator(10) # 注册无名称的累加器
+        val accum = sc.accumulator[Long](100, "accum1") # 有名称的累加器会显示在相关stage的webUI上
+        sc.parallelize(Array(1, 2, 3, 4)).foreach(x => accum.add(x))
+        accum.value
+
 2. sqlDF.show()
     UnicodeEncodeError: 'ascii' codec can't encode characters in position 641-645: ordinal not in range(128)
-    解决方法
-        export PYTHONIOENCODING=utf8
+    export PYTHONIOENCODING=utf8
 
 
 3. 增加自定义column
@@ -144,12 +240,227 @@ CLI工具
     pyspark: python环境交互式
     spark-shell: scala环境交互式
     sparkR: R环境交互式
-    spark-sql: 操作hive table
+    spark-sql: 操作hive table, 不使用hadoop mapreduce
 
 spark执行资源设置
     too many open files
         ulimit -n 65535
     内存设置
         spark-submit --executor-memory 60G --driver-memory 60G run.py
+
+
+pyspark 使用ipython
+    export PYSPARK_DRIVER_PYTHON=ipython
+
+
+RDD可以自动从node failure恢复
+使用本地文件系统作为data source, 必须保证所有worker也可在同样位置访问
+spark.read.textFile()支持文件夹, 通配符, 压缩文件
+所有的transformation都是lazy的, 直到有action发生
+
+可以直接在文件上执行sql
+SaveMode
+    default: 存在即报错
+    append: 添加
+    overwrite: 覆盖
+    ignore: 存在不做任何操作
+
+pivot的字段, 值一定不能为null
+
+pyspark shell使用mysql表数据
+
+    pyspark --packages mysql:mysql-connector-java:5.1.38 # 使用maven坐标
+    spark-shell --driver-class-path postgresql-9.4.1207.jar --jars postgresql-9.4.1207.jar #手动指定驱动包
+    spark使用ivy包管理工具
+
+    df = spark.read.format("jdbc").options(
+        url ="jdbc:mysql://localhost/test",
+        driver="com.mysql.jdbc.Driver",
+        dbtable="bb",
+        user="root",
+        password="").load()
+
+spark使用mysql数据
+    spark/jars
+        mysql-connector-java-5.1.38-bin.jar
+
+spark.sql(sql) 执行的sql如果包含中文, 需要使用``
+
+只有发生shuffle, sort才会导致stage变化
+
+action会触发job
+
+添加hadoop支持后, 加载本地文件
+    spark.read.textFile("file:///root/file")
+    sc.read.textFile("file:///root/file") # 使用sc, 路径必须在每个node都存在
+
+    spark.read.textFile("file") # 默认加载hdfs://ip:<port>/user/<username>/file
+
+c.select(c("mobile"), (c("data") * 2).alias("hehe")).show()
+c.selectExpr("mobile", "2 * data").show()
+
+df.na: 针对not available数据的算子
+    df.na.drop()
+    df.na.fill()
+    df.na.replace()
+
+udf
+    def get_slope():
+        pass
+    spark.udf.register("get_slope", get_slope, FloatType())
+
+
+    get_slope = udf(lambda val: func(val), FloatType())
+    df.select("name", get_slope("col"))
+
+
+df = spark.createDataFrame([(1, 10), (2, 20)], ("features", "label"))
+part1, part2 = df.randomSplit([0.3, 0.7]) # 按照权重分割
+
+字段重命名
+    pyspark.sql.functions.col
+    df.select(col("old").alias("new"), "col2")
+
+    df.selectExpr("old as new", "col2")
+
+import pyspark.sql.functions as f
+    df2 = df.select(f.explode(f.split(df.value, " ").alias("words")))
+
+df.show(truncate=False)
+
+集群模式
+    stand-alone
+    yarn
+        HADOOP_CONF_DIR
+        spark-submit --master yarn
+
+Kafka
+     pyspark --packages org.apache.spark:spark-sql-kafka-0-10_2.11:2.3.0
+
+
+    Source
+        # for stream query
+        df = spark.readStream.format("kafka").option("kafka.bootstrap.servers", "kafka1:9092,kafka2:9092,kafka3:9092").option("subscribe", "test").load()
+
+        # for batch query
+        df = spark.read.format("kafka").option("kafka.bootstrap.servers", "kafka1:9092,kafka2:9092,kafka3:9092").option("subscribe", "test").load()
+
+        # 订阅多个topic
+        .option("subscribe", "topic1,topic2") \
+
+        # 按pattern订阅
+        option("subscribePattern", "topic.*")
+
+        df.selectExpr("CAST(key AS STRING)", "CAST(value AS STRING)").show()
+    Sink
+        ds = df.selectExpr("CAST(key AS STRING)", "CAST(value AS STRING)").writeStream.format("kafka").option("kafka.bootstrap.servers", "host1:port1,host2:port2").option("topic", "topic1").start() 
+
+
+spark streaming writeStream无法直接写入hive表, 先写入HDFS, 然后用hive external table分析
+spark streaming无法在集群模式运行, 只能单机运行
+writeStream().option("path", "/path/to/output") 后续无法继续append的问题
+
+设置kafka读取速率, 防止内存爆炸和HDFS写入
+spark-sql无法实现client查询, beeline可以
+
+df.foreach(lambda row: f(row)) 无法访问外部变量, 更改为
+    data = df.collect() 
+    for row in data:
+        do()
+  
+
+hive load parquet 
+
+org.codehaus.janino.JaninoRuntimeException: Code of method "processNext()V" of 
+class "org.apache.spark.sql.catalyst.expressions.GeneratedClass$GeneratedIterator" 
+grows beyond 64 KB
+    sparkSession.builder.config("spark.sql.codegen.wholeStage", False)
+
+spark history server
+    1. conf/spark-defaults.conf
+        spark.history.fs.logDirectory      hdfs://hadoop1:9000/log/spark-events
+        spark.history.ui.port              18080
+    2. sbin/start-history-server.sh        http://<ip>:18080, 支持api调用
+    3. app configuration
+        spark = SparkSession.builder.config("spark.eventLog.enabled", True).config("spark.eventLog.dir", "hdfs://hadoop1:9000/log/spark-events")
+
+
+spark 日志配置
+    conf/log4j.properties, 同步至所有节点
+
+        log4j.rootCategory=INFO, console, FILE  # 总体级别
+        log4j.appender.console=org.apache.log4j.ConsoleAppender
+        log4j.appender.console.target=System.err
+        log4j.appender.console.layout=org.apache.log4j.PatternLayout
+        log4j.appender.console.layout.ConversionPattern=%d{yy/MM/dd HH:mm:ss} %p %c{1}: %m%n
+
+        log4j.logger.org.apache.spark.repl.Main=WARN
+
+        log4j.logger.org.spark_project.jetty=WARN
+        log4j.logger.org.spark_project.jetty.util.component.AbstractLifeCycle=ERROR
+        log4j.logger.org.apache.spark.repl.SparkIMain$exprTyper=INFO
+        log4j.logger.org.apache.spark.repl.SparkILoop$SparkILoopInterpreter=INFO
+        log4j.logger.org.apache.parquet=ERROR
+        log4j.logger.parquet=ERROR
+
+        log4j.logger.org.apache.hadoop.hive.metastore.RetryingHMSHandler=FATAL
+        log4j.logger.org.apache.hadoop.hive.ql.exec.FunctionRegistry=ERROR
+
+        log4j.appender.FILE=org.apache.log4j.DailyRollingFileAppender
+        log4j.appender.FILE.Threshold=DEBUG  # 级别阈值
+        log4j.appender.FILE.file=/var/log/spark.log
+        log4j.appender.FILE.DatePattern='.'yyyy-MM-dd
+        log4j.appender.FILE.layout=org.apache.log4j.PatternLayout
+        log4j.appender.FILE.layout.ConversionPattern=[%-5p] [%d{yyyy-MM-dd HH:mm:ss}] [%C{1}:%M:%L] %m%n
+
+pyspark 获取spark logger
+    Logger = spark._jvm.org.apache.log4j.Logger
+    Level = spark._jvm.org.apache.log4j.Level
+    mylogger = Logger.getLogger(__name__)
+    mylogger.setLevel(Level.WARN)
+    mylogger.error("some error trace")
+    mylogger.info("some info trace")
+
+spark session config
+    pyspark.conf.SparkConf
+    conf = SparkConf()
+    conf.set("spark.sql.codegen.wholeStage", False)
+    spark = SparkSession.builder.config(conf=conf).getOrCreate()
+
+重命名字段
+    a.select(col("_c0").alias("user_id"))
+    a.toDF("user_id", "name")
+
+pyspark 报java.lang.IllegalArgumentException: Error while instantiating 'org.apache.spark.sql.hive.HiveSessionState':
+
+    HADOOP_CONF_DIR环境变量要么注释掉, 要么确保hive正常运行
+
+spark mongodb
+    注意驱动和spark版本适配
+    mongodb >=3.2
+
+    spark = SparkSession \
+        .builder \
+        .appName("myApp") \
+        .config("spark.mongodb.input.uri", "mongodb://127.0.0.1/test.coll") \
+        .config("spark.mongodb.output.uri", "mongodb://127.0.0.1/test.coll") \
+        .getOrCreate()
+
+    pyspark --conf "spark.mongodb.input.uri=mongodb://127.0.0.1/test.myCollection?readPreference=primaryPreferred" \
+                  --conf "spark.mongodb.output.uri=mongodb://127.0.0.1/test.myCollection" \
+                  --packages org.mongodb.spark:mongo-spark-connector_2.11:2.2.2
+
+    people = spark.createDataFrame([("Bilbo Baggins",  50), ("Gandalf", 1000), ("Thorin", 195), ("Balin", 178), ("Kili", 77),
+       ("Dwalin", 169), ("Oin", 167), ("Gloin", 158), ("Fili", 82), ("Bombur", None)], ["name", "age"])
+
+    # 写数据
+    people.write.format("com.mongodb.spark.sql.DefaultSource").mode("append").save()
+    # 改变默认output collection
+    people.write.format("com.mongodb.spark.sql.DefaultSource").mode("append").option("database",
+    "people").option("collection", "contacts").save()
+
+    # 读数据
+    df = spark.read.format("com.mongodb.spark.sql.DefaultSource").load()
+    df = spark.read.format("com.mongodb.spark.sql.DefaultSource").option("uri", "mongodb://127.0.0.1/people.contacts").load()
 
 ```

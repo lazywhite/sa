@@ -1,0 +1,7 @@
+支持事务
+beeline -u jdbc:hive2://localhost:10000 -n root
+
+>!verbose  #更多输出
+>!outputformat csv2
+
+如果sql语句在beeline无法执行, 使用hive执行, 若成功则证明hiveserver2出问题

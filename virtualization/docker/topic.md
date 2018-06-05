@@ -87,3 +87,15 @@ restart policy
 ## Conclusion
 1. stop a container will keep environment variable, all system setting
 
+
+## rename image 
+```
+docker tag  origin:tag  target:tag
+docker rmi origin:tag
+```
+
+## docker-compose
+```
+docker-compose -f <file.yml> up  &
+docker-compose -f <file.yml> down
+```

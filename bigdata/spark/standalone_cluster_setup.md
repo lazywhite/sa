@@ -6,7 +6,9 @@
 5. 各节点配置环境变量
 	export JAVA_HOME=/usr/jdk1.8.0_121
 	export SCALA_HOME=/usr/scala-2.12.1
-	export HADOOP_CONF_DIR=/usr/hadoop-2.7.3/etc/hadoop
+    export SPARK_HOME=/usr/local/spark
+
+    HADOOP_CONF_DIR 可以使spark探测到hadoop
 
 注意
     最好跟hdfs部署在相同节点
@@ -39,4 +41,5 @@
 1. 启动spark-master   master>bin/start-master.sh
 2. 启动所有spark-slave master>/start-slaves.sh
 3. web gui http://SPARK_MASTER_IP:8080
+4. 提交应用 spark-submit --master spark://hadoop1:7077 <app> <params>
 ```

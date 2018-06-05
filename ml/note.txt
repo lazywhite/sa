@@ -1,11 +1,30 @@
 machine learning
     不需要人为显式编程, 让计算机自己发现数据间的规律
-supervised learning
-    有明确的feature, label对应关系, 对以后的输入做预测
-unsupervised learning
-    没有给定feature与label间的对应, 仅对给出的数据集做分类
-reinforcement
-    给程序的输出做出反馈, 从而使算法更为精确
+
+深度学习使用的分类器是Neural network
+
+监督式学习(supervisored learning)
+    提供feature和label
+无监督学习(non-supervisored learning)
+    根据feature自动找到pattern
+半监督式学习(semi-supervisored learning)
+    少量有标签的样本和大量无标签样本
+强化学习(reinforcement learning)
+    在每次训练后自动调整model参数
+遗传算法
+    在后代中挑选最好的进行迭代
+    
+supervised 
+    classification(分类)
+        decisiontree
+        random forest
+        Kneighbors
+    regression(回归)
+        linear
+        logistic
+unsupervised
+    clustering(聚类)
+        K-Mean
 
 
 line regression 线性回归
@@ -30,14 +49,20 @@ line regression 线性回归
 NLP: nature language processing
         
 
-
 svm: supported vector machine
     hyperplan 超平面
     kernel function(trick)
         将原本线性不可分的数据集进行分割, 通过映射到高纬度来
         使其线性可分的方法
     k-fold crosss validation
+
 DNN: deep neural network
+CNN: convolution neural network
+    常用在图像识别
+
+RNN: recurrent neural network
+    常用在语音识别
+    LSTM
 
 decision tree(cart)
     classification and regression tree
@@ -47,11 +72,6 @@ decision tree(cart)
             ternimal node
     缺点: overfitting(过拟合), 不稳定
 
-artifical neural network
-    Deep Neutal Network
-        back propagation  反向传播
-        convolution  卷积
-        recurrent  递归
 
 监督式学习
     分类方法
@@ -63,10 +83,6 @@ artifical neural network
             线性
             超平面
 
-概率论与数理统计
-统计学
-
-
 特征值的选取
     1. 避免无用项作为特征, 要对分类起决定作用
     2. 避免冗余项作为特征, 不要相互包含或重叠
@@ -74,3 +90,13 @@ artifical neural network
 
 
 训练过的classifier可以使用pickle持久化
+
+
+optimizer 优化器
+overfit 过拟合
+gradient Descent 梯度下降
+activation function 激励函数
+    relu
+    sigmoid
+    tanh
+cost function 损失函数

@@ -1,10 +1,3 @@
-## Installation
-```
-brew install zookeeper
-brew services start zookeeper
-
-zoo.cfg
-```
 ## Usage
 ```
 zkCli -server localhost:2181 // 支持自动补全
@@ -68,6 +61,3 @@ git clone https://github.com/mijalko/zookeeper_browser.git
 pip install -r requirements.txt
 python zkbrowser.py
 ```
-
-
-

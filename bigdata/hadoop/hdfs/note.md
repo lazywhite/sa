@@ -74,6 +74,10 @@ tail: 打印文件尾部1KB数据
 test: 检查文件是否存在
 text: 将源文件输出为文本格式
 touchz: 创建一个0字节的空文件
+```
 
-hdfs dfs -rm -r hdfs://path/to/file
+## Safe Mode
+```
+文件只读
+hadoop dfsadmin -safemode [enter, leave, get, wait]
 ```

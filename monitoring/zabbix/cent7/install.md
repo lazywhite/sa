@@ -29,7 +29,7 @@ curl  http://mirrors.aliyun.com/repo/Centos-7.repo >> /etc/yum.repos.d/aliyun.re
 rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 
 ## 安装依赖包
-yum install gcc  libxml2-devel  unixODBC-devel net-snmp-devel libcurl-devel libssh2-devel OpenIPMI-devel openssl-devel mysql++-devel mariadb mariadb-server libevent-devel pcre-devel
+yum install gcc  libxml2-devel  unixODBC-devel net-snmp-devel libcurl-devel libssh2-devel OpenIPMI-devel openssl-devel mariadb-devel mariadb mariadb-server libevent-devel pcre-devel
 
 ## 编译安装
 ./configure --prefix=/usr/local/zabbix --enable-server --enable-agent --with-mysql --with-net-snmp --with-libcurl --with-libxml2 --with-unixodbc --with-ssh2 --with-openipmi --with-openssl
@@ -52,6 +52,16 @@ cd database/mysql
 mysql -uzbx_user -p'zbx_pw' zabbix < schema.sql
 mysql -uzbx_user -p'zbx_pw' zabbix < images.sql
 mysql -uzbx_user -p'zbx_pw' zabbix < data.sql
+
+## 创建partition规则
+mysql -uzbx_user -p'zbx_pw' zabbix < partition.sql
+
+初次执行
+    /usr/bin/mysql -h127.0.0.1 -uroot -pdbroot zabbix -e "call partition_maintenance_all('zabbix')"
+
+crontab
+    0 2 */10 * * /usr/bin/mysql -h127.0.0.1 -uroot -pdbroot zabbix -e "call partition_maintenance_all('zabbix')">/dev/null 2>&1
+
 
 ## 生成zabbix系统用户
 useradd -M zabbix -s /sbin/nologin
@@ -332,11 +342,18 @@ exit $RETVAL
 # 二. zabbix-web
 ## 2.1 整体流程
 ```
-# 安装php56源
-rpm -ivh http://mirror.webtatic.com/yum/el7/webtatic-release.rpm
+For webtatic
+	# 安装php56源
+	rpm -ivh http://mirror.webtatic.com/yum/el7/webtatic-release.rpm
 
-# 安装依赖包
-yum -y install php56w-cli php56w-pdo php56w-bcmath php56w php56w-mysql php56w-gd php56w-xml php56w-common php56w-mbstring php56w-devel php56w-pear httpd
+	# 安装依赖包
+	yum -y install php56w-cli php56w-pdo php56w-bcmath php56w php56w-mysql php56w-gd php56w-xml php56w-common php56w-mbstring php56w-devel php56w-pear httpd
+
+
+For remi
+	rpm -ivh http://rpms.famillecollet.com/enterprise/remi-release-7.rpm
+	yum -y install php56-php-cli php56-php-pdo php56-php-bcmath php56-php php56-php-mysqlnd php56-php-gd php56-php-xml php56-php-common php56-php-mbstring php56-php-devel php56-php-pear httpd
+
 
 
 # 拷贝web代码
@@ -372,6 +389,8 @@ systemctl start httpd
 ## 2.2 更改php配置文件
 
 ```
+for remi
+	/opt/remi/php56/root/etc/php.ini
 /etc/php.ini
     post_max_size=16M
     max_execution_time=300

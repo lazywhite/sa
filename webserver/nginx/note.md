@@ -116,3 +116,12 @@ location = /swagger.yaml {
 yum -y install pcre-devel zlib-devel openssl-devel
 ./configure --prefix=/usr/local/nginx
 ```
+
+## 9. nginx 源安装
+```
+[nginx]
+name=nginx repo
+baseurl=http://nginx.org/packages/centos/7/$basearch/
+gpgcheck=0
+enabled=1
+```

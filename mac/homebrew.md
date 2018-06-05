@@ -10,6 +10,21 @@ echo 'export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.ustc.edu.cn/homebrew-bottles
 source ~/.bash_profile
 ```
 
+## Usage
+```
+brew update # 升级brew本身及formulae列表
+brew upgrade # 升级所有已安装formulae
+brew upgrade [formulae]# 升级某个包
+
+brew doctor # 诊断brew
+brew config # 列出配置信息
+
+brew info [formulae]
+brew install -vd FORMULA # debug
+
+HOMEBREW_NO_AUTO_UPDATE=1 brew install <formula> # 安装之前不更新
+```
+
 ## Tap
 
 ```

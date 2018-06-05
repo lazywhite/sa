@@ -29,7 +29,7 @@ ansible -i <inventory_file> '<host pattern>' -m <module> -a <arguments>
 ansible all -m copy -a "src=/root/m.deb dest=/root/m.deb"
 ansible all -m shell -a "ls -al"
 
-ansible -all -f <并发数> 
+ansible -all -f <并发数>  默认为5
 ```
 
 ## Playbook

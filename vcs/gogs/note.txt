@@ -1,4 +1,9 @@
 https://gogs.io/docs/advanced/configuration_cheat_sheet
 
-OFFLINE_MODE = true
-DISABLE_GRAVATAR = true
+禁用gavatar
+    gogs/conf/app.ini
+        OFFLINE_MODE = true
+        DISABLE_GRAVATAR = true
+
+jenkins webhook
+    http://<gogos-server:port>/gogs-webhook/?job=<jenkins_job_name>

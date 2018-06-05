@@ -37,6 +37,8 @@ mkdir /usr/local/hive/tmp
 conf/hive-site.xml
     设置tmpdir
         <name>system:java.io.tmpdir</name>
+    设置用户名
+        <name>system:user.name</name>
     注意以下配置, 并保证全局唯一
         <name>javax.jdo.option.ConnectionURL</name>
         <name>javax.jdo.option.ConnectionDriverName</name>
@@ -89,7 +91,7 @@ hive>show tables;
 	  </property>
 
 
-3. 配置hdfs
+3. 配置hdfs etc/hadoop/core-site.xml
    <property>
       <name>dfs.permissions.enabled</name>
       <value>false</value>
@@ -107,6 +109,6 @@ hive>show tables;
 4. 重启hdfs
 	stop-dfs.sh
 	start-dfs.sh
-5. 运行hiveserver2 &
+5. 运行hiveserver2 & # 启动较慢
 6. beeline -u jdbc:hive2://localhost:10000 -n root
 ```

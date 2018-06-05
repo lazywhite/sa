@@ -1,6 +1,6 @@
 ## Installation and Usage
 ```
-1. start zookeeper
+1. start embbed zookeeper
     zookeeper-server-start.sh config/zookeeper.properties
 2. configure config/server.properties
     host.name = localhost
@@ -13,6 +13,9 @@
     kafka-topics.sh --describe --zookeeper localhost:2181 --topic test
 6. send message
     kafka-console-producer.sh --broker-list localhost:9092 --topic test   
+
+    ## 添加发送key value
+    kafka-console-producer.sh --broker-list localhost:9092 --topic test --property "parse.key=true" --property "key.separator=:"
 7. recv message
     kafka-console-consumer.sh --zookeeper localhost:2181 --topic test --from-beginning
 8. start other broker
@@ -21,6 +24,7 @@ config/server-1.properties:
     broker.id=1
     port=9093
     log.dir=/tmp/kafka-logs-1
+
 
 ```
 

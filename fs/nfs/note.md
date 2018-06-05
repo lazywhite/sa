@@ -17,3 +17,8 @@ service nfs start
 
 exportfs -avr 
 ```
+
+## Sync
+```
+mount -o sync
+```
