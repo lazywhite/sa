@@ -64,7 +64,6 @@ uplink 端口, 普通端口
 动态
     
 
-
 ## FAQ
 1. line protocol is down : duplex auto
 2. vlan database is deprecated, use config mode 
@@ -74,7 +73,8 @@ uplink 端口, 普通端口
 6. save config:Router#copy running-config startup-config 
 6. erase config:Router#erase startup-config 
 
-
+连接交换机
+    telnet 192.168.47.13
 
 ## 2层交换机配置vlan
 ```

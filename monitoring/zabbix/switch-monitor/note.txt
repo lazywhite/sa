@@ -3,6 +3,12 @@ enable
         snmp-server community public ro
         snmp-server enable traps 
 
+yum -y install net-snmp-utils
+
+https://www.manageengine.com/products/mibbrowser-free-tool/download.html
+http://www.wtcs.org/snmp4tpc/FILES/Tools/SNMP/getif/getif-2.3.1.zip
+yum -y install mbrowse
+
 snmpwalk -c public -v 2c 192.168.102.244:161
 snmpwalk -c public -v 2c 192.168.102.244:161 system
 snmpwalk -c public -v 2c 192.168.102.244:161 ifDescr

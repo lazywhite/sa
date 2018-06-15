@@ -159,5 +159,10 @@ system.cpu.discovery
 system.cpu.num[online]
 
 ids表保存zabbix自己维护的主键nextid
+
+自动注册
+
+模板制作
+    自动发现
 ```
 

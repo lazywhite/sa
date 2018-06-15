@@ -51,6 +51,7 @@ Hadoop涉及的端口
     9000    fs.defaultFS，如：hdfs://172.25.40.171:9000
     50070   webgui, webhdfs
     14000   httpfs
+    8030,8031,8032    resource_manager
 
 
 WebHDFS 与 HTTPFS

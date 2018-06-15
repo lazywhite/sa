@@ -190,6 +190,30 @@ cluster mode
 pyspark和spark-sql无法同时操作同一张表, beeline和spark-sql可以
 
 ```
+## Spark on Yarn
+```
+前提:
+    spark runtime的二进制jar包, spark.yarn.jars 默认为SPARK_HOME/jars, 会被上传给yarn
+    具备HADOOP_CONF_DIR环境变量
+    yarn-site.xml 添加相关配置, 重启yarn
+    使用时spark-cluster可以开启, 也可以是关闭状态
+
+spark-submit --master yarn --deploy-mode [cluster, client]
+yarn logs -applicationId <app ID>
+
+
+避免每次上传spark jar包
+    cd $SPARK_HOME/jars
+    zip -r spark-2.1.1-jars.zip *.jar
+    hdfs dfs -put spark-2.1.1-jars.zip /tmp
+    spark-submit --conf spark.yarn.archive=hdfs:///tmp/spark-2.1.1-jars.zip
+
+上传python解释器, 避免python版本问题
+    zip -r anaconda3.zip /anaconda3
+    hdfs dfs -put anaconda3.zip /tmp
+    spark-submit --archives hdfs:///tmp/anaconda3.zip#anaconda3 
+                 --conf spark.yarn.appMasterEnv.PYSPARK_PYTHON=./anaconda3/anaconda3/bin/python3
+```
 ## Tips
 ```
 1. Shared Variable
@@ -382,7 +406,13 @@ spark history server
         spark.history.ui.port              18080
     2. sbin/start-history-server.sh        http://<ip>:18080, 支持api调用
     3. app configuration
-        spark = SparkSession.builder.config("spark.eventLog.enabled", True).config("spark.eventLog.dir", "hdfs://hadoop1:9000/log/spark-events")
+        1. 运行时指定
+            spark = SparkSession.builder.config("spark.eventLog.enabled", True).config("spark.eventLog.dir", "hdfs://hadoop1:9000/log/spark-events")
+        2. 持久化
+            conf/spark-defaults.conf
+                spark.eventLog.enabled           true
+                spark.eventLog.dir               hdfs://redhat166:9000/log/spark-events
+
 
 
 spark 日志配置

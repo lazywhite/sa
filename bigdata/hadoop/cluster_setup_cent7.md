@@ -167,6 +167,42 @@ hdfs dfs -rmdir --ignore-fail-on-non-empty /test
         <value>hadoop1:8031</value>
     </property>
 
+	<!-- 防止无法启动spark on yarn 模式 -->
+    <property>
+        <name>yarn.nodemanager.pmem-check-enabled</name>
+        <value>false</value>
+        <discription>是否启动一个线程检查每个任务正使用的物理内存量，如果任务超出分配值，则直接将其杀掉，默认是true</discription>
+    </property>
+
+    <property>
+        <name>yarn.nodemanager.vmem-check-enabled</name>
+        <value>false</value>
+        <discription>是否启动一个线程检查每个任务正使用的虚拟内存量，如果任务超出分配值，则直接将其杀掉，默认是true</discription>
+    </property>
+    <property>
+        <name>yarn.nodemanager.vmem-pmem-ratio</name>
+        <value>3</value>
+		<description>虚拟内存和物理内存的比率, 默认2.1</description>
+    </property>
+    <property>
+        <name>yarn.nodemanager.resource.memory-mb</name>
+        <value>22528</value>
+        <discription>每个节点可用内存,单位MB</discription>
+      </property>
+
+      <property>
+        <name>yarn.scheduler.minimum-allocation-mb</name>
+        <value>1500</value>
+        <discription>单个任务可申请最少内存，默认1024MB</discription>
+      </property>
+
+      <property>
+        <name>yarn.scheduler.maximum-allocation-mb</name>
+        <value>16384</value>
+        <discription>单个任务可申请最大内存，默认8192MB</discription>
+      </property>
+
+
 </configuration>
 
 ```
