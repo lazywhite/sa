@@ -68,6 +68,8 @@ virsh snapshot-delete --domain freebsd --snapshotname freebsd-origin
 net-list
 net-edit default
 net-dumpxml default
+
+# 删除virbr0
 net-undefine default
 net-destroy default
 

@@ -13,6 +13,11 @@ docker push localhost:5000/local-nginx
 # another client
 docker pull localhost:5000/local-nginx
 ```
+# High Available
+```
+redis cache
+global storage
+```
 
 # tips
 ```

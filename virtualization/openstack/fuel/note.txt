@@ -5,3 +5,6 @@
 
 检查某项服务
     fuel-utils check_service <service>
+
+/etc/rsyncd.conf 不能更改
+    

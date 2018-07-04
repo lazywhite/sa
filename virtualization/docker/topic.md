@@ -99,3 +99,16 @@ docker rmi origin:tag
 docker-compose -f <file.yml> up  &
 docker-compose -f <file.yml> down
 ```
+
+## docker pull proxy
+```
+/etc/systemd/system/docker.service
+
+[service]
+Environment="HTTP_PROXY=http://192.168.33.125:8888/" "NO_PROXY=localhost,127.0.0.1,registry.local.com"
+Environment="HTTPS_PROXY=https://192.168.33.125:8888/" "NO_PROXY=localhost,127.0.0.1,registry.local.com"
+
+systemctl daemon-reload
+systemctl restart docker
+```
+
