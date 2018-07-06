@@ -17,6 +17,9 @@ Keyword
     feed, fetch: 从arbitrary operation赋值或获取值
 
 
+Glossary
+    Estimator
+    Evaluator
 
 每个session初始化后有default graph
 source op: 不接受输入, 产生输出并传递给其他op

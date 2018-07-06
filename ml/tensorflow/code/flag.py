@@ -5,6 +5,9 @@
 # Distributed under terms of the MIT license.
 
 """
+python flag.py --param1 test 
+python flag.py --param1 test --param2
+python flag.py --param1 test --param2 True
 """
 
 import tensorflow as tf

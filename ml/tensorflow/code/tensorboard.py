@@ -5,6 +5,9 @@
 # Distributed under terms of the MIT license.
 
 """
+python tensorboard.py
+tensorboard --logdir logs
+http://localhost:6006
 """
 import tensorflow as tf
 import numpy as np
