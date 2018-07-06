@@ -1,0 +1,59 @@
+https://www.jianshu.com/p/cc9da3a154a0
+
+yum -y install samba samba-client cifs-utils
+
+/etc/samba/smb.conf
+
+[global]
+    unix charset = UTF-8
+    dos charset = CP932
+    hosts allow = 127. 10.0.0.  192.168.
+    map to guest = Bad User
+	workgroup = WORKGROUP
+	security = user
+
+	passdb backend = tdbsam
+
+	printing = cups
+	printcap name = cups
+	load printers = yes
+	cups options = raw
+
+[homes]
+	comment = Home Directories
+	valid users = %S, %D%w%S
+	browseable = No
+	read only = No
+	inherit acls = Yes
+
+[printers]
+	comment = All Printers
+	path = /var/tmp
+	printable = Yes
+	create mask = 0600
+	browseable = No
+
+[print$]
+	comment = Printer Drivers
+	path = /var/lib/samba/drivers
+	write list = root
+	create mask = 0664
+	directory mask = 0775
+
+[public]
+    path = /share
+    writable = Yes
+    public = Yes
+    guest ok = Yes
+    printable = No
+    create mode = 0777
+    directory mode = 0777
+
+
+systemctl start smb 
+systemctl start nmb 
+
+mount -t cifs -o username=guest,password= //192.168.1.124/public /mnt
+smbclient -L //192.168.1.124/public 
+
+windows : \\192.168.1.124\public
