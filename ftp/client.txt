@@ -20,3 +20,16 @@ ftp>
     delete
     mdelete
     rename 重命名
+
+
+ftp> ls
+227 Entering Passive Mode (118,118,170,44,49,227).
+
+ftp> passive
+Passive mode off.
+ftp> ls
+200 PORT command successful. Consider using PASV.
+150 Here comes the directory listing.
+-rw-r--r--    1 ftp      ftp             4 Jun 25 16:18 main.retry
+226 Directory send OK.
+

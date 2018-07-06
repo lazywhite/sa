@@ -1,25 +1,6 @@
-# msgpack exchange data just like json but faster and smaller
-pip install msgpack-python
-
-bson and Mongodb
-    BSON is a binary-encoded serialization of JSON-like documents. BSON is designed to be lightweight, traversable, and efficient.
-
-# path shortcut
-echo 'CDPATH=~/.paths' >> ~/.bashrc
-
-
 "Bad marshal data" when importing python module
     delete the pyo, pyc file of that file
 
-
-django template
-    {% with var=value %} {% endwith %}
-
-<td align="center">
-
-
-networksetup -listallnetworkservices
-networksetup -setv6off Ethernet
 
 ssh tunnel
     -N Do not execute a shell or command. 
@@ -44,37 +25,6 @@ mysql 限定用户登录IP
     grant user@'ip'
 
 
-tail -f |grep -v 
-
-
-create table test (str varchar(32), ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
-
-brew install libmemcached
-pip install pylibmc --install-option="--with-libmemcached=/usr/local"
-
-zip is a bytes -> bytes encoding
-
-python venv
-    2.7
-        virtualenv -p /usr/bin/python2.7 <path>
-    3.x
-        pyvenv <path>
-    source <path/bin/active>
-    deactivate
-
-
-cent 7 
-	firewalld : 动态防火墙, netfilter
-	systemd
-	xfs
-	iscsi in kernel space
-
-
-switch: 
-    trunk mode
-        native vlan
-    access mode
-
 iozone
 iperf
 
@@ -82,22 +32,6 @@ time + command
 
 kpartx: Partition device manager for device-mapper devices
 
-
-cisco 2960 设置密码
-
-console：
-   conf t=> line console 0
-   conf t=> password switch
-   conf t=> end
-
-telnet:
-   conf t=> line vty 0 4
-            password switch
-            login
-            end
-enable
-   conf t=> enable password switch
-            end
 
 
 /dev/ttyUSB0
@@ -112,7 +46,6 @@ puppet variables can't be capitalize
 
 galera cluster datetime must be same
 
-npm install -g mongo-hacker
 
 
 netstat -an -f inet -p tcp
@@ -123,55 +56,11 @@ argument 实参
 parameter 形参
 
 
-object has attribute and method 
-
-command not found : glibtoolize
-    brew install libtool
-command not found : aclocal
-    brew install automake
-
-
 
 use 'dmesg' to detect inserted device 
 
 
-brew install libxml2
-brew install libxslt
-brew link libxml2 --force
-brew link libxslt --force
-sudo C_INCLUDE_PATH=/usr/local/include/libxml2 pip install lxml
-
-
-# linux lvm
-partprobe
-pvcreate /dev/sda3; pvs
-vgreate vg1 /dev/sda3;vgs
-lvcreate -L 100M -n lv1 vg1;lvs
-mkfs -t ext3 /dev/vg1/lv1
-vgextend; lvextend; resize2fs
-
-
-sudo python3 (command not found)
-visudo: secure_path
-
-poster: multipart_encode({"image1":open("a.jpg", "rb")})
-
-
-mount -t cifs -o username=guest,password= //192.168.1.124/public /mnt
-smbclient -L //192.168.1.124/public 
-
-
-pip install pyreadline
-
-#Jira installation
-JIRA_HOME = /var/jira 
-download mysql jdbc drive and put it in lib/
-
-
 cat /dev/urandom | md5sum
-# Mac dd 过慢问题
-dd if=Downloads/FreeBSD-10.1-RELEASE-amd64-memstick.img of=/dev/rdisk2 bs=1024000
-
 
 
 iozone -a -i 0 -i 1 -f /var/lib/iozone.temp -Rab /root/read.xls -g 8G -n 4G -C
@@ -180,39 +69,14 @@ xtrabackup  socat
 
 for i in {1..5};do rsync --delete --exclude=database.php --exclude=start.php --exclude=check -vr hrcf/ web$i:/var/www/hrcf/ ;done
 
-
 yum groupinstall "X Window System" xorg-x11-xauth dejavu-lgc-sans-fonts
+
 dbus-uuidgen > /var/lib/dbus/machine-id
 
 
-read a b c
-a, b, c = sys.stdin.read().splite()
-
-
-centos6.6 安装支持netns的iproute
-[openstack-juno]
-name=OpenStack Juno Repository
-baseurl=http://repos.fedorapeople.org/repos/openstack/openstack-icehouse/epel-6/
-enabled=1
-skip_if_unavailable=0
-gpgcheck=0
-
-yum upgrade iproute
-
 ls -l /sys/class/net/
 
-virsh net-destroy default
-virsh net-undefine default
-
-
-docker run -t -i -v /root:/mnt:rw cppking/local_cent65 /bin/bash
-
-
 awk 'NR==5{print substr($0,2,3)}'
-
-# compile python3
-yum install tk-devel sqlite-devel readline-devel gdbm-devel xz-devel bzip2-devel openssl-devel; make -j
-
 
 
 proxy_set_header        X-Real-IP       $remote_addr;
@@ -223,12 +87,10 @@ php_flag[display_errors] = on
 
 makewhatis
 
-hostnamectl set-hostname 
-
 ipcalc -cs x.x.x.x && echo 'IP Right' || echo 'IP Error'  
 
-/etc/yum.conf proxy=http://proxysvr.yourdom.com:3128
-
+/etc/yum.conf 
+    proxy=http://proxysvr.yourdom.com:3128
 
 vmstat: virtual memory statistics
 sar: system activity report 
@@ -243,23 +105,10 @@ ps aux
 pmap -d PID
 sar 1 5
 
-
-
-mininet
-
-
 filebucket [rollback]
-hiera
-
 
 puppet 变量作用域
 	根据请求的host自动设置配置参数
-
-
-
-openflow switch
-
-VM auto-migration
 
 
 noVNC
@@ -269,32 +118,11 @@ noVNC
 oVirt
 	a virtual datacenter managment platform
 
-
-
-ulimit -l unlimited(es cant start)
-bootstrap.mlockall: true
-vm.max_map_count=262144
-vm.swappiness = 0
-
 virsh storage pool
 
-Max number of nodes = Number of shards * (number of replicas +1)
-换句话说，如果你计划用10个分片和2个分片副本，那么最大的节点数是30。
 
-
-
-If you do not explicitly set underscores_in_headers on;, nginx will silently drop HTTP headers with underscores (which are perfectly valid according to the HTTP standard). This is done in order to prevent ambiguities when mapping headers to CGI variables, as both dashes and underscores are mapped to underscores during that process.
-
-
-
-logstash forwarder: 加密传输
-
-
-logstash -e 'input { stdin { } } output { stdout {} }'
-
-
-ipconfig /all
-
+nginx默认会丢弃包含下划线的header
+    underscores_in_headers    on;
 
 
 redis:MISCONF
@@ -325,80 +153,15 @@ STATD_PORT=662
 STATD_OUTGOING_PORT=663
 
 
-mongo replset  election priority 
- 
-
-I/O Error with PHP5-FPM, ptrace(PEEKDATA) failed
-disable 'request_slowlog_timeout'
-set 'max_execution_time' in php.ini
-
 mysqldump -w
 
 
-
-#2014-3-6
-- solved metadata service  
-		use independent nova-metadata-api service
-- solved spicehtml5 service
-		pkill -9 nova-spicehtml5
-- solved snapshot problem
-		glance --is-public  
-- ZFS usage
-
-#2014-3-7
-- solved linux injection
-		metadata
-		userdata
-		file
-		configuration drive
-- windows injection
-		cloud init
-  
-#2014-4-9
-- cloud-init
-- HA-document
-- rabbitmq-cluster
-- userdoc
-
-#2014-4-30
-- zfs backup script
-- puppet module rewrite
-- iscsi & multipath
-
-#2014-5-4
-- remote support for iflytek
-- vmha service & nova evacuate
-- sed learning
-- puppet provision module
-
-#2014-5-5
-- mail server
-- git review
-- remote support for iflytek
-- puppet provision module
-- structured editor
-
-#2014-5-6
-- meta programming|DSL development environment
-- completed puppet provision module
-
-#2014-8-4
-- razor work flow
-- nailgun work flow
----------------------------
 ldd /path/to/exe  查看依赖的动态链接库
 ----------
 arp -an | virsh dumpxml domain
 --------
 virt-install console parameter
 ----------
-/opt/zentao/config/my.php
-.ztaccess
-install.php/ upgrade.php
-
-RedirectMatch "^/$" "/zentao"
-需要安装php-common,以便于apache结合
-=============================
 doku_wiki plugin configuration  exmail smtp port： 25
 -----------------
 
@@ -414,28 +177,11 @@ realize User['deploy']
 include virtual::users
 User <| tag == web |> #resource collector
 User <| title == 'deploy' |> #resource collector
---------------
-mongo replset  election priority 
  
 
-
-git tag 'name' 
-git tag -l (list)
-git tag -v 'name' (information)
-
-
-
-I/O Error with PHP5-FPM, ptrace(PEEKDATA) failed
-My first guess would be to disable request_slowlog_timeout. Since it's not working right, it may be doing more harm than good. If this doesn't fix the issue of running out of processes, then set the php.ini max_execution_time to something that will kill the script for sure.
-
-想明白应该问什么样的问题，而一旦你抓准了问题，剩下的就很容易解决了
-
-----------------
-mc = memcached.Client(['localhost:11211'])
----------
-yum metadata expire time  /etc/yum.conf
 =======
-export TMOUT=1800
+bash 超时登出
+    export TMOUT=1800
 ===========
 echo 'pass'|md5sum ;
 select MD5('pass')
@@ -444,20 +190,13 @@ nmap -Sp 10.10.1.0/24
 ping -b 10.10.1.0/24
 arp -n
 =======
-开3次方  pow(a, (1.0/3))
-========
 zip -e (encript)
 tar |openssl 
 
 ============
 au FileType python set ts=4 sts=4 sw=4
-========
-kernel parameter rdshell
 ===========
-sftp
-
-===========
-write back:  写入缓存, 再根据policy写入磁盘, 缓存所有读(可调)
+write back:  回写 先写入缓存, 再根据policy写入磁盘, 缓存所有读(可调)
 write through: 通写, 写入缓存的同时写入磁盘, 缓存所有读(可调)
 write around: 仅写入磁盘, 不写缓存, 缓存所有读(可调)
 write only: 只有写操作才会缓存, 不缓存读
@@ -492,78 +231,31 @@ raid5:
     rcw/rmw
 
 ramdisk
-
-=====
-l1 cache,分为数据缓存和指令缓存, 静态RAM, 32-256KB
-L2 cache,分为内部(速率等于主频)和外部(速率等于主频一半)两种芯片, 2-3MB
-L3 cache
-
-storage
-network
-database
 ======
-jenkins daily build : build trigger: cron like 
-java -jar jenkins.war --httpPort=9000 > jenkins.log  2>&1 &
-=====
 mknod
 ramdisk
 
 内核参数
     dirty_ratio
 
-
 ctdb
 =======
 truncate -s 20G disk1
 losetup /dev/loop1 disk1
-========
-kernel parameter rdshell
 ======
 ip route add default via 10.10.1.1
 ip addr add 10.10.1.6/24 dev eth0
 ======
-
-btrfs
-systemd
-==========
-k1: v1
-k2: v2
-subdict:
-    - subk1: subv1
-      subk2: subv2
-list1:
-    - v1
-    - v2
-yaml.load(stream)
-==========
 mkdir path/{dir1,dir2} no space 
 
 route -n add 10.0.0.0/8 10.16.3.254
 ==========
-import requests_unixsocket
-session = requests_unixsocket.Session()
-r = session.get('http+unix://%2Fvar%2Frun%2Fdocker.sock/images/json')
-=========
-echo -e "GET /images/json HTTP/1.1\r\n" | socat unix-connect:/var/run/docker.sock STDIO
-
-# nc version (netcat-freebsd)
-echo -e "GET /images/json HTTP/1.0\r\n" | nc -U /var/run/docker.sock
-
-# bonus round: relay socket
-socat -d -d TCP-L:8080,fork UNIX:/var/run/docker.sock
-=============
 ifconfig en0 alias x.x.x.x/msk
 ifconfig en0 -alias x.x.x.x
 ==========
-__file__.split('.')[0]
-=========
-pip install ftptool
-========
-dpkg -l
-dpkg-query -L <package>
-=======
-Cannot open your terminal '/dev/pts/0' - please check.
-script /dev/null
+screen
+    Cannot open your terminal '/dev/pts/0' - please check.
+    script /dev/null
 =======
 diff -Naur old new > foo.patch
 cd old; patch -p1 < /path/to/foo.patch
@@ -572,99 +264,29 @@ diff 的4种格式
 =========
 bash关联数组必须declare -A
 
-conf/{passwd,svnserve.conf}
-bash 4.3以上才能使用变量间接引用
-==========
-haldaemon can't start --> service messagbus start
-
-
 export C_INCLUDE_PATH=/usr/local/include/<package>
 make clean; make distclean
 =========
-ipython 出现DistributionNotFound, 重新安装distribution模块
 ntpdate [0-3].cn.pool.ntp.org
 
 samba-client
     smbclient -L <server>: show share
     smbpasswd -a <user>: internal user name
 
-==========
-python class.__dict__ 是只读的, dictproxy type
-只能用setattr来设置属性
-
-
-cp -f /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
-ntpdate pool.ntp.org
 
 rsync -e 'ssh -p 1234' username@hostname:SourceFile DestFile
-
 
 rsyslog: @@tcp @udp
 
 
-remote: error: GH001: Large files detected. You may want to try Git Large File Storage - https://git-lfs.github.com.
-git filter-branch -f --index-filter "git rm -rf --cached --ignore-unmatch FOLDERNAME" -- --all  
-git rebase -i; edit; git rm -rf <large file>; git ci --amend ; git rebase --continue 
-
-===============
-minion 错误日志 
-2014-06-06 02:04:22,505 [salt.crypt  ][ERROR   ] The master key has changed, the salt master could have been subverted, verify salt master's public key 
-2014-06-06 02:04:22,506 [salt.crypt ][CRITICAL] The Salt Master server's public key did not authenticate! 
-The master may need to be updated if it is a version of Salt lower than 2014.1.4, or If you are confident that you are connecting to a valid Salt Master, then remove the master public key and restart the Salt Minion. 
-The master public key can be found at: 
-/etc/salt/pki/minion/minion_master.pub 
-
-解决办法 
-master/syndic 端 
-删除此minion KEY
-salt-key -d xxx (minion ID)
-
-minion 端 
-删除minion_master.pub 
-rm -rf /etc/salt/pki/minion/minion_master.pub
-
-重启minion
-/etc/init.d/salt-minion restart
-
-
-
-weechat block leave/join message
-/filter add irc_smart * irc_smart_filter *
-
-
-dict sometime  lost datetime datatype
-
-
-virt-what
-
-python模块导入的路径与程序的入口有关
-
-
-状态机
-    表示有限个状态以及在这些状态之间的转移和动作等行为的数学模型。
-    米利型(mealy) 
-        Mealy有限状态机的输出不单与当前状态有关，而且与输入信号的当前值有关
-    摩尔性(moore)
-        摩尔型有限状态机的输出只与有限状态自动机的当前状态有关
-
-
-Grunt: bootstrap's default build system, install by npm
-bower: front-end package manager, install by npm
-
-
+查看本虚拟机虚拟化技术
+    virt-what
 
 ssh -i /Users/rock/Desktop/key/jiashuanxi.id_rsa -p 36023 -L 5890:10.0.2.23:3306 jiashuanxi@114.80.0.39
 
-
-
-hash: one way
-encryption: two way
-
-
-
-
-vi /etc/ld.so.conf.d/myapp.conf
+/etc/ld.so.conf.d/myapp.conf
     /usr/local/lib
+ldconfig
 
 export C_INCLUDE_PATH=
 export LD_LIBRARY_PATH=
@@ -673,44 +295,14 @@ export LD_LIBRARY_PATH=
 
 /etc/security/limits.conf
 
-usr/bin/ld: /usr/local/lib/libpython2.7.a(abstract.o): relocation R_X86_64_32S against `_Py_NotImplementedStruct' can not be used when making a shared object; recompile with -fPIC
-
-python compile
-export CFLAGS="$CFLAGS -fPIC"
-
-
-awk '!/time_transfer:0.00/{print $4,$7,$10,$11,$12}'|tr ' ' :|awk -F:  'BEGIN{s1=0;s2=0;s3=0;s4=0;total=0;}{if($9>=10){s1+=1}else if($9>=1){s2+=1}else if(0.5<=$9){s3+=1}else if(0.1<=$9){s4+=1};total+=1}END{print s1/total,s2/total, s3/total,s4/total}' OFS='\t' bigsec_3.log >result
-
-
-
 watch -n 5 'seq 1 200 | xargs -I {} -n 1 -P 50 curl -o /dev/null -4 -s -w "`date`http_code:%{http_code}  http_connect:%{http_connect}  dns:%{time_namelookup}  redirect:%{time_redirect}  pretransfer:%{time_pretransfer}  time_connect:%{time_connect}  time_transfer:%{time_starttransfer}  time_total:%{time_total}  speed_down:%{speed_download}\n" "http://139.196.60.69/checkvip?ip=8.8.8.8&auth=2d411ebbdd8fb53b" >> bigsec_3.log'
-
-
-
-
-pyramid>=1.4,<1.5
-
-
-fatal: object 47e1979a125aa4bac0d03f8d31814036404a1196 is corrupted
-rm -f .git/object/47/e1979a125aa4bac0d03f8d31814036404a1196 ; git pull
-
-
-grep -l #only print filename
 
 
 mkfifo <pipe file>
 
-gitstatus : calculate the status of git repo
-
-
-sudo launchctl unload /Library/LaunchDaemons/com.alipay.DispatcherService.plist 
-
-sbt is a build tool for Scala, Java, and more. It requires Java 1.6 or later.
-
 
 fatal: renaming ‘foldername’ failed: Invalid argumen
 git mv <old> <tmp>; git mv <tmp> <new>
-
 
 
 ksm: kernel samepage merging
@@ -727,46 +319,26 @@ sudo killall -HUP mDNSResponder
 mysql -h<> -u<> -p -e 'show tables like "qrtz%"' -sN  (no-header, silent)
 
 
-
-ls -l |grep '^d'
-b      block (buffered) special
-c      character (unbuffered) special
-d      directory
-p      named pipe (FIFO)
-f      regular file
-l      symbolic link; this is never true if the  -L  option
-       or  the -follow option is in effect, unless the sym‐
-       bolic link is broken.  If you  want  to  search  for
-       symbolic links when -L is in effect, use -xtype.
-s      socket
-
-
-ssh -vv -ND 7070 root@gfw_jumper
-curl -vv -x socks5h://127.0.0.1:7070 http://www.freeproxylists.net/zh/\?c\=CN\&pt\=\&pr\=\&a%5B%5D\=0\&a%5B%5D\=1\&a%5B%5D\=2\&u\=0
-
-
-mac --> window --> zoom
+find <path> -type <type>
+    b      block (buffered) special
+    c      character (unbuffered) special
+    d      directory
+    p      named pipe (FIFO)
+    f      regular file
+    l      symbolic link; this is never true if the  -L  option
+           or  the -follow option is in effect, unless the sym‐
+           bolic link is broken.  If you  want  to  search  for
+           symbolic links when -L is in effect, use -xtype.
+    s      socket
 
 
 mysqldump  -h<host> -u<user> -p<passwd>  --where='1 limit 100' <db_name> > dump.sql
-
-
-===== windows list listening port =====
-netstat -aon|more
-
-===== disable oom ======
 
 
 
 ===== get encoding of file ======
 mac: file -I <filename>
 linux: file -i <filename>
-
-
-====== view image on no x-window system ====
-python -m SimpleHTTPServer <port>
-
-python -m http.server --bind <ip> <port>
 
 
 ====== use curl to post data ======
@@ -790,19 +362,6 @@ locale-gen zh_CN.UTF-8
 
 
 
-## mac set ls output color
-export CLICOLOR=1
-LSCOLORS=ExFxCxDxBxegedabagacad
-
-
-## mac GVim set font size
-set guifont=Monaco:h12
-
-
-## mac set user loggin shell
-chpass -u white -s /usr/local/bin/zsh
-
-
 ## kill epmd
 ```
 epmd: erlang port mapper daemon
@@ -823,37 +382,10 @@ less -S : cause lines longer than width of screen chopped not wrapped
 ## du skip directory
 du -h --max-depth=1 --exclude ./<relative path> .
 
-
-## get mac version
-```
-sw_vers -productVersion:  10.11.6
-system_profiler SPSoftwareDataType
-
-Software:
-
-    System Software Overview:
-
-      System Version: OS X 10.11.6 (15G1004)
-      Kernel Version: Darwin 15.6.0
-      Boot Volume: MacBook
-      Boot Mode: Normal
-      Computer Name: MacPro
-      User Name: white (white)
-      Secure Virtual Memory: Enabled
-      System Integrity Protection: Enabled
-      Time since boot: 9 days 19:35
-```
-
-
 ## check tcp port alive
 ```
 nc -w 2 192.168.0.64 9797 </dev/null
 echo $?
-```
-
-## sap process monitoring tool 
-```
-dpmon -s pf=QAS_DVEBMGS00_SAPQAS01 l
 ```
 
 ## filco 键盘配对
@@ -865,15 +397,6 @@ server 1.cn.pool.ntp.org
 server 2.cn.pool.ntp.org
 server 3.cn.pool.ntp.org
 
-
-```
-on RHEL6.4
-Error: Cannot retrieve repository metadata (repomd.xml) for repository: epel. Please verify its path and try again
-
-
-$ sudo yum clean all 
-$ sudo yum --disablerepo="epel" update nss
-```
 
 挂载qcow2磁盘
 # modeprobe nbd
@@ -887,8 +410,6 @@ $ sudo yum --disablerepo="epel" update nss
 通过跳板机进行scp, jump_host安装netcat
 scp -o ProxyCommand="ssh $jump_host nc $host 22" $local_path $host:$destination_path
 
-查看当前机器是否为虚拟机
-    $facter virtual
 
 提示文件路径不存在, 有可能是mac, windows文件名编码问题, 重命名为ascii即可
 
@@ -914,15 +435,18 @@ mtime
 修改文件内容会同时更新ctime和mtime, 读取文件内容才会修改atime
 
 
-linux 终端设置http正向代理
-export http_proxy=ip:port
+临时设置http正向代理
+    export HTTP_PROXY=http://192.168.33.125:8888
+    export HTTPS_PROXY=https://192.168.33.125:8888
 
 
 export VAR=xx;unset $VAR
 
 crontab
-    /var/spool/cron/root
-    /var/spool/cron/crontabs/root
+    centos
+        /var/spool/cron/root
+    ubuntu
+        /var/spool/cron/crontabs/root
 
 pkill, pgrep
 
@@ -933,9 +457,6 @@ pkill, pgrep
         lsb_release -a
 
 
-ping可以通, telnet ip port: No route to host, 一般為防火墻問題
-
-
 ssh -C -f -N -g -D 1234 proxy@192.168.33.125
 export http_proxy=socks5://localhost:1234
 export https_proxy=socks5://localhost:1234
@@ -944,12 +465,6 @@ curl --socks5 localhost:1234 http://14.215.177.39/
 获取服务器SN
     dmidecode -s system-serial-number
 
-
-cronjob 分钟不能写0
-    1 * * * * echo hehe
-
-install telnet
-    brew install inetutils
 
 bash -c "$(curl -sS url)"
 

@@ -352,6 +352,12 @@ mongodb为单个文档提供原子操作
     db.col.findAndModify() 
 
 mongod进程cpu占用率较高, 可能是缺少索引
+
+bson and Mongodb
+    BSON is a binary-encoded serialization of JSON-like documents. BSON is designed to be lightweight, traversable, and efficient.
+
+命令行增强
+    npm install -g mongo-hacker
 ```
 
 

@@ -130,3 +130,23 @@ https://docs.saltstack.com/en/latest/topics/jobs/schedule.html
 5. use pgrep or pkill, not to use too many pipe  
 6. salt-master需要监听4505, 4506, salt-minion无需监听端口
 
+```
+2014-06-06 02:04:22,505 [salt.crypt  ][ERROR   ] The master key has changed, the salt master could have been subverted, verify salt master's public key 
+2014-06-06 02:04:22,506 [salt.crypt ][CRITICAL] The Salt Master server's public key did not authenticate! 
+The master may need to be updated if it is a version of Salt lower than 2014.1.4, or If you are confident that you are connecting to a valid Salt Master, then remove the master public key and restart the Salt Minion. 
+The master public key can be found at: 
+/etc/salt/pki/minion/minion_master.pub 
+
+解决办法 
+master/syndic 端 
+删除此minion KEY
+salt-key -d xxx (minion ID)
+
+minion 端 
+删除minion_master.pub 
+rm -rf /etc/salt/pki/minion/minion_master.pub
+
+重启minion
+/etc/init.d/salt-minion restart
+
+```

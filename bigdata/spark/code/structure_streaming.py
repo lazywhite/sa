@@ -3,6 +3,9 @@ from pyspark.sql import SparkSession
 from pyspark.sql.functions import *
 '''
 nc -lk 192.168.33.125 5555 # 在spark-submit之前运行
+outputmode:
+        complete
+        append
 '''
 
 

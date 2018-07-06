@@ -30,3 +30,15 @@ rpm
 
 yum 
     yum deplist <package> 查看包依赖
+
+设置字符集
+    localectl set-locale  LANG=zh_CN.UTF-8
+
+
+禁止repo
+    yum clean all 
+    yum --disablerepo="epel" update nss
+
+iptables
+    yum -y install iptables-services
+    /usr/libexec/iptables/iptables.init save

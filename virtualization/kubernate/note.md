@@ -41,7 +41,7 @@ object
     status: actual state
 ```
 
-## Usage
+## Minicube Usage
 ```
 minikube start --vm-driver=kvm2
 minikube delete
@@ -62,6 +62,7 @@ kubectl run nginx --image=nginx:latest --port=80
 
 # start service
 kubectl expose deployment/nginx --type="NodePort" --port 80
+
 
 # start proxy, 仅在minicube中使用
 kubectl proxy
@@ -109,9 +110,9 @@ pod有生命周期, 一个pod内的所有容器共享网络和存储
 pod需要service才能暴露给外部
 service具备internal load-balancer, 可以给exposed deployment提供负载均衡
 service expose type
-    ClusterIp
-    NodePort
-    LoadBalancer
+    ClusterIp: default, 在集群内部可以使用的ip
+    NodePort: 在集群所有节点上开放同一个端口,手动指定--nodeport, 自动生成--service-node-port-range
+    LoadBalancer: 需要依赖云服务提供商
     ExternalName (需要1.7版本以上, kube-dns支持)
 rolling update
     在old pod的node上用新image启动new pod, 然后加入service, 删掉old pod, 最终达到全部替换
@@ -156,6 +157,8 @@ kubectl
     get <nodes|pod|service|deployment>
     describe <pod|service|deployment|replicaset>
     logs <pod>
+    exec
+    top
 
 App
     stateless
@@ -173,6 +176,9 @@ kubectl describe deployments hello-world
 kubectl get replicasets
 kubectl describe replicasets hello-world-5b446dd74b
 # create service
+#kubectl expose deployment hello-world --type=NodePort --name=my-service --port=88 --target-port=8080
+# curl <cluster-ip>:<port> ; curl <node-ip>:<node-port>
+
 kubectl expose deployment hello-world --type=LoadBalancer --name=my-service
 kubectl get services my-service
 kubectl describe services my-service
@@ -213,4 +219,27 @@ yum -y install bridge-utils
      kubectl get pod nginx-768979984b-8vrq5 -o yaml
 编辑某个pod配置
      kubectl edit pod nginx-768979984b-8vrq5
+
+kube-proxy优先使用ipvs, 否则使用iptables
+
+pod命名规则: 只能由数字, 字母, 连字符组成, 连字符不能做开头
+service的cluster-ip可以手动指定, 也可以设置为空
+
+如果pod有对应的service, 则pod自动具备以下环境变量
+    <SERVICE_NAME>_SERVICE_HOST
+    <SERVICE_NAME>_SERVICE_PORT
+
+DNS
+    service
+        <service_name>.<namespace>.svc.cluster.local
+    pod 
+        <1-2-3-4>.<namespace>.pod.cluster.local  -> 1.2.3.4
+        如果有一个headless service并且一个pod的subdomain等于service的metadata.name
+        则此pod具有一个<hostname>.<subdomain>.<namespace>.svc.cluster.local的FQDN
+
+    coredns容器创建时会使用host的/etc/resolv.conf, 下列命令重新生成
+        kubectl delete -f manifests/coredns/coredns.yaml
+        kubectl apply -f manifests/coredns/coredns.yaml
+
+    
 ```

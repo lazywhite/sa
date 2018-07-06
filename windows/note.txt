@@ -29,4 +29,11 @@ services.msc
     taskkill /f /t /im <java.exe>
 
 
-jnlp webstart文件使用javaws.exe打开
+查看监听端口
+    netstat -aon|more
+
+打开jnlp webstart文件
+    javaws.exe
+
+查看网络信息
+    ipconfig /all

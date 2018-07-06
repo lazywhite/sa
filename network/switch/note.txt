@@ -162,3 +162,21 @@ sw-outside(config)#line ?
   vty      Virtual terminal
 
 ```
+cisco 2960 设置密码
+
+```
+console：
+   conf t=> line console 0
+   conf t=> password switch
+   conf t=> end
+
+telnet:
+   conf t=> line vty 0 4
+            password switch
+            login
+            end
+enable
+   conf t=> enable password switch
+            end
+
+```

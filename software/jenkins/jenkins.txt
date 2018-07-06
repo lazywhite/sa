@@ -1,7 +1,7 @@
 # installation
 curl -o jenkins.war http://mirrors.jenkins-ci.org/war/latest/jenkins.war
 # run
-java -jar jenkins.war > jenkins.log &
+java -jar jenkins.war --httpPort=9000 > jenkins.log &
 # configure
 plugin website: https://wiki.jenkins-ci.org/display/JENKINS/Plugins
 usefull plugin: git-client git gitlab
