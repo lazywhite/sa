@@ -115,6 +115,14 @@ git cherry-pick --continue
     
 ```
 
+## mergetool
+```
+git config --global merge.tool p4merge
+git config --global mergetool.p4merge.path "/Applications/p4merge.app/Contents/MacOS/p4merge"
+git config --global mergetool.p4merge.trustExitCode false
+git config --global mergetool.keepBackup false
+```
+
 ## reset
 ```
 
@@ -250,6 +258,12 @@ git commit -a -F -  从标准输入读取提交信息
 git fetch origin [remote_br]:[local_br] 拉取远程分支到本地
 
 ```
-1. 分支的相对路径  HEAD~[n]   HEAD之前的第n此提交
-2. git clone Peer reports incompatible or unsupported protocol version.
+
+## Problem
+```
+git clone Peer reports incompatible or unsupported protocol version.
     yum -y update nss curl libcurl
+
+fatal: object 47e1979a125aa4bac0d03f8d31814036404a1196 is corrupted
+    rm -f .git/object/47/e1979a125aa4bac0d03f8d31814036404a1196 ; git pull
+```
