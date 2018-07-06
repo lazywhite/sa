@@ -160,9 +160,25 @@ system.cpu.num[online]
 
 ids表保存zabbix自己维护的主键nextid
 
-自动注册
-
 模板制作
     自动发现
+        发现规则
+            名称
+            键值
+                print json
+                    {#DISK_ID}
+        监控项原型
+            名称
+                Disk {#DISK_ID} Temprature
+            键值
+                raid.hdd.attr[{#DISK_ID}, Current_Temperature]
+
+自动发现
+    配置-->自动发现-->创建自动发现规则
+    配置-->动作--(事件源:自动发现)创建
+自动注册
+    必须安装zabbix-agentd
+    配置-->动作--(事件源:自动注册)创建
+
 ```
 

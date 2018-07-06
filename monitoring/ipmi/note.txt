@@ -93,3 +93,5 @@ dmidecode|grep Product
 -I open 表示连接本地接口
 -I lan 表示远程连接
 
+# 设置光驱启动
+ipmitool  -H 192.168.50.5 -U user -P pwd  -I lanplus chassis bootdev cdrom
