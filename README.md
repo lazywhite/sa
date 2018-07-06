@@ -4,6 +4,7 @@ note for linux system administration
 ## Directory Layout 
 
 ```  
+├── RHCE.png
 ├── android
 │   ├── jenkins_android.sh
 │   └── note.md
@@ -21,20 +22,25 @@ note for linux system administration
 │   ├── hbase
 │   ├── hcatalog
 │   ├── hive
+│   ├── hue
 │   ├── impala
+│   ├── kettle
 │   ├── kylin
 │   ├── mahout
+│   ├── matlab
 │   ├── mesos
-│   ├── note.md
+│   ├── note.txt
 │   ├── pig
 │   ├── spark
 │   ├── sqoop
 │   ├── storm
 │   └── zookeeper
 ├── cache
+│   ├── etcd
 │   ├── memcache
 │   └── varnish
 ├── database
+│   ├── access
 │   ├── counchdb
 │   ├── greenplum
 │   ├── influxdb
@@ -49,6 +55,7 @@ note for linux system administration
 │   ├── sybase
 │   └── tools
 ├── dns
+│   ├── bind
 │   └── dnsmasq.md
 ├── firewalls
 │   ├── firewalld
@@ -62,7 +69,10 @@ note for linux system administration
 │   ├── lvm
 │   ├── mogilefs
 │   ├── nfs
+│   ├── samba
 │   └── zfs
+├── ftp
+│   └── client.txt
 ├── ha
 │   ├── Cluster.txt
 │   ├── corosync.txt
@@ -106,7 +116,8 @@ note for linux system administration
 │   ├── sysadmin.txt
 │   ├── systemd
 │   ├── tcpfsm.png
-│   ├── ubuntu.md
+│   ├── ubuntu
+│   ├── user.txt
 │   ├── vcl.png
 │   ├── vsftpd+pam+mysql.txt
 │   └── webapp.txt
@@ -123,11 +134,17 @@ note for linux system administration
 │   ├── note.md
 │   ├── smartstack.md
 │   └── zuul
+├── ml
+│   ├── note.txt
+│   ├── sklearn
+│   ├── tensorflow
+│   └── theano
 ├── monitoring
 │   ├── bosun
 │   ├── cadvisor
 │   ├── ganglia
 │   ├── grafana
+│   ├── ipmi
 │   ├── nagios
 │   ├── tick
 │   └── zabbix
@@ -142,9 +159,12 @@ note for linux system administration
 │   ├── nic-bridge.txt
 │   ├── ntop
 │   ├── route.txt
-│   ├── route_table.md
 │   ├── smokeping
-│   └── switch.txt
+│   ├── switch
+│   └── ubuntu
+├── ntp
+│   ├── note.md
+│   └── ntp.conf
 ├── optool
 │   ├── autossh.md
 │   ├── awk.md
@@ -161,11 +181,14 @@ note for linux system administration
 │   ├── iostat.md
 │   ├── iptables.txt
 │   ├── irc.txt
+│   ├── lmsensor.txt
 │   ├── lsof.md
 │   ├── lsof.txt
+│   ├── mpstat.md
 │   ├── nmap.md
 │   ├── oh-my-zsh.md
 │   ├── pxe.md
+│   ├── rdp.md
 │   ├── rpm.md
 │   ├── rsync.md
 │   ├── sar.md
@@ -175,11 +198,13 @@ note for linux system administration
 │   ├── slack.md
 │   ├── ss.md
 │   ├── sublime.md
+│   ├── systemd.md
 │   ├── vim.md
 │   ├── vmstat.md
 │   ├── vnc.md
 │   └── weechat.md
 ├── performance
+│   ├── cpu
 │   ├── disk
 │   ├── epoll.md
 │   ├── filesystem
@@ -197,10 +222,17 @@ note for linux system administration
 │   ├── note.md
 │   └── thrift.md
 ├── proxy
+│   ├── forward_proxy
 │   ├── note.md
-│   └── reverse_proxy
+│   ├── reverse_proxy
+│   └── tinyproxy.md
+├── rsync
+│   ├── note.txt
+│   ├── rsyncd.conf
+│   └── rsyncd.secrets
 ├── security
 │   ├── clamav.md
+│   ├── cors.txt
 │   ├── csrf.md
 │   ├── ddos.md
 │   ├── oauth.md
@@ -235,12 +267,15 @@ note for linux system administration
 ├── vcs
 │   ├── git
 │   ├── gitlab
+│   ├── gogs
 │   └── svn
 ├── virtualization
 │   ├── docker
+│   ├── kubernate
 │   ├── kvm
 │   ├── openstack
-│   └── vagrant
+│   ├── vagrant
+│   └── virtualbox
 ├── webserver
 │   ├── apache
 │   ├── lighttpd
@@ -249,7 +284,8 @@ note for linux system administration
 └── windows
     ├── jdk.md
     ├── note.txt
+    ├── rdp.txt
     ├── salt-minion.md
+    ├── virtio.md
     └── zabbix_agent.md
 ```
-
