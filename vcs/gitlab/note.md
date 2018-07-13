@@ -1,4 +1,3 @@
-## Topic
 ### 汉化
   
 ```
@@ -58,9 +57,58 @@ gitlab-ctl start
 
 
 ```
+### smtp配置
+```
+admin_aread->settings->restricted domains for sign-up
 
-### imap setting
+external_url 'http://192.168.1.252:8080'
+gitlab_rails['gitlab_email_from'] = 'code@shrlwl.cn'
+gitlab_rails['gitlab_email_reply_to'] = 'code@shrlwl.cn'
+gitlab_rails['smtp_enable'] = true
+gitlab_rails['smtp_address'] = "smtp.exmail.qq.com"
+gitlab_rails['smtp_port'] =  465
+gitlab_rails['smtp_user_name'] = "code@shrlwl.cn"
+gitlab_rails['smtp_password'] = ""
+gitlab_rails['smtp_domain'] = "shrlwl.cn"
+gitlab_rails['smtp_authentication'] = "login"
+gitlab_rails['smtp_enable_starttls_auto'] = true
+gitlab_rails['smtp_tls'] = true
+nginx['listen_port'] = 7000
 
-### Topic
+gitlab_rails['gitlab_ssh_host'] = ''
+gitlab_rails['gitlab_shell_ssh_port'] = 322
+nginx['client_max_body_size'] = '2500m'
+
+time_zone: 'Asia/Shanghai'
+email_enabled: true
+https://gitlab.com/gitlab-org/omnibus-gitlab/blob/master/doc/settings/smtp.md
+```
+
+
+### 设置日志级别
+```
 debug_level: /opt/gitlab/embedded/service/gitlab-rails/config/environments/production.rb  
     config.log_level = :debug
+```
+
+### 允许同域名webhook
+```
+admin-area --> setting --> Outbound requests --> Allow requests to the local network from hooks and services.
+```
+
+### 配置webhook
+```
+project page --> settings --> integration --> uncheck SSL
+```
+
+### 配置deploy key
+```
+clone project无需用户名密码
+project page --> settings --> repository --> deploy keys
+
+# on jenkins master
+ssh-keygen
+git clone <repo url> # git协议,  手动clone一次, 防止unknown host问题
+job--> vcs --> git --> url 
+```
+

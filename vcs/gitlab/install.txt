@@ -1,0 +1,14 @@
+
+yum install -y curl policycoreutils-python openssh-server postfix
+systemctl start postfix
+systemctl enable postfix
+
+rpm -ivh gitlab-ce-11.0.3-ce.0.el7.x86_64.rpm
+
+/etc/gitlab/gitlab.rb
+    external_url = "gitlab.local.com"
+
+gitlab-ctl reconfigure
+gitlab-ctl start
+
+# 第一次登录直接设置root密码, 然后使用root/password登录
