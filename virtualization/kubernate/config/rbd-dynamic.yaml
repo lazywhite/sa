@@ -1,0 +1,95 @@
+---
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: ssd
+provisioner: kubernetes.io/rbd
+parameters:
+  monitors: 192.168.56.59:6789
+  adminId: admin
+  adminSecretName: ceph-secret-admin
+  adminSecretNamespace: default
+  pool: ssd-pool
+  userId: admin
+  userSecretName: ceph-secret-admin
+  fsType: xfs
+  imageFormat: "2"
+  imageFeatures: "layering"
+---
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: sata
+provisioner: kubernetes.io/rbd
+parameters:
+  monitors: 192.168.56.59:6789
+  adminId: admin
+  adminSecretName: ceph-secret-admin
+  adminSecretNamespace: default
+  pool: sata-pool
+  userId: admin
+  userSecretName: ceph-secret-admin
+  fsType: xfs
+  imageFormat: "2"
+  imageFeatures: "layering"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ceph-rbd-dyn-ssd-pv-claim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: ssd
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ceph-rbd-dyn-sata-pv-claim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: sata
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ceph-rbd-dyn-sata-pod
+spec:
+  containers:
+  - name: ceph-rbd-pv-busybox
+    image: busybox
+    command: ["sleep", "60000"]
+    volumeMounts:
+    - name: ceph-rbd-vol1
+      mountPath: /mnt
+      readOnly: false
+  volumes:
+  - name: ceph-rbd-vol1
+    persistentVolumeClaim:
+      claimName: ceph-rbd-dyn-sata-pv-claim
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ceph-rbd-dyn-ssd-pod
+spec:
+  containers:
+  - name: ceph-rbd-pv-busybox
+    image: busybox
+    command: ["sleep", "60000"]
+    volumeMounts:
+    - name: ceph-rbd-vol1
+      mountPath: /mnt
+      readOnly: false
+  volumes:
+  - name: ceph-rbd-vol1
+    persistentVolumeClaim:
+      claimName: ceph-rbd-dyn-ssd-pv-claim

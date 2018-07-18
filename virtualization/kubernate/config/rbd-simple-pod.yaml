@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: rbd
+spec:
+  containers:
+    - image: busybox
+      name: rbd-rw
+      command: ["sleep", "60000"]
+      volumeMounts:
+      - name: rbdpd
+        mountPath: /mnt/rbd
+  volumes:
+    - name: rbdpd
+      rbd:
+        monitors:
+        - '192.168.56.59:6789'
+        pool: ssd-pool
+        image: foo
+        fsType: xfs
+        readOnly: false
+        user: admin
+        keyring: /etc/ceph/ceph.client.admin.keyring
+        imageformat: "2"
+        imagefeatures: "layering"
+

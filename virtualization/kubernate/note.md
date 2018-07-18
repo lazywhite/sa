@@ -241,5 +241,73 @@ DNS
         kubectl delete -f manifests/coredns/coredns.yaml
         kubectl apply -f manifests/coredns/coredns.yaml
 
-    
+设置资源上限    
+    kubectl run nginx1 --image=nginx --port=80 --expose --limits='cpu=500m,memory=8Mi'
+    kubectl run --rm -it load-generator --image=busybox /bin/sh
+
+kubelet edit ing test # 修改后直接生效
+kubectl replace -f # 更换object
+
+cockpit监控工具集成
+    ansible -i hosts  all -m shell -a 'yum -y install cockpit cockpit-docker cockpit-kubernetes'
+    ansible -i hosts  all -m shell -a 'systemctl start cockpit'
+    ansible -i hosts  all -m shell -a 'systemctl enable cockpit'
+
+    node1:9090 #使用系统用户登录
+
+
+使用rbd pv
+
+    (一) 直接使用
+    在k8集群所有节点安装ceph-common包, 注意版本跟ceph集群保持一致
+    1. ceph-deploy  --username root install --no-adjust-repos master1
+    2. ceph-deploy admin master1 [node1 ...]
+    3. 手动创建rbd image
+        rbd create ssd-pool/foo --size 4096M --image-feature layering
+    4. rbd.yaml
+
+        apiVersion: v1
+        kind: Pod
+        metadata:
+          name: rbd
+        spec:
+          containers:
+            - image: busybox
+              name: rbd-rw
+              command: ["sleep", "60000"]
+              volumeMounts:
+              - name: rbdpd
+                mountPath: /mnt/rbd
+          volumes:
+            - name: rbdpd
+              rbd:
+                monitors:
+                - '192.168.56.59:6789'
+                pool: ssd-pool
+                image: foo
+                fsType: xfs
+                readOnly: false
+                user: admin
+                keyring: /etc/ceph/ceph.client.admin.keyring
+                imageformat: "2"
+                imagefeatures: "layering"
+
+    5. kubectl create -f rbd.yaml --validate=false
+
+
+    (二) 使用PV + PVC
+        注意: 删除pv前要删除相关的pvc
+        使用前仍需手动创建rbd image
+
+    (三) StorageClass + PVC (动态)
+    https://blog.csdn.net/aixiaoyang168/article/details/79120095
+    1. 生成kube secret
+        ceph auth get-key client.admin |base64   # 获取ceph admin用户的key, 并替换 ceph-secret-admin.yaml中字段
+        kubectl create -f ceph-secret-admin.yaml
+    2. 生成storageclass
+    3. 生成pvc
+    4. 生成pod
+
+
 ```
+

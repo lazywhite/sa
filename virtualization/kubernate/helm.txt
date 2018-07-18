@@ -1,0 +1,9 @@
+helms install \
+	--name grafana \
+	--namespace monitoring \
+	-f grafana-settings.yaml \
+	-f grafana-dashboards.yaml \
+	grafana
+helms upgrade grafana -f grafana-settings.yaml -f grafana-dashboards.yaml grafana
+helms rollback monitor [REVISION]
+helm delete --purge <release>
