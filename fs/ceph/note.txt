@@ -1,0 +1,93 @@
+http://docs.ceph.com/docs/master/start/quick-ceph-deploy/
+
+http://www.xuxiaopang.com/2016/10/10/ceph-full-install-el7-jewel/
+    
+
+准备工作
+    os: centos-7
+    ceph: 12.2.6 luminous
+    磁盘使用xfs
+    1. ntp
+    2. ustc.repo, ceph.repo, epel
+    3. selinux firewalld
+    4. ssh-copy-id
+    5. disk without partition
+    6. systemctl stop NetworkManager; systemctl disable NetworkManager
+    7. systemctl start network; systemctl enable network
+    8. /etc/resolv.conf
+    9. yum.conf # forward proxy
+
+(deploy): 
+    yum -y install ceph-deploy
+    mkdir ceph-cluster; cd ceph-cluster
+    ceph-deploy --username root new ceph1 # 初始mon节点, 在当前文件夹生成配置文件
+        ceph.conf
+            public_network = 192.168.56.0/24
+            cluster_network = 192.168.56.0/24
+    ceph-deploy --username root install --no-adjust-repos ceph1 ceph2 # 安装ceph
+    ceph-deploy mon create-initial # 启动第一个mon节点
+    ceph-deploy admin ceph1 ceph2 # 拷贝集群文件至目标节点, 使其可管理集群
+    ceph-deploy mgr create node1 # 启动manager
+
+    #创建osd, 成功后/var/lib/ceph/osd/ceph-<int>里面有软连接指向lvm设备
+    ceph-deploy osd create --data /dev/sdb --fs-type xfs ceph1
+    ceph-deploy osd create --data /dev/sdc --fs-type xfs ceph1
+    ceph-deploy osd create --data /dev/sdd --fs-type xfs ceph1
+    ceph-deploy osd create --data /dev/sdb --fs-type xfs ceph2
+    ceph-deploy osd create --data /dev/sdc --fs-type xfs ceph2
+    ceph-deploy osd create --data /dev/sdd --fs-type xfs ceph2
+
+    ceph-deploy mds create ceph1 # 启动metadata-server
+    ceph-deploy mon add ceph2 # HA only
+    ceph-deploy mgr create ceph2 # HA only
+    ceph-deploy rgw create ceph1 # ceph object gateway, port: 7480
+    ssh ceph1 ceph mgr module enable dashboard # default port: 7000
+    ssh ceph1 ceph mgr module enable balancer
+
+
+
+Block device
+    rbd可以只读模式被多重挂载, 但读写模式只能单个挂载
+
+    ceph-deploy --username root install --no-adjust-repos client1
+    ceph-deploy admin client1
+    (admin-node): rbd pool init ssd-pool
+    (admin-node): rbd create ssd-pool/foo --image-feature layering --size 4096M
+    (admin-node): rbd info ssd-pool/foo
+    (admin-node): rbd list ssd-pool
+    (admin-node): rbd remove ssd-pool/foo
+    (client1): rbd map ssd-pool/foo # -->/dev/rbd0
+    (client1): rbd unmap ssd-pool/foo 
+    (client1): rbd showmapped
+    (admin-node): rbd --pool  ssd-pool du
+
+    
+
+
+删除集群
+    ceph-deploy purge ceph1 ceph2
+    # delete all partition from all node, then reboot
+    # dd if=/dev/urandom of=/dev/sdb bs=512 count=64 所有磁盘执行, 不然无法创建osd, 同时要检查lvm配置不要过滤掉磁盘
+    ceph-deploy purgedata ceph1 ceph2
+    ceph-deploy forgetkeys
+    cd ceph-cluster; rm -rf ceph*
+
+    
+
+tip
+    http://docs.ceph.com/docs/master/rados/operations/placement-groups/
+    设置pg_num, pgp_num
+    Less than 5 OSDs set pg_num to 128
+    Between 5 and 10 OSDs set pg_num to 512
+    Between 10 and 50 OSDs set pg_num to 1024
+
+    ceph的优点
+        crush算法
+        ceph 的block device支持cow clone, incremental snapshot
+
+    ceph的使用
+        对象存储
+        块存储
+        文件系统(需要metadata-server)
+
+    部署ceph client, 可以使用ceph-deploy工具 install, admin

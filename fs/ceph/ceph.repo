@@ -1,0 +1,15 @@
+[ceph-noarch]
+name=Ceph noarch packages
+baseurl=http://mirrors.aliyun.com/ceph/rpm-luminous/el7/noarch/
+enabled=1
+gpgcheck=1
+type=rpm-md
+gpgkey=https://download.ceph.com/keys/release.asc
+
+[ceph]
+name=Ceph 
+baseurl=http://mirrors.aliyun.com/ceph/rpm-luminous/el7/x86_64/
+enabled=1
+gpgcheck=1
+type=rpm-md
+gpgkey=https://download.ceph.com/keys/release.asc
