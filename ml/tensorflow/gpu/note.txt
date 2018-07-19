@@ -1,0 +1,67 @@
+https://blog.csdn.net/xueshengke/article/details/78134991
+
+modprobe -r <mod> 卸载内核模块
+nvidia-smi -l 1
+nvcc --version
+
+nvidia-persistenced.service
+
+https://developer.nvidia.com/cuda-90-download-archive
+https://developer.nvidia.com/rdp/cudnn-download
+https://pypi.org/project/tensorflow-gpu/#files
+
+cuda_9.0.176_384.81_linux.run
+cudnn-9.0-linux-x64-v7.1.tgz
+tensorflow-gpu (1.9.0)
+
+
+ImportError: libcublas.so.9.0: cannot open shared object file: No such file or directory
+
+    ldconfig -v|grep -i libcublas
+    lsmod|grep -i nvidia
+    # 安装cuda-9.0, 如果已有nvidia driver, 可以选择不安装
+    ./cuda_9.0.176_384.81_linux.run
+    /etc/ld.so.conf.d/cuda-9.0.conf
+         /usr/local/cuda-9.0/lib64/
+    ldconfig 
+
+
+
+ImportError: libcudnn.so.7: cannot open shared object file: No such file or directory
+    https://docs.nvidia.com/deeplearning/sdk/cudnn-install/index.html
+    tar xf cudnn-9.0-linux-x64-v7.1.tgz
+    cd cuda/
+    cp include/cudnn.h  /usr/local/cuda-9.0/include/
+    cp lib64/libcudnn* /usr/local/cuda-9.0/lib64/
+    chmod a+r /usr/local/cuda/include/cudnn.h
+    chmod a+r /usr/local/cuda/lib64/libcudnn*
+    rm -f /usr/local/cuda-9.0/lib64/libcudnn.so.7
+    ln -s /usr/local/cuda-9.0/lib64/libcudnn.so.7.1.4 /usr/local/cuda-9.0/lib64/libcudnn.so.7
+    ldconfig
+
+
+
+access GPU inside docker container 
+    https://github.com/NVIDIA/nvidia-docker
+    注意根据本机的docker安装方式(docker-ce rpm, 二进制)选择不同的安装section
+
+	GPU节点需要安装GPU driver 和 cuda
+
+    docker run --runtime=nvidia --rm -it tensorflow/tensorflow:latest-gpu /bin/sh
+    nvidia-docker run -it -p 8888:8888 tensorflow/tensorflow:latest-gpu
+
+    1. 修改/usr/lib/systemd/system/docker.service
+        ExecStart=/usr/bin/dockerd --default-runtime=nvidia
+    2. systemctl daemon-reload; systemctl restart docker
+
+    3. 在GPU节点创建pod
+        (一)通过打标签和nodeSelector进行
+        kubectl label node 192.168.56.80 accelerator=nvidia-tesla-p40
+        kubectl create -f nvidia-pod.yaml
+
+        (二)通过official nvidia gpu plugin, 无需打标签和指定nodeSelector, 只需要标明需求量
+	    注意修改kubelet service文件	
+        https://kubernetes.io/docs/tasks/manage-gpus/scheduling-gpus/
+		https://github.com/NVIDIA/k8s-device-plugin
+        kubectl create -f nvidia-plugin-pod.yaml
+
