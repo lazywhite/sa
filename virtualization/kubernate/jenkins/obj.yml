@@ -1,0 +1,84 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: jenkins
+  namespace: kubernetes-plugin
+  labels:
+    k8s-app: jenkins
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: jenkins
+  template:
+    metadata:
+      labels:
+        k8s-app: jenkins
+    spec:
+      containers:
+      - name: jenkins
+        image: 192.168.33.124/library/jenkins:2.121.2
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+        - name: ceph-rbd-vol1
+          mountPath: /var/jenkins_home
+          readOnly: false
+        ports:
+        - containerPort: 8080 
+          name: web
+        - containerPort: 50000
+          name: agent
+      volumes:
+      - name: ceph-rbd-vol1
+        emptyDir: {}
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  labels:
+    k8s-app: jenkins
+  name: jenkins
+  namespace: kubernetes-plugin
+spec:
+  ports:
+    #type: NodePort
+    - port: 8080
+      name: web
+      targetPort: 8080
+    - port: 50000
+      name: agent
+      targetPort: 50000
+  selector:
+    k8s-app: jenkins
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: jenkins-master-ingress
+  namespace: kubernetes-plugin
+spec:
+  rules:
+  - host: jenkins.local.com
+    http:
+      paths:
+      - backend:
+          serviceName: jenkins
+          servicePort: 8080
+        path: /
+status:
+  loadBalancer: {}
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: RoleBinding
+metadata:
+  name: jenkins
+  namespace: kubernetes-plugin
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: edit
+subjects:
+- kind: ServiceAccount
+  name: default
+  namespace: kubernetes-plugin

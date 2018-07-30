@@ -1,0 +1,65 @@
+https://blog.csdn.net/aixiaoyang168/article/details/79767649
+https://github.com/jenkinsci/kubernetes-plugin
+
+# rolebinding较重要
+kubectl create -f obj.yml
+
+kubectl -n kubernetes-plugin exec jenkins-5877bbd588-q7jcx cat /var/jenkins_home/secrets/initialAdminPassword
+
+jenkins plugins
+    gitlab
+    kubernetes
+    pipeline
+
+
+jenkins --> 系统管理 --> 系统配置 --> 云
+    kubernetes
+        name: kubernetes
+      	Kubernetes URL: https://kubernetes.default  #需要保证dns能解析
+        Disable https certificate check: uncheck
+        Jenkins URL: http://jenkins.kuberetes-plugin:8080 #需要保证dns能解析 
+
+        test connection 
+
+新建任务-->流水线
+    定义: Pipeline Script
+    脚本:
+    def label = "mypod-${UUID.randomUUID().toString()}"
+        podTemplate(label: label, cloud: 'kubernetes') {
+            node(label) {
+                stage('Run shell') {
+                    sh 'sleep 130s'
+                    sh 'echo hello world.'
+                }
+            }
+    }
+
+系统管理--> 节点列表  可以看到新创建的jenkins-slave
+kubectl -n kubernetes-plugin get pod 
+
+
+
+Gitlab集成
+https://github.com/lusyoe/springboot-k8s-example
+
+1. 创建repo
+    git@gitlab.local.com:ai/spring-cicd.git
+2. 创建gitlab bot用户, 并分配给bot用户clone权限
+3. 创建bot linux系统用户, ssh-keygen生成密匙对
+4. 给gitlab bot用户配置ssh key
+5. jenkins-->凭据-->系统-->全局凭据-->添加凭据
+    类型: ssh username with private key
+    username: bot
+    private key: text(id_rsa)
+6. 创建jenkins job
+    name: spring-cicd
+    类型: 流水线
+
+    构建触发器: push Events
+    流水线:
+        定义: Pipeline script from SCM
+        SCM: Git
+            repo: git@gitlab.local.com:ai/spring-cicd.git
+            Credentials: bot
+        脚本路径: jenkins/Jenkinsfile
+
