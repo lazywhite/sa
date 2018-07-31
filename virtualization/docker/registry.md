@@ -7,11 +7,22 @@ docker run -d -p 5000:5000 --name registry registry:2
 # on client node
 ```
 docker pull nginx
-docker image tag nginx localhost:5000/local-nginx
-docker push localhost:5000/local-nginx
+docker image tag nginx registry:5000/local-nginx
 
-# another client
-docker pull localhost:5000/local-nginx
+# 允许http协议推送(所有client)
+/etc/docker/daemon.json
+    {
+        "insecure-registries": [
+            "registry:5000"
+        ]
+    }
+
+#client跟registry不能为同一台机器
+#push的域名要跟daemon.json的严格一致
+
+(client1) docker push registry:5000/local-nginx
+
+(client2) docker pull registry:5000/local-nginx
 ```
 # High Available
 ```
@@ -21,13 +32,6 @@ global storage
 
 # tips
 ```
-docker push error: server gave HTTP response to HTTPS client
-    /etc/docker/daemon.json
-        {
-            "insecure-registries": [
-                "registry:5000"
-            ]
-        }
 
 查看镜像列表
     $ curl http://registry:5000/v2/_catalog

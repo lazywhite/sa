@@ -12,3 +12,11 @@ PATH and URL is a kind of "context", It will search recursively under "context"
 
 Example:
     docker build -t 'test:v0.1' .
+
+
+cd maven-local
+
+Dockerfile
+    COPY|ADD  m2  /root/.m2  # 必须保证m2是maven-local的子文件夹, 并且不能是软链接
+
+docker build -t 'test:v0.1' .
