@@ -1,0 +1,9 @@
+BGP: Border Gateway Protocol, 
+    使用TCP 179与peer建立长连接, 每60s发送心跳信息
+
+RIB: routing information base
+    Adj-RIBs-in
+    Local RIB
+    Adj-RIBs-out
+
+quagga

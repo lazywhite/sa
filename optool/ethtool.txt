@@ -1,0 +1,2 @@
+ethtool eno2 # check link status
+ethtool -p eno2 15 # make link light blink for 15 secondsa

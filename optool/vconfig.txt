@@ -1,0 +1,23 @@
+yum -y install vconfig
+
+临时设置
+    modprobe 8021q
+    ifconfig eth0 0.0.0.0  # 清除eth0 IP配置
+    vconfig add eth0 3000
+    ifconfig eth0.3000 192.168.0.1/24 up
+    vconfig rem eth0.3000 # 删除vlan tag
+
+持久设置
+    modprobe 8021q
+    cat > /etc/sysconfig/modules/8021q.modules <<EOF
+    modprobe 8021q > /dev/null 2>&1
+    EOF
+    /etc/sysconfig/network-scripts/ifcfg-eth0
+    /etc/sysconfig/network-scripts/ifcfg-eth0.3000
+
+    ifdown eth0; ifup eth0
+    ifup eth0.3000
+
+# 查看vlan配置
+    cat /proc/net/vlan/config 
+

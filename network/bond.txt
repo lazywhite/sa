@@ -1,0 +1,42 @@
+modprobe bonding
+
+touch /etc/modprobe.d/bond.conf
+    alias bond0 bonding
+    options bond0 miimon=100 mode=0 fail_over_mac=1
+
+ifcfg-ens7f0
+    DEVICE=ens7f0
+    TYPE=Ethernet
+    ONBOOT=yes
+    BOOTPROTO=none
+    MASTER=bond0
+    SLAVE=yes
+
+ifcfg-ens7f1
+    DEVICE=ens7f1
+    TYPE=Ethernet
+    ONBOOT=yes
+    BOOTPROTO=none
+    MASTER=bond0
+    SLAVE=yes
+
+ifcfg-bond0
+    TYPE=Ethernet
+    BOOTPROTO=none
+    NAME=bond0
+    DEVICE=bond0
+    ONBOOT=yes
+
+    IPADDR=172.16.0.1
+    PREFIX=24
+
+ifup ens7f0
+ifup ens7f1
+ifup bond0
+
+cat /proc/net/bonding/bond0
+
+
+ifenslave -d bond0 ens7f0 # 删除接口, 同时调整ifcfg-ens7f0
+ifenslave bond0 ens7f0 # 添加接口
+
