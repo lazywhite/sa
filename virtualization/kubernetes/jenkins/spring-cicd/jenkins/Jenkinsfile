@@ -26,9 +26,9 @@ podTemplate(label: 'jenkins-slave', cloud: 'kubernetes', containers: [
         def shortGitCommit
         def previousGitCommit
 
-        container('maven') {
 
-            stage('checkout') {
+        stage('checkout') {
+            container('maven') {
                 checkout scm
 
                 sh 'printenv'
@@ -41,32 +41,37 @@ podTemplate(label: 'jenkins-slave', cloud: 'kubernetes', containers: [
                 echo "shortGitCommit = ${shortGitCommit}"
                 echo "previousGitCommit = ${previousGitCommit}"
             }
+        }
 
-            stage('pacakge') {
-
+        stage('pacakge') {
+            container('maven'){
                 sh 'mvn clean package -Dmaven.test.skip=true'
             }
         }
 
-        container('docker') {
 
-            stage('docker-login') {
+        stage('docker-login') {
+            container('docker') {
                 //REGISTRY_URL私有仓库地址，也可使用官方地址：docker.io
                 sh "docker login -u ${params.DOCKER_USER} -p ${params.DOCKER_PASSWORD} ${params.REGISTRY_URL}"
             }
+        }
 
-            stage('docker-build') {
+        stage('docker-build') {
+            container('docker') {
                 sh "docker build . -t ${params.REGISTRY_URL}/library/k8s-example:${shortGitCommit}"
             }
+        }
 
-            stage('docker-push') {
+        stage('docker-push') {
+            container('docker') {
                 sh "docker push ${params.REGISTRY_URL}/library/k8s-example:${shortGitCommit}"
             }
         }
 
 
-        container('kubectl') {
-            stage('k8s deploy') {
+        stage('k8s deploy') {
+            container('kubectl') {
                 sh "sed -i \"s/library\\/k8s-example/${params.REGISTRY_URL}\\/library\\/k8s-example:${shortGitCommit}/g\" k8s-example.yaml"
                 sh "kubectl --kubeconfig=/root/.kube/config apply -f k8s-example.yaml"
             }
@@ -75,3 +80,4 @@ podTemplate(label: 'jenkins-slave', cloud: 'kubernetes', containers: [
     }
 }
 
+// vim: ft=groovy

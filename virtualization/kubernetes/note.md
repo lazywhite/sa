@@ -118,6 +118,8 @@ rolling update
     在old pod的node上用新image启动new pod, 然后加入service, 删掉old pod, 最终达到全部替换
     update 是有版本的, 可以随时回退
 
+service的selector需要谨慎定义, 错误会导致cluster-ip:port不可达的问题
+
 kubectl rollout
     history     View rollout history
     pause       Mark the provided resource as paused
@@ -248,6 +250,9 @@ DNS
 kubelet edit ing test # 修改后直接生效
 kubectl replace -f # 更换object
 
+无法删除pod, 先get node查看node是否ready
+pvc区分namespace, storageClass不区分
+
 cockpit监控工具集成
     ansible -i hosts  all -m shell -a 'yum -y install cockpit cockpit-docker cockpit-kubernetes'
     ansible -i hosts  all -m shell -a 'systemctl start cockpit'
@@ -298,6 +303,7 @@ cockpit监控工具集成
     (二) 使用PV + PVC
         注意: 删除pv前要删除相关的pvc
         使用前仍需手动创建rbd image
+        https://github.com/kubernetes/examples/tree/master/staging/volumes/rbd
 
     (三) StorageClass + PVC (动态)
     https://blog.csdn.net/aixiaoyang168/article/details/79120095
