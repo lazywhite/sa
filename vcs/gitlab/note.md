@@ -112,3 +112,10 @@ git clone <repo url> # git协议,  手动clone一次, 防止unknown host问题
 job--> vcs --> git --> url 
 ```
 
+### Two factor authentication
+```
+确保手机时间跟gitlab服务器时间相同
+手机安装"google authentication" app
+扫描输入pin code
+
+```

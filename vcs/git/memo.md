@@ -224,6 +224,14 @@ git filter-branch \
 --index-filter 'git rm --cached --ignore-unmatch linux/bzImage' <start>..<stop|HEAD>
 ```    
 
+### Remove directory from all commits
+```
+git filter-branch --tree-filter 'rm -rf project' --prune-empty HEAD
+git for-each-ref --format="%(refname)" refs/original/ | xargs -n 1 git update-ref -d
+git gc
+
+```    
+
 
 
 ## 常用命令

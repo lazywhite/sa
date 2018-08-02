@@ -40,7 +40,15 @@ gitlab插件使用
               
     3. job使用deploy key拉取代码
 
-    4. 有n个分支有更新, 会触发n次webhook, 每个$GIT_BRANCH一次
+    4. 开启 Build when a change is pushed to GitLab.
+
+    5. 有n个分支有更新, 会触发n次webhook, 每个$GIT_BRANCH一次
+
+    6. 日志
+        系统配置-->系统日志-->添加
+        name: gitlab plugin
+        Logger: com.dabsquared.gitlabjenkins
+        logLevel: FINEST
 ```
 
 
