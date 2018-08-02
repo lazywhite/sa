@@ -42,10 +42,10 @@ spec:
   - host: jupyter1.app.local.com
     http:
       paths:
-      - backend:
-          serviceName: gpu-service
-          servicePort: 8888
-        path: /
+        - path: /
+          backend:
+            serviceName: gpu-service
+            servicePort: 8888
 status:
   loadBalancer: {}
 
