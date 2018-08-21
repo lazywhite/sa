@@ -32,4 +32,5 @@ WantedBy=multi-user.target
 
 # systemctl status <postfix>
 # journalctl -xe                # view systemd log
+# journalctl -u kube-proxy|less   # 查看特定服务的日志, 需要配合less才能完全显示
 ```

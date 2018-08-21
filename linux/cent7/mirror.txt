@@ -1,0 +1,97 @@
+
+## /mirrors/exclude.list
+```
+SRPMS
+aarch64
+ppc64
+ppc64le
+debug
+repodata
+EFI
+LiveOS
+images
+isolinux
+CentOS_BuildTag
+EULA
+GPL
+RPM-GPG-KEY-CentOS-7
+RPM-GPG-KEY-CentOS-Testing-7
+drpms
+isos
+```
+## cent7.sh
+```
+yum -y install createrepo
+
+# 注意执行createrepo参数路径, 必须是Packages的父目录
+mkdir -p /mirrors/epel/7/x86_64/  /mirrors/centos/7/os/x86_64/ /mirrors/centos/7/extra/x86_64/ /mirrors/centos/7/updates/x86_64/ /mirrors/centos/7/centosplus/x86_64/
+
+# 参考rsync squid代理配置
+export RSYNC_PROXY=192.168.33.125:8888
+
+## base
+rsync -avz --exclude-from=/mirrors/exclude.list rsync://mirrors.tuna.tsinghua.edu.cn/centos/7/os/x86_64/ /mirrors/centos/7/os/x86_64/
+createrepo /mirrors/centos/7/os/x86_64/
+
+## updates
+rsync -avz --exclude-from=/mirrors/exclude.list rsync://mirrors.tuna.tsinghua.edu.cn/centos/7/updates/x86_64/ /mirrors/centos/7/updates/x86_64/
+createrepo /mirrors/centos/7/updates/x86_64/
+
+## extras
+rsync -avz --exclude-from=/mirrors/exclude.list rsync://mirrors.tuna.tsinghua.edu.cn/centos/7/extras/x86_64/ /mirrors/centos/7/extras/x86_64/
+createrepo /mirrors/centos/7/extras/x86_64/
+
+## centosplus
+rsync -avz --exclude-from=/mirrors/exclude.list rsync://mirrors.tuna.tsinghua.edu.cn/centos/7/centosplus/x86_64/ /mirrors/centos/7/centosplus/x86_64/
+createrepo /mirrors/centos/7/centosplus/x86_64/
+
+## epel
+rsync -avz --exclude-from=/mirrors/exclude.list rsync://mirrors.tuna.tsinghua.edu.cn/epel/7/ /mirrors/epel/7/
+createrepo /mirrors/epel/7/x86_64/
+
+```
+
+## repo
+```
+[epel]
+name=Extra Packages for Enterprise Linux 7 - $basearch
+#baseurl=http://download.fedoraproject.org/pub/epel/7/$basearch
+baseurl=http://192.168.53.140/epel/7/$basearch
+failovermethod=priority
+enabled=1
+gpgcheck=0
+#gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7
+
+[base]
+name=CentOS-$releasever - Base
+#mirrorlist=http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=os
+baseurl=http://192.168.53.140/centos/$releasever/os/$basearch/
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+
+#released updates
+[updates]
+name=CentOS-$releasever - Updates
+# mirrorlist=http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=updates
+baseurl=http://192.168.53.140/centos/$releasever/updates/$basearch/
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+
+#additional packages that may be useful
+[extras]
+name=CentOS-$releasever - Extras
+# mirrorlist=http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=extras
+baseurl=http://192.168.53.140/centos/$releasever/extras/$basearch/
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+
+#additional packages that extend functionality of existing packages
+[centosplus]
+name=CentOS-$releasever - Plus
+# mirrorlist=http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=centosplus
+baseurl=http://192.168.53.140/centos/$releasever/centosplus/$basearch/
+gpgcheck=1
+enabled=0
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+
+```
