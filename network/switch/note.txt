@@ -23,6 +23,8 @@
         路由器之间
 
 CCNA < CCNP < CCIE
+
+
 ## Topic 
 1. Spanning-tree protocol生成树协议
 ```
@@ -75,6 +77,8 @@ uplink 端口, 普通端口
 
 连接交换机
     telnet 192.168.47.13
+    username:
+    password:
 
 ## 2层交换机配置vlan
 ```

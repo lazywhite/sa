@@ -1,8 +1,14 @@
-modprobe bonding
+bond mode
+    0: 轮询模式, 存在数据包无序到达问题, 吞吐量下降, 需要交换机配置"静态"链路聚合
+    1: 主备模式, 只有单个网卡处于活动状态, 交换机看到的mac地址不变
+    2: 
+    3: 广播模式, 所有数据复制后在所有子接口发送
+    4: 同时使用多张网卡, 需要交换机配置"动态"链路聚合
+    5: 
+    6: 会依次占满网卡流量, 无需交换机额外配置
 
-touch /etc/modprobe.d/bond.conf
-    alias bond0 bonding
-    options bond0 miimon=100 mode=0 fail_over_mac=1
+确保NetworkManager关闭
+modprobe bonding
 
 ifcfg-ens7f0
     DEVICE=ens7f0
@@ -21,7 +27,7 @@ ifcfg-ens7f1
     SLAVE=yes
 
 ifcfg-bond0
-    TYPE=Ethernet
+    TYPE=Bond
     BOOTPROTO=none
     NAME=bond0
     DEVICE=bond0
@@ -29,6 +35,8 @@ ifcfg-bond0
 
     IPADDR=172.16.0.1
     PREFIX=24
+    BONDING_MASTER=yes
+    BONDING_OPTS='mode=4 miimon=100'
 
 ifup ens7f0
 ifup ens7f1
@@ -40,3 +48,4 @@ cat /proc/net/bonding/bond0
 ifenslave -d bond0 ens7f0 # 删除接口, 同时调整ifcfg-ens7f0
 ifenslave bond0 ens7f0 # 添加接口
 
+更改bond mode后 systemctl restart network

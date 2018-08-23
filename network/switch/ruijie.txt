@@ -1,0 +1,27 @@
+LACP: link aggregate control protocol
+port-group 100 mode static # 静态链路聚合, 貌似不支持
+
+telnet <ip>
+    username:
+    password:
+enable
+    password:
+
+show version # 查看型号
+show vlan # 查看vlan配置
+show AggregatePort summary # 查看链路聚合
+show bgp all
+show clock # 系统时间
+
+show mac # 查看arp表
+show lacp summary # 查看链路聚合信息
+show aggregatePort load-balance # 查看AP负载均衡算法
+
+
+锐捷交换机端口聚合使用注意点
+1）端口聚合的成员属性必须一致，包括接口速率、双工，介质类型（指光口或者电口）等，光口和电口不能绑定，千兆与万兆不能绑定；
+2）二层端口只能加入二层AP，三层端口只能加入三层 AP，已经关联了成员口的 AP口不允许改变二层/ 三层属性；
+3）端口聚合后，成员接口不能单独再进行配置，只能在AP口配置所需要的功能（interface aggregateport x/x）；
+4）两个互联设备的端口聚合模式必须一致，并且同一时候只能选择一种，是静态聚合或者是动态LACP聚合；
+5）我司交换机通常最多支持8个物理端口聚合为一个AP。
+

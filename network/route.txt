@@ -1,35 +1,26 @@
-方法一：
-    添加路由
-    route add -net 192.168.0.0/24 gw 192.168.0.1
-    route add -host 192.168.1.1 dev eth0
-    删除路由
-    route del -net 192.168.0.0/24 gw 192.168.0.1
+# 停止并删除NetworkManager !!!
 
-    增加默认路由
-    route add default gw 192.168.0.1 eth0:1
+添加路由
+ip route add 192.168.0.0/24 via 192.168.0.1
+删除路由
+ip route del 192.168.0.0/24 via 192.168.0.1
 
-    删除默认路由
-    route del default gw 192.168.1.254 eth0
-    查看路由表
-    route -n  
+增加默认路由
+ip route add default via 192.168.0.1 dev eth0
 
+查看路由信息
+ip route
 
-方法二：
-    添加路由
-    ip route add 192.168.0.0/24 via 192.168.0.1
-    删除路由
-    ip route del 192.168.0.0/24 via 192.168.0.1
-
-    增加默认路由
-    ip route add default via 192.168.0.1 dev eth0
-
-    查看路由信息
-    ip route
+测试路由规则
+ip route get 8.8.8.8 from 172.31.232.106
 
 持久化
-/etc/sysconfig/network-script/route-eth0
-    192.168.1.0/24 via 192.168.0.1
-
+    /sbin/ifup-local
+		#!/bin/bash
+		if [[ "$1" == "enp3s0f0" ]];then
+			ip rule add from 172.31.232.0/24 table 100
+			ip route add default via 172.31.232.254 dev enp3s0f0 table 100
+		fi
 
 案例
     网络规定192.168.1.10可以出外网, 某台机器eth1已有ip 192.168.1.2
@@ -39,4 +30,3 @@
         route del default gw 192.168.1.254 eth1
         route add default gw 192.168.1.254 eth1:2
     3. 持久化
-
