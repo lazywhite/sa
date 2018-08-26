@@ -1,6 +1,5 @@
 ## Component
 ```
-
 master
     api
     etcd
@@ -25,10 +24,7 @@ addon
     logging
 
 node
-    deployment
-        pod
-            container
-    service
+
 
 CLI
     kubeadmin: 管理集群节点
@@ -39,69 +35,16 @@ object
     metadata
     spec: desired state
     status: actual state
-```
 
-## Minicube Usage
-```
-minikube start --vm-driver=kvm2
-minikube delete
-minikube ip
+Access modes
+	ReadWriteOnce – the volume can be mounted as read-write by a single node(RWO)
+	ReadOnlyMany – the volume can be mounted read-only by many nodes(ROX)
+	ReadWriteMany – the volume can be mounted as read-write by many nodes(RWX)
 
-
-kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep admin-user | awk '{print $1}')
-
-kubectl version
-kubectl api-versions
-kubectl get nodes
-kubectl cluster-info
-kubectl get deployment
-
-# start deployment
-kubectl run nginx --image=nginx:latest --port=80
-
-
-# start service
-kubectl expose deployment/nginx --type="NodePort" --port 80
-
-
-# start proxy, 仅在minicube中使用
-kubectl proxy
-
-# check service
-kubectl get pods; export POD_NAME=nginx-6bfb654d7c-ws2nv
-curl http://localhost:8001/api/v1/namespaces/default/pods/$POD_NAME/proxy/
-
-# delete service
-kubectl delete service -l run=kubernetes-bootcamp
-
-# execute command of pod
-kubectl exec -ti $POD_NAME curl localhost:8080
-
-# scale deployment
-kubectl scale deployments/kubernetes-bootcamp --replicas=4
-kubectl get pods -o wide
-
-kubectl describe service/kubernetes-bootcamp
-
-# update
-kubectl set image deployments/kubernetes-bootcamp kubernetes-bootcamp=jocatalin/kubernetes-bootcamp:v2
-# 确认升级
-kubectl rollout status deployments/kubernetes-bootcamp
-# 回退
-kubectl rollout undo deployments/kubernetes-bootcamp
-
-
-deployment.yaml
-    apiVersion
-    kind:
-        Deployment
-        Service
-    metadata
-        name
-        uid
-        namespace
-kubectl create -f /path/to/deployment.yaml --record
-
+Reclaim Policy
+ 	Retain
+	Recycle (只有本地盘和nfs支持数据盘Recycle 擦除回收)
+	Delete
 ```
 
 ## Tips
@@ -142,54 +85,74 @@ Label and Selector
 Annotation
     不是用来选择object, 是放在metadata里面的注释信息
 
-
-kubectl
-    create
-    run
-    replace
-    delete
-    apply
-    scale
-    autoscale
-    annotate
-    label
-    set
-    edit
-    patch
-    get <nodes|pod|service|deployment>
-    describe <pod|service|deployment|replicaset>
-    logs <pod>
-    exec
-    top
-
 App
     stateless
     stateful
+    
 
-
+Cronjob
 ```
 
 
-```
-# create deployment
-kubectl run hello-world --replicas=5 --labels="run=load-balancer-example" --image=gcr.io/google-samples/node-hello:1.0  --port=8080
-kubectl get deployment hello-world
-kubectl describe deployments hello-world
-kubectl get replicasets
-kubectl describe replicasets hello-world-5b446dd74b
-# create service
-#kubectl expose deployment hello-world --type=NodePort --name=my-service --port=88 --target-port=8080
-# curl <cluster-ip>:<port> ; curl <node-ip>:<node-port>
 
-kubectl expose deployment hello-world --type=LoadBalancer --name=my-service
-kubectl get services my-service
-kubectl describe services my-service
-# clean up
-kubectl delete services my-service
-kubectl delete deployment hello-world
+## 使用rbd pv
+```
+
+(一) 直接使用
+在k8集群所有节点安装ceph-common包, 注意版本跟ceph集群保持一致
+1. ceph-deploy  --username root install --no-adjust-repos master1
+2. ceph-deploy admin master1 [node1 ...]
+3. 手动创建rbd image
+   rbd create ssd-pool/foo --size 4096M --image-feature layering
+4. rbd.yaml
+
+   apiVersion: v1
+   kind: Pod
+   metadata:
+     name: rbd
+   spec:
+     containers:
+       - image: busybox
+         name: rbd-rw
+         command: ["sleep", "60000"]
+         volumeMounts:
+         - name: rbdpd
+           mountPath: /mnt/rbd
+     volumes:
+       - name: rbdpd
+         rbd:
+           monitors:
+           - '192.168.56.59:6789'
+           pool: ssd-pool
+           image: foo
+           fsType: xfs
+           readOnly: false
+           user: admin
+           keyring: /etc/ceph/ceph.client.admin.keyring
+           imageformat: "2"
+           imagefeatures: "layering"
+
+5. kubectl create -f rbd.yaml --validate=false
+
+
+(二) 使用PV + PVC
+   注意: 删除pv前要删除相关的pvc
+   使用前仍需手动创建rbd image
+   https://github.com/kubernetes/examples/tree/master/staging/volumes/rbd
+
+(三) StorageClass + PVC (动态)
+https://blog.csdn.net/aixiaoyang168/article/details/79120095
+1. 生成kube secret
+   ceph auth get-key client.admin |base64   # 获取ceph admin用户的key, 并替换 ceph-secret-admin.yaml中字段
+   kubectl create -f ceph-secret-admin.yaml
+2. 生成storageclass
+3. 生成pvc
+4. 生成pod
+
+
+StorageClass如果有annotation标为default, 则pvc无需写storageclass
 
 ```
-## Cronjob
 
 
 
@@ -260,60 +223,13 @@ cockpit监控工具集成
 
     node1:9090 #使用系统用户登录
 
+使用NFS, 所有节点安装nfs-utils
 
-使用rbd pv
-
-    (一) 直接使用
-    在k8集群所有节点安装ceph-common包, 注意版本跟ceph集群保持一致
-    1. ceph-deploy  --username root install --no-adjust-repos master1
-    2. ceph-deploy admin master1 [node1 ...]
-    3. 手动创建rbd image
-        rbd create ssd-pool/foo --size 4096M --image-feature layering
-    4. rbd.yaml
-
-        apiVersion: v1
-        kind: Pod
-        metadata:
-          name: rbd
-        spec:
-          containers:
-            - image: busybox
-              name: rbd-rw
-              command: ["sleep", "60000"]
-              volumeMounts:
-              - name: rbdpd
-                mountPath: /mnt/rbd
-          volumes:
-            - name: rbdpd
-              rbd:
-                monitors:
-                - '192.168.56.59:6789'
-                pool: ssd-pool
-                image: foo
-                fsType: xfs
-                readOnly: false
-                user: admin
-                keyring: /etc/ceph/ceph.client.admin.keyring
-                imageformat: "2"
-                imagefeatures: "layering"
-
-    5. kubectl create -f rbd.yaml --validate=false
-
-
-    (二) 使用PV + PVC
-        注意: 删除pv前要删除相关的pvc
-        使用前仍需手动创建rbd image
-        https://github.com/kubernetes/examples/tree/master/staging/volumes/rbd
-
-    (三) StorageClass + PVC (动态)
-    https://blog.csdn.net/aixiaoyang168/article/details/79120095
-    1. 生成kube secret
-        ceph auth get-key client.admin |base64   # 获取ceph admin用户的key, 并替换 ceph-secret-admin.yaml中字段
-        kubectl create -f ceph-secret-admin.yaml
-    2. 生成storageclass
-    3. 生成pvc
-    4. 生成pod
-
-
+node自带的label, 可以供nodeSelector使用
+    kubernetes.io/hostname
+    failure-domain.beta.kubernetes.io/zone
+    failure-domain.beta.kubernetes.io/region
+    beta.kubernetes.io/instance-type
+    beta.kubernetes.io/os
+    beta.kubernetes.io/arch
 ```
-
