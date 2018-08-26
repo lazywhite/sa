@@ -1,0 +1,90 @@
+cat /proc/scsi/scsi  # 查看硬raid
+    Attached devices:
+    Host: scsi0 Channel: 03 Id: 00 Lun: 00
+      Vendor: HP       Model: P440ar           Rev: 4.02
+      Type:   RAID                             ANSI  SCSI revision: 05
+    Host: scsi0 Channel: 00 Id: 00 Lun: 00
+      Vendor: HP       Model: LOGICAL VOLUME   Rev: 4.02
+      Type:   Direct-Access                    ANSI  SCSI revision: 05
+    Host: scsi0 Channel: 00 Id: 00 Lun: 01
+      Vendor: HP       Model: LOGICAL VOLUME   Rev: 4.02
+      Type:   Direct-Access                    ANSI  SCSI revision: 05
+
+fdisk -l
+mdadm  # 软raid
+
+硬盘SMART数据 smartmontools
+smartctl --all /dev/sda
+dmesg|grep -i raid
+
+smartctl --scan-open
+
+
+smartctl -d cciss,0  -a /dev/sda
+smartctl -d megaraid,0 -a /dev/sda
+
+
+惠普Hewlett Packard Enterprise RAID卡下查看磁盘smart信息, ssacli
+https://support.hpe.com/hpsc/swd/public/detail?swItemId=MTX_3d16386b418a443388c18da82f
+
+# ssacli controller all show   -> missing sg module
+    https://support.hpe.com/hpsc/doc/public/display?docId=mmr_kc-0126907
+    modprobe sg
+    modprobe hpsa hpsa_allow_any=1
+
+    ssacli 交互式shell需要退出重进
+
+软件包下载
+    https://downloads.linux.hpe.com/SDR/repo/mcp/pool/non-free/
+
+
+
+简写
+    ctrl controller
+    sn serialnumber
+    pd physicaldisk
+    ld logicaldisk
+
+
+
+=> ctrl sn=PDNLH0BRH46EQ2 ld all show 
+
+    Smart Array P440ar in Slot 0 (Embedded)
+
+   Array A
+
+      logicaldrive 1 (279.4 GB, RAID 1, OK)
+
+   Array B
+
+      logicaldrive 2 (1.4 TB, RAID 5, OK)
+
+=> ctrl sn=PDNLH0BRH46EQ2 ld 1 show status|detail
+
+=> ctrl sn=PDNLH0BRH46EQ2 pd all show [status|detail]
+   Array A
+
+      physicaldrive 1I:1:1 (port 1I:box 1:bay 1, SAS HDD, 300 GB, OK)
+      physicaldrive 1I:1:2 (port 1I:box 1:bay 2, SAS HDD, 300 GB, OK)
+
+   Array B
+
+      physicaldrive 1I:1:3 (port 1I:box 1:bay 3, SAS HDD, 300 GB, OK)
+      physicaldrive 1I:1:4 (port 1I:box 1:bay 4, SAS HDD, 300 GB, OK)
+
+=> ctrl sn=PDNLH0BRH46EQ2 pd  1I:1:3 show [status|detail]
+
+
+=> ctrl slot=0 create type=ld drives=1I:1:3 raid=0
+=> ctrl slot=0 create type=ld drives=1I:1:3,1I:1:4 raid=1
+=> ctrl slot=0 create type=ld drives=1I:1:3,1I:1:4,2I:1:6,2I:1:7,2I:1:8 raid=5
+
+=> rescan
+
+=> ctrl slot=0 ld 2 add drives=2I:1:6,2I:1:7  ## 向逻辑盘添加新物理盘
+=> ctrl slot=0 array all add spares=2I:1:6,2I:1:7 ## 向逻辑盘添加spare盘
+
+=> ctrl slot=0 modify dwc=<disable|enable> # 开启或关闭磁盘缓存
+
+=> ctrl slot=0 pd 2I:1:6 modify erase # 清空硬盘
+=> ctrl slot=0 ld 2 modify led=<on|off> # 开启或关闭属于ld 2的所有硬盘LED灯
