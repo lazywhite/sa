@@ -1,3 +1,7 @@
+yum -y install sysstat
+
+sar -n DEV 1 # 监测网卡流量
+
 sar -n SOCK
  totsck: 系统持有的socket个数；
  tcpsck: 当前正在使用的tcp socket的个数；

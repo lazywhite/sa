@@ -1,3 +1,4 @@
+
 ## on centos-7
 ```
 yum install tigervnc-server
@@ -14,6 +15,23 @@ vncpasswd  --> /home/<User>/.vnc/passwd
 停止桌面
     vncserver -kill :1 
 ```
+## Install Xfce vnc
+```
+yum -y install epel-release # 必须, 否则yum groups list无输出
+yum groups install Xfce
+vncserver # 生成user/.vnc
+edit .vnc/xstartup
+    #!/bin/sh
+    unset SESSION_MANAGER
+    unset DBUS_SESSION_BUS_ADDRESS
+    startxfce4 &
+
+    [ -x /etc/vnc/xstartup ] && exec /etc/vnc/xstartup
+    [ -r $HOME/.Xresources ] && xrdb $HOME/.Xresources
+    xsetroot -solid grey
+vncserver -kill :1
+vncserver
+```
 ## configuration file
 ```
 /lib/systemd/system/vncserver@.service
@@ -25,3 +43,4 @@ vncpasswd  --> /home/<User>/.vnc/passwd
 Mac screen sharing vnc server必须要配置密码
 vnc://192.168.x.x:5900 仅支持端口号连接
 ```
+
