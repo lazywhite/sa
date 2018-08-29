@@ -80,3 +80,9 @@ uninstall: 0
 %postun
 
 ```
+
+
+## 查看未安装rpm包信息
+```
+rpm -qipl  drbd-pacemaker-9.5.0-1.el7.centos.x86_64.rpm # 文件列表
+```
