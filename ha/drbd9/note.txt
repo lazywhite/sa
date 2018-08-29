@@ -4,6 +4,9 @@ https://www.server-world.info/en/note?os=CentOS_7&p=drbd9&f=1
     drbdmanage需要yum -y install pygobject2
     drbd-utils需要联网
 
+    # pacemaker resource agent
+    drbd-pacemaker-9.5.0-1.el7.centos.x86_64.rpm
+
 安装
     需要kernel跟打包机版本一致
     yum -y install pygobject2
@@ -18,6 +21,10 @@ https://www.server-world.info/en/note?os=CentOS_7&p=drbd9&f=1
     (node1): drbdmanage init 192.168.1.1
     (node1): drbdmanage add-node node2 192.168.1.2 # 返回加入命令
     (node2): drbdmanage join -p 6999 192.168.0.2 1 node1 192.168.0.1 0 twuZE5BAthnZIRyEAAS/ 
+
+    # 设置同步速率
+    (node1): drbdmanage net-options --common --max-buffers 131072 --max-epoch-size 20000 --sndbuf-size 10485760 --rcvbuf-size 10485760
+    (node1): drbdmanage peer-device-options --common --c-max-rate 4194304 --c-plan-ahead 100 --c-fill-target 200000
 
     drbdmanage list # 查看子命令
     drbdmanage list-nodes # 查看集群节点
@@ -36,14 +43,23 @@ https://www.server-world.info/en/note?os=CentOS_7&p=drbd9&f=1
     drbd-overview
     drbd-top
 
+    drbdsetup show
 
+
+    (one) drbdmange startup # 启动本机drbd api
 
 扩容drbdpool
     (all)vgextend drbdpool /dev/sdc 
     (node1)dbrdmanage update-pool
     (node1)lsblk # 新磁盘会在被使用时创建对应分区
 
+volume
+    drbdmanage remove-volume <resource> <volume id>
+
 
 1. please disable drbd.service Unless you are NOT using a cluster manager.
 2. 可以创建不大于pool size的任意大小volume
 3. drbdmange restart
+
+
+drbdadm up|down <resource>

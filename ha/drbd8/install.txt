@@ -1,0 +1,28 @@
+https://www.server-world.info/en/note?os=CentOS_7&p=drbd&f=1
+
+确保通外网
+KDIR=/usr/src/kernels/3.10.0-862.11.6.el7.x86_64/ make km-rpm
+
+lvcreate -L 10G drbdpool
+drbdadm primary --force r0  # 初始化同步
+
+/etc/drbd.d/r0.res
+/etc/drbd.d/global_common.conf
+
+
+
+# node显示diskless, 重建resource
+[root@node4 ~]# drbdadm up r0
+No valid meta data found
+
+[root@node4 ~]# drbdadm status
+r0 role:Secondary
+  disk:Diskless
+
+[root@node4 ~]# drbdadm create-md r0
+initializing activity log
+initializing bitmap (32 KB) to all zero
+Writing meta data...
+New drbd meta data block successfully created.
+success
+

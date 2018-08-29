@@ -1,0 +1,27 @@
+Aug 29 14:30:59 node5 kernel: block drbd0: Split-Brain detected but unresolved, dropping connection!
+
+https://segmentfault.com/a/1190000005685072
+
+1.确保卸载所有drbd设备
+root@drbd1:~# umount /dev/drbd0
+root@drbd2:~# umount /dev/drbd0
+
+2.将所有节点设为Secondary
+root@drbd1:~# drbdadm secondary r0
+root@drbd2:~# drbdadm secondary r0
+
+3.中断节点的连接
+root@drbd1:~# drbdadm disconnect r0
+root@drbd2:~# drbdadm disconnect r0
+
+4.drbd2 上执行
+root@drbd2:~# drbdadm connect r0 --discard-my-data
+root@drbd2:~# drbd-overview
+ 0:r0/0  WFConnection Secondary/Unknown UpToDate/DUnknown
+状态 WFConnection: 表示本节点将会等待, 直到对点网络实现连接
+
+5.drbd1 上执行
+root@drbd1:~# drbdadm connect r0
+
+6. watch "cat /proc/drbd"
+

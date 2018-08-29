@@ -1,0 +1,7 @@
+https://docs.linbit.com/docs/users-guide-8.4/
+
+1. 确保drbdadm status 显示UpToDate
+2. umount /dev/drbd0
+
+(all) lvresize -L 10T /dev/drbdpool/lvol0
+(one) drbdadm -- --assume-clean resize <resource>
