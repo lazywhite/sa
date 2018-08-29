@@ -157,13 +157,28 @@ pcs resource create nfs-daemon nfsserver nfs_no_notify=true
 pcs resource create nfs-share exportfs clientspec=172.31.0.0/255.255.0.0 options="rw,sync,insecure,no_subtree_check,no_root_squash" directory=/share fsid=0
 pcs resource create nfs-notify nfsnotify source_host=172.16.0.200
 
+
+# 要严格注意order
 pcs resource group add nfs fs
-pcs resource group add nfs nfs-daemon --after fs
+pcs resource group add nfs cluster_ip --after nfs-share
+pcs resource group add nfs nfs-daemon --after cluster_ip
 pcs resource group add nfs nfs-share --after nfs-daemon
 pcs resource group add nfs nfs-notify --after nfs-share
-pcs resource group add nfs cluster_ip --after nfs-share
 pcs constraint colocation add fs with master drbd_r0_clone INFINITY # master role
 pcs constraint order promote drbd_r0_clone then fs # promote action
+
+
+Full list of resources:
+
+ Master/Slave Set: drbd_r0_clone [drbd_r0]
+     Masters: [ node4 ]
+     Slaves: [ node5 ]
+ Resource Group: nfs
+     fs (ocf::heartbeat:Filesystem):    Started node4
+     cluster_ip (ocf::heartbeat:IPaddr2):       Started node4
+     nfs-daemon (ocf::heartbeat:nfsserver):     Started node4
+     nfs-share  (ocf::heartbeat:exportfs):      Started node4
+     nfs-notify (ocf::heartbeat:nfsnotify):     Started node4
 
 
 
