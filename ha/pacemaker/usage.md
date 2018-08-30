@@ -60,7 +60,10 @@ gui: https://<ip>:2224
 
 pcs resource # list all resource
 pcs resource show <resource>
-pcs resource describe <resource> 获取resource agent帮助
+
+# 获取resource agent帮助
+pcs resource describe ocf:heartbeat:nfsnotify 
+    This agent sends NFSv3 reboot notifications to clients which informs clients to reclaim locks.
 
 
 pcs resource defaults resource-stickiness=100 # 设置默认资源粘性

@@ -5,3 +5,6 @@ https://docs.linbit.com/docs/users-guide-8.4/
 
 (all) lvresize -L 10T /dev/drbdpool/lvol0
 (one) drbdadm -- --assume-clean resize <resource>
+
+mount /dev/drbd0 /share
+xfs_growfs /share
