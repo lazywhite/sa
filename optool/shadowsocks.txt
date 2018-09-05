@@ -1,0 +1,22 @@
+echo 3 > /proc/sys/net/ipv4/tcp_fastopen
+pip install --upgrade pip
+pip install shadowsocks
+
+/etc/ss.conf
+{
+    "server":"hk1.test.com",
+    "server_port": 27725,
+    "local_address": "192.168.3.15",
+    "local_port":1080,
+    "password":"xxxxx",
+    "timeout":300,
+    "method":"rc4-md5",
+    "fast_open": true,
+    "workers": 10
+}
+
+
+sslocal -c /etc/ss.conf
+
+
+可以使用多个配置文件, 跑多个sslocal进程, 使用haproxy进行tcp roundrobin反向代理
