@@ -23,6 +23,7 @@
     ceph-deploy --username root new ceph1 # 初始mon节点, 在当前文件夹生成配置文件
     ceph-deploy --username root install --no-adjust-repos ceph1 ceph2 # 安装ceph
     ceph-deploy mon create-initial # 启动第一个mon节点
+    # modify ceph.conf
     ceph-deploy admin ceph1 ceph2 # 拷贝集群文件至目标节点, 使其可管理集群
     ceph-deploy mgr create ceph1 # 启动manager
 
@@ -55,8 +56,8 @@
 
 删除集群
     ceph-deploy purge ceph1 ceph2
-    # delete all partition from all node, then reboot
-    # dd if=/dev/urandom of=/dev/sdb bs=512 count=64 所有磁盘执行, 不然无法创建osd, 同时要检查lvm配置不要过滤掉磁盘
+    # vgremove /dev/ceph-xxx
+    # dd if=/dev/urandom of=/dev/sdb bs=512 count=64 如果出现无法创建osd, 执行此命令
     ceph-deploy purgedata ceph1 ceph2
     ceph-deploy forgetkeys
     cd ceph-cluster; rm -rf ceph*

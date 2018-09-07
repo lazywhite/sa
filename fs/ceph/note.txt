@@ -64,3 +64,12 @@ auth相关
     ceph auth get client.admin
 
 出现rbd map挂载不上, 需要升级client内核
+
+
+Bluestore
+    https://ceph.com/community/new-luminous-bluestore/
+    BlueStore is a new storage backend for Ceph.  
+    It boasts better performance (roughly 2x for writes), full data checksumming, and built-in compression.  
+    It is the new default storage backend for Ceph OSDs in Luminous v12.2.z and will be used by default when provisioning new OSDs with ceph-disk, ceph-deploy, and/or ceph-ansible.
+
+    Each OSD can run either BlueStore or FileStore, and a single Ceph cluster can contain a mix of both

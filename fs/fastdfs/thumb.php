@@ -1,6 +1,6 @@
 <?php
 //防盗链判断
-if (isset($_SERVER['HTTP_REFERER']) && $_SERVER['HTTP_REFERER'] && !preg_match("/mmbang|iyaya|babybang/", $_SERVER['HTTP_REFERER'])){
+if (isset($_SERVER['HTTP_REFERER']) && $_SERVER['HTTP_REFERER'] && !preg_match("/local|iyaya|babybang/", $_SERVER['HTTP_REFERER'])){
 	header("Location:/blank.gif");
 	exit;
 }
@@ -135,7 +135,7 @@ if (file_exists($tmp_fileid)){
 function url_to_fileid($url)
 {
 	$fileid = '';
-	if (preg_match("/http:\/\/img01\.mmbang\.info\/[0-9]+iyaya_(group[0-9]+_[^_]+_[^_]+_[^_]+_)(.+)/i", $url, $matches)){
+	if (preg_match("/http:\/\/img01\.local\.info\/[0-9]+iyaya_(group[0-9]+_[^_]+_[^_]+_[^_]+_)(.+)/i", $url, $matches)){
 		if ($matches[1]){
 			return str_replace('_', '/', $matches[1]).$matches[2];
 		}

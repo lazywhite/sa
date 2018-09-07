@@ -75,7 +75,7 @@ role
 ```
 rabbitmqctl list_users
 rabbitmqctl list_permissions -p /
-rabbitmqctl add_user admin admin@mmbang
+rabbitmqctl add_user admin admin@local
 rabbitmqctl set_user_tags admin administrator
 rabbitmqctl list_user_permissions guest
 rabbitmqctl set_permissions admin ".*" ".*" ".*"

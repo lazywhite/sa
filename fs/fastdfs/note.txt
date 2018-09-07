@@ -5,4 +5,4 @@ location / {
 }
 
 
-img01.thumb.mmbang.info 无法通group6
+img01.thumb.local.info 无法通group6
