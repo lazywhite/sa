@@ -40,3 +40,12 @@ Executor
 Task
 Zookeeper framework
 ```
+
+
+## Tips
+```
+cd examples/storm-starter; mvn clean package
+storm jar target/storm-starter-1.2.2.jar org.apache.storm.starter.WordCountTopology  <name> # 必须跟name, 否则会以local模式运行
+storm list
+storm kill <name>
+```

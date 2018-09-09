@@ -1,0 +1,25 @@
+前置条件
+    /etc/hosts 所有node短域名解析
+    zookeeper集群
+
+1. (all)install jdk
+2. (all)install storm
+3. (all)conf/storm.yaml
+    storm.zookeeper.servers:
+      - 'zk01'
+      - 'zk02'
+      - 'zk03'
+    storm.local.dir: "/root/stormdata"
+    storm.log.dir: "/root/stormdata"
+    nimbus.host: "master"
+
+    # define how many workers can run on this node, default is 4
+    supervisor.slots.ports:
+      - 6700
+      - 6701
+      - 6702
+      - 6703
+
+4. (master) storm nimbus
+5. (master) storm ui # default 8080
+6. (nodes) storm supervisor
