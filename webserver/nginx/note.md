@@ -125,3 +125,9 @@ baseurl=http://nginx.org/packages/centos/7/$basearch/
 gpgcheck=0
 enabled=1
 ```
+
+## 10. yum安装
+```
+yum -y install epel-release
+yum -y install nginx
+```

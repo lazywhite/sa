@@ -476,3 +476,10 @@ df -i 查看inode占用, /proc文件也会在inode中产生记录
 <ip>:<port>唯一决定一个服务
     192.168.1.1:8080, 127.0.0.1:8080可以同时由不同程序监听
     192.168.1.1:8080, 0.0.0.0:8080在mac可以, 在linux不行
+
+cent7使用iptables
+    yum remove firewalld
+    yum -y install iptables-service
+    systemctl start iptables
+    iptables -F
+    service iptables save

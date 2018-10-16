@@ -37,3 +37,5 @@ services.msc
 
 查看网络信息
     ipconfig /all
+查看路由信息
+    route print -4

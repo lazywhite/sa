@@ -414,3 +414,5 @@ SQL> set cmds off
 SQL> show cmds
 cmdsep OFF)
 ```
+
+## dblink
