@@ -3,8 +3,7 @@ note for linux system administration
 
 ## Directory Layout 
 
-```  
-├── RHCE.png
+```
 ├── android
 │   ├── jenkins_android.sh
 │   └── note.md
@@ -54,6 +53,8 @@ note for linux system administration
 │   ├── sqlite
 │   ├── sybase
 │   └── tools
+├── disk
+│   └── raid.txt
 ├── dns
 │   ├── bind
 │   └── dnsmasq.md
@@ -62,6 +63,7 @@ note for linux system administration
 │   ├── iptables
 │   └── note.md
 ├── fs
+│   ├── ceph
 │   ├── fastdfs
 │   ├── gfs2
 │   ├── gluster
@@ -74,14 +76,10 @@ note for linux system administration
 ├── ftp
 │   └── client.txt
 ├── ha
-│   ├── Cluster.txt
-│   ├── corosync.txt
-│   ├── corosync_configure.md
-│   ├── cpc.md
-│   ├── drbd+pacemaker.txt
+│   ├── drbd8
+│   ├── drbd9
 │   ├── keepalived
-│   ├── pcs-corosync.txt
-│   └── rhcs
+│   └── pacemaker
 ├── ldap
 │   ├── db.tar.gz
 │   ├── deploy.md
@@ -146,6 +144,7 @@ note for linux system administration
 │   ├── grafana
 │   ├── ipmi
 │   ├── nagios
+│   ├── prometheus
 │   ├── tick
 │   └── zabbix
 ├── mq
@@ -154,8 +153,8 @@ note for linux system administration
 │   ├── rabbitmq
 │   └── zeromq
 ├── network
+│   ├── bond.txt
 │   ├── cisco-router.md
-│   ├── multi_net_routing.txt
 │   ├── nic-bridge.txt
 │   ├── ntop
 │   ├── route.txt
@@ -166,18 +165,22 @@ note for linux system administration
 │   ├── note.md
 │   └── ntp.conf
 ├── optool
+│   ├── 7zip.md
+│   ├── atop.md
 │   ├── autossh.md
 │   ├── awk.md
 │   ├── awk.txt
 │   ├── cobbler.md
-│   ├── code-deploy.txt
 │   ├── customize_iso.txt
 │   ├── dstat
+│   ├── ethtool.txt
 │   ├── experience.txt
 │   ├── find.md
 │   ├── gitbook.md
 │   ├── grep.md
+│   ├── hashcat.md
 │   ├── htop.md
+│   ├── iftop.md
 │   ├── iostat.md
 │   ├── iptables.txt
 │   ├── irc.txt
@@ -185,20 +188,24 @@ note for linux system administration
 │   ├── lsof.md
 │   ├── lsof.txt
 │   ├── mpstat.md
+│   ├── nload.md
 │   ├── nmap.md
 │   ├── oh-my-zsh.md
 │   ├── pxe.md
 │   ├── rdp.md
 │   ├── rpm.md
 │   ├── rsync.md
+│   ├── rsyslog.md
 │   ├── sar.md
 │   ├── screen.md
 │   ├── sed.md
 │   ├── seq.md
+│   ├── shadowsocks.txt
 │   ├── slack.md
 │   ├── ss.md
 │   ├── sublime.md
 │   ├── systemd.md
+│   ├── vconfig.txt
 │   ├── vim.md
 │   ├── vmstat.md
 │   ├── vnc.md
@@ -214,6 +221,7 @@ note for linux system administration
 │   ├── network
 │   └── taskset.md
 ├── protocol
+│   ├── bgp
 │   ├── dns.md
 │   ├── http
 │   ├── https.md
@@ -226,6 +234,8 @@ note for linux system administration
 │   ├── note.md
 │   ├── reverse_proxy
 │   └── tinyproxy.md
+├── README.md
+├── RHCE.png
 ├── rsync
 │   ├── note.txt
 │   ├── rsyncd.conf
@@ -271,7 +281,7 @@ note for linux system administration
 │   └── svn
 ├── virtualization
 │   ├── docker
-│   ├── kubernate
+│   ├── kubernetes
 │   ├── kvm
 │   ├── openstack
 │   ├── vagrant
@@ -289,3 +299,4 @@ note for linux system administration
     ├── virtio.md
     └── zabbix_agent.md
 ```
+
