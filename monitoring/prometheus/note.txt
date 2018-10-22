@@ -1,0 +1,34 @@
+rules
+    recording rules
+        预计算, 产生新的series并保存
+    alert rules
+        expr, 触发报警
+
+检查配置
+    promtool check rules /path/to/example.rules.yml
+应用新配置
+    kill -HUP pid
+    http://localhost:9090/-/reload
+
+
+storage
+    local
+    remote
+        adaptor
+            third-party storage
+                influxdb
+
+alertmanager
+    route
+        child route 
+        continue
+    inhibit
+        mute
+    receiver
+        name
+        wechat_config
+
+grafana
+    datasource
+        http://promethues
+    graph
