@@ -1,0 +1,3 @@
+kube-dummy-if: 所有的svc ip会绑定到此网卡
+kube-bridge: 所有pod会桥接到此网卡
+所有pod网关指向kube-bridge

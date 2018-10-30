@@ -1,7 +1,7 @@
 ## Component
 ```
 master
-    api
+    apiserver
     etcd
     scheduler
     kube controller manager
@@ -23,8 +23,6 @@ addon
     resource monitoring
     logging
 
-node
-
 
 CLI
     kubeadmin: 管理集群节点
@@ -42,9 +40,9 @@ Access modes
 	ReadWriteMany – the volume can be mounted as read-write by many nodes(RWX)
 
 Reclaim Policy
- 	Retain
+ 	Retain: 保留volume
 	Recycle (只有本地盘和nfs支持数据盘Recycle 擦除回收)
-	Delete
+	Delete: 删除volume
 ```
 
 ## Tips
@@ -206,6 +204,11 @@ DNS
         kubectl delete -f manifests/coredns/coredns.yaml
         kubectl apply -f manifests/coredns/coredns.yaml
 
+    测试(不要使用busybox)
+        kubectl run b1 -it --rm --image=alpine /bin/sh
+        nslookup
+
+
 设置资源上限    
     kubectl run nginx1 --image=nginx --port=80 --expose --limits='cpu=500m,memory=8Mi'
     kubectl run --rm -it load-generator --image=busybox /bin/sh
@@ -232,4 +235,11 @@ node自带的label, 可以供nodeSelector使用
     beta.kubernetes.io/instance-type
     beta.kubernetes.io/os
     beta.kubernetes.io/arch
+
+
+获取dashboard admin token
+    kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep admin-user | awk '{print $1}')
+
+pod status: NodeLost
+    systemctl restart kubelet
 ```

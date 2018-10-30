@@ -7,3 +7,19 @@ helms install \
 helms upgrade grafana -f grafana-settings.yaml -f grafana-dashboards.yaml grafana
 helms rollback monitor [REVISION]
 helm delete --purge <release>
+
+[root@master1 prometheus]# helm ls --all
+NAME      	REVISION	UPDATED                 	STATUS  	CHART           	NAMESPACE
+grafana   	1       	Thu Aug 30 15:50:27 2018	DELETED 	grafana-1.10.0  	monitoring
+monitor   	1       	Thu Aug 30 15:46:50 2018	DELETED 	prometheus-6.7.0	monitoring
+prometheus	1       	Thu Aug 30 16:23:59 2018	DEPLOYED	prometheus-6.7.0	monitoring
+
+[root@master1 prometheus]# helm del --purge monitor
+Error: transport is closing
+
+等待一段时间重新删除
+
+
+
+
+

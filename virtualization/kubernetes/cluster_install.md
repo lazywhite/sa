@@ -6,3 +6,4 @@
 6. selinux, firewalld, iptables
 7. 磁盘容量
 8. disable swap
+9. nfs-utils, ceph-client
