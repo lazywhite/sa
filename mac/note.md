@@ -73,9 +73,11 @@ brew link libxml2 --force
 brew link libxslt --force
 sudo C_INCLUDE_PATH=/usr/local/include/libxml2 pip install lxml
 ```
-## dd 过慢问题
+## 创建自启动U盘
 ```
-dd if=Downloads/FreeBSD-10.1-RELEASE-amd64-memstick.img of=/dev/rdisk2 bs=1024000
+diskutil list
+diskutil umountdisk /dev/disk2
+dd if=Downloads/FreeBSD-10.1-RELEASE-amd64-memstick.img of=/dev/disk2 bs=1m
 ```
 
 ## 禁止开机启动

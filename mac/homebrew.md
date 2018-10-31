@@ -10,6 +10,11 @@ echo 'export HOMEBREW_BOTTLE_DOMAIN=https://mirrors.ustc.edu.cn/homebrew-bottles
 source ~/.bash_profile
 ```
 
+## Proxy
+```
+# ALL_PROXY=http://192.168.1.1:8888 brew install <>
+```
+
 ## Usage
 ```
 brew update # 升级brew本身及formulae列表
