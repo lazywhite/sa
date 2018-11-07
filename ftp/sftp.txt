@@ -1,0 +1,30 @@
+sftp基于ssh, 无需独立的端口
+env:
+    os: centos-7.5
+    sshd: openssh-server-7.4p1-16.el7.x86_64
+
+
+groupadd sftp
+useradd -d /home/crm -m -s /bin/false -g sftp crm
+passwd crm
+
+mkdir /data
+chown root.sftp /data  # 必须
+chmod 755 /data
+
+mkdir /data/app1
+chown crm.sftp /data/app1
+
+
+/etc/ssh/sshd_config
+    Subsystem   sftp    internal-sftp  # update
+
+    Match User crm 
+        ChrootDirectory /data
+        ForceCommand internal-sftp
+        X11Forwarding no
+        AllowTcpForwarding no
+
+systemctl restart sshd
+
+登陆后无法在/操作, 只能cd进app1进行任意操作

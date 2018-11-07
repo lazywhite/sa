@@ -78,5 +78,6 @@ RBD
     (client1): rbd map ssd-pool/foo # -->/dev/rbd0
     (client1): rbd unmap ssd-pool/foo 
     (client1): rbd showmapped
+    (client1): systemctl start rbdmap # 允许开机映射
     (admin-node): rbd --pool  ssd-pool du
 

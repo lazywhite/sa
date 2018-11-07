@@ -20,6 +20,8 @@ ftp>
     delete
     mdelete
     rename 重命名
+    prompt 不询问yes/no
+    binary 二进制模式
 
 
 ftp> ls
