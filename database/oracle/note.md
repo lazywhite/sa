@@ -15,6 +15,10 @@ schema
 数据库实例
 redo log
 
+
+SID
+service name
+
 一般一个oracle database(磁盘文件)对应一个oracle instance(内存进程)
 需要分别启动不同的oracle instance
 一台服务器可以同时启动多个oracle instance
@@ -118,3 +122,17 @@ jdbc call oracle procedure
 切换数据库
     export ORACLE_SID='TEST'
     sqlplus  
+
+
+自增字段
+    creat table Persons(P_Id number(20), FirstName varchar(20), LastName varchar(20));
+    create sequence seq_person
+    minvalue 1
+    start with 1
+    increment by 1
+    cache 100
+
+    INSERT INTO Persons (P_Id,FirstName,LastName)
+    VALUES (seq_person.nextval,'Lars','Monsen')
+
+不支持单insert插入values list

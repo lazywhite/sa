@@ -1,0 +1,2 @@
+create table F_CACHE_DATA_H (id number(10), app_name varchar(30), data number(30))
+delete from F_CACHE_DATA_H where id is null;

@@ -416,3 +416,12 @@ cmdsep OFF)
 ```
 
 ## dblink
+
+
+# 分页
+select a1.* from (select student.*,rownum rn from student) a1 where rn between 3 and 5;
+
+
+## sqlplus 执行sql文件
+sqlplus> @/path/to/script.sql
+sqlplus> commit; # 必须
