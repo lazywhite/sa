@@ -1,3 +1,8 @@
+install
+    download prometheus-2.4.3.linux-amd64.tar.gz
+    tar xf  prometheus-2.4.3.linux-amd64.tar.gz -C /usr/local
+    bin/prometheus --config.file=prometheus.yaml
+
 rules
     recording rules
         预计算, 产生新的series并保存

@@ -483,3 +483,25 @@ cent7使用iptables
     systemctl start iptables
     iptables -F
     service iptables save
+
+bash超时自动退出
+    TMOUT=180
+    unset TMOUT
+    
+
+rz connection canceld by remote side
+    数据中含有控制字符
+    rz -be 
+
+
+chage -l user01 # 查看账户密码策略
+chage -M 9999 user01 # 设置最大过期时间
+chage -m 1 user01 # 设置最小过期时间
+
+
+/etc/login.defs
+    PASS_MAX_DAYS 60     #密码最大有效期，此处参数PASS_MAX_DAYS为60，表示60天后，密码会过期。99999表示永不过期。
+    PASS_MIN_DAYS 0      #两次修改密码的最小间隔时间，0表示可以随时修改账号密码
+    PASS_MIN_LEN  8      #密码最小长度，对于root无效
+    PASS_WARN_AGE 7      #密码过期前多少天开始提示
+
