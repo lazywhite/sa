@@ -1,0 +1,11 @@
+yum -y install chrony
+
+
+/etc/chrony.conf
+    server 0.centos.pool.ntp.org iburst
+    allow 192.168.0.0/16
+
+systemctl start chronyd
+
+
+chronyc resource # 查看同步状态
