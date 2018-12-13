@@ -2,6 +2,8 @@
 ## 1. 服务端
 ```
 /etc/rsyslog.conf
+     $ModLoad imudp
+     $UDPServerRun 514
      local7.*                                                /var/log/boot.log
      local3.*                                                /var/log/bash-history.log # 新增
 
