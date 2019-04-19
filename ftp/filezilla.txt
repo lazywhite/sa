@@ -1,0 +1,14 @@
+1. install on windows
+2. configure admin port 
+
+3. Edit-->Settings 
+    enable passive ftp
+    disable ftp over TLS
+
+4. Edit-->Group
+    add ftp group
+
+5. Edit-->User
+    add ftp user
+    set permissions
+
