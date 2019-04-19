@@ -1,5 +1,0 @@
-define servicegroup {
-    servicegroup_name       SSH Service
-    alias                   alias2
-    members                 mongo1,check_ssh,mongo2,check_ssh,mongo3,check_ssh,mongo2,4heck_ssh,mongo5,check_ssh,mongo6,check_ssh,mongo7
-}
