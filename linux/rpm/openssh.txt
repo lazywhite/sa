@@ -1,0 +1,71 @@
+# centos-7
+yum -y install rpm-build gcc make openssl-devel zlib-devel pam-devel
+
+mkdir -p rpmbuild/SOURCES
+cd rpmbuild/SOURCES
+wget http://ftp.riken.jp/pub/OpenBSD/OpenSSH/portable/openssh-7.9p1.tar.gz
+wget http://ftp.riken.jp/Linux/momonga/6/Everything/SOURCES/x11-ssh-askpass-1.2.4.1.tar.gz
+tar xf openssh-7.9p1.tar.gz 
+
+###### centos 6 ############
+cat > openssh-7.9p1/contrib/redhat/sshd.pam <<EOF
+
+#%PAM-1.0
+auth       required     pam_sepermit.so
+auth       include      password-auth
+account    required     pam_nologin.so
+account    include      password-auth
+password   include      password-auth
+# pam_selinux.so close should be the first session rule
+session    required     pam_selinux.so close
+session    required     pam_loginuid.so
+# pam_selinux.so open should only be followed by sessions to be executed in the user context
+session    required     pam_selinux.so open env_params
+session    optional     pam_keyinit.so force revoke
+session    include      password-auth
+EOF
+
+###### centos 7 ############
+cat > openssh-7.9p1/contrib/redhat/sshd.pam <<EOF
+#%PAM-1.0
+auth	   required	pam_sepermit.so
+auth       substack     password-auth
+auth       include      postlogin
+# Used with polkit to reauthorize users in remote sessions
+-auth      optional     pam_reauthorize.so prepare
+account    required     pam_nologin.so
+account    include      password-auth
+password   include      password-auth
+# pam_selinux.so close should be the first session rule
+session    required     pam_selinux.so close
+session    required     pam_loginuid.so
+# pam_selinux.so open should only be followed by sessions to be executed in the user context
+session    required     pam_selinux.so open env_params
+session    required     pam_namespace.so
+session    optional     pam_keyinit.so force revoke
+session    include      password-auth
+session    include      postlogin
+# Used with polkit to reauthorize users in remote sessions
+-session   optional     pam_reauthorize.so prepare
+EOF
+
+
+cp openssh-7.9p1/contrib/redhat/openssh.spec  ~
+mv openssh-7.9p1.tar.gz{,.orig}
+tar zcpf openssh-7.9p1.tar.gz openssh-7.9p1
+cd
+vim openssh.spec  # change 0 to 1
+    %define no_x11_askpass 1
+    %define no_gnome_askpass 1
+    #BuildRequires: openssl-devel < 1.1 # comment this check
+
+rpmbuild -ba openssh.spec 
+
+cd ~/rpmbuild/RPMS
+rpm -Uvh *.rpm
+chmod 600 /etc/ssh/ssh*_key
+rpm -Uvh *.rpm
+systemctl restart sshd
+# 检查版本
+ssh -V
+sshd -V
