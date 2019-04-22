@@ -1,6 +1,0 @@
-install
-    download  alert-manger-
-    ./alertmanager --config.file=simple.yml
-
-conf
-

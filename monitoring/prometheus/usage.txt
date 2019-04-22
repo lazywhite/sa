@@ -1,0 +1,64 @@
+======== Install =============
+1. download and untar following files
+
+alertmanager-0.16.1.linux-amd64.tar.gz
+node_exporter-0.17.0.linux-amd64.tar.gz
+prometheus-2.7.1.linux-amd64.tar.gz
+pushgateway-0.7.0.linux-amd64.tar.gz
+
+
+2. prometheus
+    ./prometheus
+
+  
+  alerting:
+    alertmanagers:
+      - static_configs:
+        - targets:
+           - alertmanager:9093
+  scrape_configs:
+      - job_name: 'node_exporter'
+        static_configs:
+            - targets: ['127.0.0.1:9100']
+
+3. alertmanager
+    ./alertmanager
+    
+4. node_exporter
+    ./node_exporter
+
+5. grafana
+    # 启动
+    ./grafana-server web
+    # 配置文件
+    conf/default.ini
+    # 访问
+    http://ip:3000    admin/admin
+    # add prometheus datasource
+    http://ip:9090
+    # import node_exporter dashboard
+    https://grafana.com/dashboards/8919 
+    ./grafana-cli --pluginsDir=data/plugins plugins install grafana-piechart-panel
+    # restart grafana-server
+    
+======== Usage =============
+API
+http://1.2.3.4:8090/api/v1/query?query=  # 获取单个值
+http://1.2.3.4:8090/api/v1/query_range?query=&start=&end=&step=  # 获取一定时间范围内值
+
+
+获取所有节点列表(job="node_group")
+http://1.2.3.4:8090/api/v1/targets
+
+cpu 最近5m内空闲率
+http://1.2.3.4:8090/api/v1/query_range?query=irate(node_cpu_seconds_total{mode="idle",job="node_group"}[5m])&start=1552538580&end=1552538910&step=15
+
+获取某个节点的内存使用率(当前值)
+http://1.2.3.4:8090/api/v1/query_range?query=node_memory_MemAvailable_bytes{instance=~"1.2.2.1:9100"} / (node_memory_MemTotal_bytes{instance=~"1.2.2.1:9100"})&start=1552538580&end=1552538910&step=15
+
+获取某个节点所有磁盘当前使用率
+http://1.2.3.4:8090/api/v1/query_range?query=1-(node_filesystem_free_bytes{instance=~'1.2.2.1:9100',fstype=~"ext4|xfs"} / node_filesystem_size_bytes{instance=~'1.2.2.1:9100',fstype=~"ext4|xfs"})&start=1552538580&end=1552538910&step=15
+
+获取某个节点所有磁盘IO Util比率
+http://1.2.3.4:8090/api/v1/query_range?query=irate(node_disk_io_time_seconds_total{instance=~"1.2.2.1:9100"}[10m])&start=1552538580&end=1552538910&step=15
+

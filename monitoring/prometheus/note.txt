@@ -1,8 +1,3 @@
-install
-    download prometheus-2.4.3.linux-amd64.tar.gz
-    tar xf  prometheus-2.4.3.linux-amd64.tar.gz -C /usr/local
-    bin/prometheus --config.file=prometheus.yaml
-
 rules
     recording rules
         预计算, 产生新的series并保存
@@ -11,29 +6,34 @@ rules
 
 检查配置
     promtool check rules /path/to/example.rules.yml
+
 应用新配置
     kill -HUP pid
     http://localhost:9090/-/reload
 
 
+
+metric type
+    counter
+    gauge
+    histogram
+    summary
+
+datamodel
+    metric name and label
+
+job and instance
+
+
+分布式
+    federation
+
 storage
-    local
-    remote
-        adaptor
-            third-party storage
-                influxdb
+    local-disk
+    remote storage
+        
 
-alertmanager
-    route
-        child route 
-        continue
-    inhibit
-        mute
-    receiver
-        name
-        wechat_config
 
-grafana
-    datasource
-        http://promethues
-    graph
+pushgateway适用于server无法直接pull node的情况, node post到gateway, 再由server pull
+
+server收集的metrics可通过server:9090/metrics访问
