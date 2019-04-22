@@ -101,4 +101,7 @@ find . -type f -size -4096k # smaller than size
 find . -name "*.py" -or -name "*.sh"
 
 find . -path ./migrations -prune -o -name "*.py" # 排除某些文件夹
+
+find . -mtime +10 # 当前日期10天以前的
+find . -mtime -10 # 当前日期10天以内的
 ```
