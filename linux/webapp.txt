@@ -1131,5 +1131,3 @@ proxy_pass /forum http://192.168.10.8:8080/forum
 
 
 mod_proxy均衡时无法stickeysession
-
-

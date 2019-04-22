@@ -1,35 +1,3 @@
-磁盘分区格式化：
-
-/
-/bin, /sbin: 二进制程序，操作系统自身运行就需要用到的程序
-	/usr/bin, /usr/sbin: 二进制程序，基本的系统工具；
-	/usr/local/bin, /usr/local/sbin：第三方程序；
-/lib
-	/usr/lib
-	/usr/local/lib
-/etc
-/tmp
-/var
-	log
-	mail
-	cache
-/proc: 内核映像
-/sys：硬件信息
-
-/media
-/mnt
-
-/opt:
-
-/boot: 引导目录，内核
-
-/home/USERNAME, /root:
-
-/dev:
-	设备类型：
-		b: 随机设备
-		c：线性设备
-
 硬盘设备：随机存取设备
 	I/O, I/O Controller
 		 I/O Adapter
@@ -4044,101 +4012,8 @@ GRUB识别分区：
 			quiet: 静默模式；
 			selinux=0: 禁用内核中的selinux；
 
-password --md5 密码
 
-# grub-md5-crypt			
-
-安装grub：
-grub> root (hd#,#)
-grub> setup (hd#)
-grub> quit
-
-方法2：安装grub
-1、创建一个名为boot的目录，例如/mnt/boot
-2、确保目标硬盘分区已经存在，否则，请自行分区格式化；
-3、挂载目标硬盘上要安装grub的分区至新建的boot目录;
-3、grub-install --root-directory=/mnt/boot /dev/sdb
-
-内核探测硬件的信息：记录进日志文件/var/log/dmesg
-# cat /var/log/dmesg
-# dmesg
-
-
-
-tservice 
-
-# chkconfig: 35 90 60
-
-X(65) --> Y (60)
-X(60) --> Y(70)
-
-
-chkconfig --add 
-
-# chkconfig: <runlevels> <SS> <KK>
-
-
-#!/bin/bash
-# chkconfig: 35 90 60
-# description: Test Service
-# config: /etc/tservice.conf
-
-Service=`basename $0`
-LockFile=/var/lock/subsys/$Service
-
-start() {
-	if [ -e $LockFile ]; then
-	  echo "$Service is already running..."
-	  return 5
-    else
-      touch $LockFile
-      echo "Starting $Service finished..."
-      return 0
-    fi
-}
-
-stop() {
-	if [ -e $LockFile ]; then
-	  rm -f $LockFile
-	  echo "Stop $Service finished..."
-	  return 0
-	else
-	  echo "$Service is stopped."
-	  return 6
-	fi
-}
-
-status() {
-	if [ -e $LockFile ]; then
-	  echo "$Service is running..."
-	else
-	  echo "$Service is stopped..."
-	fi
-    return 0
-}
-
-usage() {
-	echo "Usage: $Service {start|stop|restart|status}"
-}
-
-case $1 in
-start)
-	start ;;
-stop)
-	stop ;;
-restart)
-	stop
-	start ;;
-status)
-	status ;;
-*)
-	usage 
-	exit 1 ;; 
-esac
-
-
-
-
+## 终端彩色
 
 Jump='\033[60G'
 Green='\033[32m'
@@ -4184,24 +4059,10 @@ Linux: 单内核
 
 	depmod
 
-ram disk 或 ram fs如何生成：
-	# mkinitrd
-	# dracut </path/to/image_file> <kernel_version>
-
-Linux: 
-	vmlinuz, modules, initramfs
-	init, bash
-
-	initctl, telinit
-
-	initctl tty1
 
 busybox
 
 
-kernel, /proc
-
-/proc/#: 
 
 通过/proc/sys修改内核的工作特性
 	文件：但它们是内核参数，文件的内容即为参数的值；
@@ -4231,26 +4092,9 @@ lscpu：显示CPU相关信息；
 lsblk: 显示块设备相关信息；
 
 hal-device
-x86info
 dmesg
 
 dmidecode
-
-ls /dev
-	b: 随机设备
-	c: 线性设备
-
-	mknod, udev
-
-	mknod /dev/dev_file 类型 major minor
-		-m MODE
-
-	udev: /etc/udev/rules.d/*.rule
-
-
-内核编译：
-5.0,5.9
-6.0,6.4
 
 "Development tools"
 "Server Platform Development"
@@ -4354,27 +4198,6 @@ make -j #
 
 
 
-获取RedHat官方提供的源码：
-http://ftp.redhat.com/pub/redhat/linux/enterprise/
-
-mockbuild
-
-
-
-
-trouble shooting, kickstart, pxe
-
-
-
-livecd
-isolinux/
-
-
-anaconda, kickstart
-
-POST-->MBR(cdrom, grub.conf)-->isolinux.bin(isolinux.cfg)-->vmlinuz(initrd)-->anaconda
-
-
 GPT
 MBR
 
@@ -4402,29 +4225,20 @@ kickstart文件组成：
 
 POST-->cdrom(MBR)-->isolinux.bin(isolinux.cfg)-->vlinuz+initrd(anaconda)
 
-GUI: 安装
-boot: 在提示符下可以提供一些配置信息，自定义如何启动安装过程
-
 
 Linux的引导选项，即boot:提示符后可以使用的选项：
 
 boot: linux ks=http://172.16.0.1/rhel6.x86_64.cfg
 
-ip=
-netmask=
-gateway=
-dns=
-ks=
 
-
-Kickstart 资​源​	 选​项​格​式​
-DVD 驱​动​器​	ks=cdrom:/directory/ks.cfg
-硬​盘​驱​动​器​	ks=hd:/device/directory/ks.cfg
-其​它​设​备​	ks=file:/device/directory/ks.cfg
-HTTP服​务​器​	ks=http://server.mydomain.com/directory/ks.cfg
-HTTPS服​务​器​	ks=https://server.mydomain.com/directory/ks.cfg
-FTP服​务​器​	ks=ftp://server.mydomain.com/directory/ks.cfg
-NFS服​务​器​	ks=nfs:server.mydomain.com:/directory/ks.cfg
+Kickstart 资源	 选项格式
+DVD 驱动器	ks=cdrom:/directory/ks.cfg
+硬盘驱动器	ks=hd:/device/directory/ks.cfg
+其它设备	ks=file:/device/directory/ks.cfg
+HTTP服务器	ks=http://server.mydomain.com/directory/ks.cfg
+HTTPS服务器	ks=https://server.mydomain.com/directory/ks.cfg
+FTP服务器	ks=ftp://server.mydomain.com/directory/ks.cfg
+NFS服务器	ks=nfs:server.mydomain.com:/directory/ks.cfg
 
 
 1、制作引导光盘
@@ -4469,8 +4283,6 @@ kernel --> init ()
 
 
 
-
-
 安装：引导介质
 	cdrom
 	USB
@@ -4492,66 +4304,6 @@ kernel --> init ()
 	POST-->cdrom(MBR, bootloader, isolinux.bin)-->isolinux.cfg-->vmlinuz+initrd-->anaconda
 
 
-
-bash编程之循环控制、数组、信号捕捉
-
-	for 变量 in 列表; do
-	  循环体
-	done
-
-	while 条件; do
-	  循环体
-	done
-
-	until 条件; do
-	  循环体
-	done
-
-	continue: 结束本轮循环提前进入下一轮；
-	break: 跳出循环
-
-练习：求100以内所有偶数的和：
-
-#!/bin/bash
-#
-declare -i Sum=0
-for I in {1..100}; do
-  if [ $[$I%2] -eq 1 ]; then
-    continue
-  fi
-  let Sum+=$I
-done
-
-
-#!/bin/bash
-#
-declare -i Sum=0
-declare -i Count=0
-while true; do
-  if [ $Count -gt 100 ]; then
-    break
-  fi
-  let Sum+=$Count
-  let Count+=2
-done
-
-echo $Sum
-
-
-每隔5秒探测一次当前系统上指定用户是否登录；直到登录，说明其已经登录，而后结束脚本；
-
-#!/bin/bash
-#
-read -p "Which user: " UserName
-UserName=${UserName:-root}
-
-while true; do
-  who | grep "^$UserName[[:space:]]" &> /dev/null
-  [ $? -eq 0 ] && break
-  sleep 5
-done
-
-echo "$UserName is logged."
 
 
 
@@ -4585,37 +4337,3 @@ for I in {11..110};do
     echo "$Network.$I is down."
   fi
 done
-
-
-练习：写一个脚本，完成如下功能
-前提：有两个下载点可以提供相应的软件包：http://172.16.0.1/cobbler/ks_mirror/centos-6.4-x86_64/Packages/和http://172.16.0.1/fedora-epel/6/x86_64；
-1、install.log文件中每一个以Installing开头的行后面后的均为一个包名，其后被.rpm即为软件包文件名；请从如上两个位置中的某一个下载相应的文件；
-2、下载完成后保存至目标目录，如iso/Packages/，
-3、所有包都下载完成后，使用createrepo命令将目标目录创建为yum repository；注意，如果createrepo命令不存在，需要事先安装之；安装不成，则要报错；
-4、将http://172.16.0.1/cobbler/ks_mirror/centos-6.4-x86_64/isolinux/下的所有文件下载至前面Packages的父目录下的isolinux目录中，如iso/isolinux/；
-5、使用mkisofs命令将iso目录制作成可引导的iso镜像；
-6、如果中途用户使用ctrl+c组合键退出脚本，则需要清除下载的所有文件；
-
-
-#!/bin/bash
-#
-Target=/root/Packages
-File=/root/install.log
-URL=http://172.16.0.1/cobbler/ks_mirror/centos-6.4-x86_64/Packages
-
-trap "rm -rf $Target; exit 4" INT
-
-[ -d $Target ] || mkdir $Target
-
-while read Line; do
-  if [[ $Line =~ ^Installing ]]; then
-    RpmFile=`echo $Line | awk '{print $2}'`
-  else
-    continue
-  fi
-
-  wget -q -P $Target/ $URL/${RpmFile}.rpm
-  [ $? -ne 0 ] && echo "$RpmFile not download."
-done < $File
-
-

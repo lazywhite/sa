@@ -1,3 +1,11 @@
+# change default ssh port for host
+    Host server1
+         HostName server1.cyberciti.biz
+         User nixcraft
+         Port 4242
+         IdentityFile /nfs/shared/users/nixcraft/keys/server1/id_rsa
+
+
 # 将zabbix用户的组列表设置为zabbix,0
 usermod -G zabbix,0 zabbix
 # 将组wheel添加给zabbix用户
@@ -6,4 +14,3 @@ usermod -a -G wheel zabbix
 usermod -g zabbix zabbix
 # 查看user的组
 groups <user>
-

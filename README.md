@@ -65,6 +65,7 @@ note for linux system administration
 ├── fs
 │   ├── ceph
 │   ├── fastdfs
+│   ├── ftpfs
 │   ├── gfs2
 │   ├── gluster
 │   ├── iscsi
@@ -72,9 +73,16 @@ note for linux system administration
 │   ├── mogilefs
 │   ├── nfs
 │   ├── samba
+│   ├── sshfs
 │   └── zfs
 ├── ftp
-│   └── client.txt
+│   ├── client.txt
+│   ├── filezilla.txt
+│   ├── ftp_client.sh
+│   ├── ftp-server.sh
+│   ├── lftp.md
+│   ├── sftp.txt
+│   └── vsftp.md
 ├── ha
 │   ├── drbd8
 │   ├── drbd9
@@ -93,42 +101,29 @@ note for linux system administration
 ├── library
 │   └── openssl.md
 ├── linux
-│   ├── 143256261.jpg
-│   ├── 2033581_1369962477MN7p.jpg
-│   ├── 2033581_13699627772B10.jpg
-│   ├── 2033581_1369962848eEh1.jpg
-│   ├── 2033581_1369962958hvxf.jpg
-│   ├── 2033581_1369963124kxNd.jpg
-│   ├── 2033581_1369963308D7At.jpg
-│   ├── 2033581_1369963393EOGB.jpg
-│   ├── 2033581_1370221372VEAi.jpg
-│   ├── cent7
-│   ├── course.txt
-│   ├── cronolog.md
-│   ├── debian.md
-│   ├── http-netstat.txt
-│   ├── iproute2.png
-│   ├── java_run_process.jpg
-│   ├── procedure.txt
-│   ├── ssh_config.md
+│   ├── build_minimal_linux.txt
+│   ├── deb_mirror.md
+│   ├── image
+│   ├── note.txt
+│   ├── password_strategy.md
+│   ├── rpm_mirror.txt
+│   ├── software
 │   ├── sysadmin.txt
-│   ├── systemd
-│   ├── tcpfsm.png
 │   ├── ubuntu
-│   ├── user.txt
-│   ├── vcl.png
-│   ├── vsftpd+pam+mysql.txt
 │   └── webapp.txt
 ├── mac
 │   ├── homebrew.md
 │   ├── ipa_build
 │   ├── note.md
-│   └── route.md
+│   ├── route.md
+│   ├── xcode.md
+│   └── xvim2.md
 ├── microservice
 │   ├── consul
 │   ├── etcd
 │   ├── eureka
 │   ├── hystrix
+│   ├── istio
 │   ├── note.md
 │   ├── smartstack.md
 │   └── zuul
@@ -162,6 +157,7 @@ note for linux system administration
 │   ├── switch
 │   └── ubuntu
 ├── ntp
+│   ├── chrony.txt
 │   ├── note.md
 │   └── ntp.conf
 ├── optool
@@ -171,7 +167,9 @@ note for linux system administration
 │   ├── awk.md
 │   ├── awk.txt
 │   ├── cobbler.md
+│   ├── cronolog.md
 │   ├── customize_iso.txt
+│   ├── dpkg.md
 │   ├── dstat
 │   ├── ethtool.txt
 │   ├── experience.txt
@@ -187,17 +185,20 @@ note for linux system administration
 │   ├── lmsensor.txt
 │   ├── lsof.md
 │   ├── lsof.txt
+│   ├── mail.md
 │   ├── mpstat.md
 │   ├── nload.md
 │   ├── nmap.md
 │   ├── oh-my-zsh.md
 │   ├── pxe.md
 │   ├── rdp.md
-│   ├── rpm.md
+│   ├── rpmbuild
 │   ├── rsync.md
-│   ├── rsyslog.md
+│   ├── rsyslog_logger.md
+│   ├── rsyslog_redirect.md
 │   ├── sar.md
 │   ├── screen.md
+│   ├── securecrt.txt
 │   ├── sed.md
 │   ├── seq.md
 │   ├── shadowsocks.txt
@@ -209,7 +210,8 @@ note for linux system administration
 │   ├── vim.md
 │   ├── vmstat.md
 │   ├── vnc.md
-│   └── weechat.md
+│   ├── weechat.md
+│   └── yum.txt
 ├── performance
 │   ├── cpu
 │   ├── disk
@@ -267,12 +269,12 @@ note for linux system administration
 │   ├── nexus
 │   └── solr
 ├── sync
+│   ├── course.txt
 │   ├── goal.txt
 │   ├── memo.txt
 │   ├── music.txt
 │   ├── punctuation
 │   ├── todo.txt
-│   ├── upgrade_ssl_ssh_mysql.md
 │   └── work_note.txt
 ├── vcs
 │   ├── git
@@ -299,4 +301,3 @@ note for linux system administration
     ├── virtio.md
     └── zabbix_agent.md
 ```
-

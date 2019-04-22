@@ -549,3 +549,5 @@ lxj PS 2016-06-20 0 99999 7 -1 (Password set, SHA512 crypt.)
     sync
     echo 3 > /proc/sys/vm/drop_caches 
 
+显示ISO格式时间
+    ls --full-time 
