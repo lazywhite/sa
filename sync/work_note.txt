@@ -384,7 +384,7 @@ du -h --max-depth=1 --exclude ./<relative path> .
 
 ## check tcp port alive
 ```
-nc -w 2 192.168.0.64 9797 </dev/null
+nc -z -w 2 192.168.0.64 9797
 echo $?
 ```
 
@@ -504,4 +504,48 @@ chage -m 1 user01 # 设置最小过期时间
     PASS_MIN_DAYS 0      #两次修改密码的最小间隔时间，0表示可以随时修改账号密码
     PASS_MIN_LEN  8      #密码最小长度，对于root无效
     PASS_WARN_AGE 7      #密码过期前多少天开始提示
+
+
+
+netstat -ntup|grep  <remote-ip>:<port> 查看跟远程服务器建立的连接
+
+
+stat file.sh
+    atime: 最后一次被读取时间
+    ctime: 最后一次改变时间, 包括属主, 权限等
+    mtime: 最后一次文件内容更改时间, 会同步更改ctime
+
+
+-bash: fork: retry: No child processes!
+    /etc/security/limits.d/20-nproc.conf
+        *          soft    nproc     unlimited   # 默认4096
+        root       soft    nproc     unlimited
+
+
+[root@rhel7 ~]# passwd -l lxj    --- -l 锁定
+Locking password for user lxj.
+passwd: Success
+[root@rhel7 ~]# passwd -S lxj    --- 查看状态
+lxj LK 2016-06-20 0 99999 7 -1 (Password locked.)
+[root@rhel7 ~]# 
+[root@rhel7 ~]# passwd -u lxj    --- 解锁
+Unlocking password for user lxj.
+passwd: Success
+[root@rhel7 ~]# passwd -S lxj
+lxj PS 2016-06-20 0 99999 7 -1 (Password set, SHA512 crypt.)
+
+2、使用usermod命令锁定与解锁账号
+
+[root@rhel7 ~]# usermod -L lxj
+[root@rhel7 ~]# passwd -S lxj
+lxj LK 2016-06-20 0 99999 7 -1 (Password locked.)
+[root@rhel7 ~]# usermod -U lxj
+[root@rhel7 ~]# passwd -S lxj
+lxj PS 2016-06-20 0 99999 7 -1 (Password set, SHA512 crypt.)
+
+
+
+清理系统缓存
+    sync
+    echo 3 > /proc/sys/vm/drop_caches 
 

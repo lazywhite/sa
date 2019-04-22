@@ -32,3 +32,5 @@ insert into d_table_name (column1,column2,column3) select column1x,column2x,colu
 alter table cfg_config rename to cfg_config_20190101; # 重命名表
 
 
+# 查看数据库版本
+select * from v$version;

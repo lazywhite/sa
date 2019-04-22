@@ -15,9 +15,7 @@ schema
 数据库实例
 redo log
 
-
-SID
-service name
+服务名和SID
 
 一般一个oracle database(磁盘文件)对应一个oracle instance(内存进程)
 需要分别启动不同的oracle instance

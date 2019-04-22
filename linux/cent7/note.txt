@@ -25,6 +25,7 @@ yum修复未完成的事务
 rpm
     rpm -ivh *.rpm 
     rpm -Uvh *.rpm  # 升级安装
+    rpm -Uvh --oldpackage *.rpm  # 降级安装
 
     rpm -ql <package> # 列出所有文件
 
