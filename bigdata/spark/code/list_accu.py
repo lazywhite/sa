@@ -21,4 +21,3 @@ df = spark.createDataFrame([[1, 2], [3, 4]], ("x", "y"))
 df.foreach(lambda row: add_it(row, l1))
 
 print(l1.value)
-~

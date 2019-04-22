@@ -1246,3 +1246,8 @@ mysql> help create table
 
 
 select round(3.123231, 2); # 小数精度
+
+
+## 复制表
+create table aa as select * from bb; # 不含索引
+create table aa like bb # 含索引, oracle没有相同语句
