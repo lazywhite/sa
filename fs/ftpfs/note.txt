@@ -1,0 +1,5 @@
+yum -y install curlftpfs
+
+curlftpfs -o codepage=utf-8 ftp://bob:bob@localhost/  /mnt
+
+umount /mnt

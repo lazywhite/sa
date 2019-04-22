@@ -1,0 +1,8 @@
+yum -y install fuse-sshfs    
+
+# 配置免密码登陆, 否则需要输入密码
+sshfs root@192.168.1.1:/tmp /mnt
+
+
+fusermount -u mountpoint # linux
+umount mountpoint # BSD, Mac
