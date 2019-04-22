@@ -1,2 +1,34 @@
-create table F_CACHE_DATA_H (id number(10), app_name varchar(30), data number(30))
+create table F_CACHE_DATA_H (id number(10), app_name varchar(30), data number(30, 2))
+    number(P, S): P整数位, S小数位
 delete from F_CACHE_DATA_H where id is null;
+
+
+alter table tableName rename column oldCName to newCName; -- 修改字段名
+alter table tableName modify (cloumnName 数据类型); -- 修改数据类型
+
+时间字符串转化为时间类型
+select to_date('2018-11-12 14:00:00', 'yyyy-mm-dd hh24:mi:ss') from dual
+
+
+1、复制表结构以及数据
+
+create table d_table_name as select * from s_table_name;  ---注意并不会创建索引
+
+2、只复制表结构
+
+create table d_table_name as select * from s_table_name where 1=2;
+
+3、只复制数据
+
+（1）、两个表结构一样
+
+insert into d_table_name select * from s_table_name;
+
+（2）、两个表的结构不一样，只复制部分列
+
+insert into d_table_name (column1,column2,column3) select column1x,column2x,column3x from s_table_name;
+
+
+alter table cfg_config rename to cfg_config_20190101; # 重命名表
+
+

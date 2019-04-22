@@ -15,14 +15,17 @@
 ```
 
 ## 用户
+```
 CREATE USER auto_exchange IDENTIFIED BY pass1234 #用户和密码不能引号, 密码不能以数字开头
 GRANT RESOURCE TO auto_exchange;
 GRANT CONNECT TO auto_exchange;
 GRANT CREATE VIEW TO auto_exchange;
 GRANT CREATE SESSION TO auto_exchange;
 GRANT UNLIMITED TABLESPACE TO auto_exchange;
+```
 
-## sequence
+## Sequence
+```
 SQL> create sequence mysec increment by 1 start with 1;
 SQL> create sequence mysec maxvalue 100 increment by -1 start with 100;
 SQL> select mysec.nextval from dual;
@@ -30,12 +33,16 @@ SQL> select mysec.nextval from dual;
 SQL> drop sequence mysec
 show all sequence
 
+```
 ## dual
+```
 虚拟表 只有一行一列, 用来配合select凑成语法规则
 select user from dual
 select sysdate from dual
+```
 
 ## mysql oracle 命令对照
+```
 show current database name
     SELECT NAME FROM v$database;
 show tables
@@ -52,15 +59,16 @@ show create table
 
 insert into dept(name, loc) values('xx', 'bbbb') -- 字符串必须用单引号
 
+```
 
+
+## 存储过程
+```
 声明存储过程时如果名字有双引号, 调用的时候也要加双引号
-
-存储过程
-------------------
 /* 声明存储过程 */
 create or replace procedure p_3a (v_empid number) as -- 没有参数, 不能写()
 
--- 变量声明与赋值
+# 变量声明与赋值
 v_a number := 123;
 v_s varchar2(20) := '中文';
 v_d date ;
@@ -102,9 +110,11 @@ begin
 end p_3b;
 
 ------------------
+```
 
 
-游标使用
+## 游标
+```
 ------------------
 CREATE OR REPLACE
 PROCEDURE "p_cursor" (v_dno in number, v_c out number) AS
@@ -136,39 +146,6 @@ BEGIN
 
 END;
 ------------------
-
-
-流程控制语句
-------------------
-CREATE OR REPLACE
-PROCEDURE "p_flow" AS
-v_c number := 1;
-BEGIN
-
-	loop
-
-
-		if v_c > 10 then
-			goto endloop;
-		end if;
-
-		if v_c > 5 then
-			v_c := v_c + 2;
-		else
-			v_c := v_c + 1;
-
-		end if;
-		dbms_output.put_line('v_c=' || v_c);
-
-	end loop;
-
-	<<endloop>>
-	dbms_output.put_line('end of procedure');  -- label 之后一定要有语句, 不然会编译错误
-
-END;
-
-------------------
-
 
 游标内更新数据
 ------------------
@@ -232,6 +209,41 @@ BEGIN
 	select empno, salary from emp;
 END;
 ------------------
+```
+
+## 流程控制语句
+```
+------------------
+CREATE OR REPLACE
+PROCEDURE "p_flow" AS
+v_c number := 1;
+BEGIN
+
+	loop
+
+
+		if v_c > 10 then
+			goto endloop;
+		end if;
+
+		if v_c > 5 then
+			v_c := v_c + 2;
+		else
+			v_c := v_c + 1;
+
+		end if;
+		dbms_output.put_line('v_c=' || v_c);
+
+	end loop;
+
+	<<endloop>>
+	dbms_output.put_line('end of procedure');  -- label 之后一定要有语句, 不然会编译错误
+
+END;
+
+------------------
+
+```
 
 
 ## Function 
@@ -419,9 +431,22 @@ cmdsep OFF)
 
 
 # 分页
+```
 select a1.* from (select student.*,rownum rn from student) a1 where rn between 3 and 5;
 
+```
 
 ## sqlplus 执行sql文件
+```
 sqlplus> @/path/to/script.sql
 sqlplus> commit; # 必须
+```
+
+
+
+## Synonym
+```
+create [public] synonym F_DEPT_H for F_DEPT_H@LINK_test
+select * from dba_synonyms where synonym_name like 'F_DETP%'
+DROP [public] synonym F_DEPT_H;
+```
