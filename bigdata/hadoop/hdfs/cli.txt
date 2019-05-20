@@ -1,0 +1,31 @@
+cat
+chgrp
+chmod
+chown
+copyFromLocal
+copyToLocal [-p] 
+cp 
+du
+distcp: copy files or directories recursively
+dus
+expunge: cleanup trash
+get: 复制文件到本地文件系统 
+getmerge: 将HDFS中一个目录的文件连接成一个文件并存放至本地
+ls
+lsr: ls -R
+mkdir
+mv
+put: 从本地文件系统复制到目标文件系统 
+rm [-r] [-f] [-skipTrash]
+setrep: 改变一个文件的副本数
+stat: 指定路径的统计信息
+tail: 打印文件尾部1KB数据
+test: 检查文件是否存在
+text: 将源文件输出为文本格式
+touchz: 创建一个0字节的空文件
+
+
+hadoop fs -rm -r -f -skipTrash  /path/to/dir
+hadoop fs -expunge  # 清空回收站
+
+hadoop dfsadmin -report 

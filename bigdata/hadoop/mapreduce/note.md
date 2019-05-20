@@ -29,5 +29,3 @@ Reducer
 
 
 
-hadoop job -list [all]
-hadoop job -kill <job_id>

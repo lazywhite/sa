@@ -57,3 +57,43 @@ Hadoop涉及的端口
 WebHDFS 与 HTTPFS
     webhdfs默认开启, httpfs需要额外启动服务httfs.sh
     webhdfs需要client同时访问所有节点, httpfs只需访问一个节点, 但数据只从此节点IO, 因此会有单点故障问题
+
+
+
+yarn1
+    jobtracker
+    tasktracker
+
+    这种方式还是有一定的弊端的
+
+    tasktracker出现故障，会导致整个任务计算失败。
+    jobtracker压力过大，既要负责全局的任务分配，还需要时刻与tasktracker沟通。
+
+yarn2
+    resource manager
+    application master
+    node manager
+
+
+    流程大致如下
+
+    client客户端向yarn集群(resourcemanager)提交任务
+    resourcemanager选择一个node创建appmaster
+    appmaster根据任务向rm申请资源
+    rm返回资源申请的结果
+    appmaster去对应的node上创建任务需要的资源（container形式，包括内存和CPU, 不同于docker container）
+    appmaster负责与nodemanager进行沟通，监控任务运行
+    最后任务运行成功，汇总结果。
+
+    
+
+    三种调度器
+        FIFO
+        Capacity
+        Fair
+
+
+执行引擎
+    MR
+    spark
+    tez

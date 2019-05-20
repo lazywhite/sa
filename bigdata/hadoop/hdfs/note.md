@@ -28,52 +28,6 @@ default block size is 64MB
 2. mounte disk with -noatime
 3. set datadir with comma seperated path
 
-### Volume
-
-## Feature
-```
-Shell like commands to interact with HDFS directly
-NameNode and DataNode have built in web servers to show the status 
-File permissions and authentications
-Safemode for administrative task
-fsck: to diagnose health of the filesystem, find missing files or blocks
-fetchdt: fetch delegationtoken and store it in a file on the local system
-balancer: tool to balance the cluster when data is unevenly distributed
-upgrade and rollback: after software upgrade, you can rollback 
-secondary namenode: merge "fsimage" and "edits" log periodly
-Checkpoint node: 
-backup node: an extension to checkpoint node 
-```
-
-## Usage
-```
-prefix: hdfs dfs  or hadoop dfs (deprecated)
-cat
-chgrp
-chmod
-chown
-copyFromLocal
-copyToLocal
-cp 
-du
-distcp: copy files or directories recursively
-dus
-expunge: cleanup trash
-get: 复制文件到本地文件系统 
-getmerge: 将HDFS中一个目录的文件连接成一个文件并存放至本地
-ls
-lsr: ls -R
-mkdir
-mv
-put: 从本地文件系统复制到目标文件系统 
-rm: 
-rmr: 递归删除
-setrep: 改变一个文件的副本数
-stat: 指定路径的统计信息
-tail: 打印文件尾部1KB数据
-test: 检查文件是否存在
-text: 将源文件输出为文本格式
-touchz: 创建一个0字节的空文件
 ```
 
 ## Safe Mode
