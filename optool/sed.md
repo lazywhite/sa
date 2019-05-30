@@ -38,4 +38,6 @@ sed '3,6 {/This/{/fish/d}}' pets.txt 匹配到包含This的行之后, 再删除f
 sed '1,${/This/d;s/^ *//g}' pets.txt 从第一行到最后一行，如果匹配到This，则删除之；如果前面有空格，则去除空格
 sed '/dog/,+3s/^/# /g' pets.txt 地址的上限和下限, 包含dog的行及之后的三行
 
+ts=20190401
+sed -i "s/today/$ts/" a.txt  # 用双引号可以传递变量
 ```

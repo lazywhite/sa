@@ -1,0 +1,15 @@
+设置字符集
+    localectl set-locale  LANG=zh_CN.UTF-8
+
+设置时区
+    timedatectl set-local-rtc 1#硬件时钟设置与本地时钟一致
+
+    timedatectl list-timezones
+    timedatectl set-timezone Asia/Shanghai
+
+设置主机名
+    hostnamectl set-hostname mongo1
+
+cent7 使用iptables
+    yum -y install iptables-services
+    /usr/libexec/iptables/iptables.init save

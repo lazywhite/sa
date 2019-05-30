@@ -1,0 +1,9 @@
+rpm -e --nodeps `rpm -qa | grep openssh`
+
+rpm -ivh *.rpm  # 如果不存在则安装
+rpm -Uvh *.rpm  # 升级安装
+rpm -Uvh --oldpackage *.rpm  # 降级安装
+rpm -ql <package> # 列出所有文件
+
+
+--force 强制执行

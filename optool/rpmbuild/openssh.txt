@@ -8,7 +8,7 @@ wget http://ftp.riken.jp/Linux/momonga/6/Everything/SOURCES/x11-ssh-askpass-1.2.
 tar xf openssh-7.9p1.tar.gz 
 
 ###### centos 6 ############
-cat > openssh-7.9p1/contrib/redhat/sshd.pam <<EOF
+cat > openssh-7.9p1/contrib/redhat/sshd.pam.old <<EOF
 
 #%PAM-1.0
 auth       required     pam_sepermit.so
@@ -64,8 +64,12 @@ rpmbuild -ba openssh.spec
 cd ~/rpmbuild/RPMS
 rpm -Uvh *.rpm
 chmod 600 /etc/ssh/ssh*_key
-rpm -Uvh *.rpm
 systemctl restart sshd
 # 检查版本
 ssh -V
 sshd -V
+
+
+## 问题
+升级完root无法登陆, 查看/etc/ssh/sshd_config  PermitRootLogin 是否为yes
+默认不会覆盖此配置文件

@@ -14,32 +14,12 @@ yum修复未完成的事务
     yum history redo <id>
     yum history undo <id>  # 撤销
 
-设置时区
-    timedatectl set-local-rtc 1#硬件时钟设置与本地时钟一致
-    timedatectl list-timezones
-    timedatectl set-timezone Asia/Shanghai
+查看包依赖
+    yum deplist <package>
 
-设置主机名
-    hostnamectl set-hostname mongo1
-
-rpm
-    rpm -ivh *.rpm 
-    rpm -Uvh *.rpm  # 升级安装
-    rpm -Uvh --oldpackage *.rpm  # 降级安装
-
-    rpm -ql <package> # 列出所有文件
-
-yum 
-    yum deplist <package> 查看包依赖
-
-设置字符集
-    localectl set-locale  LANG=zh_CN.UTF-8
 
 
 禁止repo
     yum clean all 
     yum --disablerepo="epel" update nss
 
-iptables
-    yum -y install iptables-services
-    /usr/libexec/iptables/iptables.init save

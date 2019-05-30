@@ -39,3 +39,26 @@ awk -F: 'BEGIN{OFS="\v"}/root/{print $7}' /etc/passwd
 
 awk -F, 'NR==2{printf "%0.2f", $8/$9}' file.csv
 ```
+## split
+```
+time="12:34:56"
+out=`echo $time | awk '{split($0,a,":");print a[1],a[2],a[3]}'`
+echo $out
+```
+## substr
+```
+substr(s,p) 返回字符串s中从p开始的后缀部分
+substr(s,p,n) 返回字符串s中从p开始长度为n的后缀部分
+echo "123" | awk '{print substr($0,1,1)}'
+```
+## length
+```
+echo "123" | awk '{print length}'
+echo "abc 1234"|awk '{print length($1)}'
+```
+## variable
+```
+timeout=5
+awk -v timeout=timeout  '{if ($1 > timeout) print}' ## 正确
+awk '{if ($1 > $timeout) print}' ## 错误, 无法进行变量替换
+```
