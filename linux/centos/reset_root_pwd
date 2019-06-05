@@ -1,0 +1,11 @@
+## centos7
+
+tab, e找到linux16那一行
+ro改为rw 添加init=/sysroot/bin/sh
+Ctrl+x启动
+
+# chroot /sysroot
+# passwd
+# exit
+# reboot
+
