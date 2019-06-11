@@ -1,0 +1,28 @@
+1. download quick installer zip file,  install jdk
+http://www.oracle.com/technetwork/middleware/weblogic/overview/index.html
+
+useradd weblogic
+mkdir -p /usr/local/weblogic
+chown weblogic.weblogic  /usr/local/weblogic
+su - weblogic
+# 以下操作全部用weblogic用户进行
+unzip -d /path/to/install  weblogic.zip
+cd /path/to/install
+java -jar fmw_12.2.1.3.0_wls_quick.jar -help #查看帮助
+java -jar fmw_12.2.1.3.0_wls_quick.jar  ORACLE_HOME=/usr/local/weblogic  # 安装, 需要输入admin user/passwd
+mkdir -p /usr/local/weblogic/domains/base
+cd /usr/local/weblogic/domains/base
+. /usr/local/weblogic/wlserver/server/bin/setWLSEnv.sh
+java weblogic.Server # 第一次需要执行40分钟, 自动创建完文件后Ctrl+C退出
+
+
+# 编辑配置文件
+config/config.xml
+    <server>
+      <name>myserver</name>
+      <listen-address>0.0.0.0</listen-address>
+    </server>
+
+./startWebLogic.sh # 启动8分钟
+
+http://ip:7001/console #管理页面
