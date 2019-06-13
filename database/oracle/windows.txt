@@ -1,0 +1,2 @@
+1. 安装instant_client
+2. 安装navicat, plsq并配置库路径

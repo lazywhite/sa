@@ -34,3 +34,13 @@ alter table cfg_config rename to cfg_config_20190101; # 重命名表
 
 # 查看数据库版本
 select * from v$version;
+# 查看实例
+select * from v$instance;
+# 查看当前用户下的表
+select table_name from user_tables;
+# 查看所有用户下的表
+select table_name from all_tables;
+# 查看所有表, 包括系统表
+select table_name from dba_tables;
+# 不区分大小写
+SELECT * FROM Student s WHERE lower(s.name) LIKE '%red%')
