@@ -9,13 +9,15 @@ note for linux system administration
 │   └── note.md
 ├── appserver
 │   ├── jetty
-│   └── tomcat
+│   ├── tomcat
+│   └── weblogic
 ├── auto
 │   ├── ansible
 │   ├── foreman.md
 │   ├── puppet
 │   └── saltstack
 ├── bigdata
+│   ├── druid
 │   ├── flume
 │   ├── hadoop
 │   ├── hbase
@@ -29,6 +31,7 @@ note for linux system administration
 │   ├── matlab
 │   ├── mesos
 │   ├── note.txt
+│   ├── phoenix
 │   ├── pig
 │   ├── spark
 │   ├── sqoop
@@ -88,6 +91,20 @@ note for linux system administration
 │   ├── drbd9
 │   ├── keepalived
 │   └── pacemaker
+├── image
+│   ├── 143256261.jpg
+│   ├── 2033581_1369962477MN7p.jpg
+│   ├── 2033581_13699627772B10.jpg
+│   ├── 2033581_1369962848eEh1.jpg
+│   ├── 2033581_1369962958hvxf.jpg
+│   ├── 2033581_1369963124kxNd.jpg
+│   ├── 2033581_1369963308D7At.jpg
+│   ├── 2033581_1369963393EOGB.jpg
+│   ├── 2033581_1370221372VEAi.jpg
+│   ├── iproute2.png
+│   ├── java_run_process.jpg
+│   ├── tcpfsm.png
+│   └── vcl.png
 ├── ldap
 │   ├── db.tar.gz
 │   ├── deploy.md
@@ -102,11 +119,9 @@ note for linux system administration
 │   └── openssl.md
 ├── linux
 │   ├── build_minimal_linux.txt
-│   ├── deb_mirror.md
-│   ├── image
+│   ├── centos
 │   ├── note.txt
 │   ├── password_strategy.md
-│   ├── rpm_mirror.txt
 │   ├── software
 │   ├── sysadmin.txt
 │   ├── ubuntu
@@ -166,6 +181,7 @@ note for linux system administration
 │   ├── autossh.md
 │   ├── awk.md
 │   ├── awk.txt
+│   ├── cent_cmd.txt
 │   ├── cobbler.md
 │   ├── cronolog.md
 │   ├── customize_iso.txt
@@ -193,6 +209,7 @@ note for linux system administration
 │   ├── pxe.md
 │   ├── rdp.md
 │   ├── rpmbuild
+│   ├── rpm.txt
 │   ├── rsync.md
 │   ├── rsyslog_logger.md
 │   ├── rsyslog_redirect.md
@@ -203,9 +220,11 @@ note for linux system administration
 │   ├── seq.md
 │   ├── shadowsocks.txt
 │   ├── slack.md
+│   ├── sort.md
 │   ├── ss.md
 │   ├── sublime.md
 │   ├── systemd.md
+│   ├── uniq.md
 │   ├── vconfig.txt
 │   ├── vim.md
 │   ├── vmstat.md
@@ -294,6 +313,7 @@ note for linux system administration
 │   ├── nginx
 │   └── note.md
 └── windows
+    ├── cmd.md
     ├── jdk.md
     ├── note.txt
     ├── rdp.txt
