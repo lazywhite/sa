@@ -16,6 +16,7 @@ timestamp: 作为version标识符, 每个cf独立设置, 默认为3(<=0.96), 1(>
 row key: 数字或字符串(按字母顺序存储)
 
 namespace: 默认有hbase, default
+Hlog: write-ahead log 灾难恢复使用
 ```
 ## Object hierarchy
 ```

@@ -1,0 +1,8 @@
+OLAP工具
+
+grafana 
+    1. 安装druid datasource plugin
+    2. 连接方式要选代理或server(不然会有跨域问题)
+
+dsql
+    提供sql使用接口

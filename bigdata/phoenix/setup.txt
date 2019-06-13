@@ -1,0 +1,13 @@
+wget http://mirror.bit.edu.cn/apache/phoenix/apache-phoenix-5.0.0-HBase-2.0/bin/apache-phoenix-5.0.0-HBase-2.0-bin.tar.gz
+tar xf apache-phoenix-5.0.0-HBase-2.0-bin.tar.gz
+cd apache-phoenix-5.0.0-HBase-2.0-bin
+cp phoenix-5.0.0-HBase-2.0-server.jar  to $HBASE_HOME/lib   ## 所有hbase节点(use phoenix-core-[version].jar for Phoenix 3.x)
+restart all RegionServer and HMaster
+
+# on client node
+cp phoenix-5.0.0-HBase-2.0-client.jar $HBASE_HOME/lib
+cp bin/sqlline.py $PATH
+
+sqlline.py  localhost examples/stock_symbol.sql
+
+

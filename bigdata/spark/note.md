@@ -70,7 +70,7 @@ cluster
     Master
         SparkContext(Driver program)
     standby master
-        HA
+        HA(zookeeper)
     resource manager
         Yarn
         spark
@@ -199,6 +199,7 @@ pyspark和spark-sql无法同时操作同一张表, beeline和spark-sql可以
     使用时spark-cluster可以开启, 也可以是关闭状态
 
 spark-submit --master yarn --deploy-mode [cluster, client]
+    deploy-mode是client时, 需要加参数 --conf spark.driver.host=<client ip>
 yarn logs -applicationId <app ID>
 
 
