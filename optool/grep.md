@@ -39,6 +39,7 @@ $
 
 -H with-fileName  # 搜索多个文件时需要
 -n with-line-number # 带行号
+-q 静默模式, 不显示输出
 
 
 grep -nHro '"resource_id":"[^"]*"' /root/lucci|grep -v 'CPC'

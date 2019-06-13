@@ -21,6 +21,9 @@ VBoxManage modifyhd new.vdi --compact
 host-only vm不通host
     关闭windows防火墙
 
+host-only 通外网
+    host设置SNAT
+
 vbox nat
     连接方式： 网络地址转换（NAT）
     高级
@@ -48,3 +51,7 @@ vbox 共享文件夹
         windows vm
             此电脑--> 映射网络驱动器
             \\vboxsvr\tmp
+
+vm网络连接找不到host网卡列表
+    适配器设置-->属性-->安装-->服务-->添加-->vbox/driver/network/netlwf/vboxnetlwf
+    https://blog.csdn.net/qq_383698639/article/details/79527311

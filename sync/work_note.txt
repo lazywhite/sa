@@ -551,3 +551,16 @@ lxj PS 2016-06-20 0 99999 7 -1 (Password set, SHA512 crypt.)
 
 显示ISO格式时间
     ls --full-time 
+
+tee
+ls -1|tee -a /path/to/log | while read line;do echo $line;done
+
+查看时区
+    cat /etc/sysconfig/clock # centos 6.x
+    timedatectl
+
+
+date
+    date -d "2019/04/01 00:00:00" +%s   根据date获取时间戳
+    date -s "2019-04-01 12:00:00"  设定系统时间  
+    hwclock -w

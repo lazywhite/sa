@@ -39,3 +39,11 @@ services.msc
     ipconfig /all
 查看路由信息
     route print -4
+
+win10要关闭预览体验服务
+
+
+进程管理
+    taskkill /F /IM dllhost.ext 杀死进程
+    tasklist 列出所有进程
+

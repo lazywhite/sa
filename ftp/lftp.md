@@ -39,3 +39,13 @@ mirror
 
 mirror -v -c -P 50 -R /data/mrbushu  /gpfs/mrbs 
     将本地文件夹同步至远程ftp, 目录位置需要对调
+
+
+设置超时
+    lftp -u $user,$pw ftp://$ip <<EOF
+    set net:timeout 5
+    set net:max-retries 2
+    set net:reconnect-interval-base 5
+    put $health_file
+    EOF
+

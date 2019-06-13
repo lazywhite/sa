@@ -5,4 +5,6 @@ binary
 prompt
 ls
 
+put $file $dst_file
+
 EOF

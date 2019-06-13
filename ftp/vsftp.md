@@ -14,6 +14,9 @@ yum -y install vsftpd ftp
     userlist_enable=YES
     tcp_wrappers=YES
 
+    max_per_ip=1000  # 单IP并发连接数
+    allow_writeable_chroot=YES # 允许ftp家目录可写
+
 systemctl start vsftpd
 
 # 默认使用系统账户登录
