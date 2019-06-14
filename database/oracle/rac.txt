@@ -1,1 +1,95 @@
-srvctl status database -d db
+crsctl命令是一个集群级别命令，可以对所有集群资源进行统一启动、停止等管理操作
+srvctl命令是一个服务级别命令，可以对单一服务资源进行统一启动、停止等管理操作
+
+
+
+关闭过程（CRS集群关闭－>关闭数据库）
+    1.关闭数据库：
+        [Oracle@rac1 ~]$ srvctl stop database -d racdb  -停止所有节点上的实例
+         然后查看状态：
+        [oracle@rac1 ~]$ srvctl status database -d racdb    
+         Instance rac1 is not running on node rac1
+         Instance rac2 is not running on node race
+    2.停止HAS(High Availability Services)，必须以root用户操作
+        [root@rac1 oracle]# cd /u01/grid/11.2.0/grid/bin
+        [root@rac1 bin]# ./crsctl stop has -f
+        [root@rac1 bin]# ./crsctl stop crs -f
+      本命令只能关闭当前节点的CRS服务，因此需要在RAC的所有节点上执行，启动也一样。has与crs等同
+    3.停止节点集群服务，必须以root用户：
+        [root@rac1 oracle]# cd /u01/grid/11.2.0/grid/bin
+        [root@rac1 bin]# ./crsctl stop cluster        ----停止本节点集群服务 
+        [root@rac1 bin]# ./crsctl stop cluster -all  ---停止所有节点服务
+        也可以如下控制所停节点：
+        [root@rac1 bin]# crsctl stop cluster -n rac1 rac2
+         CRS-2677: Stop of 'ora.cssd' on 'rac1' succeeded
+         CRS-2677: Stop of 'ora.cssd' on 'rac2' succeeded
+    4.检查集群进程状态
+        [root@rac1 bin]# crsctl check cluster
+        [root@rac1 bin]# crs_stat -t -v
+        只检查本节点的集群状态
+        [root@rac1 bin]# crsctl check crs
+
+启动过程（CRS集群启动－>启动数据库）
+    1.启动HAS
+    单一节点启动
+    [root@rac2 ~]# crsctl start has 
+    [root@rac2 ~]# crsctl start crs
+    [root@rac2 ~]# crsctl check crs
+     CRS-4638: Oracle High Availability Services is online
+     CRS-4537: Cluster Ready Services is online
+     CRS-4529: Cluster Synchronization Services is online
+     CRS-4533: Event Manager is online
+    所有节点启动
+    [root@rac1 bin]# crsctl start cluster -n rac1 rac2
+     CRS-4123: Oracle High Availability Services has been started.
+     [root@rac1 bin]# crsctl start cluster -all
+     [root@rac2 ~]# crsctl check cluster
+     CRS-4537: Cluster Ready Services is online
+     CRS-4529: Cluster Synchronization Services is online
+     CRS-4533: Event Manager is online
+    此命令会在后台启动所有RAC CRS相关进程
+    [root@rac2 ~]# crs_stat -t -v
+     CRS-0184: Cannot communicate with the CRS daemon.
+    因为start has启动的crs进程比较多因此会启动的比较慢，我的机器等待了5分钟，在没有完全启动成功之前会报上述错误，需要耐心等待一段时间后执行下面命令即可查看到所有CRS相关进程服务已经启动。
+    2.启动数据库：
+        oracl用户执行srvctl命令：
+        语法：srvctl start|stop|status database -d dbname ［-o immediate］
+        作用：可以一次性启动dbname的所有实例
+        [oracle@rac1 ~]$ srvctl start database -d racdb  -启动所有节点上的实例
+         然后查看状态：
+        [oracle@rac1 ~]$ srvctl status database -d racdb  
+     3.详细输出资源全名称并检查状态
+         crsctl status resource -t
+         crsctl status resource
+
+
+常用srvctl命令
+    指定dbname上某个实例
+        srvctl start|stop|status instance -d <dbname> -i <instance_name>
+    显示RAC下所有实例配置与状态
+        srvctl status|config database -d <dbname>
+    显示所有节点的应用服务（VIP，GSD，listener，ONS）
+        srvctl start|stop|status nodeapps -n <node_name>
+    ASM进程服务管理
+        srvctl start|stop|status|config asm -n <nodename>[-i <asm_inst_name>] [-o<oracle_home>]
+        srvctl config asm -a
+        srvctl status asm -a
+    获取所有的环境信息：
+        srvctl getenv database -d <dbname> [-i<instance_name>]
+    设置全局环境和变量：
+        srvctl setenv database -d<dbname> -t LANG=en
+    在OCR中删除已有的数据库信息
+        srvctl remove database -d <dbname>
+    向OCR中添加一个数据库的实例：
+        srvctl add instance -d <dbname> -i<instance_name> -n <node1>
+        srvctl add instance -d <dbname> -i<instance_name> -n <node2>
+    检查监听的状态
+        srvctl status listener 
+        srvctl config listener -a
+    SCAN配置信息
+        srvctl config scan
+    SCAN listener状态信息
+        srvctl status scan
+
+
+
