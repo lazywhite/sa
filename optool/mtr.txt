@@ -1,0 +1,18 @@
+mtr默认使用icmp报文探测
+
+
+mtr -v 显示mtr的版本信息
+mtr -r 已报告模式显示
+mtr -c 设置每秒发送数据包的数量
+mtr -s 用来指定ping数据包的大小
+
+mtr -n no-dns不对IP地址做域名解析
+mtr -a 设置发送数据包的IP地址 这个对一个主机由多个IP地址是有用的
+mtr -i 设置ICMP返回间隔, 默认是1秒
+
+mtr -4 IPv4
+mtr -6 IPv6
+
+
+example
+    mtr -nr -c 30 -s 1024 <ip>
