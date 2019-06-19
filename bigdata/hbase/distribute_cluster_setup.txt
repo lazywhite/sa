@@ -1,0 +1,42 @@
+http://hbase.apache.org/book.html#quickstart_fully_distributed
+
+规划
+    node1 HMaster
+    node2 backup HMaster
+    node3 regionServer
+
+
+1. zookeeper集群
+2. node1到其他节点的ssh免密登陆
+   node2到其他节点的ssh免密登陆
+
+3. 所有节点同步配置 
+    conf/hbase-site.xml
+        <property>
+          <name>hbase.cluster.distributed</name>
+          <value>true</value>
+        </property>
+        <property>
+          <name>hbase.rootdir</name>
+          <value>hdfs://node1:8020/hbase</value>
+        </property
+        --------------zookeeper相关--------------
+        <property>
+          <name>hbase.zookeeper.quorum</name>
+          <value>node-a.example.com,node-b.example.com,node-c.example.com</value>
+        </property>
+        <property>
+          <name>hbase.zookeeper.property.dataDir</name>
+          <value>/usr/local/zookeeper</value>
+        </property>
+    conf/regionservers
+        node3
+
+    conf/backup-masters # 需要新建
+        node2
+
+# 如果不希望hbase管理zookeeper, bin/start-hbase.sh 注释掉zookeeper启动命令
+4. node1> start-hbase.sh # 在哪台节点执行, 哪台就是master
+5. hbase shell  # 启动交互式
+6. http://node1:16010/
+
