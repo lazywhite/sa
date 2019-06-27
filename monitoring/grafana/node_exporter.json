@@ -1117,7 +1117,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "(node_memory_MemFree_bytes{group=~\"$NodeGroup:*\", instance=~\"$hosts:*\"} / node_memory_MemTotal_bytes{group=~\"$NodeGroup:*\", instance=~\"$hosts:*\"}) * 100",
+          "expr": "(node_memory_MemAvailable_bytes{group=~\"$NodeGroup:*\", instance=~\"$hosts:*\"} / node_memory_MemTotal_bytes{group=~\"$NodeGroup:*\", instance=~\"$hosts:*\"}) * 100",
           "format": "time_series",
           "intervalFactor": 2,
           "refId": "A",

@@ -10,3 +10,9 @@ http://docs.grafana.org/http_api/dashboard/
     enabled = true
     org_name = Main Org.  # default org name
     org_role = Viewer    # viewer, editor, admin
+
+使用json导入dashboard时, uid相同的会覆盖
+    "uid": "y8feQlsmk",
+
+避免多选
+    template-->list-->multi: false
