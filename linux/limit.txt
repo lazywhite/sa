@@ -1,0 +1,31 @@
+调整全局最大值
+    /etc/sysctl.conf
+        fs.file-max = 500000000
+        fs.nr_open = 10000000
+
+    sysctl -p
+
+    [nokia@logs22 ~]$ cat /proc/sys/fs/nr_open 
+    10000000
+    [nokia@logs22 ~]$ cat /proc/sys/fs/file-max 
+    500000000
+
+调整登陆用户limit
+    /etc/ssh/sshd_config
+        UsePAM yes
+
+    /etc/pam.d/sshd
+        session     required     pam_limits.so
+
+    service sshd restart
+
+    /etc/security/limits.conf    # 仅会被pam_limits.so读取, 设置只会影响到登陆用户, 修改设置无需重启sshd
+        ## 通配配置
+        * - nproc 6553500
+        * - nofile 6553500
+        ## 针对某个用户配置
+        <user> - nproc 6553500
+        <user> - nofile 6553500
+
+
+    重新登陆

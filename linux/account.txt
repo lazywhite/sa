@@ -1,0 +1,39 @@
+# 将zabbix用户的组列表设置为zabbix,0
+usermod -G zabbix,0 zabbix
+# 将组wheel添加给zabbix用户
+usermod -a -G wheel zabbix
+# 设置user的primary group
+usermod -g zabbix zabbix
+# 查看user的组
+groups <user>
+# 锁定账户
+usermod -L <user>
+# 解锁账户
+usermod -U <user>
+
+[root@rhel7 ~]# passwd -l lxj    --- -l 锁定
+Locking password for user lxj.
+passwd: Success
+[root@rhel7 ~]# passwd -S lxj    --- 查看状态
+lxj LK 2016-06-20 0 99999 7 -1 (Password locked.)
+[root@rhel7 ~]# 
+[root@rhel7 ~]# passwd -u lxj    --- 解锁
+Unlocking password for user lxj.
+passwd: Success
+[root@rhel7 ~]# passwd -S lxj
+lxj PS 2016-06-20 0 99999 7 -1 (Password set, SHA512 crypt.)
+
+
+account locked due to <num> failed logins
+    pam_tally2 --user <user> --reset
+
+
+useradd
+    -M 不创建家目录
+    -d 指定家目录
+    -s 指定login shell
+    -g 指定组
+
+userdel
+    -r 删除家目录和邮箱
+    -f 强制
