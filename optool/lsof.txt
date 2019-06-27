@@ -50,6 +50,9 @@ sshd    36454 root    3r  IPv4  94352      0t0  TCP www.test.com:ssh->172.16.0.1
  
 
  
- 
+查看某个用户打开的所有文件数
+    lsof -u <user> |wc -l
+查看当前系统打开的所有文件数
+    lsof |wc -l
 
 

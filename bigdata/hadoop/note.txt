@@ -4,10 +4,6 @@ Hadoop组件
 	3. Hadoop YARN: mapreduce框架
 	4. Hadoop MapReduce: mapreduce实现
 
-Mapreduce
-	job tracker(单点master)
-	task tracker(最好运行在datanode, 可以有多个)
-	
 HDFS
 	NameNode
     Secondary NameNode
@@ -30,13 +26,6 @@ Hadoop Streaming
     自定义mapper.py, reducer.py
     运行 #hadoop jar contrib/streaming/hadoop-streaming-1.2.1.jar -input myinput -output myoutput -mapper /home/expert/hadoop-1.2.1/mapper.py -reducer /home/expert/hadoop-1.2.1/reducer.py
 
-
-Job执行流程
-	1.用户提交job给jobtracker
-	2.jobtracker查询namenode, 获得数据的存放位置
-	3.jobtracker筛选出离数据近或就在数据节点的taskTracker
-	4.jobTracker分配任务给TaskTracker
-	5.TaskTracker的执行状态被监控, 必须向jobtracker发送心跳信息, 如果不发送, task被重新调度给其他TaskTracker
 
 HDFS GUI
 	http://localhost:50070/
@@ -86,7 +75,6 @@ yarn2
     最后任务运行成功，汇总结果。
 
     
-
     三种调度器
         FIFO
         Capacity

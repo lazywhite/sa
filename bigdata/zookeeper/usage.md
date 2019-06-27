@@ -21,6 +21,7 @@ zkCli -server localhost:2181 // 支持自动补全
 >quit //退出cli
 
 >setAcl /father  ip:127.0.0.1:crwda //设置权限
+>setacl /father auth:user1:password:cdrwa
 >getAcl /father //获取权限
 
 >listquota /father  //获取node限额

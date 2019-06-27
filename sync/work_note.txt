@@ -293,7 +293,13 @@ export LD_LIBRARY_PATH=
 
 
 
-/etc/security/limits.conf
+更改用户限制
+    /etc/security/limits.conf
+        <user> - nofile 65535
+        <user> - nproc 65535
+
+    普通用户无法设置为unlimited
+    无需重启任何服务
 
 watch -n 5 'seq 1 200 | xargs -I {} -n 1 -P 50 curl -o /dev/null -4 -s -w "`date`http_code:%{http_code}  http_connect:%{http_connect}  dns:%{time_namelookup}  redirect:%{time_redirect}  pretransfer:%{time_pretransfer}  time_connect:%{time_connect}  time_transfer:%{time_starttransfer}  time_total:%{time_total}  speed_down:%{speed_download}\n" "http://139.196.60.69/checkvip?ip=8.8.8.8&auth=2d411ebbdd8fb53b" >> bigsec_3.log'
 
@@ -522,27 +528,6 @@ stat file.sh
         root       soft    nproc     unlimited
 
 
-[root@rhel7 ~]# passwd -l lxj    --- -l 锁定
-Locking password for user lxj.
-passwd: Success
-[root@rhel7 ~]# passwd -S lxj    --- 查看状态
-lxj LK 2016-06-20 0 99999 7 -1 (Password locked.)
-[root@rhel7 ~]# 
-[root@rhel7 ~]# passwd -u lxj    --- 解锁
-Unlocking password for user lxj.
-passwd: Success
-[root@rhel7 ~]# passwd -S lxj
-lxj PS 2016-06-20 0 99999 7 -1 (Password set, SHA512 crypt.)
-
-2、使用usermod命令锁定与解锁账号
-
-[root@rhel7 ~]# usermod -L lxj
-[root@rhel7 ~]# passwd -S lxj
-lxj LK 2016-06-20 0 99999 7 -1 (Password locked.)
-[root@rhel7 ~]# usermod -U lxj
-[root@rhel7 ~]# passwd -S lxj
-lxj PS 2016-06-20 0 99999 7 -1 (Password set, SHA512 crypt.)
-
 
 
 清理系统缓存
@@ -564,3 +549,13 @@ date
     date -d "2019/04/01 00:00:00" +%s   根据date获取时间戳
     date -s "2019-04-01 12:00:00"  设定系统时间  
     hwclock -w
+
+
+
+change default ssh port for host
+    Host server1
+         HostName server1.cyberciti.biz
+         User nixcraft
+         Port 4242
+         IdentityFile /nfs/shared/users/nixcraft/keys/server1/id_rsa
+

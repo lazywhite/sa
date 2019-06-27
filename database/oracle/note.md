@@ -134,3 +134,5 @@ jdbc call oracle procedure
     VALUES (seq_person.nextval,'Lars','Monsen')
 
 不支持单insert插入values list
+
+oracle里面只能用""修饰字段名, 用''修饰字符串

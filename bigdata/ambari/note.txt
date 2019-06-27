@@ -1,0 +1,2 @@
+ambari-server stop|start
+service ambari-agent restart

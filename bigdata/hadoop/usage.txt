@@ -1,4 +1,4 @@
-# 1. yarn queue
+# 一. yarn queue
 
 ## (1)修改queue配置
 1. 指定调度器yarn.resourcemanager.scheduler.class
@@ -13,6 +13,8 @@ hadoop queue -info <queue_name>  -listJobs
 ## (3)指定queue
 hadoop
     hadoop jar app.jar -D mapreduce.job.queuename=root.mr -D mapreduce.job.priority=HIGH
+
+
 Hive
     设置执行引擎
         set hive.execution.engine=mr;  
@@ -29,6 +31,9 @@ Pig
 
 spark
     spark-submit --conf spark.yarn.queue default
-# 2. Job
+
+# 二. Job
 hadoop job -list [all]
 hadoop job -kill <job_id>
+
+yarn logs -applicationId <app ID>

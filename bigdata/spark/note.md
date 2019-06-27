@@ -2,6 +2,7 @@
 ```
 Application
 	Spark Application的概念和Hadoop MapReduce中的类似，指的是用户编写的Spark应用程序，包含了一个Driver 功能的代码和分布在集群中多个节点上运行的Executor代码；
+    一个application往往会生成多个job(action)
 
 Driver
 	Spark中的Driver即运行上述Application的main()函数并且创建SparkContext，其中创建SparkContext的目的是为了准备Spark应用程序的运行环境。在Spark中由SparkContext负责和ClusterManager通信，进行资源的申请、任务的分配和监控等；当Executor部分运行完毕后，Driver负责将SparkContext关闭。通常用SparkContext代表Driver;
@@ -74,6 +75,7 @@ cluster
     resource manager
         Yarn
         spark
+        mesos
         kubernate
     Slave
         executor
@@ -93,18 +95,6 @@ Graphx(graph)
 	图计算
 ```
 
-## Hadoop, Spark性能对比
-```
-Hadoop
-	1. 产生的中间数据必须保存在HDFS
-	2. shuffler必须同步等待mapper执行完成
-	3. reducer同步等待mapper完成才能执行  
-
-Spark
-	1. 中间数据保存在内存中
-	2. 数据可以选择被持久化在内存中
-
-```
 
 ## MLlib
 ```
@@ -198,9 +188,13 @@ pyspark和spark-sql无法同时操作同一张表, beeline和spark-sql可以
     yarn-site.xml 添加相关配置, 重启yarn
     使用时spark-cluster可以开启, 也可以是关闭状态
 
-spark-submit --master yarn --deploy-mode [cluster, client]
-    deploy-mode是client时, 需要加参数 --conf spark.driver.host=<client ip>
-yarn logs -applicationId <app ID>
+运行模式
+    spark-submit --master yarn --deploy-mode [cluster, client]
+
+    每个application都有一个driver, 
+        如果是client模式, 则driver运行在提交任务的机器
+            deploy-mode是client时, 为了防止找不到driver, 需要加参数 --conf spark.driver.host=<client ip>
+        如果是cluster模式, driver运行在任意一台worker节点
 
 
 避免每次上传spark jar包
@@ -353,11 +347,13 @@ import pyspark.sql.functions as f
 
 df.show(truncate=False)
 
-集群模式
-    stand-alone
-    yarn
-        HADOOP_CONF_DIR
-        spark-submit --master yarn
+运行模式
+    single node
+    cluster
+        stand-alone
+        spark on yarn
+            HADOOP_CONF_DIR
+            spark-submit --master yarn
 
 Kafka
      pyspark --packages org.apache.spark:spark-sql-kafka-0-10_2.11:2.3.0
@@ -494,4 +490,37 @@ spark mongodb
     df = spark.read.format("com.mongodb.spark.sql.DefaultSource").load()
     df = spark.read.format("com.mongodb.spark.sql.DefaultSource").option("uri", "mongodb://127.0.0.1/people.contacts").load()
 
+spark性能高原因
+    使用DAG算法, 避免生成HDFS的中间文件
+
+
+spark application调度
+    stand-alone
+        只能是FIFO, 每个app尝试使用全部节点, 可以通过--conf spark.cores.max 控制使用的节点数, --conf spark.executor.memory 控制使用的内存
+    yarn
+        resource manager有多种调度器 Capacity, FIFO, Fair, 配合queue使用
+        --num-executors  # 控制使用的worker个数(一般一个worker产生一个executor)
+        --executor-memory # 控制单个executor使用的内存
+        --executor-cores  # 控制单个executor使用的内核
+
+
+spark动态资源分配
+    spark application可以使用此特性, 默认是禁止的
+    开启方法
+        1. application提交必须添加此参数
+            --conf spark.dynamicAllocation.enabled=true
+        2. 开启external shuffle service
+            standalone mode
+                 配置spark.shuffle.service.enabled=true, 并重启所有worker
+            mesos
+                配置spark.shuffle.service.enabled=true
+                所有worker执行sbin/start-mesos-shuffle-service.sh 
+            yarn
+                http://spark.apache.org/docs/latest/running-on-yarn.html#configuring-the-external-shuffle-service
+
+spark application内部job调度                
+    http://spark.apache.org/docs/latest/job-scheduling.html#scheduling-within-an-application
+            --conf spark.shuffle.service.enabled=true 
+
+    http://spark.apache.org/docs/latest/running-on-yarn.html#configuring-the-external-shuffle-service
 ```
