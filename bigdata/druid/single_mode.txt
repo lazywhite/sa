@@ -1,0 +1,29 @@
+1. install druid 
+# 1.1 download package
+apache-zookeeper-3.5.5-bin.tar.gz
+apache-druid-0.15.0-incubating-bin.tar.gz  
+
+# 1.2 install
+tar xf apache-druid-0.15.0-incubating-bin.tar.gz  -C /usr/local
+ln -s /usr/local/apache-druid-0.15.0-incubating-bin /usr/local/druid
+
+tar xf apache-zookeeper-3.5.5-bin.tar.gz -C /usr/local/druid
+mv /usr/local/druid/apache-zookeeper-3.5.5-bin  /usr/local/druid/zk 
+
+# 1.3 run
+cd /usr/local/druid
+bin/start-single-server-large &
+
+## http://ip:8888 可访问则证明安装成功
+
+2. install tranquility
+# 2.1 download
+tranquility-distribution-0.8.2.tgz
+# 2.2 install
+tar xf tranquility-distribution-0.8.2.tgz -C /usr/local
+ln -s /usr/local/tranquility-distribution-0.8.2 /usr/local/tranquility
+
+# 2.3 copy canal_metrics.json to conf/
+# 2.4 run , default port 8200
+bin/tranquility server -configFile conf/canal_metrics.json &   
+
