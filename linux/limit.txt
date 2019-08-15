@@ -14,8 +14,12 @@
     /etc/ssh/sshd_config
         UsePAM yes
 
+    # 确保pam_limits.so被加载, 默认password-auth已经required
     /etc/pam.d/sshd
-        session     required     pam_limits.so
+        account    include      password-auth 
+        password   include      password-auth
+    /etc/pam.d/password-auth
+        session     required      pam_limits.so
 
     service sshd restart
 
@@ -26,6 +30,8 @@
         ## 针对某个用户配置
         <user> - nproc 6553500
         <user> - nofile 6553500
+    /etc/security/limit.d/*.conf
+        查看有没有设置会覆盖默认配置
 
 
     重新登陆

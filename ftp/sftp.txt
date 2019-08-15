@@ -28,3 +28,9 @@ chown crm.sftp /data/app1
 systemctl restart sshd
 
 登陆后无法在/操作, 只能cd进app1进行任意操作
+
+
+
+## 如果某个用户ftp可登陆， sftp不能登陆， 修改以下配置
+    #Subsystem      sftp    /usr/libexec/openssh/sftp-server
+    Subsystem       sftp    internal-sftp

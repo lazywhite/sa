@@ -503,6 +503,7 @@ rz connection canceld by remote side
 chage -l user01 # 查看账户密码策略
 chage -M 9999 user01 # 设置最大过期时间
 chage -m 1 user01 # 设置最小过期时间
+chage -E -1 user01 # 设置expire date
 
 
 /etc/login.defs
@@ -547,6 +548,7 @@ ls -1|tee -a /path/to/log | while read line;do echo $line;done
 
 date
     date -d "2019/04/01 00:00:00" +%s   根据date获取时间戳
+    date -d @1565597793 +%Y%m%d%H%M%S   根据时间戳获取时间
     date -s "2019-04-01 12:00:00"  设定系统时间  
     hwclock -w
 
@@ -559,3 +561,31 @@ change default ssh port for host
          Port 4242
          IdentityFile /nfs/shared/users/nixcraft/keys/server1/id_rsa
 
+
+# 查看物理CPU个数
+cat /proc/cpuinfo| grep "physical id"|wc -l
+
+# 查看逻辑CPU的个数
+cat /proc/cpuinfo| grep "processor"| wc -l
+
+
+Linux内核会释放调用了exit系统调用进程所使用的所有存储区，关闭所有打开的文件等，但是Linux内核为每一个终止子进程保存了一定量的进程退出信息。这些信息包括进程ID，进程的终止状态，以及该进程使用的CPU时间，所以当终止子进程的父进程调用wait或waitpid时就可以得到这些信息。子进程退出的时候会向其父进程发送一个SIGCHLD信号。
+设置僵死状态的目的是维护子进程的信息，以便父进程在以后某个时候获取
+一个进程执行了exit系统调用退出，而其父进程并没有为它收尸(调用wait或waitpid来获得它的结束状态)的进程。
+
+僵尸进程是一个早已死亡的进程，但在进程表 （processs table）中仍占了一个位置（slot）
+
+子进程退出时
+    父进程运行， 同时没有调用wait/waitpid, 则子进程成为僵尸进程
+    父进程运行， 调用了wait/waitpid, 则子进程正常结束
+    父进程退出， 则自动被init进程接管， init自动wait所有进程， 子进程正常退出
+https://www.jb51.net/article/135562.htm
+
+如何避免僵尸进程
+    1. 忽略SIGCHLD信号
+    2. double fork
+
+
+
+du, df结果不一致
+    lsof|grep -i 'delete'   #杀掉占据大文件句柄的进程

@@ -242,4 +242,41 @@ node自带的label, 可以供nodeSelector使用
 
 pod status: NodeLost
     systemctl restart kubelet
+
+运行时与配置做比对和patch
+    kubectl diff -R -f configs/
+    kubectl apply -R -f configs/
+
+动态调整
+    kubectl scale deployment/nginx-deployment --replicas=2
+
+强制重启某个pod
+    kubectl get pod PODNAME -n NAMESPACE -o yaml | kubectl replace --force -f -
+
+获取某个ns下所有资源
+    kubectl -n <name> get all
+
+
+常用命令
+    kubect get pod -o wide
+    kubect get pod -o yaml
+    kubect get node
+    kubect get ns
+    kubect describe pod <>
+    kubect edit pod <>
+
+
+label
+    kubectl describe node <node> # view label
+    kubectl label node <node> name=value [--overwrite] # 赋值
+    kubectl label node <node> name-   # 删除某个label
+
+role
+    kubectl label node <node>  node-role.kubernetes.io/worker=
+
+kubectl explain Deployment.spec
+
+taint
+    kubectl taint node  <node> key1=value1:NoSchedule  # 新增
+    kubectl taint node  <node> key1:NoSchedule-  # 删除
 ```

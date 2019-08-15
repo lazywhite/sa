@@ -1255,3 +1255,5 @@ create table aa like bb # 含索引, oracle没有相同语句
 
 
 where 语句后的字段名不能带"", 或'',  否则会当字符串处理, 可以用``
+
+视图无法创建index

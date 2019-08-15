@@ -137,3 +137,18 @@ tblproperties ("skip.header.line.count"="1");
 
 drop table sd_data_sample; # 删除external表
 ```
+
+## 结果保存本地
+```
+insert overwrite directory '路径'
+row format delimited
+fields terminated by '|'   --指定列分隔符
+select * from 库.表名;
+```
+
+## UDF
+```
+add jar 路径/AESDecodeNEW.jar;
+create temporary function AESDecode as 'hive.Udf.AESDecode';
+select '要加密的值',AESDecode('要加密的值','秘钥');
+```

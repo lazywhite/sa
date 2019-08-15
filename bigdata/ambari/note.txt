@@ -1,2 +1,9 @@
 ambari-server stop|start
 service ambari-agent restart
+
+webUI
+
+
+
+ambari会检测/var/run/hadoop/hdfs/*.pid, 但真实的pid可能存在
+/var/run/hadoop/root/*.pid ,可以copy过去让ambari页面显示正常

@@ -8,7 +8,7 @@
 ## (2)查看queue
 hadoop queue -list
 hadoop queue -info <queue_name> 
-hadoop queue -info <queue_name>  -listJobs
+hadoop queue -info <queue_name>  -showJobs
 
 ## (3)指定queue
 hadoop
@@ -30,10 +30,15 @@ Pig
    SET mapreduce.job.priority HIGH;
 
 spark
-    spark-submit --conf spark.yarn.queue default
+    spark-submit --conf spark.yarn.queue=default # 自动匹配
+    spark-submit --conf spark.yarn.queue=root.queue1.child1 # 绝对路径
+    spark-submit --conf spark.yarn.queue=child1  # 自队列也能自动匹配
 
 # 二. Job
 hadoop job -list [all]
 hadoop job -kill <job_id>
 
-yarn logs -applicationId <app ID>
+yarn logs -applicationId <app ID>   > a.log  # 每个log对应一个hdfs路径， 里面存的数据不是txt， 必须用输出重定向  
+
+
+yarn application -list  

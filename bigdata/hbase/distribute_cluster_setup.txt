@@ -35,7 +35,9 @@ http://hbase.apache.org/book.html#quickstart_fully_distributed
     conf/backup-masters # 需要新建
         node2
 
-# 如果不希望hbase管理zookeeper, bin/start-hbase.sh 注释掉zookeeper启动命令
+# 如果不希望hbase管理zookeeper, 修改hbase-env.sh
+    HBASE_MANAGES_ZK=false
+    
 4. node1> start-hbase.sh # 在哪台节点执行, 哪台就是master
 5. hbase shell  # 启动交互式
 6. http://node1:16010/

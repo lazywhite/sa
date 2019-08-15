@@ -1,25 +1,34 @@
 Hadoop组件 
 	1. Hadoop Common: hadoop基础库
 	2. HDFS: 分布式文件系统
-	3. Hadoop YARN: mapreduce框架
-	4. Hadoop MapReduce: mapreduce实现
+	3. Hadoop YARN: 任务调度和资源管理框架
+	4. Hadoop MapReduce: yarn具体实现
+    5. ozone(object store)
+    6. submarine(machine learning engine)
+
+NFS Gateway
+    允许通过NFS协议挂载HDFS
 
 HDFS
 	NameNode
-    Secondary NameNode
+    Secondary NameNode(仅配合单namenode使用)
 	DataNode
 	File
-		Block: 默认大小为64Mkko
+		Block: 默认大小为128MB
 		Replication: 每个block的备份数ko
 
 NameNode高可用
     1. 启动多个NameNode, 只有一个处于Active状态
-    2. 通过相互独立的"journal node"进程进行通信, 同步Active上namespace的更改到本地
-    3. DataNode需要同时向多个NameNode会报
-    4. 共享edits log, 达到快速failover的目的, 共享的方式有以下两种
-        Quorum Journal Manager (QJM)
-        NFS
-    5. 需要借助zookeeper进行选举和切换
+    2. 通过相互独立的journalNode进程进行通信, 同步Active上namespace的更改到本地
+    3. DataNode需要同时向多个NameNode汇报
+    4. 需要借助zookeeper进行选举和切换
+    5. 高可用namenode，secondaryNameNode需关闭
+
+ResourceManager高可用
+    1. zookeeper
+    2. yarn-site.xml
+    3. yarn rmadmin
+    
 	
 Hadoop Streaming
 	用任意类型的脚本或语言创建hadoop jobs

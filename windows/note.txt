@@ -47,3 +47,8 @@ win10要关闭预览体验服务
     taskkill /F /IM dllhost.ext 杀死进程
     tasklist 列出所有进程
 
+win8开启热点
+    netsh wlan set hostednetwork mode=allow ssid=share01 key=00000000
+    netsh wlan start hostednetwork
+    本地连接->属性-->共享
+    无法启动承载网络(设备管理器 网络设备 启用microsoft虚拟驱动器)

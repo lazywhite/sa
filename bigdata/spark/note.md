@@ -523,4 +523,18 @@ spark application内部job调度
             --conf spark.shuffle.service.enabled=true 
 
     http://spark.apache.org/docs/latest/running-on-yarn.html#configuring-the-external-shuffle-service
+
+测试任务提交
+spark-submit --master yarn  --num-executors 20 --executor-memory 5g  --class org.apache.spark.examples.JavaSparkPi /opt/spark-2.1.1/examples/jars/spark-examples_2.11-2.1.1.jar
+
+
+spark 看不到hive database
+    ln -s /path/to/hive-site.xml /path/to/spark/conf/
+    spark-env.sh
+        SPARK_CONF_DIR=/path/to/spark/conf
+
+parquet to csv
+    DataFrame df = sqlContext.parquetFile("parquet path");  
+    df.javaRDD().saveAsTextFile("outputpath");
 ```
+

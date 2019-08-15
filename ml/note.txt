@@ -100,3 +100,19 @@ activation function 激励函数
     sigmoid
     tanh
 cost function 损失函数
+
+
+监督算法
+    k近邻
+    决策树
+    朴素贝叶斯
+    逻辑回归
+    svm
+无监督算法
+    k-means
+    隐含狄利克雷分布
+    bisecting k-means
+    高斯混合模型
+
+
+

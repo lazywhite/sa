@@ -1,8 +1,18 @@
 rules
     recording rules
         预计算, 产生新的series并保存
+        record: string
+        expr: string
+        labels:
+            [label_name: label_value]
     alert rules
-        expr, 触发报警
+        触发报警
+        alert: string
+        expr: string
+        labels:
+            [label_name: tpl_string]
+        annotations:
+            [label_name: tpl_string]
 
 检查配置
     promtool check rules /path/to/example.rules.yml
@@ -10,7 +20,6 @@ rules
 应用新配置
     kill -HUP pid
     http://localhost:9090/-/reload
-
 
 
 metric type
@@ -22,8 +31,14 @@ metric type
 datamodel
     metric name and label
 
-job and instance
+labels
+    job
+    instance
 
+自定义label
+    - target: []
+      labels:
+        key: value
 
 分布式
     federation
@@ -34,6 +49,46 @@ storage
         
 
 
-pushgateway适用于server无法直接pull node的情况, node post到gateway, 再由server pull
+pushgateway
+    使用场景
+        因网络或防火墙, server无法直接pull
+        生命周期短暂的批处理任务， 无法被抓取
+        相当于一个metrics cache
 
+    scrap_config
+        honor_labels: true
 server收集的metrics可通过server:9090/metrics访问
+
+
+
+text collector
+    https://github.com/prometheus/node_exporter/tree/master/text_collector_examples
+
+    ./node_exporter --collector.textfile.directory=/path/to/dir
+    echo my_batch_job_completion_time $(date +%s) > /path/to/directory/my_batch_job.prom.$$
+    mv /path/to/directory/my_batch_job.prom.$$ /path/to/directory/my_batch_job.prom
+
+
+
+
+
+API
+    http://1.2.3.4:8090/api/v1/query?query=  # 获取单个值
+    http://1.2.3.4:8090/api/v1/query_range?query=&start=&end=&step=  # 获取一定时间范围内值
+
+
+    获取所有节点列表(job="node_group")
+    http://1.2.3.4:8090/api/v1/targets
+
+    cpu 最近5m内空闲率
+    http://1.2.3.4:8090/api/v1/query_range?query=irate(node_cpu_seconds_total{mode="idle",job="node_group"}[5m])&start=1552538580&end=1552538910&step=15
+
+    获取某个节点的内存使用率(当前值)
+    http://1.2.3.4:8090/api/v1/query_range?query=node_memory_MemAvailable_bytes{instance=~"1.2.2.1:9100"} / (node_memory_MemTotal_bytes{instance=~"1.2.2.1:9100"})&start=1552538580&end=1552538910&step=15
+
+    获取某个节点所有磁盘当前使用率
+    http://1.2.3.4:8090/api/v1/query_range?query=1-(node_filesystem_free_bytes{instance=~'1.2.2.1:9100',fstype=~"ext4|xfs"} / node_filesystem_size_bytes{instance=~'1.2.2.1:9100',fstype=~"ext4|xfs"})&start=1552538580&end=1552538910&step=15
+
+    获取某个节点所有磁盘IO Util比率
+    http://1.2.3.4:8090/api/v1/query_range?query=irate(node_disk_io_time_seconds_total{instance=~"1.2.2.1:9100"}[10m])&start=1552538580&end=1552538910&step=15
+
