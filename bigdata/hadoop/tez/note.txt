@@ -1,0 +1,16 @@
+DAG：Directed Acyclic Graph 无环有向图
+Tez可以将多个有依赖的作业转换为一个作业（这样只需写一次HDFS，且中间节点较少），从而大大提升DAG作业的性能
+
+Tez将Map task和Reduce task进一步拆分
+
+Tez的task由Input、processor、output阶段组成，可以表达所有复杂的map、reduce操作。
+    Input
+        input
+        shuffle
+        sort
+        merge
+    Processor
+    Output
+        sort
+        merge
+        output
