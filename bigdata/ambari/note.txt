@@ -1,9 +1,34 @@
-ambari-server stop|start
-service ambari-agent restart
-
-webUI
-
-
-
 ambari会检测/var/run/hadoop/hdfs/*.pid, 但真实的pid可能存在
 /var/run/hadoop/root/*.pid ,可以copy过去让ambari页面显示正常
+
+
+如果某些节点需要特殊配置， 则新建一个config group， 把这些节点加进来， 
+然后在页面上更改配置，最后在页面上重启相关服务， 服务器上的配置文件
+会在服务启动时进行更新
+
+
+部署时，会在每台机生成ambari-hdp-1.repo文件， 里面有hdp hdp-util的配置
+但个别版本有bug， 生成错误的repo， 这时需要进postgre ambari数据库(ambari/bigdata)
+手动插入repo_definition表;
+
+
+部署时需要填写jvm路径，如果需要修改, 更改/etc/ambari-server/conf/ambari.properties, 并重启ambari-server
+    java.home=/
+    jdk1.8.home=/
+    stack.java.home=/
+
+    openjdk rpm安装的，则JAVA_HOME=/， 不能为/usr
+     
+
+更改host name
+    要确保老的hostname可解析，集群配置文件还是老域名
+    https://docs.cloudera.com/HDPDocuments/Ambari-2.7.3.0/administering-ambari/content/amb_changing_host_names.html
+
+自定义agent hostame
+    /etc/ambari-agent/conf/ambari-agent.ini
+        [agent]
+        hostname_script=/tmp/hostname.sh
+
+    /tmp/hostname.sh
+        #!/bin/bash
+        echo `hostname`
