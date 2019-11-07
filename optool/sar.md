@@ -8,3 +8,7 @@ sar -n SOCK
  ip-frag: 当前正在使用ip分片的个数；
  tcp-tw: 处于tw状态的tcp套接字的个数；
 
+
+# 查看所有磁盘设备, 每秒一次
+sar -d 1 # 单位为0.5B
+iostat 1 # 单位为KB

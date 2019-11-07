@@ -6,5 +6,6 @@ prompt
 ls
 
 put $file $dst_file
+rename <old> <new>
 
 EOF

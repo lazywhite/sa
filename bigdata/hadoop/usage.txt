@@ -42,3 +42,85 @@ yarn logs -applicationId <app ID>   > a.log  # 每个log对应一个hdfs路径�
 
 
 yarn application -list  
+
+
+
+## hdfs客户端
+如果需要同时连接安全和非安全集群， 需要以安全集群的配置文件为基础， 添加非安全集群的信息(nameService), 
+然后在core-site.xml里面添加ipc.client.fallback-to-simple-auth-allowed=true
+
+如果出现hdfs://不通， webhdfs://通的情况, 客户端开启debug(export HADOOP_ROOT_LOGGER=DEBUG,console) 同时看namenode的日志
+如果报错org.apache.hadoop.security.authentication.util.KerberosName$NoMatchingRule
+
+需要修改namenode的core-site.xml配置(kerberos principle)
+    <property>
+      <name>hadoop.security.auth_to_local</name>
+      <value>RULE:[1:$1@$0](dpihadoop-bjvoltesecurity@DOMAIN.COM)s/.*/dpihadoop/
+RULE:[1:$1@$0](.*@DOMAIN.COM)s/@.*//
+RULE:[2:$1@$0](yarn@DOMAIN.COM)s/.*/dpihadoop/
+DEFAULT</value>
+    </property>
+
+然后重启namenode
+
+
+NameService配置样例
+```
+    <property>
+      <name>dfs.client.failover.proxy.provider.cluster01</name>
+      <value>org.apache.hadoop.hdfs.server.namenode.ha.ConfiguredFailoverProxyProvider</value>
+    </property>
+
+     <property>
+      <name>dfs.ha.namenodes.cluster01</name>
+      <value>nn1,nn2</value>
+    </property>
+
+    <property>
+      <name>dfs.namenode.rpc-address.cluster01.nn1</name>
+      <value>node1.test.com:8020</value> <!-- 4-->
+    </property>
+
+    <property>
+      <name>dfs.namenode.rpc-address.cluster01.nn2</name>
+      <value>node1.test.com:8020</value> <!-- 5-->
+    </property>
+    <property>
+      <name>dfs.namenode.http-address.cluster01.nn1</name>
+      <value>node1.test.com:50070</value> <!-- 4-->
+    </property>
+
+    <property>
+      <name>dfs.namenode.http-address.cluster01.nn2</name>
+      <value>node1.test.com:50070</value> <!-- 5-->
+    </property>
+
+    <property>
+      <name>dfs.namenode.https-address.cluster01.nn1</name>
+      <value>node1.test.com:50470</value> <!-- 4-->
+    </property>
+
+    <property>
+      <name>dfs.namenode.https-address.cluster01.nn2</name>
+      <value>node1.test.com:50470</value> <!-- 5-->
+    </property>
+
+```
+
+
+
+Quota
+    name quota: 设置文件数量
+        hdfs dfs -mkdir /name_quota
+        hdfs dfsadmin -setQuota 5 /name_quota
+    space quota: 设置空间(hdfs默认block size为128M,不足的依然会占用1个block
+        hdfs dfs -mkdir /space_quota
+        hdfs dfsadmin -setSpaceQUota 50m /space_quota  # 10M的文件，1个都无法上传
+        hdfs dfsadmin -setSpaceQUota 1024m /space_quota  # 128M的文件，第9个无法上传
+    清除quota
+        hadoop dfsadmin -clrQuota <directory>
+        hadoop dfsadmin -clrSpaceQuota <directory>
+
+
+
+datanode启动后会检查volume并校验内部文件,耗时较长，namenode此时认为为dead状态

@@ -136,3 +136,4 @@ jdbc call oracle procedure
 不支持单insert插入values list
 
 oracle里面只能用""修饰字段名, 用''修饰字符串
+cx_oracle里面无法在使用dblink的表中(table@link)使用group by语句

@@ -27,6 +27,9 @@ Hive从0.14版本开始支持事务和行级更新，要想支持行级insert、
 beeline配合hiveserver2使用
 使用remote metastore server, 必须保证metastore service运行
 
+命令行debug
+    hive --hiveconf hive.root.logger=DEBUG,console
+
 ```
 ## Hive组件
 ```
@@ -119,7 +122,7 @@ create external table log_data(`key` varchar(30), `value` varchar(100))
     location "/user/root/s1"; //HDFS
 
 
-### load csv
+### 外部表
 create external table sd_data_sample(
 user_id int ,
 `date` char(30) ,
@@ -138,17 +141,37 @@ tblproperties ("skip.header.line.count"="1");
 drop table sd_data_sample; # 删除external表
 ```
 
-## 结果保存本地
+## 结果保存
 ```
-insert overwrite directory '路径'
+type: local表示本地, 留空表示hdfs
+insert overwrite [type] directory '路径'
 row format delimited
 fields terminated by '|'   --指定列分隔符
 select * from 库.表名;
 ```
 
-## UDF
+## 自定义函数
 ```
-add jar 路径/AESDecodeNEW.jar;
+add jar /path/to/AESDecodenew.jar;
 create temporary function AESDecode as 'hive.Udf.AESDecode';
-select '要加密的值',AESDecode('要加密的值','秘钥');
+select '要加密的值', AESDecode('要加密的值','秘钥');
+```
+
+## 定义以parquet存储的表
+```
+CREATE TABLE parquet_test (
+ id int,
+ str string,
+ mp MAP<STRING,STRING>,
+ lst ARRAY<STRING>,
+ strct STRUCT<A:STRING,B:STRING>)
+PARTITIONED BY (part string)
+STORED AS PARQUET;
+```
+
+## 类型转换
+```
+select name from company where cast(salary as Float) < 1000.0;
+cast(string as DATE)
+cast(date as STRING)
 ```

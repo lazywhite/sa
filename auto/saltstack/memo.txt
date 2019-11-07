@@ -1,14 +1,5 @@
-salt db1 grains.get pythonpath --out=pprint
-salt "*" disk.usage
-salt "*" network.interfaces
-salt "*" test.ping
-when troubleshooting it can be more beneficial to login to the minion directly and use salt-call.
-
-salt 'host' grains.items
-salt 'host' grains.item host
-
-salt "*"  sys.doc [module]
-=============
+概念
+```
 environment: defined in top.sls
 grains: facter system
     self-defined: /etc/salt/minion
@@ -26,49 +17,73 @@ beacon: monitor system processes and produce an event then trigger reactor
 returner: store execute result into backend other than return to master
 roster: salt-ssh
 syndic: distribute manage system
+```
 
-HA
-
-SPM
-    formula
-
-mine:
-
-targeting:
-    
-peer
-proxy
+常用命令
+    salt db1 grains.get pythonpath --out=pprint
+    salt "*" disk.usage
+    salt "*" network.interfaces
+    salt "*" test.ping
 
 
-salt "*" saltutil.sync_grains
-salt "*" saltutil.refresh_pillar
-salt "*" pillar.items
-salt "*" grain.items
+登录到客户端debug
+    salt-call 
+查看所有grain
+    salt 'host' grains.items
+查看某个grain
+    salt 'host' grains.item host
 
-saltutil.sync_modules
-saltutil.sync_grains
-saltutil.sync_all
+查看模块文档
+    salt "*"  sys.doc [module]
+
+
+
+同步grain
+    salt "*" saltutil.sync_grains
+刷新pillar到minion
+    salt "*" saltutil.refresh_pillar
+查看匹配到的pillar
+    salt "minion1" pillar.items
+查看minion所有grain
+    salt "*" grain.items
+
+同步
+    saltutil.sync_modules
+    saltutil.sync_grains
+    saltutil.sync_all
 
 ## returner system
-/srv/salt/_returners/local.py
-    from __future__ import print_function
-    def returner(ret):
-        print(ret)
+```
+执行结果处理系统
 
-salt '*' saltutil.sync_returners
-salt '*'  cmd.run   'hostname'  --return    local
+自定义returner
+    /srv/salt/_returners/local.py
+        from __future__ import print_function
+        def returner(ret):
+            print(ret)
 
-## self-defined graines
+下发returner
+    salt '*' saltutil.sync_returners
+测试
+    salt '*'  cmd.run   'hostname'  --return    local
+```
+
+## 自定义grain
+```
 /srv/salt/_graines/
+```
 
-## self-defined module
+## 自定义module
+```
 /srv/salt/_modules/cheng.py
     def cheng(name):
       return __salt__['foo.foo'](name)
 salt '*' saltutil.sync_modules
 salt '*' cheng.cheng nae
+```
 
 ## reactor system
+```
 salt-run state.event pretty=True  #display event in forground
 salt-call event.send 'foo' '{orchestrate: refresh}' ## fire an event
 
@@ -84,12 +99,18 @@ salt/job/20150213001905721678/new       {
     "tgt_type": "glob",
     "user": "root"
 }
+## debug reactor system
+    service salt-master stop
+    salt-master -l debug  
 
-stop the master; salt-master -l debug  ## debug reactor system
-
+```
 
 ## Topic
+```
 不需要为salt-minion开放端口, 只需要为salt-master开发4505,4506即可
+master与minion版本需要一致
+无法从syndic node获取pillar配置, 需要重启salt-master服务, 不是salt-syndic服务
+```
 
 ### backup file 
 ```
@@ -108,7 +129,6 @@ local:
             /var/cache/salt/minion/file_backup/etc/vimrc_Fri_Jun_03_17:21:25_573320_2016
         Size:
             2039
-
 ```
 
 
@@ -118,24 +138,29 @@ local:
 
 
 ## host target
-
--E
+```
+-E(regexp)
     'web1-(prod|devel)'
--L
+-L(list)
     'web1,web2,web3'
-globbing
+globbing(default)
     '*.example.*'
     'web?.example.net'
     'web[1-5]'
+-S(subnet/IP)
+-C(comboined)    
+    "E@  and L@ and S@"
 
-
+```
 
 #### iptables module
+```
 salt 'mongo*' iptables.set_policy filter INPUT ACCEPT
 salt 'mongo*' iptables.get_policy filter INPUT
 salt 'mongo*' iptables.flush filter INPUT
 salt 'mongo*' cmd.run ':>/etc/sysconfig/iptables'
 
+```
 
 
 ### install salt on ubuntu 12.04
@@ -144,8 +169,8 @@ apt-get install python-software-properties
 add-apt-repository ppa:saltstack/salt
 apt-get update
 apt-get install salt-minion
+```
 
-## master and minion version should be same
 
 ```
 
@@ -164,10 +189,14 @@ for ubuntu-12.04: apt-get purge python-psutil
 ```
 
 ## remove a salt minion
+```
 salt-key -D <minion_id>
+```
 
 ## change salt master
+```
 rm -rf /etc/salt/pki/minion/*
+```
 
 ## auto accept key
 ```
@@ -180,5 +209,3 @@ key_accept:
 
 salt-run jobs.lookup_jid 20170412100938275448
 
-### cant get pillar setting from syndic node
-重启salt-master服务, 不是salt-syndic服务

@@ -80,3 +80,12 @@ row key一旦写入无法更改
 
 ## catalog tables
 hbase:meta 保存了所有region的列表, location存储在zookeeper
+
+
+## regionServer failed to start
+hbase >= 2.0
+    sudo -u hbase hbase hbck   
+hbase < 2.0
+    sudo -u hbase hbase hbck -fix
+    sudo -u hbase hbase hbck -repair
+

@@ -485,7 +485,7 @@ df -i 查看inode占用, /proc文件也会在inode中产生记录
 
 cent7使用iptables
     yum remove firewalld
-    yum -y install iptables-service
+    yum -y install iptables-services
     systemctl start iptables
     iptables -F
     service iptables save
@@ -524,8 +524,9 @@ stat file.sh
 
 
 -bash: fork: retry: No child processes!
+-bash: fork: retry: Resource temporarily unavailable
     /etc/security/limits.d/20-nproc.conf
-        *          soft    nproc     unlimited   # 默认4096
+        *          soft    nproc     <bignum>   # 默认4096
         root       soft    nproc     unlimited
 
 
@@ -589,3 +590,19 @@ https://www.jb51.net/article/135562.htm
 
 du, df结果不一致
     lsof|grep -i 'delete'   #杀掉占据大文件句柄的进程
+
+
+查看所有磁盘分区的文件系统类型
+    parted -l
+    lsblk -f
+    file -s /dev/sdb1
+
+
+'abrt-cli' status timed out
+    systemctl stop abrtd
+
+
+删除/lib64/libc.so.6, 单用户也无法进入， 需要用CD的维护模式修复
+
+
+ping -I bond1 <ip> 指定ping接口

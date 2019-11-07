@@ -1,0 +1,7 @@
+ipa help <user|group>
+
+ipa group-add group1 --desc="first group" 
+ipa group-find group1 # get gid
+ipa user-add user1 --first=user1 --last=tesla  --gidnumber=INT --password
+    
+ipactl status

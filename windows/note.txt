@@ -40,6 +40,13 @@ services.msc
 查看路由信息
     route print -4
 
+双网卡
+    route print 查看两个网卡目前的网关
+    route delete 0.0.0.0 mask 0.0.0.0 192.168.1.1
+    route add 10.0.0.0 mask 255.0.0.0 192.168.1.1
+    route add 0.0.0.0 mask 0.0.0.0 172.20.10.1
+
+
 win10要关闭预览体验服务
 
 
@@ -51,4 +58,4 @@ win8开启热点
     netsh wlan set hostednetwork mode=allow ssid=share01 key=00000000
     netsh wlan start hostednetwork
     本地连接->属性-->共享
-    无法启动承载网络(设备管理器 网络设备 启用microsoft虚拟驱动器)
+    无法启动承载网络(设备管理器->网络适配器->启用microsoft虚拟驱动器)

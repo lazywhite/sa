@@ -1,5 +1,9 @@
+# 查看当前字符集设置
+SELECT * FROM v$nls_parameters;
 # sqlldr导出数据
 export NLS_LANG="AMERICAN_AMERICA.AL32UTF8"
 export LANG=en_US.UTF-8
 
-/path/to/sqluldr2_linux64_10204.bin USER=user/passwd@192.168.212.73/dbname QUERy="select * from tb_test"  head=yes FILE=/tb_test.csv FIELD=0x7c log=/path/to/dump.log
+# quote设置字符串列的标识符, 默认为无， 0x22为双引号
+/path/to/sqluldr2_linux64_10204.bin USER=user/passwd@192.168.212.73/dbname QUERy="select * from tb_test"  quote=0x22 head=yes FILE=/tb_test.csv FIELD=0x7c log=/path/to/dump.log
+

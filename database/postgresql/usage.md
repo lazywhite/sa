@@ -306,8 +306,11 @@ https://wiki.postgresql.org/wiki/Disk_Usage
 
 
 ## log in as postgres user  
+```
+psql [database [user]]
 psql -h localhost -U postgres -W  
 
+```
 
 ## installation on centos
 ```

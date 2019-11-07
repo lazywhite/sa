@@ -32,3 +32,10 @@ ambari会检测/var/run/hadoop/hdfs/*.pid, 但真实的pid可能存在
     /tmp/hostname.sh
         #!/bin/bash
         echo `hostname`
+
+删除host
+    停止ambari-agent
+    界面上删除(不会删掉已部署的包及配置)
+
+添加新组件
+    hosts-->host-->components(add)

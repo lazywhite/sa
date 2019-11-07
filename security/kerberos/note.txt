@@ -1,0 +1,7 @@
+
+登陆方式
+    kinit <user> # 然后输入密码
+    kinit -kt /path/to/keytab
+
+kerberos认证流程
+https://blog.csdn.net/jewes/article/details/20792021

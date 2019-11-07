@@ -1,0 +1,11 @@
+fdisk 只能处理2T以下硬盘
+
+
+parted /dev/sdb
+>print
+>mklabel gpt
+>mkpart primary 0 5995G
+>exit
+
+
+mkfs.xfs /dev/sdb1

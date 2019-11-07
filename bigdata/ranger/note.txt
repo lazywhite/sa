@@ -1,0 +1,3 @@
+给用户赋queue权限时，queue的名称要写root.xx这种完全路径
+
+https://www.iteblog.com/archives/2316.html

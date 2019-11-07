@@ -1,8 +1,13 @@
-CREATE TABLE parquet_test (
- id int,
- str string,
- mp MAP<STRING,STRING>,
- lst ARRAY<STRING>,
- strct STRUCT<A:STRING,B:STRING>)
-PARTITIONED BY (part string)
-STORED AS PARQUET;
+时间戳转成日期
+    select distinct from_unixtime(1441565203,'yyyy/MM/dd HH:mm:ss’) from test_date;
+
+日期转成时间戳
+    select distinct unix_timestamp(‘20111207 13:01:03’) from test_date; // 默认格式为“yyyy-MM-dd HH:mm:ss“
+    select distinct unix_timestamp(‘20111207 13:01:03’,‘yyyyMMdd HH:mm:ss’) from test_date;
+
+yyyymmdd和yyyy-mm-dd日期之间的切换
+    select from_unixtime(unix_timestamp(‘20181205’,‘yyyymmdd’),‘yyyy-mm-dd’) from dual;
+
+时间戳秒级为10位,毫秒级为13位
+    select from_unixtime(cast(151331629920/1000 as int), 'yyyyMMddHHmmss') from dual;
+
