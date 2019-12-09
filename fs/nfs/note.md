@@ -69,3 +69,18 @@ noac:关闭cache机制。
 
 同时使用多个参数的方法：mount -t nfs -o timeo=3,udp,hard 192.168.0.30:/tmp /nfs
 ```
+
+
+## 性能优化
+```
+linux nfs客户端对于同时发起的NFS请求数量进行了控制，若该参数配置较小会导致IO性能较差，查看该参数：
+    cat /proc/sys/sunrpc/tcp_slot_table_entries
+
+默认编译的内核该参数最大值为256，可适当提高该参数的值来取得较好的性能，请以root身份执行以下命令：
+
+    echo "options sunrpc tcp_slot_table_entries=128" >> /etc/modprobe.d/sunrpc.conf
+    echo "options sunrpc tcp_max_slot_table_entries=128" >> /etc/modprobe.d/sunrpc.conf
+    sysctl -w sunrpc.tcp_slot_table_entries=128
+修改完成后，您需要重新挂载文件系统或重启机器。
+    mount -o remount,rw,tcp,nolock,vers=3 /<mount path>
+```
