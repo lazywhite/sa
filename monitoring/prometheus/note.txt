@@ -73,8 +73,8 @@ text collector
 
 
 API
-    http://1.2.3.4:8090/api/v1/query?query=  # 获取单个值
-    http://1.2.3.4:8090/api/v1/query_range?query=&start=&end=&step=  # 获取一定时间范围内值
+    http://1.2.3.4:8090/api/v1/query?query=&time=<ts>  # 获取单个值, time省略默认为当前时间戳
+    http://1.2.3.4:8090/api/v1/query_range?query=&start=&end=&step=  # 获取一定时间范围内值, 结果为列表
 
 
     获取所有节点列表(job="node_group")
@@ -92,3 +92,8 @@ API
     获取某个节点所有磁盘IO Util比率
     http://1.2.3.4:8090/api/v1/query_range?query=irate(node_disk_io_time_seconds_total{instance=~"1.2.2.1:9100"}[10m])&start=1552538580&end=1552538910&step=15
 
+    获取cpu使用率平均值
+    http://10.224.210.110:8090/api/v1/query_range?query=100 - (avg by (instance)(irate(node_cpu_seconds_total{mode="idle",job="node_group"}[5m])) * 100)&start=1575475200&end=1575561500&step=86400
+
+    获取内存使用率
+    http://10.224.210.110:8090/api/v1/query_range?query=100 - (node_memory_MemAvailable_bytes{job="node_group"} / (node_memory_MemTotal_bytes{job="node_group"}) * 100)&start=1575475200&end=1575561500&step=86400
