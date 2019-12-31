@@ -27,3 +27,8 @@ docker run
     --storage-opt: storage driver option for this container
     -v <host_dir>:<container_path>[:options]
 ```
+
+## enter a running container
+```
+docker exec -it <id> /bin/sh
+```

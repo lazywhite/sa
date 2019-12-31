@@ -27,14 +27,31 @@ gitfs_remotes:
 ## Events
 ```
 beacons: 监测salt之外其他进程的状态, 并产生相应的事件
-    文件更改
-    系统负载
-    特定服务状态
-    用户登录
-    网络状态
+
+/etc/salt/minion
+beacons:
+  inotify:
+    /home/vagrant/importantfile:
+      mask:
+        - modify
 ```
 ## Reactor
+```
 根据相应的事件, 触发相应的动作
+root@salt-master:~# cat /etc/salt/master.d/reactor.conf 
+reactor:
+  - 'lixc':
+    - /srv/reactor/lixc.sls
+
+root@salt-master:~# cat /srv/reactor/lixc.sls
+clean_tmp:
+  cmd.cmd.run:
+    - tgt: 'os:Debian'
+    - expr_form: grain
+    - arg:
+      - echo "hello liss" >>/tmp/test.log
+
+```
 
 ## Orchestration
 通过runner来进行多个minion之间的联动  

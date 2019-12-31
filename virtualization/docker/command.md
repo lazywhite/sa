@@ -42,5 +42,6 @@ docker export -o output.tar <container-id> 导出container
 docker import output.tar  产生镜像
 
 docker save -o output.tar <image> 导出镜像
-docker load -i output.tar
+docker load -i output.tar  # image会丢失name:tag
+docker tag <image_id> <name>:<tag>
 ```

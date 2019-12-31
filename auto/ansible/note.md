@@ -91,5 +91,7 @@ run as sudo user
     ansible all -u admin -b -m ping
 
 jinja2 template {{}}要用"", 防止跟yaml的字典语法冲突
+
+目标机器必须安装libselinux-python
 ```
 

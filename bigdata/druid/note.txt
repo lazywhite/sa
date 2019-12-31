@@ -6,3 +6,5 @@ grafana
 
 dsql
     提供sql使用接口
+
+    SELECT COUNT(*) FROM new_table WHERE "__time" BETWEEN TIMESTAMP '2019-12-21 00:00:00' AND TIMESTAMP '2019-12-23 00:00:00'

@@ -8,3 +8,9 @@ ansible -i inventory all -u ansible -b -k -m copy -a "src=a.sh dest=/tmp/a.sh mo
 
 # 设置并发数, 默认为5
 ansible -i inventory all -f 50 -m ping 
+
+# 命令行指定ip
+ansible all -i 192.168.1.1,192.168.1.2 -m shell -a "ls -l /data0/ | wc -l"
+
+# 查看机器fact
+ansible 192.168.1.1 -m setup -a "filter="

@@ -5,7 +5,7 @@ VBoxManage clonehd work-disk1.vmdk new.vdi --format vdi
 VBoxManage modifyhd new.vdi --resize 20480
 cfdisk /dev/sda # add partition
 vgextend vg /dev/sda5
-lvextent -l 100%FREE /dev/vg/lv_root
+lvextend -l +100%FREE /dev/vg/lv_root
 resize2fs /dev/vg/lv_root
 ```
 

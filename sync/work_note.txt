@@ -606,3 +606,7 @@ du, df结果不一致
 
 
 ping -I bond1 <ip> 指定ping接口
+
+
+split -a 2 -d -b 10k /var/log/messages  <name prefix> # 按大小拆分
+split -d -10 /etc/passwd my_passwd_  # 按行拆分

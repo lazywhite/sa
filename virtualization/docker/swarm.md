@@ -11,4 +11,6 @@ master
 node
 ```
 
-
+docker stack deploy -c <compose.yml> <stack_name> --prune
+docker stack ls <stack_name>
+docker stack rm <stack_name>

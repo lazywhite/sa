@@ -42,7 +42,7 @@ ifup ens7f0
 ifup ens7f1
 ifup bond0
 
-cat /proc/net/bonding/bond0
+cat /proc/net/bonding/bond0 # 查看当前bond模式
 
 
 ifenslave -d bond0 ens7f0 # 删除接口, 同时调整ifcfg-ens7f0

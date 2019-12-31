@@ -124,3 +124,7 @@ Quota
 
 
 datanode启动后会检查volume并校验内部文件,耗时较长，namenode此时认为为dead状态
+
+
+
+hadoop distcp --update [ --overwrite ] hdfs://1.2.3.4:50070/abs/path  /local/path

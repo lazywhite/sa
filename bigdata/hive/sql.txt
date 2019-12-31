@@ -11,3 +11,5 @@ yyyymmdd和yyyy-mm-dd日期之间的切换
 时间戳秒级为10位,毫秒级为13位
     select from_unixtime(cast(151331629920/1000 as int), 'yyyyMMddHHmmss') from dual;
 
+查看表详细信息
+    desc formatted <tb>
