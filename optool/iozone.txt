@@ -1,0 +1,42 @@
+## 安装
+```
+apt-get install iozone
+```
+
+###  常见参数
+```
+-a 全面测试，比如块大小它会自动加
+-i N 用来选择测试项, 比如Read/Write/Random 比较常用的是0 1 2,可以指定成-i 0 -i 1 -i2.这些别的详细内容请查man
+  0=write/rewrite
+  1=read/re-read
+  2=random-read/write
+  3=Read-backwards
+  4=Re-write-record
+  5=stride-read
+  6=fwrite/re-fwrite
+  7=fread/Re-fread
+  8=random mix
+  9=pwrite/Re-pwrite
+  10=pread/Re-pread
+  11=pwritev/Re-pwritev
+  12=preadv/Re-preadv
+
+-r block size 指定一次写入/读出的块大小
+-s file size 指定测试文件的大小
+-f filename 指定测试文件的名字,完成后会自动删除(这个文件必须指定你要测试的那个硬盘中)
+-F file1 file2... 指定多线程下测试的文件名
+
+批量测试项:
+-g -n 指定测试文件大小范围,最大测试文件为4G,可以这样写 -g 4G
+-y -q 指定测试块的大小范围
+
+输出:
+下面是几个日志记录的参数.好象要输出成图象进行分析，需要指定-a的测试才能输出
+-R 产生Excel到标准输出
+-b 指定输出到指定文件上. 比如 -Rb ttt.xls
+
+```
+## 样例
+```
+iozone -a -i 0 -i 1 -f /mnt/iozone -Rb /root/read.xls -g 8G -n 4G -C
+```

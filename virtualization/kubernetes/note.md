@@ -284,4 +284,8 @@ endpoint
 　　Endpoints是实现实际服务的端点集合
     service配置selector，endpoint controller才会自动创建对应的endpoint对象；否则，不会生成endpoint对象.
     k8s集群中创建一个名为hello的service，就会生成一个同名的endpoint对象，ENDPOINTS就是service关联的pod的ip地址和端口
+
+
+NetworkPolicy
+    https://godleon.github.io/blog/Kubernetes/k8s-Network-Policy-Overview/
 ```

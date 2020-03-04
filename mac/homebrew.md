@@ -19,6 +19,7 @@ source ~/.bash_profile
 ```
 brew update # 升级brew本身及formulae列表
 brew upgrade # 升级所有已安装formulae
+brew upgrade -n # 列出哪些会被升级
 brew upgrade [formulae]# 升级某个包
 
 brew doctor # 诊断brew

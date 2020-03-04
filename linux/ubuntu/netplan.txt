@@ -1,0 +1,16 @@
+# 版本18.04之后
+sudo vim /etc/netplan/50-cloud-init.yaml
+
+network:
+    ethernets:
+        ens160:
+            addresses:
+                - 210.72.92.28/24 # IP及掩码
+            gateway4: 210.72.92.254 # 网关
+            nameservers:
+                addresses:
+                    - 8.8.8.8 # DNS
+    version: 2
+
+
+sudo netplan apply

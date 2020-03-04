@@ -1,0 +1,52 @@
+######### for mac ##########
+1. brew install minikube # will install kubectl at same time
+2. download minikube-v1.7.0.iso
+3. minikube config set vm-driver virtualbox
+4. minikube start # 会提示下载iso, 如果无法下载, 自己手动下载
+
+获取阿里云镜像加速地址
+    https://cr.console.aliyun.com/cn-hangzhou/instances/mirrors
+
+手动下载kubelet, kubeadm 至 ~/.minikube/cache/<version>/
+    https://storage.googleapis.com/kubernetes-release/release/v1.17.2/bin/linux/amd64/kubelet
+
+5. minikube start --iso-url="file:///Users/white/Downloads/minikube-v1.7.0.iso" --image-mirror-country cn --registry-mirror=https://49ri251n.mirror.aliyuncs.com
+
+
+6. minikube dashboard
+
+7. minikube stop
+
+## 重新启动一个已停止的cluster
+8. minikube start --iso-url="file:///Users/white/Downloads/minikube-v1.7.0.iso" --image-mirror-country cn --registry-mirror=https://49ri251n.mirror.aliyuncs.com
+
+## 进入vm terminal
+9. minikube ssh 
+
+######### for linux ##########
+#!/bin/bash
+
+# 执行要求
+# 1. sudo权限
+# 2. cpu至少双核
+# 3. ubuntu 18.04
+
+version=v1.17.2
+
+curl -Lo /bin/kubectl https://storage.googleapis.com/kubernetes-release/release/$version/bin/linux/amd64/kubectl
+curl -Lo /bin/minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 && chmod +x /bin/minikube
+apt install docker.io
+minikube start  --image-mirror-country cn --registry-mirror=https://49ri251n.mirror.aliyuncs.com --kubernetes-version=$version  --vm-driver=none
+
+kubectl get pods --all-namespaces
+
+
+
+########## minikube 更改bind IP ########## 
+使用vm-driver=none安装后, kubectl cluster-info 会显示kube-api在某张网卡ip上
+如果网卡ip更改, 则kubelet无法连接
+
+1. 网卡更改ip
+2. export CHANGE_MINIKUBE_NONE_USER=true &&  minikube update-context
+3. minikube stop
+4. minikube start <install args>

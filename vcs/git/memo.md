@@ -221,7 +221,7 @@ git push -f origin master
 ### Remove files from all commits
 ```
 git filter-branch \
---index-filter 'git rm --cached --ignore-unmatch linux/bzImage' <start>..<stop|HEAD>
+--index-filter 'git rm --cached --ignore-unmatch linux/bzImage' -f
 ```    
 
 ### Remove directory from all commits

@@ -96,3 +96,9 @@ command not found : glibtoolize
 command not found : aclocal
     brew install automake
 ```
+
+## 系统配置的输入监视没有列出请求权限的app
+```
+rm /Library/Application\ Support/com.apple.TCC/TCC.db
+reboot
+```

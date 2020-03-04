@@ -25,7 +25,6 @@ mysql 限定用户登录IP
     grant user@'ip'
 
 
-iozone
 iperf
 
 time + command
@@ -63,7 +62,6 @@ use 'dmesg' to detect inserted device
 cat /dev/urandom | md5sum
 
 
-iozone -a -i 0 -i 1 -f /var/lib/iozone.temp -Rab /root/read.xls -g 8G -n 4G -C
 
 xtrabackup  socat 
 
@@ -610,3 +608,14 @@ ping -I bond1 <ip> 指定ping接口
 
 split -a 2 -d -b 10k /var/log/messages  <name prefix> # 按大小拆分
 split -d -10 /etc/passwd my_passwd_  # 按行拆分
+
+alphine linux 软件源
+    sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
+    apk update
+
+force disconnect ssh
+    <enter>~.
+
+    /etc/ssh/ssh_config
+        ServerAliveInterval 10  ## add this line
+

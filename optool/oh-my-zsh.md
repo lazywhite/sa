@@ -1,7 +1,11 @@
 ## Installation
+```
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 plugins=(git bundler osx rake ruby)
 ZSH_THEME="robbyrussell"
+```
 
 ## Usage
-d: list access path
+```
+d: list accessed path, enter path id only will cd to that path
+```
