@@ -17,7 +17,15 @@ halt
 VBoxManage modifyhd new.vdi --compact
 ```
 
+## headless
+```
+VBoxManage startvm ubuntu --type headless
+VBoxManage controlvm ubuntu poweroff
+VBoxManage controlvm ubuntu  pause
+VBoxManage controlvm ubuntu reset
+```
 
+```
 host-only vm不通host
     关闭windows防火墙
 
@@ -55,3 +63,4 @@ vbox 共享文件夹
 vm网络连接找不到host网卡列表
     适配器设置-->属性-->安装-->服务-->添加-->vbox/driver/network/netlwf/vboxnetlwf
     https://blog.csdn.net/qq_383698639/article/details/79527311
+```
