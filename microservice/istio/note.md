@@ -10,3 +10,7 @@ component
     citaldel
         traffic encryption
 
+
+# enable jaeger
+istioctl manifest apply --set profile=demo  --set values.tracing.enabled=true
+# should enable grafana, prometheus

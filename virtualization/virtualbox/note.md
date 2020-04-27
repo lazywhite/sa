@@ -63,4 +63,16 @@ vbox 共享文件夹
 vm网络连接找不到host网卡列表
     适配器设置-->属性-->安装-->服务-->添加-->vbox/driver/network/netlwf/vboxnetlwf
     https://blog.csdn.net/qq_383698639/article/details/79527311
+
+
+mac host-only出外网
+    /etc/pf.conf
+        rdr-anchor "com.apple/*"    ## 此行后面添加
+        nat on en0 from 192.168.56.0/24 to any -> en0
+        pass from {lo0, 192.168.56.0/24} to any keep state
+    sysctl -w net.inet.ip.forwarding=1
+
+    sudo pfctl -vnf /etc/pf.conf  # 检查配置文件
+    sudo pfctl -ef /etc/pf.conf  # 应用
+    重启后会失效
 ```

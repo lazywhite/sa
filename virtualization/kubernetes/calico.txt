@@ -1,0 +1,2 @@
+bandwidth plugin work by "tc"
+tc qdisc show

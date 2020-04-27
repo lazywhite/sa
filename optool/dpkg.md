@@ -39,6 +39,9 @@ apt-get purge <package>
 apt-get install apt-file
 apt-file update
 apt-file search <file-path>
+
+
+dpkg -S <file>
 ```
 
 

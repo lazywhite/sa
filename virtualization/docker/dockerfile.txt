@@ -135,3 +135,15 @@ FROM
 
     必须放在Dockerfile的最前面
     一个Dockerfile可以有多个FROM指令, 用来生成多个image或者进入不同的编译阶段
+
+
+
+
+
+ADD go /usr/local/
+    will copy the contents of your local go directory in the /usr/local/ directory of your docker image.
+
+ADD go /usr/local/go
+COPY go /usr/local/go
+    will copy the go directory itself to /usr/local/
+

@@ -1,0 +1,5 @@
+# 允许grep
+curl www.baidu.com 2>&1|grep 'str'
+
+-v: 显示req, resp header
+

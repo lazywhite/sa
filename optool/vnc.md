@@ -4,9 +4,14 @@
 yum install tigervnc-server
 vncpasswd  --> /home/<User>/.vnc/passwd
 运行
-    vncserver 
+    vncserver  -localhost no :1  // (5901)
 设置分辨率
     vncserver -geometry 1280x800 (default 1027x768)
+
+    tigervncserver -xstartup /usr/bin/xterm
+
+.vnc/config
+	geometry=1280x800
 
 强制停止vnc进程清理文件
     /tmp/.X1-lock

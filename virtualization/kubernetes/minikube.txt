@@ -50,3 +50,23 @@ kubectl get pods --all-namespaces
 2. export CHANGE_MINIKUBE_NONE_USER=true &&  minikube update-context
 3. minikube stop
 4. minikube start <install args>
+
+
+
+########### 使用calico插件 #########
+kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
+#kubectl taint nodes --all node-role.kubernetes.io/master-
+kubectl label node <node1> node-role.kubernetes.io/master-
+kubectl label node <node1> kubernetes.io/os: linux
+
+minikube stop; minikube start --network-plugin=cni  --extra-config="kubeadm.pod-network-cidr=10.224.0.0/16"
+
+
+
+
+######### 删除minikube ############
+必须在minikube start状态下, 执行minikube delete
+
+
+####### addon #######
+minikube addons list

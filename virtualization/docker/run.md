@@ -26,6 +26,7 @@ docker run
     --sig-proxy: proxy received signal to this container, default true
     --storage-opt: storage driver option for this container
     -v <host_dir>:<container_path>[:options]
+    --user <uid|username>[:<gid|groupname>]
 ```
 
 ## enter a running container

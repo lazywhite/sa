@@ -1,0 +1,60 @@
+nvidia gpu driver
+cuda toolkit(optional)
+nvidia-docker2(docker<=19.03)
+docker default runtime(daemon.json, docker<=19.03)
+
+
+
+https://github.com/NVIDIA/nvidia-docker
+	Make sure you have installed the NVIDIA driver and Docker 19.03 for your 
+	Linux distribution Note that you do not need to install the CUDA toolkit on the host, but the driver needs to be installed
+
+	Note that with the release of Docker 19.03, usage of nvidia-docker2 packages 
+	are deprecated since NVIDIA GPUs are now natively supported as devices in the Docker runtime.
+
+
+https://minikube.sigs.k8s.io/docs/tutorials/nvidia_gpu/
+https://github.com/NVIDIA/k8s-device-plugin
+
+
+https://github.com/NVIDIA/gpu-monitoring-tools
+
+
+node GPU monitor 
+	https://www.jianshu.com/p/1c9bfb4f032d
+
+
+
+tips
+	# check nvidia runtime
+	docker run --rm --runtime=nvidia  nvidia/cuda nvidia-smi
+
+
+
+
+kubectl create namespace monitoring
+kubectl label no <nodename> hardware-type=NVIDIAGPU
+kubectl get nodes --show-labels
+
+
+
+
+
+dcgm_fan_speed_percent                             GPU 风扇转速占比（%）
+dcgm_sm_clock                                      GPU sm 时钟(MHz)
+dcgm_memory_clock                                  GPU 内存时钟(MHz)
+dcgm_gpu_temp                                      GPU 运行的温度(℃)
+dcgm_power_usage                                   GPU 的功率（w）
+dcgm_pcie_tx_throughput                            GPU PCIe TX传输的字节总数 （kb）
+dcgm_pcie_rx_throughput                            GPU PCIe RX接收的字节总数   （kb）
+dcgm_pcie_replay_counter                           GPU PCIe重试的总数
+dcgm_gpu_utilization                               GPU 利用率（%）
+dcgm_mem_copy_utilization                          GPU 内存利用率（%）
+dcgm_enc_utilization                               GPU 编码器利用率 （%）
+dcgm_dec_utilization                               GPU 解码器利用率 (%)
+dcgm_xid_errors                                    GPU 上一个xid错误的值
+dcgm_power_violation                               GPU 功率限制导致的节流持续时间(us)
+dcgm_thermal_violation                             GPU 热约束节流持续时间(us)
+dcgm_sync_boost_violation                          GPU 同步增强限制，限制持续时间(us)
+dcgm_fb_free                                       GPU fb（帧缓存）的剩余（MiB）
+dcgm_fb_used                                       GPU fb （帧缓存）的使用 （MiB）
