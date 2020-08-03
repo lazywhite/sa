@@ -59,3 +59,16 @@ win8开启热点
     netsh wlan start hostednetwork
     本地连接->属性-->共享
     无法启动承载网络(设备管理器->网络适配器->启用microsoft虚拟驱动器)
+
+
+
+环境变量
+	SET  # 打印全部变量
+	SET USERNAME # 打印单个变量
+	SET USERNAME=test # 设置变量值
+
+打印文件内容
+	type a.txt
+
+切换磁盘
+	D:
