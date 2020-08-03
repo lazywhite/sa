@@ -137,13 +137,34 @@ git reset [--soft | --mixed [-N] | --hard | --merge | --keep] [-q] [<commit>]
 
 ## Tag
 ```
-git tag 'tag_name' <commit_id>  
-git rev-parse 'tag_name' --> commit_id  
 
 
-git tag -l (list)  
-git tag -v 'name' (information)  
-git checkout tags/v1.2 
+git tag  # 列出所有tag
+git tag -l "1.8*" $ 列出符合条件的tag
+
+标签类型
+	轻量标签
+		git tag <v1.4>
+		git show v1.4 # 仅显示提交信息
+	附注标签
+		git tag -a <v1.4> -m "<comment>"
+		git show v1.4 # 显示打标签者，日期，备注及提交信息
+
+后期打标签
+	git log --pretty=oneline
+	git tag -a v1.2 913c1b21
+
+共享标签
+	git push origin <v1.2>
+	git push --tags # 推送所有
+
+删除标签
+	git tag -d v1.2  #本地删除
+	git push origin --delete <v1.2> # 删除远程
+
+检出
+	git co v1.4  # detached HEAD
+	git co -b local_v1.4 # 新建分支， 可做变更
 ```
   
 ## Checkout
@@ -274,4 +295,18 @@ git clone Peer reports incompatible or unsupported protocol version.
 
 fatal: object 47e1979a125aa4bac0d03f8d31814036404a1196 is corrupted
     rm -f .git/object/47/e1979a125aa4bac0d03f8d31814036404a1196 ; git pull
+```
+
+
+## Ignore
+```
+1. .gitignore
+2. .git/info/exclude  //不会纳入版本管理
+```
+
+## FileMode
+```
+.git/config
+  [core]
+  filemode = false
 ```
