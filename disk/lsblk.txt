@@ -1,0 +1,4 @@
+lsblk -f # 同时打印文件系统
+
+查看是否为ssd
+lsblk -d -p -o name,rota  // 为1说明为HDD

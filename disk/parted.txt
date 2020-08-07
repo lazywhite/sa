@@ -1,0 +1,13 @@
+fdisk 只能处理2T以下硬盘
+
+
+parted /dev/sdb
+>print
+>mklabel gpt
+>mkpart primary xfs 0 2048G
+>mkpart primary xfs 2048G 100%
+>quit
+
+# mkpart 仅仅指定了文件系统, 并没有真正格式化
+
+mkfs.xfs /dev/sdb1
