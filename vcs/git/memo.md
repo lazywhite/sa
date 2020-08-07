@@ -306,7 +306,18 @@ fatal: object 47e1979a125aa4bac0d03f8d31814036404a1196 is corrupted
 
 ## FileMode
 ```
+不将文件权限纳入版本管理
 .git/config
   [core]
   filemode = false
+```
+
+
+## 修改author信息
+```
+git push发现author 邮箱格式不正确
+
+git config user.name  <>
+git config user.email  <>
+git commit --amend --reset-author --no-edit
 ```
