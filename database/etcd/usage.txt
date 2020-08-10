@@ -1,0 +1,14 @@
+etcdctl version
+export ETCDCTL_API=3
+
+etcdctl --write-out=table --endpoints=localhost:2379 put  foo bar
+etcdctl --write-out=table --endpoints=localhost:2379 get foo
+etcdctl --write-out=table --endpoints=localhost:2379 get foo --print-value-only
+etcdctl --write-out=table --endpoints=localhost:2379 get --prefix=foo
+etcdctl --write-out=table --endpoints=localhost:2379 get --prefix=foo --limit=2
+
+
+
+
+etcdctl --write-out=table --endpoints=localhost:2379 del foo
+etcdctl --write-out=table --endpoints=localhost:2379 watch foo
