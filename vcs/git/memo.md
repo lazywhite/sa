@@ -286,6 +286,11 @@ git commit -a -F -  从标准输入读取提交信息
 
 git fetch origin [remote_br]:[local_br] 拉取远程分支到本地
 
+本地git br -a, 发现有remotes/origin/<some_br>, 但origin其实已经没有了, 需要更新远程分支列表
+    git remote update origin --prune
+
+新建分支前, 先更新基础分支
+    git pull origin/<br>
 ```
 
 ## Problem
@@ -320,4 +325,9 @@ git push发现author 邮箱格式不正确
 git config user.name  <>
 git config user.email  <>
 git commit --amend --reset-author --no-edit
+或者
+git commit --amend --author="userName <userEmail>", 注意<>为必须
 ```
+
+
+

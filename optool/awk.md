@@ -34,7 +34,7 @@ RS: the input record separator , by default a newline
 ## Usage example
 ```
 awk -F: '{printf("%-10s %-10s \n",$1,$2)}' /etc/passwd
-awk -F: 'BEGIN{OFS="\v"}/root/{print $7}' /etc/passwd
+awk -F: 'BEGIN{OFS="\v"}/root/{print $5,$7}' /etc/passwd //垂直制表符
 
 
 awk -F, 'NR==2{printf "%0.2f", $8/$9}' file.csv

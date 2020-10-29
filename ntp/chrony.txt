@@ -6,6 +6,7 @@ yum -y install chrony
     allow 192.168.0.0/16
 
 systemctl start chronyd
+systemctl enable chronyd
 
 
-chronyc resource # 查看同步状态
+chronyc sources # 查看同步状态

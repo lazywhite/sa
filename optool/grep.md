@@ -44,4 +44,12 @@ $
 
 grep -nHro '"resource_id":"[^"]*"' /root/lucci|grep -v 'CPC'
 
+同时匹配多个pattern
+    egrep已经废弃，推荐grep -E
+        grep -e pattern1 -e pattern2 
+        grep -E 'pattern1|pattern2'
+
+escape特殊字符, back slash
+    grep 'map\[test\]\$'
+
 ```

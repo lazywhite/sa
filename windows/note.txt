@@ -72,3 +72,7 @@ win8开启热点
 
 切换磁盘
 	D:
+
+操作文件夹
+	mkdir
+	rmdir /s /q

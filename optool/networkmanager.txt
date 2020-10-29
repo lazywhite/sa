@@ -1,0 +1,7 @@
+---- 不管理DNS
+
+/etc/NetworkManager/NetworkManager.conf
+[main]
+dns=none
+
+systemctl restart NetworkManager

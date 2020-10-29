@@ -112,3 +112,8 @@ systemctl daemon-reload
 systemctl restart docker
 ```
 
+## docker save with tag
+```
+docker save <image id> -o image.tar <repo>:<tag>
+docker load < image.tar
+```

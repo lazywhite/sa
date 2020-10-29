@@ -56,6 +56,7 @@ vbox 共享文件夹
             名称： dir1
         linux vm
             mount -t vboxsf dir1 /mnt
+            不能写进/etc/fstab, 无法自动挂载, 会导致无法启动
         windows vm
             此电脑--> 映射网络驱动器
             \\vboxsvr\tmp

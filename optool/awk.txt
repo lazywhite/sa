@@ -350,3 +350,6 @@ cat access_log | awk '($NF > 30){print $7}' | sort -n | uniq -c | sort -nr | hea
  
 ## 列出最最耗时的页面(超过60秒的)
 cat access_log | awk '($NF > 60 && $7~/\.PHP/){print $7}' | sort -n | uniq -c | sort -nr | head -100
+
+## 打印某一列至最后一列所有值
+awk -F " " '{for (i=2;i<=NF;i++)printf("%s ", $i);print ""}'

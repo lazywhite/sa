@@ -1,14 +1,26 @@
 etcdctl version
 export ETCDCTL_API=3
 
+etcdctl --write-out=table --endpoints=localhost:2379 member list
 etcdctl --write-out=table --endpoints=localhost:2379 put  foo bar
 etcdctl --write-out=table --endpoints=localhost:2379 get foo
 etcdctl --write-out=table --endpoints=localhost:2379 get foo --print-value-only
 etcdctl --write-out=table --endpoints=localhost:2379 get --prefix=foo
 etcdctl --write-out=table --endpoints=localhost:2379 get --prefix=foo --limit=2
 
+ETCDCTL_API=3 etcdctl get "" --prefix=true  //获取所有key
 
 
 
 etcdctl --write-out=table --endpoints=localhost:2379 del foo
 etcdctl --write-out=table --endpoints=localhost:2379 watch foo
+
+
+
+----- v3 client ------------
+etcdctl --endpoints=https://10.40.0.1:2379 --cacert=/var/run/ca.pem --cert=/var/run/etcd-client.pem --key=/var/run/etcd-client-key.pem get "/dir1" --prefix=true
+etcdctl --endpoints=https://10.40.0.1:2379 --cacert=/var/run/ca.pem --cert=/var/run/etcd-client.pem --key=/var/run/etcd-client-key.pem del "/dir1" --prefix=true
+
+----- v2 client ------------
+etcdctl338 --endpoints=https://10.40.0.1:2379 --ca-file=/var/run/ca.pem --cert-file=/var/run/etcd-client.pem --key-file=/var/run/etcd-client-key.pem  ls "/dir1" 
+etcdctl338 --endpoints=https://10.40.0.1:2379 --ca-file=/var/run/ca.pem --cert-file=/var/run/etcd-client.pem --key-file=/var/run/etcd-client-key.pem  rm -r "/dir1" 
