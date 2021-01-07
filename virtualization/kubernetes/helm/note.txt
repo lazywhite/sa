@@ -27,6 +27,7 @@ helm repo update
 helm install minio --set persistence.size=10Gi stable/minio
 helm list
 helm uninstall minion
+helm uninstall --no-hooks -v 5 <release>
 
 
 

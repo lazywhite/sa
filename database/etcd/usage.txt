@@ -1,21 +1,77 @@
-etcdctl version
+查看客户端版本
+    etcdctl version
+查看服务端版本
+    etcd --version
+
+
 export ETCDCTL_API=3
-
-etcdctl --write-out=table --endpoints=localhost:2379 member list
-etcdctl --write-out=table --endpoints=localhost:2379 put  foo bar
-etcdctl --write-out=table --endpoints=localhost:2379 get foo
-etcdctl --write-out=table --endpoints=localhost:2379 get foo --print-value-only
-etcdctl --write-out=table --endpoints=localhost:2379 get --prefix=foo
-etcdctl --write-out=table --endpoints=localhost:2379 get --prefix=foo --limit=2
-
-ETCDCTL_API=3 etcdctl get "" --prefix=true  //获取所有key
+ETCDCTL_CACERT="/etc/kubernetes/pki/etcd/ca.pem"
+ETCDCTL_CERT="/etc/kubernetes/pki/etcd/etcd-client.pem"
+ETCDCTL_KEY="/etc/kubernetes/pki/etcd/etcd-client-key.pem"
+ETCDCTL_ENDPOINTS="https://10.0.0.100:2379"
 
 
 
-etcdctl --write-out=table --endpoints=localhost:2379 del foo
-etcdctl --write-out=table --endpoints=localhost:2379 watch foo
+## crud
+    etcdctl --write-out=table member list
+    etcdctl --write-out=table put foo bar
+    etcdctl --write-out=table put "/test/key1" "v1"
 
+    etcdctl get -h
+          --consistency="l"                 Linearizable(l) or Serializable(s)
+          --from-key[=false]                Get keys that are greater than or equal to the given key using byte compare
+          --keys-only[=false]               Get only the keys
+          --limit=0                         Maximum number of results
+          --order=""                        Order of results; ASCEND or DESCEND (ASCEND by default)
+          --prefix[=false]                  Get keys with matching prefix
+          --print-value-only[=false]        Only write values when using the "simple" output format
+          --rev=0                           Specify the kv revision
+          --sort-by=""                      Sort target; CREATE, KEY, MODIFY, VALUE, or VERSION
 
+    etcdctl --write-out=table get foo
+    etcdctl --write-out=table get --prefix=true "/test"
+    etcdctl --write-out=table get --from-key=true "/test"
+
+    etcdctl --write-out=table del foo
+    etcdctl --write-out=table watch foo
+
+    etcdctl get "" --prefix=true  //获取所有key
+    etcdctl del "" --from-key=true  //删除所有key
+
+## snapshot
+	# 备份, 任意node都可以
+	export ETCDCTL_API=3
+	ETCD_ENDPOINTS="https://10.0.0.1:2379,https://10.0.0.2:2379,https://10.0.0.3:2379"
+	etcdctl --endpoints=${ETCD_ENDPOINTS} --cacert=/etc/kubernetes/pki/etcd/ca.pem --cert=/etc/kubernetes/pki/etcd/etcd-client.pem --key=/etc/kubernetes/pki/etcd/etcd-client-key.pem snapshot save /opt/snapshot_121_2.db
+
+	# 查看snapshot状态
+    etcdctl snapshot --write-out=table status /path/to/db
+
+	# 还原步骤
+	# 1. 停止所有node etcd
+    # 2. 集群中每个node都要还原
+    # 3. 启动所有node etcd进程
+
+    # 还原命令
+	RESTORE_FILE="/opt/snapshot_121_2.db"
+	ETCD_NAME="10.0.1.1"  # 每个节点不一样
+	ETCD_CLUSTER="10.0.1.1=https://10.0.1.1:2380,10.0.0.2=https://10.0.0.2:2380,10.0.0.3=https://10.0.0.3:2380"
+	ETCD_INITIAL_CLUSTER_TOKEN="k8s-A-54fe"
+	ETCD_INITIAL_ADVERTISE_PEER_URLS="https://10.0.1.1:2380"  # 每个节点不一样
+
+	rm -rf /cloud/etcd/data
+	ETCDCTL_API=3 etcdctl snapshot --cacert=/etc/kubernetes/pki/etcd/ca.pem --cert=/etc/kubernetes/pki/etcd/etcd-client.pem --key=/etc/kubernetes/pki/etcd/etcd-client-key.pem restore $RESTORE_FILE \
+	  --name $ETCD_NAME \
+	  --data-dir /cloud/etcd/data \
+	  --initial-cluster $ETCD_CLUSTER \
+	  --initial-cluster-token $ETCD_INITIAL_CLUSTER_TOKEN \
+	  --initial-advertise-peer-urls $ETCD_INITIAL_ADVERTISE_PEER_URLS
+
+    # 查看状态
+    etcdctl endpoint health
+    etcdctl endpoint hashkv
+
+    
 
 ----- v3 client ------------
 etcdctl --endpoints=https://10.40.0.1:2379 --cacert=/var/run/ca.pem --cert=/var/run/etcd-client.pem --key=/var/run/etcd-client-key.pem get "/dir1" --prefix=true

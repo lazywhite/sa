@@ -125,3 +125,8 @@ yum update vim*
 ```
 set encoding=utf-8
 ```
+
+## 关闭yaml的自动缩进
+```
+autocmd FileType yaml let b:did_indent = 1
+```

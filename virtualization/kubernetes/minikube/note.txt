@@ -1,3 +1,11 @@
+需要先安装docker-ce
+
+$ sudo yum install -y yum-utils
+
+$ sudo yum-config-manager \
+    --add-repo \
+    https://download.docker.com/linux/centos/docker-ce.repo
+
 ######### for mac ##########
 1. brew install minikube # will install kubectl at same time
 2. download minikube-v1.7.0.iso
@@ -70,3 +78,7 @@ minikube stop; minikube start --network-plugin=cni  --extra-config="kubeadm.pod-
 
 ####### addon #######
 minikube addons list
+
+
+######### kubectl top node|pod 可用########
+minikube addons enable metrics-server

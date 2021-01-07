@@ -329,5 +329,35 @@ git commit --amend --reset-author --no-edit
 git commit --amend --author="userName <userEmail>", 注意<>为必须
 ```
 
+## 设置本地分支track远程分支
+```
+git branch -u upstream/foo foo
+或者
+git branch --set-upstream-to=upstream/foo foo
+```
+## 重命名某分支
+```
+If you want to rename a branch while pointed to any branch
+    git branch -m <oldname> <newname>
 
+If you want to rename the current branch, you can do
+    git branch -m <newname>
+```
+
+
+## 在virtualbox share folder模式下, git status状态错误
+  
+```
+将缓存刷入磁盘
+echo 3 > /proc/sys/vm/drop_caches
+
+git config core.filemode false
+git config core.ignorecase false
+```
+
+## 打印config出处
+  
+```
+git config --list --show-origin
+```
 

@@ -1,0 +1,30 @@
+1. helm fetch --untar stable/minio
+2. 调整values.yaml的值
+    内存
+    持久存储
+    service type
+    ak
+    sk
+3. helm install
+4. 下载mc client
+    GO111MODULE=on go get github.com/minio/mc
+
+5. 初始化配置
+    export ACCESS_KEY=$(kubectl get secret minio -o jsonpath="{.data.accesskey}" | base64 --decode)
+    export SECRET_KEY=$(kubectl get secret minio -o jsonpath="{.data.secretkey}" | base64 --decode)
+
+    //添加一个service
+    mc alias set minio http://localhost:32000 "$ACCESS_KEY" "$SECRET_KEY" --api s3v4
+
+
+6. 常见命令
+    mc mb minio/a/long/path 类似于mkdir -p
+    mc rb --force minio/a/long/path 类似于rmdir -p
+
+    mc cp <local file> minio/test/file
+    mc cat minio/test/file
+    mc ls minio/test
+
+
+7. bucket, 类似于dir, 不同于dir
+bucket 跟 directory不相同

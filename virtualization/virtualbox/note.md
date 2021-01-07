@@ -47,7 +47,7 @@ vbox 共享文件夹
 
         
         yum update kernel #reboot
-        yum -y install kernel-devel  kernel-headers
+        yum -y install kernel-devel  kernel-headers gcc
 
         cd /mnt/; ./VBoxLinuxAdditions.run
     设置共享

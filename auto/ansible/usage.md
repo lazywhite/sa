@@ -14,3 +14,10 @@ ansible all -i 192.168.1.1,192.168.1.2 -m shell -a "ls -l /data0/ | wc -l"
 
 # 查看机器fact
 ansible 192.168.1.1 -m setup -a "filter="
+
+
+# 连接本机，不需要ssh协议
+ansible all -i "localhost," -c local -m shell -a 'echo hello world'
+
+# 连接本机chroot环境，不需要ssh协议
+ansible all -i "/nodefs," -c chroot -m shell -a 'ls /'

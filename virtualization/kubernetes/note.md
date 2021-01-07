@@ -408,4 +408,40 @@ kubectl get不显示列标题
     kubectl get --no-headers=true
 
 所有资源的name不能包含大写字符
+
+
+admission webhook
+    validating
+        验证提交的资源yaml是否合法
+    mutating
+        改变提交的资源配置, 提供默认值，如resource limit，label，sidecar
+
+    使用
+        开发webhook controller，部署在集群，配置启用
+
+
+kubectl edit 无法更新status
+	If the /status subresource is enabled, the following behaviors change:
+
+	The main resource endpoint will ignore all changes in the status subpath. (note: it will not reject requests which try to change the status, following the existing semantics of other resources).
+
+
+k8s对象的name， 只能由数字，字母，- 组成， 不能包含下划线
+
+kubectl patch --type [json, merge, strategic]
+    json: json patch
+    merge: json merge patch
+    strategic: strategic merge patch  // default
+
+    strategic 可以指定patchStrategy(默认为replace，可以为merge, delete, delete from primitive list, retainKey), patchMergeKey
+    With a JSON merge patch, if you want to update a list, you have to specify the entire new list. And the new list completely replaces the existing list.
+
+    CR目前不支持策略合并
+
+
+
+volume mountPath可以在线更改, 会重新生成pod
+
+deployment无法使用volumeClaimTemplate
+    
 ```
