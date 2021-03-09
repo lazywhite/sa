@@ -121,6 +121,12 @@ git config --global merge.tool p4merge
 git config --global mergetool.p4merge.path "/Applications/p4merge.app/Contents/MacOS/p4merge"
 git config --global mergetool.p4merge.trustExitCode false
 git config --global mergetool.keepBackup false
+
+
+git merge <other-br>  # got conflict
+git mergetool <file1>
+
+如果中途退出, 需要git co -m <file1>, 重新执行git mergetool <file1>
 ```
 
 ## reset
@@ -314,7 +320,7 @@ fatal: object 47e1979a125aa4bac0d03f8d31814036404a1196 is corrupted
 不将文件权限纳入版本管理
 .git/config
   [core]
-  filemode = false
+  fileMode = false
 ```
 
 
@@ -344,6 +350,12 @@ If you want to rename the current branch, you can do
     git branch -m <newname>
 ```
 
+## 根据某个分支新建分支
+```
+git br <new branch> <base branch>
+git br dev origin/master
+```
+
 
 ## 在virtualbox share folder模式下, git status状态错误
   
@@ -351,7 +363,7 @@ If you want to rename the current branch, you can do
 将缓存刷入磁盘
 echo 3 > /proc/sys/vm/drop_caches
 
-git config core.filemode false
+git config core.fileMode false
 git config core.ignorecase false
 ```
 
@@ -361,3 +373,80 @@ git config core.ignorecase false
 git config --list --show-origin
 ```
 
+## 谨慎使用rebase
+```
+假设你使用latest分支开发, 并且push到了origin
+master分支有提交, 如果rebase master, 会导致本地分支的commit发生改变，从而跟origin/latest分支diverged
+此时如果latest分支只有自己使用， 可以直接git push -f
+如果latest分支有别的人也在用， 此时不能使用rebase， 需要用merge, 产生一个新的提交， 然后push origin/latest
+merge时可能会有conflict，解决后提交， master 此时merge latest会快进
+每次latest merge完master，push后, 如果latest分支引入了新的feature, master可以选择不merge latest, 否则应及时merge latest
+
+如果master没有及时merge latest， latest后续merge master，还要重新处理同样的conflict
+```
+
+## note
+```
+working directory-->staging directory(index)-->repository
+git stash会将文件存储在.git/refs/stash
+
+.git/HEAD指向当前分支
+.git/index文件保存暂存区信息
+
+git merge出现冲突，想要abort，直接git reset --hard HEAD
+
+```
+
+# git底层工作原理
+
+```
+git是一个键值对数据库，可以向git中插入任意内容，会返回一个唯一键，可以通过键在任意时间取回对应内容
+
+git内部对象类型
+    blob  (对应文件)
+    tree (对应目录)
+        每一行表示一个object, 格式为mode type sha1 filename
+    commit
+        tree sha1
+        parent commit(若有)
+        parent commit(若有)
+        author
+        commit
+        空行
+        注释
+header
+    类型+空格+字节数+空字节
+content
+
+header+content的sha1值(40个字符)为文件名, 存储在.git/objects/<前两个字符>/<后38个字符> 
+header+content的zip压缩值为内容, 存储在上一步的文件中
+
+git update-index 将文件加入暂存区
+git write-tree 将暂存区的文件创建成tree object并提交
+git commit-tree <tree sha1> 创建一个commit对象
+
+git cat-file  <sha1>
+    -p pretty print (content)
+    -t show type
+    -s show size
+git hash-object <path>
+    -w write to object database, otherwise return sha1 only
+    --stdin read object from stdin
+```
+
+## PS1显示git branch
+```
+parse_git_branch() {
+         git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
+                  
+                  
+}
+export PS1="\u@\h \[\033[32m\]\w\[\033[33m\]\$(parse_git_branch)\[\033[00m\] $ "
+```
+## 查看某行代码的作者的email地址
+```
+git blame <file>
+    08422f04 (bob.zc        2019-09-14 17:44:30 +0800   5) Features:
+
+git log --format="%ae" 08422f04 第一行就是
+```
