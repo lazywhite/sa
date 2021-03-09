@@ -130,3 +130,39 @@ set encoding=utf-8
 ```
 autocmd FileType yaml let b:did_indent = 1
 ```
+
+## 代码折叠
+```
+vimdiff会有自动代码折叠
+    zo: open fold
+    zc: close fold
+    zr: reduce folding level
+    zm: one more folding level
+    zR: reduce completely the folding
+    zM: fold most
+```
+
+## Centos8 安装NeoVIM
+```
+yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+yum install -y neovim 
+
+
+# 使用vim的配置
+mkdir -p ~/.config/nvim
+
+~/.config/nvim/init.vim
+    set runtimepath^=~/.vim runtimepath+=~/.vim/after
+    let &packpath=&runtimepath
+    source ~/.vimrc
+
+alias vim="nvim"
+alias vimdiff="nvim -d"
+
+
+# use as git diff tool
+git config --global merge.tool vimdiff
+git config --global mergetool.vimdiff.path nvim
+git config --global mergetool.trustExitCode true
+git config --global core.editor nvim
+```
