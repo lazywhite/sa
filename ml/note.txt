@@ -115,4 +115,9 @@ cost function 损失函数
     高斯混合模型
 
 
+AI: 泛指能模拟人类智能的机器或模型
+    Machine Learning: 一种基于数据统计的实现AI的方法
+        Deep Learning: 一种机器学习算法, 使用神经网络
+        决策树等其它算法
+
 
