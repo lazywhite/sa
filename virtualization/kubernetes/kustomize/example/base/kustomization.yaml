@@ -1,0 +1,27 @@
+namespace: custom-namespace-name
+#namePrefix: custom-
+#
+images:
+- name: nginx    # 注意一定要取原定义处 image: nginx, 而不是container name
+  #newName: alpine
+  newTag: 1.14-alpine
+
+replicas:
+- name: my-deployment
+  count: 3
+
+
+resources:
+- deployment.yaml
+- service.yaml
+
+
+vars:
+- name: MY_SERVICE_NAME
+  objref:
+    kind: Service
+    name: my-service
+    apiVersion: v1
+  fieldref:
+    fieldpath: metadata.name ## fieldRef默认值
+

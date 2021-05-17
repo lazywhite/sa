@@ -1,0 +1,62 @@
+概念
+    base
+    overlay
+    patch
+
+
+patch类型
+    patchesStrategicMerge
+    patchesJson6902
+
+
+transformer
+    namespace
+    commonLabels
+    commonAnnotations
+    namePrefix
+    nameSuffix
+    images
+    vars
+    valueAdd
+
+
+configurations:
+- kustomizeconfig.yaml
+
+
+kustomizeconfig.yaml
+    varReference
+    nameReference
+
+
+
+# 表示cr的spec.some-spec.deployment-ref里面的值, 要跟同名的deployment保持一致，避免nameSuffix, namePrefix造成的名称被改
+nameReference:
+- kind: Deployment
+  version: v1
+  fieldSpecs:
+  - kind: aCustomResource
+    version: v1
+    path: spec/some-spec/deployment-ref
+
+
+
+namespace: "custom"
+
+resources:
+- deploy.yaml
+
+bases:
+- ../base
+
+resources: # 新版bases可以直接写成resources
+- ../base
+
+
+
+如果resource里面有namespace.yaml, 旧版本kustomization.yaml里面规定的namespace会无法覆盖，需要升级kustomize版本
+如果patch file里面GVK+NN无法在base里面找到对应的，则会报错failed to find unique target for patch apps_v1_Deployment|ca-my-deployment
+
+
+issue
+    直接定义一个key = "value"的变量， 可以在所有地方使用key

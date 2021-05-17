@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: aCustomResource
+metadata:
+  name: name-of-mykind-resource
+spec:
+  some-spec:
+    deployment-ref: my-deployment 
+  other-spec: other-spec-value

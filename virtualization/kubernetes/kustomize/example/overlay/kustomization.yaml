@@ -1,0 +1,36 @@
+#resources:
+#- ../base
+bases:
+- ../base
+- namespace.yaml
+- my-cr.yaml
+
+namespace: overlay-namespace-name
+nameSuffix: -test
+
+commonLabels:
+  generator: "overlay"
+
+commonAnnotations:
+  version: "0.1.2"
+
+patches:
+- path: patch_add_replica.yaml
+- path: patch_add_ssl.yaml
+  target: 
+    name: my-service
+
+configurations:
+- config-nameref.yaml
+
+#patchesStrategicMerge:
+#- patch_add_replica.yaml
+#
+#
+#patchesJson6902:
+#  - path: patch_add_ssl.yaml
+#    target:
+#      kind: Service
+#      name: my-service
+#      version: v1
+#      group: ""

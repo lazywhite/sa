@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  my-deployment
+  namespace: default
+  labels:
+    app:  my-app
+spec:
+  selector:
+    matchLabels:
+      app: my-app
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app:  my-app
+    spec:
+      containers:
+      - name:  my-container
+        image:  nginx
+        command:
+        - $(MY_SERVICE_NAME)
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+          limits:
+            cpu: 100m
+            memory: 100Mi
+        ports:
+        - containerPort:  80
+          name:  MYAPP
