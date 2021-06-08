@@ -1,19 +1,3 @@
-cinder-volume  lvm work-flow
-nova volume mount work-flow
-
-
-链路聚合
-级联 汇聚
-
-gem install sinatra
-
-$ gem sources --remove https://rubygems.org/
-$ gem sources -a http://ruby.taobao.org/
-
-zypper addrepo -f http://mirrors.ustc.edu.cn/opensuse/distribution/12.3/repo/oss/ 
-ustc.openSUSE-12.3-Oss
-
-
 dig
 kickstart
 docker
@@ -57,7 +41,6 @@ mongo CRUD
 - cloud init windows
 - test environment
 - opendaylight
-- mininet
 - virt-manager
 - firewalled
 

@@ -1,0 +1,1 @@
+在/etc/profile.d/目录下的shell脚本会被自动运行

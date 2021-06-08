@@ -107,3 +107,10 @@ RHEL support mount nfs with tcp protocol,so we can mount it with this command
 C_INCLUDE_PATH: c头文件地址
 CPP_INCLUDE_PATH cpp头文件地址
 LD_LIBRARY_PATH  动态链接库地址
+
+
+
+xshell开启sock5代理
+    1. 开启一个ssh session
+    2. 查看->隧道窗格->连接规则->右键新建->sock5 设置端口8888
+    3. 本机即可通过socks5://localhost:8888来做代理了

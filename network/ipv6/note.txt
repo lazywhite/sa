@@ -1,0 +1,7 @@
+查看是否启用ipv6
+    cat /proc/net/if_inet6
+加载ipv6 (需要内核支持)
+    modprobe ipv6
+
+查看iptables
+    ip6tables -L -n

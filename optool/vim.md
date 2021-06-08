@@ -164,5 +164,18 @@ alias vimdiff="nvim -d"
 git config --global merge.tool vimdiff
 git config --global mergetool.vimdiff.path nvim
 git config --global mergetool.trustExitCode true
-git config --global core.editor nvim
+git config --global core.editor nvim # 默认使用vim, 否则merge分支会报错
+```
+
+## 打开256color支持
+```
+检查当前
+    tput colors
+1. .bashrc
+    如果存在 /usr/share/terminfo/x/xterm-256color
+    export TERM=xterm-256color
+2. .vimrc
+    set t_Co=256
+3. 检查是否应用256色
+    :runtime syntax/colortest.vim 
 ```

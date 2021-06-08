@@ -1,0 +1,11 @@
+# 更新到wsl 2  https://docs.microsoft.com/zh-cn/windows/wsl/install-win10#step-4---download-the-linux-kernel-update-package
+
+应用商店搜索ubuntu发行版, 下载即可
+wsl -l -v
+wsl --set-default-version 2
+wsl --set-version Ubuntu20.04 2
+
+ubuntu20.04 config --default-user root
+
+ping不通宿主机IP，可能是防火墙问题，需要添加自定义入站规则
+域名不通，可以禁用自动生成/etc/resolv.conf, 重启distro后删除/etc/resolv.conf 软链接， 新建文件

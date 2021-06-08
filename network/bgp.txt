@@ -1,0 +1,4 @@
+as: autonomous system 自治系统
+
+bgp: border gateway protocol
+    as之间互相交换路由和链路可达性的协议, 有助于数据在网络传播时，让路由设备从所有可达的路径中选取最优路径，提升效率

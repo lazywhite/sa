@@ -1,0 +1,4 @@
+socat TCP-LISTEN:7000 -
+socat tcp-listen:7000 - 
+
+socat tcp-listen:1234,fork,reuseaddr tcp-connect:target:1234

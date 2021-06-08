@@ -13,7 +13,6 @@ RAW:
     PREROUTING OUTPUT
     The raw table is mainly only used for one thing, and that is to set a mark on packets that they should not be handled by the connection tracking system
 ```
-    
 ## Usage
 ```
 -A: append
@@ -96,4 +95,7 @@ net.ipv4.netfilter.ip_conntrack_tcp_timeout_fin_wait = 120
 iptables -t raw -A PREROUTING -d 1.2.3.4 -p tcp --dport 80 -j NOTRACK
 iptables -A FORWARD -m state --state UNTRACKED -j ACCEPT
 ```
-  
+### 2. 查看表具备的链  
+```
+iptables -S -t [nat, filter, raw, mangle]
+```

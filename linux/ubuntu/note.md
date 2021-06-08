@@ -4,6 +4,7 @@ update-rc.d apache2 disable
 ```
 ## 网卡配置
 ```
+18.04之后使用netplan, 参考netplan.txt
 /etc/network/interfaces.d/ifcfg-eth0
     auto eth0
     iface eth0 inet static
@@ -24,10 +25,26 @@ apt-get install -y fuse
 ```
 
 
-## 时间同步
+## timedatectl
 ```
-https://wiki.archlinux.org/index.php/Systemd-timesyncd_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)
-使用timesyncd, 不是ntpd
 timedatectl set-ntp on
+timedatectl set-timezone Asia/Shanghai
+timedatectl set-local-rtc 1 --adjust-system-clock
 timedatectl 
+```
+
+## localectl
+```
+/var/lib/locales/supported.d/local # create
+    en_US.UTF-8 UTF-8
+    zh_CN.UTF-8 UTF-8
+    zh_CN.GBK GBK
+    zh_CN GB2312
+ 
+# locale-gen
+#localectl set-local zh_CN.UTF-8
+
+/root/.bashrc
+    export LC_ALL=zh_CN.UTF-8
+    
 ```

@@ -1,0 +1,16 @@
+# 1. 首先进行一次gc, 把孤立的blob全删掉
+git gc --aggressive --prune=now
+
+# 2. 获取被引用的blob占用空间(占用较大内存，会导致死机)
+git verify-pack -v .git/objects/pack/pack-7b03cc896f31b2441f3a791ef760bd28495697e6.idx | sort -k 3 -n  > list
+
+# 3. 查看blob文件名
+git rev-list --objects --all | grep <sha1> # 应该都有文件名
+
+# 4. 开始删除
+git filter-branch --index-filter 'git rm --cached --ignore-unmatch <file path>' -- --all
+
+# 5. 最后进行
+rm -Rf .git/refs/original
+rm -Rf .git/logs/
+git gc --aggressive --prune=now

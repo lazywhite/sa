@@ -16,3 +16,13 @@ docker/
 export PATH=/usr/local/docker:$PATH
 dockerd &
 ```
+
+## ubuntu
+```
+千万不要在系统安装时选择docker, 是通过snap安装的， 正确安装方式参考https://docs.docker.com/engine/install/ubuntu/
+
+如何卸载docker snap
+    snap remove docker
+    rm -rf /var/lib/docker
+    apt-get remove docker docker-engine docker.io
+```

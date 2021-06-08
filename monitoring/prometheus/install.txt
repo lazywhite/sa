@@ -18,11 +18,8 @@ pushgateway-0.7.0.linux-amd64.tar.gz
     ./node_exporter
 
 5. grafana
-    # 启动
     ./grafana-server web
-    # 配置文件
     conf/default.ini
-    # 访问
     http://ip:3000    admin/admin
     # add prometheus datasource
     http://ip:9090

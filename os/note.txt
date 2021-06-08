@@ -1,0 +1,31 @@
+
+============ 进程 ============
+Process Table
+	PID  PCB
+
+每个进程启动会被分配一个PID, 由于进程会被调度，需要跟踪每个进程的状态，所以操作系统会为每一个PID维护一个PCB(process controll block)
+Process Table里面存储的就是PCB列表
+
+PCB保存的信息
+	Pointer – It is a stack pointer which is required to be saved when the process is switched from one state to another to retain the current position of the process.
+	Process state – It stores the respective state of the process.
+	Process number – Every process is assigned with a unique id known as process ID or PID which stores the process identifier.
+	Program counter – It stores the counter which contains the address of the next instruction that is to be executed for the process.
+	Register – These are the CPU registers which includes: accumulator, base, registers and general purpose registers.
+	Memory limits – This field contains the information about memory management system used by operating system. This may include the page tables, segment tables etc.
+	Open files list – This information includes the list of files opened for a process.
+	Miscellaneous accounting and status data 
+
+
+
+============ 线程 ============
+http://www.cs.iit.edu/~cs561/cs450/ChilkuriDineshThreads/dinesh's%20files/User%20and%20Kernel%20Level%20Threads.html
+
+对于线程的实现，取决于操作系统，有的(Solaris)在内核空间实现(kThread)，有的(linux)在用户空间实现(pThread)
+
+kThread
+	kernel仅维护一个Thread Table(不是在每个进程内部一个TT)
+ 	thread table就是一个tcb的列表
+
+pThread
+	对于linux kernel来说没有thread的概念，而是用标准的process来实现，只不过这些process可以跟其它process共享内存

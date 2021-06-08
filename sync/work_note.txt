@@ -238,8 +238,9 @@ ramdisk
 
 ctdb
 =======
-truncate -s 20G disk1
-losetup /dev/loop1 disk1
+如何创建一块虚拟磁盘
+    truncate -s 20G disk1
+    losetup /dev/loop1 disk1 # 貌似只能是/dev/loop[]
 ======
 ip route add default via 10.10.1.1
 ip addr add 10.10.1.6/24 dev eth0

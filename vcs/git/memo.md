@@ -99,6 +99,10 @@ git diff <branch> (diff between current work tree and branch HEAD)
 git diff <src-commit> <dest-commit> 比较两次提交之间的差异
 
 git diff = git diff HEAD   # 比较当前工作目录代码与最近一次提交的差别
+
+
+git diff --name-only <hash1> <hash2> 
+git diff --name-only <other-br>   # 仅显示不同的文件
 ```
 
 
@@ -438,10 +442,8 @@ git hash-object <path>
 ```
 parse_git_branch() {
          git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
-                  
-                  
 }
-export PS1="\u@\h \[\033[32m\]\w\[\033[33m\]\$(parse_git_branch)\[\033[00m\] $ "
+export PS1="\u@\h \[\033[32m\]\W\[\033[33m\]\$(parse_git_branch)\[\033[00m\] $ "
 ```
 ## 查看某行代码的作者的email地址
 ```
@@ -450,3 +452,28 @@ git blame <file>
 
 git log --format="%ae" 08422f04 第一行就是
 ```
+
+## cherry-pick
+```
+git cherry-pick <commit>
+git cherry-pick <commitA>^..<commitB> # 包含A,B之间所有commit
+git cherry-pick <commitA>..<commitB> # 不包含A, 到B之间所有commit
+```
+
+## 切换分支失败
+```
+root@control-plane product--init (live_jsx) # git co live
+error: The following untracked working tree files would be overwritten by checkout:
+    networkpolicy/templates/Deployment.yaml
+    Please move or remove them before you switch branches.
+    Aborting
+
+是共享文件系统的问题, 将代码目录移动到linux文件系统即可
+```
+
+## using ssh rather than https
+```
+git config --global url."git@github.com:".insteadOf https://github.com/
+git config --global url."git://".insteadOf https://
+```
+

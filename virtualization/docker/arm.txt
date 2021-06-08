@@ -1,0 +1,7 @@
+如何在x86机器docker run arm镜像
+
+# ubuntu-21.04测试通过
+apt-get install qemu binfmt-support qemu-user-static # Install the qemu packages
+docker run --rm --privileged multiarch/qemu-user-static --reset -p yes # This step will execute the registering scripts
+
+docker run --rm -t arm64v8/ubuntu uname -m # Testing the emulation environment

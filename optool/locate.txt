@@ -1,0 +1,5 @@
+yum -y install mlocate
+upatedb #初次使用
+systemctl enable --now mlocate-updatedb.timer #会自动调度mlocate-updatedb.service
+
+locate bash_completion.sh
