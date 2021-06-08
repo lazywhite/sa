@@ -1,4 +1,4 @@
-强制使用ipvs进行service proxy
+使用ipvs进行service proxy
 
 特性
     pod与pod, pod与node之间通信无需NAT
@@ -6,17 +6,15 @@
     network policy使用iptables实现
 
 安装
-    修改all.yaml %CLUSTERCIDR%, %APISERVER%的值
-
-    kubectl cluster-info dump|grep -i cluster-cidr
+    修改all.yaml, server: <>
     cat /root/.kube/config|grep server
-
 
     kubectl apply -f all.yaml
 
 
 Tips:
     1. 因为ipvs要求virtual-service的ip本机必须存在, 因此每个node都创建kube-dummy-if网卡，并添加所有service ip地址
+    2. ipvs不支持自定义修改，会被kube-router覆盖掉
 
 
 

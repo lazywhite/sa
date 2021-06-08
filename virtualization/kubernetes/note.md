@@ -141,10 +141,15 @@ yum -y install bridge-utils
 kube-proxy优先使用ipvs, 否则使用iptables
 
 查看pod的环境变量
-	kubectl exec -it -n <ns> <pod> -- env
+	kubectl exec -it -n <ns> <pod> -c <container> -- env
 
 pod命名规则: 只能由数字, 字母, 连字符组成, 连字符不能做开头
-service的cluster-ip可以手动指定, 也可以设置为空
+
+service类型
+    ClusterIP
+    NodePort
+    LoadBalancer
+    HeadLess(spec.clusterIP=None)
 
 如果pod有对应的service, 则pod自动具备以下环境变量
     <SERVICE_NAME>_SERVICE_HOST
@@ -176,6 +181,25 @@ kubectl replace -f # 更换object
 
 无法删除pod, 先get node查看node是否ready
 pvc区分namespace, storageClass不区分
+
+storageClass
+    类似于openstack里面的flavor，本身仅仅记录对应的provisioner及一些默认参数
+
+    apiVersion: storage.k8s.io/v1
+    kind: StorageClass
+    metadata:
+      name: gold
+      provisioner: kubernetes.io/cinder
+      parameters:
+        availability: nova
+
+    设置默认storageClass
+    1. 先移除默认sc的annotation
+    kubectl patch storageclass <your-class-name> -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}'
+    2. 给新的sc添加annotation
+    kubectl patch storageclass <your-class-name> -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
+
+
 
 cockpit监控工具集成
     ansible -i hosts  all -m shell -a 'yum -y install cockpit cockpit-docker cockpit-kubernetes'
@@ -237,6 +261,7 @@ endpoint
 NetworkPolicy
     https://godleon.github.io/blog/Kubernetes/k8s-Network-Policy-Overview/
 
+    NP的实现由各网络插件实现, 毕竟不同插件实现网络互联的方式不一样，NP只是定义了一个标准
 
 Secret
 	data:
@@ -311,7 +336,6 @@ Annotation
 App
     stateless
     stateful
-    
 
 Cronjob
 
@@ -340,14 +364,26 @@ kubectl get  custom field
     metadata.name metadata.resourceVersion
 
 
-kubectl get pod -A -o=custom-columns='Namespace:metadata.namespace,Name:metadata.name,Tolerations:spec.tolerations'|grep -e 'map\[effect:NoSchedule operator:Exists\]' -e 'map\[operator:Exists\]' -e "node.kubernetes.io/unschedulable"|awk '{printf("%s/%s\n",$1,$2)}'
+    kubectl get pod -A -o=custom-columns='Namespace:metadata.namespace,Name:metadata.name,Tolerations:spec.tolerations'|grep -e 'map\[effect:NoSchedule operator:Exists\]' -e 'map\[operator:Exists\]' -e "node.kubernetes.io/unschedulable"|awk '{printf("%s/%s\n",$1,$2)}'
+
+
+kubectl get filter
+
+    kubectl get pods -l environment=production,tier=frontend
+    kubectl get pods -l 'environment in (production),tier in (frontend)'
+    kubectl get pods -l 'environment in (production, qa)'
+    kubectl get pods -l 'environment,environment notin (frontend)'
+
+    kubectl get --field-selector spec.nodeName=master1 pod 
+    下列filed不支持
+        spec.hostNetwork
+        status.hostIP
 
 
 
-
-taint和toleration
-    只有容忍污点的pod, 才会被node运行
-    https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/
+nodeAffinity
+    taint: node污点，不容忍此污点的pod不会被调度到此node
+    toleration 只有容忍污点的pod, 才会被调度到相关node
 
 
 给pod指定运行的node
@@ -397,10 +433,13 @@ service的实际实现
     ipvs
 
 headless service 作用
+    ping <svc>.<ns> 直接由pod进行响应
     nslookup  <svc>.<ns>直接返回所有endpoint ip(pod ip)
 
     服务端负载均衡：正常的service 下面挂的是Endpoints（podIP数组），通过iptables规则转发到实际的POD上
     客户端负载均衡：Headless Services不会分配ClusterIP,而是将Endpoints（即podIP数组）返回，也就将服务端的所有节点地址返回，让客户端自行要通过负载策略完成负载均衡。
+
+    对无头 Service 并不会分配 Cluster IP，kube-proxy 不会处理它们， 而且平台也不会为它们进行负载均衡和路由。 DNS 如何实现自动配置，依赖于 Service 是否定义了选择算符。
 
 
 
@@ -412,12 +451,16 @@ kubectl get不显示列标题
 
 admission webhook
     validating
-        验证提交的资源yaml是否合法
+        验证提交的资源
     mutating
         改变提交的资源配置, 提供默认值，如resource limit，label，sidecar
 
-    使用
-        开发webhook controller，部署在集群，配置启用
+admissionWebhook通过namespaceSelector来控制应用范围
+ValidatingWebhookConfiguration, MutatingWebhookConfiguration是集群类型资源，没有namespace
+
+
+webhook本质上是启动了一个https的web服务, kube-api-server会去POST数据, 因此validate，mutate configuration的配置文件
+里面都需要配置一个CA, 这个CA可以用k8s已存在的CA，也可以通过cert-manager等自建一个CA
 
 
 kubectl edit 无法更新status
@@ -443,5 +486,234 @@ kubectl patch --type [json, merge, strategic]
 volume mountPath可以在线更改, 会重新生成pod
 
 deployment无法使用volumeClaimTemplate
+
+
+readinessProbe:
+
+livenessProbe:
+    exec:
+        command:
+        - cat
+        - /tmp/healthy
+
+    httpGet:  # 任何返回状态码>=200,<400认为成功，其它认为失败
+        host: 默认为容器IP
+        scheme: 默认为http,可为https
+        path: /healthy
+        port: 5000
+        httpHeaders:
+        - name: Custom-header
+          value: "example"
+    tcpSocket:
+        port: 9090  # 如果能建立连接，就认为是成功的
+    initialDelaySeconds: 30  # 开始检测前等待5秒, 非常重要!!
+    periodSeconds: 5 # 每5秒检测一次
+    successThreshold: 1
+    failureThreashold: 3
+
+
+startupProbe: # 优先级最高, 如果检测不通过，容器会被杀死，依赖重启策略进行重启
+    failureThreashold: 10
+    periodSeconds: 5 # 每5秒检测一次
+
+restartPolicy: 适用于pod中的所有容器
+    Always
+    OnFailure: 退出状态码非0, job pod即为此policy
+    Never
+
+status:
+    conditions:
+    - type: PodScheduled  已被调度到某节点
+      lastProbeTime: 上次探测的时间戳
+      lastTransitionTime: 上次进行状态转换的时间戳
+      reason: 机器可读，驼峰式文字，表示上次状态变化的原因
+      message: 人类可读, 上次状态转换的详细信息
+    - type: ContainersReady 所有容器已就绪
+    - type: Intialized 所有init容器已成功执行
+    - type: Ready 可以提供服务，并且被加到对应的负载均衡池内
+    containerStatus:
+    - name: exmpale
+      ready: [true,false]
+      containerID:
+      image:
+      imageID:
+      restartCount:
+      state:
+
+容器状态只有三种[waiting,running,terminated], pod状态有[Pending,Running,Succeeded,Failed,Unknown]
+如果status.phase为Succeeded, kubectl get结果显示为completed
+
+
+kubectl drain 安全驱逐一个节点的所有pod
+
+每个pod都会有一个google pause container, 用来初始化网络并设置ip地址，保证network namespace存在，挂载所有volume
+
+
+bash添加自动补全
+    yum -y install bash-completion
+    echo 'source <(kubectl completion bash)' >>~/.bashrc
+    或者
+    kubectl completion bash >/etc/bash_completion.d/kubectl
+
+
+
+networkPolicy
+    metadata:
+        name:
+        namespace:
+
+    spec:
+        podSelector: # 若为{}则表示匹配所有pod
+          matchLabels:
+            key: value
+        ingress:
+        - from:
+          - ipBlock:
+            cidr: a.b.c.0/24
+            except:
+            - a.b.c.d/32
+          - namespaceSelector: # 若为{}, 则匹配所有namespace
+              matchLabels:
+                key: value
+          - podSelector:  # 只能匹配跟当前policy相同namespace下的pod
+              matchLabels:
+                key: value
+
+          ports: # 留空则全部放行, 有内容则为白名单, 默认禁止
+        egress:
+        - to:
+        policyType:
+        - Ingress
+        - Egress
+
+
+pod在没有networkpolicy情况下，可以访问任意其它pod
+NetworkPolicies do not apply to Pods with HostNetworking enabled
+
+
+kubectl delete --casecade=true //级联删除默认为true
+
+CSI: container storage interface
+CNI: container network interface
+CRI: container runtime interface
+
+
+
+provisioner工作原理
+    启动controller，用来watch pvc
+    获取pvc里面规定的storageClass
+    获取storageClass里面的provisioner，如果是自己就执行Provision()
     
+
+集群插件
+    kubedns 
+    dashboard
+    EFK: 容器日志监控系统
+    metric-server + prometheus: k8s集群资源监控系统
+    harbor: 镜像仓库
+    helm: 部署工具
+    ingress(trafik): 外部访问内部service
+    metalLB: 裸机集群load balancer, 类似于公有云的SLB
+        对外暴露服务，需要NodePort，Ingress, 前者需要所有node都开启，后者只支持http协议，因此有了此项目
+    CICD: jenkins+gitlab
+
+    微服务: istio
+    jaeger: 应用了opentracing标准的分布式系统(微服务)监控追踪工具, 类似的有pinpoint
+
+自动水平扩容(horizental autoscale)
+  Auto scale a deployment "foo", with the number of pods between 2 and 10, no target CPU utilization specified so a default autoscaling policy will be used:
+    kubectl autoscale deployment foo --min=2 --max=10
+  # Auto scale a replication controller "foo", with the number of pods between 1 and 5, target CPU utilization at 80%:
+    kubectl autoscale rc foo --max=5 --cpu-percent=80
+
+滚动发布(rolling update)
+    kubectl set image deployment/test test=nginx:latest
+    kubectl rollout status deployment/test
+    kubectl rollout undo deployment/test
+    kubectl rollout undo deployment/test --to-revision=<>
+
+
+如果想将某个pod调度到指定node，可以使用下面的label
+    kubernetes.io/hostname=node-name
+
+scheduler
+    集群中可以存在多个scheduler，通过spec.schedulerName来指定, 默认为default-scheduler
+
+增强scheduler功能的方法有三种
+    1. 直接修改源码，但后续升级upstream代码成本太高
+    2. 自己实现一个scheduler，跟kube-scheduler跑在一起，但有分布式锁和缓存同步问题，并且有可能相互冲突
+    3. 开发scheduler extender
+
+
+scheduler extender
+    Name(0
+    Filter()
+    Prioritize()
+    Bind()
+    ProcessPreemption() //抢占
+
+    Prioritize webhook won't be triggered if it's running on an one-node cluster. 
+    As it makes no sense to run priorities logic when there is only one candidate:
+
+
+static pod
+    Static Pods are managed directly by the kubelet daemon on a specific node, without the API server observing them.
+    kubelet watches each static Pod (and restarts it if it fails)
+    kubelet会把静态pod注册到集群(镜像pod)，kubectl get pod可以看到， 但是不能控制它
+    kubelet --config=/var/lib/kubelet/confiig.yaml
+        statidPodPath=/etc/kubernetes/manifests
+    静态pod可以不是hostNetwork的
+
+    
+
+job如果没有产生pod就失败了，有可能是serviceAccount的问题
+注意: 给job的pod规定serviceAccount，需要写在spec.template.spec.serviceAccountName, 而不是spec.serviceAccountName
+
+
+如果configmap data有变更
+    使用该 ConfigMap 挂载的 Env 不会同步更新
+    使用该 ConfigMap 挂载的 Volume 中的数据需要一段时间（实测大概10秒）才能同步更新
+
+	容器内不支持inotify, 容器内可以使用cronjob来使nginx, envoy hot reload
+
+	inotifywait -r -m -e modify /var/log | 
+	   while read path _ file; do 
+		   echo $path$file modified
+	   done
+
+configmap value使用文件
+    key: |
+      "this is 
+      a lone line"
+
+网络
+    存储网: Volume
+    业务网: SLB
+    管理网: VM
+
+kubectl 删除 StatefulSet 会将其缩容为0，因此删除属于它的所有pods
+
+pod启动
+    pause容器
+    initContainers
+    containers
+
+
+如果pod的env有改动， pod会被重建
+
+
+serviceAccount全名: system:serviceaccount:kube-system:default
+
+
+ServiceBroker
+    ServiceClass
+        ServicePlan
+ServiceInstance
+
+kubectl drain <node> --ignore-daemonsets --force --delete-local-data
 ```
+
+
+
+
+

@@ -1,0 +1,26 @@
+service流量处理流程
+    ClusterIP
+        将请求包dst:port NAT成pod:port, 然后将回复包的src:port NAT成svc:port
+    NodePort
+        将请求包dst:port NAT成pod:port，同时将src:port NAT成被请求的node:port, 最后将回复包的src:port NAT成node:port, dst:port NAT成client:port, 
+
+    LoadBalancer
+        client请求LB, LB通过rr来选择一个node:port去访问，此时client ip会被NAT掉, 可以设置service externalTrafficPolicy为local
+        LB只选择workload所在的node进行请求, 这样可以保留client ip，用来应用NetworkPolicy(需要开启service ip ad, 或eBPF)
+
+
+
+Service IP Advertisement(calico BGP)
+    1. 集群外部访问NodePort类型service时, 由于src ip也被NAT掉了，导致client ip对集群内部是不可见的，因此难以用NetworkPolicy来限制client ip, 为了解决这个问题，就有了service ip advertisement
+    2. 同时service clusterIP 默认对集群外是不可达的，service ip advertisement可以将cluster ip广播出去，从而client可以有直达clusterIP的路由
+    3. 因为client有到cluster ip的路由，因此node可以拿到source ip, 用来应用NetworkPolicy
+    4.service externalTrafficPolicy
+        local: 仅会广播与pod在同一个node的service cluster-ip, 这样可以避免跨Node路由问题, kube-proxy进行load balance, 但不同node包含的service pod数量可能不一样，导致负载失衡，可以通过pod的anti-affinity来避免
+        default: 广播Node的service clusterIP CIDR
+
+
+eBPF
+    service ip ad with native service handling
+
+metalLB
+

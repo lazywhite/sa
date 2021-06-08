@@ -1,0 +1,5 @@
+1. install
+    minikube addons enable storage-provioner-glusterfs
+2. yum install glusterfs-fuse (all schedulable node)
+3. 创建storage-class
+4. 创建pvc

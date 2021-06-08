@@ -1,1 +1,5 @@
 https://argoproj.github.io/argo/quick-start/
+
+argo list -n <ns>
+argo get -n <ns> <wf>
+argo logs -n <ns> <pod>

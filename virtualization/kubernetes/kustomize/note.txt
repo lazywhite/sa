@@ -60,3 +60,4 @@ resources: # 新版bases可以直接写成resources
 
 issue
     直接定义一个key = "value"的变量， 可以在所有地方使用key
+    varReference使用方法

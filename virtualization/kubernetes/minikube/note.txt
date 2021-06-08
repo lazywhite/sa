@@ -62,14 +62,8 @@ kubectl get pods --all-namespaces
 
 
 ########### 使用calico插件 #########
-kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
-#kubectl taint nodes --all node-role.kubernetes.io/master-
-kubectl label node <node1> node-role.kubernetes.io/master-
-kubectl label node <node1> kubernetes.io/os: linux
-
-minikube stop; minikube start --network-plugin=cni  --extra-config="kubeadm.pod-network-cidr=10.224.0.0/16"
-
-
+kubernetes==1.14.8
+    kubectl apply -f https://docs.projectcalico.org/archive/v3.14/manifests/calico.yaml
 
 
 ######### 删除minikube ############
@@ -82,3 +76,10 @@ minikube addons list
 
 ######### kubectl top node|pod 可用########
 minikube addons enable metrics-server
+
+
+######### 查看是否支持admission webhook########
+kubectl api-versions | grep admissionregistration.k8s.io
+
+###### 安装kube-router,禁用kube-proxy
+kube-proxy不是static pod，是一个daemonSet, 直接kc delete即可
