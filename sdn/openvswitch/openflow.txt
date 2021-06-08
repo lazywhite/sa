@@ -1,0 +1,4 @@
+Differentiated Services Code Point (DSCP)
+    EF: (184)  Expedited Forwarding (EF): Can be used to request low loss, low latency and guaranteed bandwidth for traffic. Packets with EF codepoint values are typically guaranteed highest priority delivery.
+
+ipv4 TOS header

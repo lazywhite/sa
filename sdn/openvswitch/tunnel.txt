@@ -1,0 +1,5 @@
+https://docs.openvswitch.org/en/latest/howto/tunneling/
+
+1. vxlan和gre均适用
+2. 所有容器必须在同一个网段
+3. br无需添加物理网卡作为port

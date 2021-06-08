@@ -1,0 +1,36 @@
+vlans:
+  hosts:
+    vid: 100
+    description: "vlan for clients"
+    faucet_mac: "00:00:00:00:00:11"
+    faucet_vips: ["10.0.0.254/24"]
+
+  servers:
+    vid: 200
+    description: "vlan for servers"
+    faucet_mac: "00:00:00:00:00:22"
+    faucet_vips: ["10.0.1.254/24"]
+    routes:
+      - route:
+          ip_dst: "192.0.2.0/24"
+          ip_gw: '10.0.1.1'
+routers:
+  router-hosts-servers:
+    vlans: [hosts, servers]
+dps:
+  br0:
+    dp_id: 0x1
+    hardware: "Open vSwitch"
+    interfaces:
+      1:
+        name: "host1"
+        description: "host1 network namespace"
+        native_vlan: hosts
+      2:
+        name: "host2"
+        description: "host2 network namespace"
+        native_vlan: hosts
+      3:
+        name: "server"
+        description: "server network namespace"
+        native_vlan: servers

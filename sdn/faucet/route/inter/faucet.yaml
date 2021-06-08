@@ -1,0 +1,27 @@
+# inter-vlan routing
+vlans:
+  vlan100:
+    vid: 100
+    faucet_vips: ["10.0.0.254/24"]  # Faucet's virtual IP address for vlan100
+    faucet_mac: "00:00:00:00:00:11"
+  vlan200:
+    vid: 200
+    faucet_vips: ["10.0.1.254/24"]  # Faucet's virtual IP address for vlan200
+    faucet_mac: "00:00:00:00:00:22"
+dps:
+  sw1:
+    dp_id: 0x1
+    hardware: "Open vSwitch"
+    interfaces:
+      1:
+        name: "host1"
+        description: "host1 network namespace"
+        native_vlan: vlan100
+      2:
+        name: "host2"
+        description: "host2 network namespace"
+        native_vlan: vlan200
+
+routers:
+  router-1:               # Router name
+    vlans: [vlan100, vlan200]     # Names of vlans to allow routing between

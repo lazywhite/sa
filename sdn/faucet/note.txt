@@ -1,0 +1,23 @@
+如果导入grafana dashboard后长久没有数据, 而手动curl http://localhost:9302,9303是有数据的, 可能prometheus数据库坏掉了
+从localhost:9090 CommandLineFlags里面查到storage.tsdb.path, 删掉重启prometheus即可
+
+
+Port Vlan Mode
+    Native - where packets come into the switch with no 802.1Q tag. (可以配置带上vlan tag)
+    Tagged - where packets come into the switch with a 802.1Q tag.
+    Mixed - where both native and tagged packets appear on the same port.
+
+Routing
+    inter-vlan
+    static-routing
+    bgp: border gateway protocol
+
+distributed switching: stacking
+    建立弹性网络拓扑，可以自动从switch,port failure recover
+    
+
+TODO:
+    controller是否定时下发流表
+    in-band, out-band management
+
+

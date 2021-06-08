@@ -1,0 +1,114 @@
+1. install on centos-8
+sudo yum install -y epel-release
+sudo yum install -y centos-release-openstack-train
+sudo yum install openvswitch libibverbs
+
+systemctl enable --now openvswitch
+
+# 不使用NM
+yum -y remove NetworkManager
+yum -y install network-scripts
+pkill dhclient
+systemctl enable --now network
+
+
+2. step
+ovs-vsctl add-br br0 # 默认就有一个跟bridge同名的internal port, 类似于lo的本地回环端口
+
+
+TODO: 貌似无法将已存在的物理设备添加为internal port
+## ovs-vsctl add-port br0 enp0s8 -- set interface enp0s8 type=internal 
+
+ovs-vsctl add-port br0 enp0s8
+
+ifconfig enp0s8 0 #清除物理网卡ip
+ifconfig br0 192.168.56.101/24
+#持久化
+/etc/sysconfig/network-scripts/ifcfg-enp0s8 
+    TYPE=Ethernet
+    BOOTPROTO=none
+    NAME=enp0s8
+    DEVICE=enp0s8
+    ONBOOT=yes
+
+/etc/sysconfig/network-scripts/ifcfg-br0 
+    TYPE=Ethernet
+    BOOTPROTO=static
+    NAME=br0
+    DEVICE=br0  # 必须要有此行
+    ONBOOT=yes
+    IPADDR=192.168.56.101
+    PREFIX=24
+
+# 检查是否持久化
+pkill dhclient;systemctl restart network
+
+############ 实现通信 ###############
+
+#### 1. 在同一个netns
+ip tuntap add mode tap vport1 # 添加虚拟二层设备, 非veth
+ip tuntap add mode tap vport2
+ifconfig vport1 up
+ifconfig vport2 up
+
+ovs-vsctl add-port br0 vport1 -- add-port br0 vport2
+使用virtualbox虚拟机，分别使用两个vport启动虚拟机，验证可以出网, 相互通信
+
+#### 2. 在不同netns
+# 确保net.ipv4.ip_forward=1
+
+ip link add veth0 type veth peer name veth0-peer
+ip link add veth1 type veth peer name veth1-peer
+ip netns list
+ip netns add ns1
+ip netns add ns2
+ip link set veth0-peer netns ns1
+ip link set veth1-peer netns ns2
+ip link list type veth
+ip netns exec ns1 ip addr add  10.0.0.1/24 dev veth0-peer
+ip netns exec ns2 ip addr add  10.0.0.2/24 dev veth1-peer
+ip netns exec ns1 ip link set veth0-peer up
+ip netns exec ns1 ip link set lo up
+ip netns exec ns2 ip link set veth1-peer up
+ip netns exec ns2 ip link set lo up
+
+# 先确保peer正常工作
+ip addr add 10.0.0.11/24 dev veth0
+ip netns exec ns1 ping -c 3 10.0.0.11 # 确保能通
+ip addr del 10.0.0.11/24 dev veth0 # 验证后删除
+
+ip link set veth0 nomaster
+ip link set veth1 nomaster
+
+# 开始配置ovs
+ovs-vsctl show
+ovs-vsctl add-port br0 veth0
+ovs-vsctl add-port br0 veth1
+
+ip netns exec ns1 ping -c 3 10.0.0.2 # 能通
+
+# 如何让ns1, ns2能通外网
+ip netns exec ns1 ping -c 3 8.8.8.8 # 不通
+ip netns exec ns1 ip route
+	10.0.0.0/24 dev veth0-peer proto kernel scope link src 10.0.0.1 
+ip netns exec ns1 ip route add default via 10.0.0.254
+ip addr add 10.0.0.254/24 dev br0
+ip netns exec ns1 ping 8.8.8.8 # 依旧不通
+tcpdump -nv -i br0 icmp # 可以看到确实有ping包, 但源地址却是10.0.0.1, google dns server不会回应, 因此需要做snat
+
+iptables -t nat -A POSTROUTING -s 10.0.0.0/24 -j MASQUERADE
+iptables -A FORWARD -s 10.0.0.0/24 -j ACCEPT
+iptables -A FORWARD -d 10.0.0.0/24 -j ACCEPT
+#或者iptables -P FORWARD ACCEPT # 此处与docker有冲突
+# 此时已经可以通了
+
+
+
+3. 额外挑战
+
+3.1 使用ovs实现SNAT (TODO)
+
+3.2 使用流表精细控制, 而不是作为hub
+ovs-ofctl dump-flow br0 # 查看现有流表
+ovs-vsctl set Bridge br0 fail-mode=secure # 如果通过br0连接的xshell, 此时连接会断开
+sh rule.sh # 添加flow rule

@@ -1,0 +1,36 @@
+vlans:
+  vlan200:
+    vid: 200
+    description: "192.168.2.0/24 network"
+    faucet_vips: ["192.168.2.254/24"]
+    faucet_mac: "00:00:00:00:00:22"
+  vlan300:
+    vid: 300
+    description: "192.168.3.0/24 network"
+    faucet_vips: ["192.168.3.254/24"]
+    faucet_mac: "00:00:00:00:00:33"
+dps:
+  sw1:
+    dp_id: 0x1
+    hardware: "Open vSwitch"
+    interfaces:
+      1:
+        name: "host1"
+        description: "host1 network namespace"
+        native_vlan: vlan200
+      2:
+        name: "host2"
+        description: "host2 network namespace"
+        native_vlan: vlan200
+      3:
+        name: "host3"
+        description: "host3 network namespace"
+        native_vlan: vlan300
+      4:
+        name: "host4"
+        description: "host4 network namespace"
+        native_vlan: vlan300
+      5:
+        name: "dnsmasq"
+        description: "dnsmasq server network namespace"
+        tagged_vlans: [vlan200, vlan300]

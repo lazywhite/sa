@@ -1,0 +1,58 @@
+支持的特性
+    vlan和trunk
+    STP: spanning tree protocol
+    LACP: link aggregation control protocol
+    port mirroring
+    flow export
+    tunneling
+    QoS controll
+
+核心组件
+    ovsdb-server: 存储配置信息(ovs-vsctl, ovs-ofctl)
+    ovs-vswitchd: (ovs-appctl)
+    ovs kernel module(datapath): (ovs-dpctl)
+
+port type
+    internal: 使port具备一个同名的可以有ip地址的interface, 否则只是一个二层设备不能有IP
+    patch: 类似于veth peer, 需要两个bridge相互添加对方
+    dpdk: datapath development kit
+    gre: generic routing encapsulation
+    vxlan: virtual extensible local area network
+
+    vxlan解决了vlan id个数限制和跨机房互通问题，同时解决了gre点对点隧道个数过多问题，同时实现了大2层网络, 可用于vm跨机房迁移
+
+
+VTEP: vxlan tunnel endpoint
+flow-rule
+
+普通硬件交换机是二层设备，但也有三层交换机, ovs网桥有路由功能
+
+fail-mode
+    standalone: 只有一条flow rule将所有接收到的packet转发给所有interface，像一个hub一样
+    secure: 没有flow rule, 默认会丢弃所有接收到的packet
+Tips
+    ovs-vsctl add-br br0 会自动创建一个跟bridge同名的internal port，可以直接用ifconfig赋IP地址, 可写在network-scripts固化
+    一个port可以包含多个interface
+    ovs-vsctl show
+    ovs-vsctl list bridge [br]
+    ovs-vsctl list port [port]
+    ovs-vsctl list interface [if]
+    ovs-vsctl port-to-br enp0s8 # 查看port属于哪个bridge
+    ovs-vsctl set-controller br0 tcp:10.0.0.1:6633 # 设置控制器, 如果成功连接，show会显示is_connected: true
+    ovs-vsctl set bridge br0 protocols=OpenFlow13  # 设置支持的openflow协议版本为1.3
+    ovs-vsctl clear bridge br0 protocols # 清除协议设置
+    ovs-vsctl dump-ports br0 # 查看所有端口状态
+    ovs-vsctl dump-flows br0 # 查看所有流规则
+    ovs-vsctl set port br0 tag=101 # 设置vlan ID
+    ovs-vsctl set Bridge br0 fail-mode=secure # 默认为standalone
+
+    ## 如果想将vport回到root netns，可以ip netns delete ns1/ns2 物理设备会回到root netns, veth设备会被删除
+    ## 或者ip netns exec myns ip link set eth10 netns 1 (报错, 待验证)
+    ovs-appctl fdb/show br0
+    ovs-ofctl show br0
+
+
+TODO
+    gre router reflect
+    openflow rule writing
+    bridge rename

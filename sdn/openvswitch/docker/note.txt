@@ -1,0 +1,17 @@
+# 1. 实现单机互联
+ovs-vsctl add-br br1
+
+#容器1
+sh run-container.sh # 拿到container id
+bash ovs-docker.sh add-port br1 eth0 <cid>
+ifconfig eth0 10.0.0.1/24 up #容器内
+
+#容器2
+sh run-container.sh # 拿到container id
+bash ovs-docker.sh add-port br1 eth0 <cid>
+ifconfig eth0 10.0.0.2/24 up #容器内
+
+#此时在容器1 ping 容器2 可以通
+
+ifconfig br1 10.0.0.254/24 # 给br1 internal port添加跟容器同网段的ip
+容器内ping br1可通

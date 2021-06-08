@@ -1,0 +1,30 @@
+vlans:
+  hosts:
+    vid: 100
+dps:
+  br0:
+    dp_id: 0x1
+    hardware: "Open vSwitch"
+    stack:
+      priority: 1
+    interfaces:
+      1:
+        description: "host1 network namespace"
+        native_vlan: hosts
+      2:
+        description: "br0 stack link to br1"
+        stack:
+          dp: br1
+          port: 2
+  br1:
+    dp_id: 0x2
+    hardware: "Open vSwitch"
+    interfaces:
+      1:
+        description: "host2 network namespace"
+        native_vlan: hosts
+      2:
+        description: "br1 stack link to br0"
+        stack:
+           dp: br0
+           port: 2

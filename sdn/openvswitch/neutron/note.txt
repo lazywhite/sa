@@ -1,0 +1,2 @@
+计算节点无需br-ex
+控制节点启动l3-agent, dhcp-agent

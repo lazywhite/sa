@@ -1,0 +1,2 @@
+apt-get install openvswitch-vswitch
+systemctl enable --now openvswitch-switch

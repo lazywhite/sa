@@ -1,0 +1,7 @@
+https://docs.openvswitch.org/en/latest/topics/bonding/
+
+ovs-vsctl add br br0
+ovs-vsctl add-bond br0 bond0 eth1 eth2 lacp=active
+
+
+跟linux bond的区别不大, 交换机侧还是要配置LACP

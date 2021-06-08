@@ -1,0 +1,11 @@
+https://docs.openvswitch.org/en/latest/howto/vlan/
+
+1. 需要连接物理网卡作为port
+2. all OVS ports are VLAN trunks,  so eth0 will pass all VLANs
+3 需要两台机器的eth0连接到物理交换机trunk口 
+
+
+
+VLAN ID，是TCI(tag controll information)中的12位元, 由于总共有12位，因此最多可供识别4096个VLAN
+
+因此vlan模式容易耗尽网段

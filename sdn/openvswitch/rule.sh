@@ -1,0 +1,10 @@
+ovs-ofctl add-flow br0 "table=0, priority=60, in_port=LOCAL, actions=learn(table=10, NXM_OF_ETH_DST[]=NXM_OF_ETH_SRC[], load:0xffff->NXM_NX_REG0[0..15]), resubmit(,1)"
+ovs-ofctl add-flow br0 "table=0, priority=50, actions=learn(table=10, NXM_OF_ETH_DST[]=NXM_OF_ETH_SRC[], load:NXM_OF_IN_PORT[]->NXM_NX_REG0[0..15]), resubmit(,1)"
+
+ovs-ofctl add-flow br0 "table=1 priority=99 dl_dst=01:00:00:00:00:00/01:00:00:00:00:00 actions=resubmit(,2)"
+ovs-ofctl add-flow br0 "table=1 priority=50 actions=resubmit(,10), resubmit(,2)"
+ovs-ofctl add-flow br0 "table=2 reg0=0 actions=LOCAL,1,2,3"
+ovs-ofctl add-flow br0 "table=2 reg0=1 actions=1"
+ovs-ofctl add-flow br0 "table=2 reg0=2 actions=2"
+ovs-ofctl add-flow br0 "table=2 reg0=3 actions=3"
+ovs-ofctl add-flow br0 "table=2 reg0=0xffff actions=LOCAL"

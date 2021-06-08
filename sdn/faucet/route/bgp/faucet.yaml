@@ -1,0 +1,50 @@
+vlans:
+  hosts:
+    vid: 100
+    description: "vlan for clients"
+    faucet_mac: "00:00:00:00:00:11"
+    faucet_vips: ["10.0.0.254/24"]
+
+  servers:
+    vid: 200
+    description: "vlan for servers"
+    faucet_mac: "00:00:00:00:00:22"
+    faucet_vips: ["10.0.1.254/24"]
+
+routers:
+  router-hosts-servers:
+    vlans: [hosts, servers]
+  bird:
+    bgp:
+      vlan: servers             # The VLAN faucet use for BGP
+      as: 65000               # Faucet's AS number
+      port: 9179              # BGP port for Faucet to listen on.
+      routerid: '10.0.1.3'        # Faucet's Unique ID.
+      server_addresses: ['10.0.1.3']    # Faucet's listen IP for BGP
+      neighbor_addresses: ['10.0.1.2']  # Neighbouring IP addresses (IPv4/IPv6)
+      neighbor_as: 65001          # Neighbour's AS number
+dps:
+  br0:
+    dp_id: 0x1
+    hardware: "Open vSwitch"
+    interfaces:
+      1:
+        name: "host1"
+        description: "host1 network namespace"
+        native_vlan: hosts
+      2:
+        name: "host2"
+        description: "host2 network namespace"
+        native_vlan: hosts
+      3:
+        name: "server"
+        description: "server network namespace"
+        native_vlan: servers
+      4:
+        name: "bgp"
+        description: "BIRD BGP router"
+        native_vlan: servers
+      5:
+        name: "faucet"
+        description: "faucet dataplane connection"
+        native_vlan: servers

@@ -1,0 +1,101 @@
+1. 下载mininet-2.3.0-210211-ubuntu-20.04.1-legacy-server-amd64-ovf.zip
+2. 解压后双击导入virtualbox虚拟机
+3. 网卡由NAT改为host network, 启动
+4. 登录mininet:mininet
+5. passwd root; /etc/ssh/sshd_config 允许root登录，systemctl daemon-reload;systemctl restart network
+
+
+1. play 
+
+# mn 进入mininet
+# mn -h # 查看--topo
+# mn --topo=minimal 
+# mn --controller=none --mac --topo single,3
+# mn --controller=none --mac --topo linear,2
+
+mininet> dump #查看当前配置
+mininet> sh ovs-vsctl show #执行shell命令
+mininet> help 
+mininet> nodes 
+mininet> ports # 查看switch port跟of-port的对应关系 
+mininet> links # 查看网线连通性
+mininet> net 
+mininet> h1 ifconfig #host: h1执行ifconfig
+mininet> s1 ifconfig #switch: s1执行ifconfig
+mininet> h1 ping -c 2 h2
+mininet> pingall
+
+mininet> sh ovs-appctl fdb/show s1 # 查看mac地址自学习表
+
+mininet> py sys.version # 查看python版本
+mininet> h1 python -m http.server 80 &  # h1启动web server (python3)
+mininet> h2 wget -O - h1
+mininet> exit 
+
+mininet> link h1 s1 down #关闭h1,s1之间的veth peer
+
+# mn -c # 清理mininet
+
+
+2. 案例
+## TODO
+   流表从上到下匹配
+   如何删除某个指定的entry
+   switch port 与of_port的区别
+
+   流表entry按priority从高到低排列
+   priority必须要写在classifier前面
+
+   使用openflow v1.3, classifer与1.0版本不同
+
+# mn --controller=none --mac --topo single,3
+mininet> sh ovs-ofctl dump-flows s1 # 没有controller, 流表为空, pingall全不通
+mininet> sh ovs-ofctl add-flow s1 action=normal # 添加一个全部转发的规则
+mininet> pingall # 全通
+mininet> sh ovs-ofctl del-flows s1 # 清除所有entry
+
+## 2.1 protocol: port级别匹配
+mininet> sh ovs-ofctl add-flow s1 priority=100,in_port=1,actions=output:2
+mininet> sh ovs-ofctl add-flow s1 priority=100,in_port=2,actions=output:1
+mininet> sh ovs-ofctl add-flow s1 priority=30000,action=drop # 优先级最大, 在流表最前面, 导致pingall不通
+mininet> sh ovs-ofctl del-flows s1 --strict # TODO
+
+## 2.2 protocol: ethernet(L2)级别匹配
+mininet> sh ovs-ofctl del-flows s1 # 清空table
+mininet> sh ovs-ofctl add-flow s1 eth_src=00:00:00:00:00:01,eth_dst=00:00:00:00:00:02,actions=output:2
+mininet> sh ovs-ofctl add-flow s1 eth_src=00:00:00:00:00:02,eth_dst=00:00:00:00:00:01,actions=output:1
+# 只有上面两项, 是无法ping通的, 因为不适用于L2 broadcast
+mininet> sh ovs-ofctl add-flow s1 arp,nw_proto=1,actions=flood #opcode=1说明是request类型 #arp,eth_type,dl_type均可
+mininet> h1 ping h2 # 可以通
+
+## 2.3 protocol: IPV4(L3)级别匹配
+mininet> sh ovs-ofctl del-flows s1 # 清空table
+
+## 添加arp, 否则无法ping通 TODO: 更简洁的方法
+mininet> sh ovs-ofctl add-flow s1 arp,nw_dst=10.0.0.1,action=output:1
+mininet> sh ovs-ofctl add-flow s1 arp,nw_dst=10.0.0.2,action=output:2
+mininet> sh ovs-ofctl add-flow s1 arp,nw_dst=10.0.0.3,action=output:3
+
+mininet> sh ovs-ofctl add-flow s1 priority=100,ip,nw_src=10.0.0.0/8,nw_dst=10.0.0.0/8,actions=normal # ip,dl_type=0x800,eth_type=0x800均可
+mininet> h1 python -m http.server 80 &
+mininet> h2 wget h1 # 可通
+mininet> pingall #全通
+
+## 2.4 protocol: TCP (L4)
+mininet> sh ovs-ofctl del-flows s1 # 清空table
+mininet> sh ovs-ofctl add-flow arp,action=normal
+mininet> sh ovs-ofctl add-flow s1 priority=100,ip,nw_proto=6,nw_dst=10.0.0.1,tp_dst=80,action=output:1
+mininet> sh ovs-ofctl add-flow s1 priority=200,ip,nw_src=10.0.0.1,action=normal # 必须有此entry才能通
+mininet> h1 python -m http.server 80 &
+mininet> h2 wget h1 # 可通
+
+
+## 2.5 protocol: ICMPv4
+mininet> sh ovs-ofctl add-flow s1 nw_proto=1,action=normal # 开放icmp
+mininet> sh ovs-ofctl del-flows s1 # 清空table
+
+## 2.6 protocol: arp
+
+TODO: SNAT, DNAT, multi-table, Vlan
+
+

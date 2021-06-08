@@ -1,0 +1,17 @@
+l3-agent
+dhcp-agent
+lbaasv2-agent
+metering-agent
+
+
+router
+network
+    subnet
+firewall
+LB
+
+
+DVR: distribute virtual router
+
+vm --> linux bridge --> router --> br-int --> br-tun
+    使用linux bridge而不是ovs bridge 是因为可以应用security group定义的iptables规则
