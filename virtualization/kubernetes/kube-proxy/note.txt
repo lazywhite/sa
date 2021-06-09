@@ -1,0 +1,23 @@
+--proxy-mode=ipvs|iptables # 老版本不支持ipvs, 默认iptables
+
+kube-proxy为service生成iptables规则, network-plugin不管理service(kube-router除外), 只负责网络互通和NetworkPolicy
+
+
+NodePort
+    请求node1:port, DNAT后此时client-ip还是被保留的， 如果workload在node2, 那么packet会在POSTROUTING被SNAT, client-ip被丢弃
+
+
+
+service处理流程(参考calico/note.txt)
+    PREROUTING
+        NAT
+            KUBE-SERVICES
+                KUBE-MARK-MASQ # 用来标记packet, 在POSTROUTING进行SNAT
+                KUBE-SVC-<>
+                    KUBE-SEP-<1>  # SEP: service endpoint,  statistics probability 0.5  (base on backend pod number)
+                        KUBE-MARK-MASQ
+                        DNAT # to pod ip:port
+                    KUBE-SEP-<2>
+                KUBE-NODEPORT # 处理完clusterIP类型，才处理NodePort类型
+    POSTROUTING
+        

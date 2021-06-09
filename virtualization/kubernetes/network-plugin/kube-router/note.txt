@@ -1,13 +1,16 @@
 使用ipvs进行service proxy
+    default mode: masquerade
+    default scheduler: round robin
 
 特性
     pod与pod, pod与node之间通信无需NAT
-    service可以ping通, 无需做转换
-    network policy使用iptables实现
+    service ip是真实存在的，无需做NAT
 
 安装
     修改all.yaml, server: <>
     cat /root/.kube/config|grep server
+
+    必须要具备/opt/cni/bin/bridge(https://github.com/containernetworking/plugins/releases/download/v0.8.1/cni-plugins-linux-amd64-v0.8.1.tgz)
 
     kubectl apply -f all.yaml
 
@@ -15,11 +18,10 @@
 Tips:
     1. 因为ipvs要求virtual-service的ip本机必须存在, 因此每个node都创建kube-dummy-if网卡，并添加所有service ip地址
     2. ipvs不支持自定义修改，会被kube-router覆盖掉
+    3. 正确配置的cni，所有pod都桥到kube-bridge
 
 
 
-TODO:
-    minikube node.spec.podCIDR为空
-
-    有的pod全部桥到docker0, 而不是kube-bridge
-    有的pod不会桥到任何br，而是host端的veth都绑定一个内部pod网关地址
+issue
+    minikube node.spec.podCIDR为空, 有的pod全部桥到docker0, 而不是kube-bridge, 有的pod不会桥到任何br，而是host端的veth都绑定一个内部pod网关地址
+    原因: # minikube start --network-plugin=cni  # pod会pending，直到network plugin被安装

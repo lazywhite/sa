@@ -1,0 +1,14 @@
+1. install
+wget https://github.com/containernetworking/plugins/releases/download/v0.8.1/cni-plugins-linux-amd64-v0.8.1.tgz
+tar xf cni-plugins-linux-amd64-v0.8.1.tgz
+./cilium install
+
+#cilium connectivity test
+
+2. usage
+cilium status
+cilium uninstall
+
+
+3. networkPolicy
+    可以设置7层规则
