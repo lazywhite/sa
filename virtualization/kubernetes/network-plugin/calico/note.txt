@@ -43,6 +43,7 @@ NetworkPolicy实现
     1. 支持原生NetworkPolicy
     2. 支持calico 扩展CRD: projectcalico.org/v3/NetworkPolicy定义, 不同的工作模式实现不同，underlay使用iptables 
 
+
 service流量处理流程
     ClusterIP
         将请求包dst:port NAT成pod:port, 然后将回复包的src:port NAT成svc:port
@@ -69,3 +70,11 @@ eBPF dataplane
 
 metalLB
 
+
+卸载
+    删除calico之前，需要清理掉iptables规则
+    https://github.com/projectcalico/calico/blob/master/hack/remove-calico-policy/remove-policy.md
+
+
+
+underlay模式networkpolicy实现(iptables)分析

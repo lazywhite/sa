@@ -8,16 +8,22 @@ NodePort
 
 
 
-service处理流程(参考calico/note.txt)
-    PREROUTING
-        NAT
+
+service iptables实现细节
+    inbound会在NAT PREROUTING KUBE-SERVICES进行DNAT
+    outbond会在NAT OUTPUT KUBE-SERVICES进行DNAT
+    inbond, outbond如果最终路由到别的node，通过NAT POSTROUTING进行SNAT
+    nat
+        PREROUTING
             KUBE-SERVICES
-                KUBE-MARK-MASQ # 用来标记packet, 在POSTROUTING进行SNAT
+                KUBE-MARK-MASQ # 用来标记packet, KUBE-POSTING会识别这个mark并进行MASQUERADE
                 KUBE-SVC-<>
                     KUBE-SEP-<1>  # SEP: service endpoint,  statistics probability 0.5  (base on backend pod number)
                         KUBE-MARK-MASQ
                         DNAT # to pod ip:port
                     KUBE-SEP-<2>
                 KUBE-NODEPORT # 处理完clusterIP类型，才处理NodePort类型
-    POSTROUTING
-        
+        OUTPUT
+            KUBE-SERVICES
+        POSTROUTING
+            KUBE-POSTROUTING

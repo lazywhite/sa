@@ -258,11 +258,6 @@ endpoint
     k8s集群中创建一个名为hello的service，就会生成一个同名的endpoint对象，ENDPOINTS就是service关联的pod的ip地址和端口
 
 
-NetworkPolicy
-    https://godleon.github.io/blog/Kubernetes/k8s-Network-Policy-Overview/
-
-    NP的实现由各网络插件实现, 毕竟不同插件实现网络互联的方式不一样，NP只是定义了一个标准
-
 Secret
 	data:
 	stringData
@@ -557,38 +552,6 @@ bash添加自动补全
 
 
 
-networkPolicy
-    metadata:
-        name:
-        namespace:
-
-    spec:
-        podSelector: # 若为{}则表示匹配所有pod
-          matchLabels:
-            key: value
-        ingress:
-        - from:
-          - ipBlock:
-            cidr: a.b.c.0/24
-            except:
-            - a.b.c.d/32
-          - namespaceSelector: # 若为{}, 则匹配所有namespace
-              matchLabels:
-                key: value
-          - podSelector:  # 只能匹配跟当前policy相同namespace下的pod
-              matchLabels:
-                key: value
-
-          ports: # 留空则全部放行, 有内容则为白名单, 默认禁止
-        egress:
-        - to:
-        policyType:
-        - Ingress
-        - Egress
-
-
-pod在没有networkpolicy情况下，可以访问任意其它pod
-NetworkPolicies do not apply to Pods with HostNetworking enabled
 
 
 kubectl delete --casecade=true //级联删除默认为true
@@ -716,4 +679,94 @@ kubectl drain <node> --ignore-daemonsets --force --delete-local-data
 
 
 
+### NetworkPolicy
+```
+https://godleon.github.io/blog/Kubernetes/k8s-Network-Policy-Overview/
+NP的实现由各网络插件实现, 毕竟不同插件实现网络互联的方式不一样，NP只是定义了一个标准
 
+
+Tips:
+    networkpolicy无法应用到hostnetwork的pod
+
+处理逻辑
+    1. 默认情况下pod是非隔离的，接受任何来源流量
+    2. 被某些networkpolicy的podSelector选中，进入隔离状态
+    3. 如果某个pod被多个np匹配到，结果是它们的并集
+    4. 为了允许两个pod之间通信，源pod的egress和目标pod的ingress都要允许
+	5. 同一组被隔离的pod，默认是可以相互通信的
+    6. ingress, egress都是白名单类型，不在规则内被deny
+
+networkPolicy
+    metadata:
+        name:
+        namespace: # 仅对同namespace下的pod生效
+
+    spec:
+        podSelector: # 若为{}则表示匹配所有pod
+          matchLabels:
+            key: value
+        ingress:
+        - from:
+          - ipBlock:
+            cidr: a.b.c.0/24
+            except:
+            - a.b.c.d/32
+          - namespaceSelector: # 若为{}, 则匹配所有namespace
+              matchLabels:
+                key: value
+          - podSelector:  # 只能匹配跟当前policy相同namespace下的pod
+              matchLabels:
+                key: value
+
+          ports: # 留空则全部放行, 有内容则为白名单, 默认禁止
+        egress:
+        - to:
+        policyType:
+        - Ingress
+        - Egress
+
+
+
+样例
+
+1. 默认拒绝所有入站流量
+	apiVersion: networking.k8s.io/v1
+	kind: NetworkPolicy
+	metadata:
+	  name: default-deny-ingress
+	spec:
+	  podSelector: {}
+	  policyTypes:
+	  - Ingress
+2. 默认允许所有入站流量
+	apiVersion: networking.k8s.io/v1
+	kind: NetworkPolicy
+	metadata:
+	  name: default-allow-ingress
+	spec:
+	  podSelector: {}
+      ingress: 
+      - {}
+	  policyTypes:
+	  - Ingress
+3. 默认拒绝所有出站流量
+	apiVersion: networking.k8s.io/v1
+	kind: NetworkPolicy
+	metadata:
+	  name: default-deny-egress
+	spec:
+	  podSelector: {}
+	  policyTypes:
+	  - Egress
+4. 默认允许所有入站流量
+	apiVersion: networking.k8s.io/v1
+	kind: NetworkPolicy
+	metadata:
+	  name: default-allow-egress
+	spec:
+	  podSelector: {}
+      egress: 
+      - {}
+	  policyTypes:
+	  - Egress
+```

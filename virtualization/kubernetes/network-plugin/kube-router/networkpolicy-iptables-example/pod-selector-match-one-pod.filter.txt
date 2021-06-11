@@ -1,0 +1,78 @@
+Chain INPUT (policy ACCEPT)
+target     prot opt source               destination         
+KUBE-ROUTER-INPUT  all  --  0.0.0.0/0            0.0.0.0/0            /* kube-router netpol - 4IA2OSFRMVNDXBVV */
+KUBE-FIREWALL  all  --  0.0.0.0/0            0.0.0.0/0           
+KUBE-SERVICES  all  --  0.0.0.0/0            0.0.0.0/0            ctstate NEW /* kubernetes service portals */
+KUBE-EXTERNAL-SERVICES  all  --  0.0.0.0/0            0.0.0.0/0            ctstate NEW /* kubernetes externally-visible service portals */
+
+Chain FORWARD (policy DROP)
+target     prot opt source               destination         
+KUBE-ROUTER-FORWARD  all  --  0.0.0.0/0            0.0.0.0/0            /* kube-router netpol - TEMCG2JMHZYE7H7T */
+ACCEPT     all  --  0.0.0.0/0            0.0.0.0/0            /* allow outbound node port traffic on node interface with which node ip is associated */
+ACCEPT     all  --  0.0.0.0/0            0.0.0.0/0            /* allow inbound traffic to pods */
+ACCEPT     all  --  0.0.0.0/0            0.0.0.0/0            /* allow outbound traffic from pods */
+KUBE-FORWARD  all  --  0.0.0.0/0            0.0.0.0/0            /* kubernetes forwarding rules */
+KUBE-SERVICES  all  --  0.0.0.0/0            0.0.0.0/0            ctstate NEW /* kubernetes service portals */
+
+Chain OUTPUT (policy ACCEPT)
+target     prot opt source               destination         
+KUBE-ROUTER-OUTPUT  all  --  0.0.0.0/0            0.0.0.0/0            /* kube-router netpol - VEAAIY32XVBHCSCY */
+KUBE-FIREWALL  all  --  0.0.0.0/0            0.0.0.0/0           
+KUBE-SERVICES  all  --  0.0.0.0/0            0.0.0.0/0            ctstate NEW /* kubernetes service portals */
+
+Chain KUBE-EXTERNAL-SERVICES (1 references)
+target     prot opt source               destination         
+
+Chain KUBE-FIREWALL (2 references)
+target     prot opt source               destination         
+DROP       all  --  0.0.0.0/0            0.0.0.0/0            /* kubernetes firewall for dropping marked packets */ mark match 0x8000/0x8000
+
+Chain KUBE-FORWARD (1 references)
+target     prot opt source               destination         
+ACCEPT     all  --  0.0.0.0/0            0.0.0.0/0            /* kubernetes forwarding rules */ mark match 0x4000/0x4000
+ACCEPT     all  --  10.244.0.0/16        0.0.0.0/0            /* kubernetes forwarding conntrack pod source rule */ ctstate RELATED,ESTABLISHED
+ACCEPT     all  --  0.0.0.0/0            10.244.0.0/16        /* kubernetes forwarding conntrack pod destination rule */ ctstate RELATED,ESTABLISHED
+
+Chain KUBE-NWPLCY-2CNMSLXSLOQ4TUZX (2 references)
+target     prot opt source               destination         
+MARK       tcp  --  0.0.0.0/0            0.0.0.0/0            /* rule to ACCEPT traffic from source pods to dest pods selected by policy name allow-same-namespace namespace default */ match-set KUBE-SRC-T3V37T4Q327VI6JU src match-set KUBE-DST-BPOCKQRRWSSVDOOF dst tcp dpt:80 MARK or 0x10000
+RETURN     tcp  --  0.0.0.0/0            0.0.0.0/0            /* rule to ACCEPT traffic from source pods to dest pods selected by policy name allow-same-namespace namespace default */ match-set KUBE-SRC-T3V37T4Q327VI6JU src match-set KUBE-DST-BPOCKQRRWSSVDOOF dst tcp dpt:80 mark match 0x10000/0x10000
+
+Chain KUBE-POD-FW-3RXOTS3WPIJNDQNC (3 references)
+target     prot opt source               destination         
+ACCEPT     all  --  0.0.0.0/0            0.0.0.0/0            /* rule for stateful firewall for pod */ ctstate RELATED,ESTABLISHED
+ACCEPT     all  --  0.0.0.0/0            10.244.0.3           /* rule to permit the traffic traffic to pods when source is the pod's local node */ ADDRTYPE match src-type LOCAL
+KUBE-NWPLCY-2CNMSLXSLOQ4TUZX  all  --  0.0.0.0/0            0.0.0.0/0            /* run through nw policy allow-same-namespace */
+NFLOG      all  --  0.0.0.0/0            0.0.0.0/0            /* rule to log dropped traffic POD name:nginx-dep-6bc47845cb-8qkc2 namespace: default */ mark match ! 0x10000/0x10000 limit: avg 10/min burst 10 nflog-group 100
+REJECT     all  --  0.0.0.0/0            0.0.0.0/0            /* rule to REJECT traffic destined for POD name:nginx-dep-6bc47845cb-8qkc2 namespace: default */ mark match ! 0x10000/0x10000 reject-with icmp-port-unreachable
+MARK       all  --  0.0.0.0/0            0.0.0.0/0            MARK and 0xfffeffff
+
+Chain KUBE-POD-FW-4PHXUOYG4BBO3PJD (3 references)
+target     prot opt source               destination         
+ACCEPT     all  --  0.0.0.0/0            0.0.0.0/0            /* rule for stateful firewall for pod */ ctstate RELATED,ESTABLISHED
+ACCEPT     all  --  0.0.0.0/0            10.244.0.4           /* rule to permit the traffic traffic to pods when source is the pod's local node */ ADDRTYPE match src-type LOCAL
+KUBE-NWPLCY-2CNMSLXSLOQ4TUZX  all  --  0.0.0.0/0            0.0.0.0/0            /* run through nw policy allow-same-namespace */
+NFLOG      all  --  0.0.0.0/0            0.0.0.0/0            /* rule to log dropped traffic POD name:nginx-dep-6bc47845cb-m5px2 namespace: default */ mark match ! 0x10000/0x10000 limit: avg 10/min burst 10 nflog-group 100
+REJECT     all  --  0.0.0.0/0            0.0.0.0/0            /* rule to REJECT traffic destined for POD name:nginx-dep-6bc47845cb-m5px2 namespace: default */ mark match ! 0x10000/0x10000 reject-with icmp-port-unreachable
+MARK       all  --  0.0.0.0/0            0.0.0.0/0            MARK and 0xfffeffff
+
+Chain KUBE-ROUTER-FORWARD (1 references)
+target     prot opt source               destination         
+KUBE-POD-FW-4PHXUOYG4BBO3PJD  all  --  0.0.0.0/0            10.244.0.4           PHYSDEV match --physdev-is-bridged /* rule to jump traffic destined to POD name:nginx-dep-6bc47845cb-m5px2 namespace: default to chain KUBE-POD-FW-4PHXUOYG4BBO3PJD */
+KUBE-POD-FW-4PHXUOYG4BBO3PJD  all  --  0.0.0.0/0            10.244.0.4           /* rule to jump traffic destined to POD name:nginx-dep-6bc47845cb-m5px2 namespace: default to chain KUBE-POD-FW-4PHXUOYG4BBO3PJD */
+KUBE-POD-FW-3RXOTS3WPIJNDQNC  all  --  0.0.0.0/0            10.244.0.3           PHYSDEV match --physdev-is-bridged /* rule to jump traffic destined to POD name:nginx-dep-6bc47845cb-8qkc2 namespace: default to chain KUBE-POD-FW-3RXOTS3WPIJNDQNC */
+KUBE-POD-FW-3RXOTS3WPIJNDQNC  all  --  0.0.0.0/0            10.244.0.3           /* rule to jump traffic destined to POD name:nginx-dep-6bc47845cb-8qkc2 namespace: default to chain KUBE-POD-FW-3RXOTS3WPIJNDQNC */
+
+Chain KUBE-ROUTER-INPUT (1 references)
+target     prot opt source               destination         
+RETURN     all  --  0.0.0.0/0            10.96.0.0/12         /* allow traffic to cluster IP - 4H2UH6XHRCCZXCYQ */
+RETURN     tcp  --  0.0.0.0/0            0.0.0.0/0            /* allow LOCAL TCP traffic to node ports - LR7XO7NXDBGQJD2M */ ADDRTYPE match dst-type LOCAL multiport dports 30000:32767
+RETURN     udp  --  0.0.0.0/0            0.0.0.0/0            /* allow LOCAL UDP traffic to node ports - 76UCBPIZNGJNWNUZ */ ADDRTYPE match dst-type LOCAL multiport dports 30000:32767
+
+Chain KUBE-ROUTER-OUTPUT (1 references)
+target     prot opt source               destination         
+KUBE-POD-FW-4PHXUOYG4BBO3PJD  all  --  0.0.0.0/0            10.244.0.4           /* rule to jump traffic destined to POD name:nginx-dep-6bc47845cb-m5px2 namespace: default to chain KUBE-POD-FW-4PHXUOYG4BBO3PJD */
+KUBE-POD-FW-3RXOTS3WPIJNDQNC  all  --  0.0.0.0/0            10.244.0.3           /* rule to jump traffic destined to POD name:nginx-dep-6bc47845cb-8qkc2 namespace: default to chain KUBE-POD-FW-3RXOTS3WPIJNDQNC */
+
+Chain KUBE-SERVICES (3 references)
+target     prot opt source               destination         

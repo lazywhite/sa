@@ -1,8 +1,7 @@
-使用ipvs进行service proxy
-    default mode: masquerade
+开启ipvs service后
+    default mode: masquerade (NAT)
     default scheduler: round robin
 
-特性
     pod与pod, pod与node之间通信无需NAT
     service ip是真实存在的，无需做NAT
 
@@ -15,8 +14,14 @@
     kubectl apply -f all.yaml
 
 
+启动
+  --run-firewall       Enables Network Policy -- sets up iptables to provide ingress firewall for pods. (default true)
+  --run-router         Enables Pod Networking -- Advertises and learns the routes to Pods via iBGP. (default true)
+  --run-service-proxy  Enables Service Proxy -- sets up IPVS for Kubernetes Services. (default true)
+
+
 Tips:
-    1. 因为ipvs要求virtual-service的ip本机必须存在, 因此每个node都创建kube-dummy-if网卡，并添加所有service ip地址
+    1. 因为ipvs要求virtual-service的ip本机必须存在, 因此每个node都创建kube-dummy-if网卡，ip addr add <svc> dev kube-dummy-if
     2. ipvs不支持自定义修改，会被kube-router覆盖掉
     3. 正确配置的cni，所有pod都桥到kube-bridge
 
@@ -25,3 +30,34 @@ Tips:
 issue
     minikube node.spec.podCIDR为空, 有的pod全部桥到docker0, 而不是kube-bridge, 有的pod不会桥到任何br，而是host端的veth都绑定一个内部pod网关地址
     原因: # minikube start --network-plugin=cni  # pod会pending，直到network plugin被安装
+
+
+
+networkpolicy只适用src，dst均是podCIDR的情况, 否则均不适用
+
+networkpolicy iptables实现细节
+
+    流量会先经过NAT表对service ip进行转换， 然后在filter表应用networkpolicy
+    inbond
+        如果是集群内某个pod发起的，在其filter output就应用了np
+    forward
+        如果dst在其它node，会在filter FORWARD KUBE-ROUTER-FORWARD应用规则
+    outbond
+        会在filter OUTPUT KUBE-ROUTER-OUTPUT应用规则
+    filter
+        FORWARD
+            KUBE-ROUTER-FORWARD
+                # 每个pod都有两条规则
+                KUBE-POD-FW-<pod-01>  PHYSDEV match --physdev-is-bridged # same node same bridge
+                KUBE-POD-FW-<pod-01> # different node
+                    KUBE-NWPLC-<>
+                        match-set <whitelist pod> src match-set <isolated pod> dst set-xmark 0x10000/0x10000
+                        return mark match 0x10000/0x10000
+
+                NFLOG mark ! match 0x10000/0x10000
+                REJECT mark ! match 0x10000/0x10000
+
+        OUTPUT
+            KUBE-ROUTER-OUTPUT
+                # 每个pod只有一个规则, 跟KUBE-ROUTER-FORWARD使用同一个chain
+                KUBE-POD-FW-<> # service-ip已经被DNAT为pod ip了
