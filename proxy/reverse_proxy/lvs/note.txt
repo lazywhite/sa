@@ -10,7 +10,7 @@ LVS: Linux Virtual Server
 
 ######## 1. 管理virtual-service
 
-1.1 添加
+1.1 添加(设置调度算法)
 ipvsadm -A -t 172.16.1.253:80 -s wlc
     -t: TCP协议的集群 
     -u: UDP协议的集群 
@@ -26,13 +26,13 @@ ipvsadm -D -t 172.16.1.253:80
 
 
 ######### 2. virtual service管理real server
-### 2.1 添加
+### 2.1 添加(设置工作模式)
 ipvsadm -a -t 172.16.1.253:80 -r 172.16.1.101 -g -w 5
 ipvsadm -a -t 172.16.1.253:80 -r 172.16.1.102 -g -w 10
     [-g|i|m]: LVS类型    
-        -g: DR 
-        -i: TUN 
-        -m: NAT 
+        -g (gateway): direct route: DR
+        -i (ipip): ipip encapsulation: TUNNLING
+        -m (masquerade): masquerade: NAT
     [-w weight]: 定义服务器权重
 
 ### 2.2 修改
