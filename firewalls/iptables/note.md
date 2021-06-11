@@ -1,22 +1,41 @@
 ## version
 ```
 iptables -V
-    lagacy (最高1.8.3)
-    nf_tables(centos8: ls -alh /usr/sbin/iptables -->  xtables-nft-multi)
+    lagacy xtables(最高1.8.3)
+    nf_tables
 
     两者最大的不同是kernel mod api不同
+    nftables is the modern Linux kernel packet classification framework. New code should use it instead of the legacy {ip,ip6,arp,eb}_tables (xtables) infrastructure. For existing codebases that have not yet converted, the legacy xtables infrastructure is still maintained as of 2021. Automated tools assist the xtables to nftables conversion process.
 
 
 centos8 netfilter模块是新版，旧版本的kube-proxy可能无法正常工作
 ```
+
+## nft
+```
+nft list ruleset
+nft list chains
+nft list tables
+nft list table ip|ip6 nat
+```
+
 ## Intro
 ```
 iptables 仅仅是netfilter模块的userspace frontend而已
 
-PREROUTING
-    route
-        (in this host)INPUT->UserSpace->OUTPUT->POSTROUTING
-        (not this host)FORWARD->POSTROUTING
+工作原理
+    如果一个chain内的所有rule都没有match，Default Policy就会被应用
+
+    Inbond
+        packet --> raw prerouting --> mangle prerouting --> nat prerouting --> route decision
+            incoming: mangle input --> filter input --> userspace
+            forward: mangle forward --> filter forward --> mangle postrouting --> nat postrouting
+            outgoing: filter output --> mangle postrouting --> nat postrouting
+    Outbond
+        userspace --> raw output --> mangle output --> nat output --> route decision
+            incoming: mangle input --> filter input --> userspace
+            forward: mangle forward --> filter forward --> mangle postrouting --> nat postrouting
+            outgoing: filter output --> mangle postrouting --> nat postrouting
 
 
 table
@@ -25,8 +44,6 @@ table
             target
 
 table
-    iptables -L -n default table is Filter
-
     Filter:
         INPUT FORWARD OUTPUT
     NAT:
@@ -36,7 +53,7 @@ table
         一般用来修改包
     RAW:
         PREROUTING OUTPUT
-        The raw table is mainly only used for one thing, and that is to set a mark on packets that they should not be handled by the connection tracking system
+        raw表的主要用途是给packet打标记, 使其不会被conntrack模块跟踪
 
 target
     ACCEPT
@@ -197,4 +214,6 @@ set
     iptables -A cali-pi-_pHTySCU__om1wJHIQqi -p tcp -m comment --comment "cali:xk4eV3PC6o8oerwT" -m set --match-set cali40s:NvVxuo5TpdJ9XcQNuWAN5Ec src -m multiport --dports 80 -j MARK --set-xmark 0x10000/0x10000
 
 
+PHYSDEV 
+    match --physdev-is-bridged # packet is bridged not routed, only used in FORWARD and POSTROUTING chains
 ```

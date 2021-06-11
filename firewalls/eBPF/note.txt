@@ -1,0 +1,3 @@
+## 检查kernel是否支持eBPF
+yum -y install kernel-devel
+grep -irI 'bpf' /usr/src/kernels/<>/arch
