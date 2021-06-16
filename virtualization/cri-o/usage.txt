@@ -1,0 +1,50 @@
+export OS=CentOS_8
+export VERSION=1.21
+
+curl -L -o /etc/yum.repos.d/devel:kubic:libcontainers:stable.repo https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/$OS/devel:kubic:libcontainers:stable.repo
+curl -L -o /etc/yum.repos.d/devel:kubic:libcontainers:stable:cri-o:$VERSION.repo https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable:cri-o:$VERSION/$OS/devel:kubic:libcontainers:stable:cri-o:$VERSION.repo
+
+yum install cri-o
+
+systemctl daemon-reload
+systemctl start crio
+
+# install, configure crictl
+.bashrc
+    export CONTAINER_RUNTIME_ENDPOINT=unix:///var/run/crio/crio.sock
+
+/etc/crictl.yaml
+    runtime-endpoint: unix:///var/run/crio/crio.sock
+    image-endpoint: unix:///var/run/crio/crio.sock
+
+crictl version
+
+# run pod
+cp policy.json /etc/containers/policy.json
+POD_ID=$(crictl runp sandbox.json)
+crictl images
+crictl pods
+crictl inspectp $POD_ID
+
+CONTAINER_ID=$(crictl create $POD_ID container_redis.json sandbox.json)
+# creating container: rpc error: code = Unknown desc = image not known 
+
+crictl pull quay.io/crio/redis:alpine
+CONTAINER_ID=$(crictl create $POD_ID container_redis.json sandbox.json)
+echo $CONTAINER_ID
+
+crictl ps
+
+POD_IP=$(crictl inspectp --output go-template --template '{{.status.network.ip}}' $POD_ID)
+echo MONITOR | ncat $POD_IP 6379
+
+crictl stop $CONTAINER_ID
+crictl rm $CONTAINER_ID
+crictl stopp $POD_ID
+[0000] stopping the pod sandbox "d963003e32e95ee7e9d1a4b804589d426c021f6cb5ba6b7dc70b87ae71b70e28": rpc error: code = Unknown desc = failed to destroy network for pod sandbox k8s_podsandbox1_redhat.test.crio_redhat-test-crio_1(d963003e32e95ee7e9d1a4b804589d426c021f6cb5ba6b7dc70b87ae71b70e28): Error while removing pod from CNI network "crio": running [/usr/sbin/iptables -t nat -N CNI-e02dd5d2417a07019b5bc12b --wait]: exit status 1: iptables: Chain already exists. 
+
+crictl rmp $POD_ID
+
+
+# 查看pod下的容器
+crictl ps -p <pod id>
