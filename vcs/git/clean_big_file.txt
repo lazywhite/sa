@@ -11,6 +11,6 @@ git rev-list --objects --all | grep <sha1> # 应该都有文件名
 git filter-branch --index-filter 'git rm --cached --ignore-unmatch <file path>' -- --all
 
 # 5. 最后进行
-rm -Rf .git/refs/original
-rm -Rf .git/logs/
+rm -rf .git/refs/original
+rm -rf .git/logs/
 git gc --aggressive --prune=now

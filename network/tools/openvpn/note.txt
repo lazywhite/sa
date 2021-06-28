@@ -1,0 +1,6 @@
+# 启动
+sudo /usr/sbin/openvpn --daemon --config $1_cert.opvn --log /tmp/openvpn.log
+
+
+# 停止
+kill -9 $pid # 会自动删除tun0和route

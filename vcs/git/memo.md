@@ -1,83 +1,106 @@
-### stash  
+### 
 ```
-stash: 保留本地所有变更， 从HEAD检出    
-git stash [save <name>]  
-git stash apply [default stash:{0}]   
+working tree
+stage area/index
+repository(.git)
+
+
+file state
+    tracked/untracked
+    modified/unmodified
+    staged/unstaged
+    commited
 ```
-  
-### merge 
-``` 
+
+### stash
+```
+stash: 保留本地所有变更， 从HEAD检出
+git stash [save <name>]
+git stash apply [default stash:{0}]
+git stash drop [default stash:{0}]
+```
+
+### merge
+```
 (master) git merge --no-ff (no fast-forward)  <branch>
 
-```  
+```
 
 ## config
 ```
 git config -l   列出所有配置项
 ```
 
-  
-### submodule 
-``` 
-git submodule add url  
-git submodule update --init
-```  
-  
-### bisect  
-```
-git bisect start  
-git bisect good  
-git bisect bad  
-git bisect visualize  
-``` 
-  
-### cat-file
-```   
-git cat-file -t 532c : commit  
-git cat-file commit 532c : tree, author, committer  
-git ls-tree tree-hash  
-git cat-file -t blob-hash : blob  
-git cat-file blob  blob-hash  
-```  
 
-  
-### rebase  
+### submodule
+```
+git submodule add url
+git submodule update --init
+```
+
+### bisect
+```
+git bisect start
+git bisect good
+git bisect bad
+git bisect visualize
+```
+
+### cat-file
+```
+git cat-file -t 532c : commit
+git cat-file commit 532c : tree, author, committer
+git ls-tree tree-hash
+git cat-file -t blob-hash : blob
+git cat-file blob  blob-hash
+```
+
+
+### rebase
 ```
 分支衍合
-	git rebase [upstream] <branch>  
-	git rebase --onto master next topic  
+	git rebase [upstream] <branch>
+	git rebase --onto master next topic
 
 更改历史提交
 	git rebase -i HEAD~3
+	git rebase -i <commit-id>
 	git rebase --continue
 
 默认不允许修改root commit
-    git rebase -i --root 
+    git rebase -i --root
 ```
-  
-### push  
+
+### push
 ```
-git push origin --tags  
-git push origin v1.5  
-git push origin local_branch:remote_branch  
-git push origin :serverfix   删除远程分支  
-git checkout --track origin/serverfix  
-  
-  
-git request-pull  
-git cherry-pick -x  
-  
-```   
-### 打补丁  
+git push origin --tags
+git push origin v1.5
+git push origin local_branch:remote_branch
+git push origin :serverfix   删除远程分支
+
+
+git request-pull
+git cherry-pick -x
+
 ```
-第一种打补丁方式
-git format-patch -M master ## generate a mailbox git-format patch   
-git am  ## apply patch from mailbox  
-  
+
+## clone
+```
+git clone <> [local dir]
+    -b <>: clone某个branch而不是master
+```
+
+### 打补丁
+```
+第一种
+    git format-patch 
+
 第二种
-<fix01>git diff master > 1.patch  
-<master>git co -b fix01;git apply 1.patch;git co masster;git merge fix01  
-  
+    <feature1-hotfix>git diff feature1 > 1.patch
+
+    <master>git apply --check 1.patch #检查是否有冲突
+    <master>git apply --reject 1.patch #默认情况下有冲突，git apply会失败，带上--reject后，自动更改无冲突的文件，有冲突的生成*.rej
+
 ```
 
 
@@ -90,10 +113,10 @@ git difftool 调用外置diff工具
     使用vimdiff时, 退出diff命令执行, :qa后Ctrl+C
 
 git diff <cid01> <cid02> -- file
-git diff --cached (diff between index and HEAD)  
-git diff (diff between work tree and index )  
-git diff HEAD (diff between work tree and HEAD)  
-git diff <branch> (diff between current work tree and branch HEAD)  
+git diff --cached (diff between index and HEAD)
+git diff (diff between work tree and index )
+git diff HEAD (diff between work tree and HEAD)
+git diff <branch> (diff between current work tree and branch HEAD)
 
 
 git diff <src-commit> <dest-commit> 比较两次提交之间的差异
@@ -101,14 +124,13 @@ git diff <src-commit> <dest-commit> 比较两次提交之间的差异
 git diff = git diff HEAD   # 比较当前工作目录代码与最近一次提交的差别
 
 
-git diff --name-only <hash1> <hash2> 
+git diff --name-only <hash1> <hash2>
 git diff --name-only <other-br>   # 仅显示不同的文件
 ```
 
 
 ## cherry-pick
 ```
-
 git cherry-pick <commit-id>
     resolve merge conflict
     git add <file>
@@ -116,7 +138,6 @@ git cherry-pick <commit-id>
 git cherry-pick --continue
     add commit message
 
-    
 ```
 
 ## mergetool
@@ -141,14 +162,12 @@ git reset [--soft | --mixed [-N] | --hard | --merge | --keep] [-q] [<commit>]
     --soft      不操作index和working tree， 仅将HEAD置为commit
     --hard      重置index和working tree
     --mixed     重置index，不重置working tree
-    
+
 ```
 
 
 ## Tag
 ```
-
-
 git tag  # 列出所有tag
 git tag -l "1.8*" $ 列出符合条件的tag
 
@@ -176,17 +195,18 @@ git tag -l "1.8*" $ 列出符合条件的tag
 	git co v1.4  # detached HEAD
 	git co -b local_v1.4 # 新建分支， 可做变更
 ```
-  
+
 ## Checkout
 ```
-git checkout -- <filename> (from stage)  
-git checkout HEAD -- <filename> (from repo)  
-git rm --cached <file> (remove  from index, but not work directory)  
-git checkout HEAD -- file (restore from repo)  
-git checkout -- file (restore from index)  
+--track/-t 
 
+git checkout --track origin/serverfix
+git checkout -- <filename> (from stage)
+git checkout HEAD -- <filename> (from repo)
+git rm --cached <file> (remove  from stage, but not work directory)
 
 git checkout -b dev -t origin/dev  创建一个跟踪远程分支的本地分支
+git checkout -b local-v1 v1 从v1检出一个local-v1分支并checkout
 ```
 
 
@@ -203,8 +223,8 @@ git checkout -b dev -t origin/dev  创建一个跟踪远程分支的本地分支
 
 
 
-用rebase保持提交的质量, 写清楚comment  
-千万不要rebase一个已经推送过的commit    
+用rebase保持提交的质量, 写清楚comment
+千万不要rebase一个已经推送过的commit
 ```
 
 
@@ -234,7 +254,7 @@ $ git commit
 ```
 
 
-### Rewrite commit histroy  
+### Rewrite commit histroy
 ```
 
 git filter-branch --commit-filter '
@@ -248,12 +268,12 @@ git filter-branch --commit-filter '
         fi' HEAD
 
 git push -f origin master
-```  
+```
 ### Remove files from all commits
 ```
 git filter-branch \
 --index-filter 'git rm --cached --ignore-unmatch linux/bzImage' -f
-```    
+```
 
 ### Remove directory from all commits
 ```
@@ -261,14 +281,14 @@ git filter-branch --tree-filter 'rm -rf project' --prune-empty HEAD
 git for-each-ref --format="%(refname)" refs/original/ | xargs -n 1 git update-ref -d
 git gc
 
-```    
+```
 
 
 
 ## 常用命令
 ```
-git grep -I -i todo     
-git reflog  
+git grep -I -i todo
+git reflog
 git revert <commit-ish>   # 给某次提交打反提交
 
 git co -b 'new' <commit-id>        从特定提交检出分支
@@ -286,12 +306,12 @@ git push --all --tags origin    将本地所有更改push到remote
 git log -n 5 --pretty=format:"%C(yellow)%h%Creset %Cred%an%Creset %Cgreen%ad%Creset" --date=iso  log彩色输出
 
 
-git revert ## like git patch -R  
+git revert ## like git patch -R
 
- 
-git repack -a -d (直接删除)    
-git repack -A -d (不直接删除)    
-  
+
+git repack -a -d (直接删除)
+git repack -A -d (不直接删除)
+
 git commit -a -F -  从标准输入读取提交信息
 
 git fetch origin [remote_br]:[local_br] 拉取远程分支到本地
@@ -362,7 +382,7 @@ git br dev origin/master
 
 
 ## 在virtualbox share folder模式下, git status状态错误
-  
+
 ```
 将缓存刷入磁盘
 echo 3 > /proc/sys/vm/drop_caches
@@ -372,7 +392,7 @@ git config core.ignorecase false
 ```
 
 ## 打印config出处
-  
+
 ```
 git config --list --show-origin
 ```
@@ -422,7 +442,7 @@ header
     类型+空格+字节数+空字节
 content
 
-header+content的sha1值(40个字符)为文件名, 存储在.git/objects/<前两个字符>/<后38个字符> 
+header+content的sha1值(40个字符)为文件名, 存储在.git/objects/<前两个字符>/<后38个字符>
 header+content的zip压缩值为内容, 存储在上一步的文件中
 
 git update-index 将文件加入暂存区
@@ -475,5 +495,10 @@ error: The following untracked working tree files would be overwritten by checko
 ```
 git config --global url."git@github.com:".insteadOf https://github.com/
 git config --global url."git://".insteadOf https://
+```
+
+## git gc unable to unlink, Operation not permitted
+```
+共享文件夹问题, chmod 777 -R /repo, 或者移动至linux文件系统即可
 ```
 

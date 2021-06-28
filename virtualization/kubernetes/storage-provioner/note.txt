@@ -1,0 +1,34 @@
+pvc是NamespaceScope, pv是clusterScope
+
+
+pv的使用
+	1. 静态
+		直接创建pv, pod挂载pv
+	2. 动态
+		通过pvc来创建, pod挂载pvc
+
+pvc的使用
+	1. 可以先创建一个pvc，pod来挂载这个pvc
+	2.  通过pvc template自动生成pvc
+
+
+
+删除pvc，会自动删除关联的pv
+创建pvc，里面指定storageClass, storageClass里面指定的provisioner会拉起pv，并最终与pvc绑定
+pvc
+    spec
+        storageClass
+        reclaimPolicy
+
+pv
+    spec
+        accessModes: []
+        capacity:
+            storage: 1G
+        claimRef: # 如果此项不为空，且pvc,pv都ready，则pvc status为Bound
+        nfs:
+            path:
+            server:
+        reclaimPolicy:
+        storageClassName:
+        volumeMode: Filesystem|Block

@@ -1,0 +1,3 @@
+1. setup charles proxy 
+2. use tshark to decrypt ssl and output to pcap file
+3. use tcpReplay 
