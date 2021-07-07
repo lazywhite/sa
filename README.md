@@ -17,6 +17,7 @@ note for linux system administration
 │   ├── puppet
 │   └── saltstack
 ├── bigdata
+│   ├── ambari
 │   ├── druid
 │   ├── flume
 │   ├── hadoop
@@ -31,8 +32,10 @@ note for linux system administration
 │   ├── matlab
 │   ├── mesos
 │   ├── note.txt
+│   ├── parquet
 │   ├── phoenix
 │   ├── pig
+│   ├── ranger
 │   ├── spark
 │   ├── sqoop
 │   ├── storm
@@ -44,6 +47,7 @@ note for linux system administration
 ├── database
 │   ├── access
 │   ├── counchdb
+│   ├── etcd
 │   ├── greenplum
 │   ├── influxdb
 │   ├── mongodb
@@ -57,14 +61,12 @@ note for linux system administration
 │   ├── sybase
 │   └── tools
 ├── disk
+│   ├── lsblk.txt
+│   ├── parted.txt
 │   └── raid.txt
 ├── dns
 │   ├── bind
 │   └── dnsmasq.md
-├── firewalls
-│   ├── firewalld
-│   ├── iptables
-│   └── note.md
 ├── fs
 │   ├── ceph
 │   ├── fastdfs
@@ -73,6 +75,7 @@ note for linux system administration
 │   ├── gluster
 │   ├── iscsi
 │   ├── lvm
+│   ├── minio
 │   ├── mogilefs
 │   ├── nfs
 │   ├── samba
@@ -118,14 +121,19 @@ note for linux system administration
 ├── library
 │   └── openssl.md
 ├── linux
+│   ├── account.txt
 │   ├── build_minimal_linux.txt
 │   ├── centos
-│   ├── note.txt
+│   ├── limit.txt
 │   ├── password_strategy.md
 │   ├── software
 │   ├── sysadmin.txt
+│   ├── systemd.txt
 │   ├── ubuntu
 │   └── webapp.txt
+├── log
+│   ├── logrotate
+│   └── rsyslog
 ├── mac
 │   ├── homebrew.md
 │   ├── ipa_build
@@ -146,7 +154,9 @@ note for linux system administration
 │   ├── note.txt
 │   ├── sklearn
 │   ├── tensorflow
-│   └── theano
+│   ├── theano
+│   ├── v2-abbf2218ddd71b68c2461101803991e8_r.jpg
+│   └── v2-fb30184a45c03a68dbce2fbbd40e2e0c_r.jpg
 ├── monitoring
 │   ├── bosun
 │   ├── cadvisor
@@ -162,15 +172,22 @@ note for linux system administration
 │   ├── kafka
 │   ├── rabbitmq
 │   └── zeromq
+├── netfilter
+│   ├── eBPF
+│   ├── ebtables
+│   ├── firewalld
+│   ├── iptables
+│   └── note.md
 ├── network
 │   ├── bond.txt
-│   ├── cisco-router.md
-│   ├── nic-bridge.txt
-│   ├── ntop
-│   ├── route.txt
-│   ├── smokeping
+│   ├── bridge.txt
+│   ├── hub.txt
+│   ├── ipv6
+│   ├── note.txt
+│   ├── protocol
+│   ├── router
 │   ├── switch
-│   └── ubuntu
+│   └── tools
 ├── ntp
 │   ├── chrony.txt
 │   ├── note.md
@@ -181,38 +198,50 @@ note for linux system administration
 │   ├── autossh.md
 │   ├── awk.md
 │   ├── awk.txt
-│   ├── cent_cmd.txt
 │   ├── cobbler.md
 │   ├── cronolog.md
+│   ├── crontab.txt
+│   ├── curl.txt
 │   ├── customize_iso.txt
 │   ├── dpkg.md
 │   ├── dstat
+│   ├── ethtool.md
 │   ├── ethtool.txt
-│   ├── experience.txt
+│   ├── expect.sh
 │   ├── find.md
 │   ├── gitbook.md
 │   ├── grep.md
 │   ├── hashcat.md
 │   ├── htop.md
+│   ├── httperf.md
 │   ├── iftop.md
 │   ├── iostat.md
-│   ├── iptables.txt
+│   ├── iotop.md
+│   ├── iozone.txt
 │   ├── irc.txt
 │   ├── lmsensor.txt
+│   ├── locate.txt
+│   ├── losetup.txt
 │   ├── lsof.md
 │   ├── lsof.txt
 │   ├── mail.md
 │   ├── mpstat.md
+│   ├── mtr.txt
+│   ├── nc.txt
+│   ├── nethogs.md
+│   ├── network
+│   ├── networkmanager.txt
 │   ├── nload.md
 │   ├── nmap.md
+│   ├── nmon.md
+│   ├── note.txt
 │   ├── oh-my-zsh.md
+│   ├── parted.md
 │   ├── pxe.md
 │   ├── rdp.md
 │   ├── rpmbuild
 │   ├── rpm.txt
 │   ├── rsync.md
-│   ├── rsyslog_logger.md
-│   ├── rsyslog_redirect.md
 │   ├── sar.md
 │   ├── screen.md
 │   ├── securecrt.txt
@@ -220,17 +249,21 @@ note for linux system administration
 │   ├── seq.md
 │   ├── shadowsocks.txt
 │   ├── slack.md
+│   ├── socat.txt
 │   ├── sort.md
 │   ├── ss.md
-│   ├── sublime.md
-│   ├── systemd.md
+│   ├── top.txt
 │   ├── uniq.md
 │   ├── vconfig.txt
 │   ├── vim.md
+│   ├── virtualization
 │   ├── vmstat.md
 │   ├── vnc.md
 │   ├── weechat.md
 │   └── yum.txt
+├── os
+│   ├── pthread.c
+│   └── thread.txt
 ├── performance
 │   ├── cpu
 │   ├── disk
@@ -251,6 +284,7 @@ note for linux system administration
 │   ├── note.md
 │   └── thrift.md
 ├── proxy
+│   ├── envoy
 │   ├── forward_proxy
 │   ├── note.md
 │   ├── reverse_proxy
@@ -261,17 +295,20 @@ note for linux system administration
 │   ├── note.txt
 │   ├── rsyncd.conf
 │   └── rsyncd.secrets
+├── sdn
+│   ├── faucet
+│   └── openvswitch
 ├── security
 │   ├── clamav.md
 │   ├── cors.txt
 │   ├── csrf.md
 │   ├── ddos.md
+│   ├── kerberos
 │   ├── oauth.md
 │   └── xss.md
 ├── sniffer
 │   ├── bro
 │   ├── charles
-│   ├── ethtool.md
 │   ├── pfring.md
 │   ├── tcpdump.md
 │   ├── tcpreplay
@@ -289,6 +326,7 @@ note for linux system administration
 │   └── solr
 ├── sync
 │   ├── course.txt
+│   ├── experience.txt
 │   ├── goal.txt
 │   ├── memo.txt
 │   ├── music.txt
@@ -301,12 +339,15 @@ note for linux system administration
 │   ├── gogs
 │   └── svn
 ├── virtualization
+│   ├── cri-o
 │   ├── docker
 │   ├── kubernetes
 │   ├── kvm
 │   ├── openstack
+│   ├── rkt
 │   ├── vagrant
-│   └── virtualbox
+│   ├── virtualbox
+│   └── wsl
 ├── webserver
 │   ├── apache
 │   ├── lighttpd
