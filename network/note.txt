@@ -1,0 +1,33 @@
+网络通信用到的三张表
+1. arp table
+	arp -nv
+
+	Address                  HWtype  HWaddress           Flags Mask            Iface
+	192.168.56.254           ether   0a:00:27:00:00:0f   C                     enp0s8
+	169.254.169.254                  (incomplete)                              enp0s3
+	10.244.0.31              ether   b2:66:00:c4:c1:5f   C                     kube-bridge
+	172.17.0.2               ether   02:42:ac:11:00:02   C                     docker0
+	10.0.2.2                 ether   52:54:00:12:35:02   C                     enp0s3
+
+
+2. mac address table(switch)
+	port no	mac addr		is local?	ageing timer
+	  1	b2:66:00:c4:c1:5f	no		   1.83
+	  1	ba:3f:9e:5a:9d:ff	yes		   0.00
+	  1	ba:3f:9e:5a:9d:ff	yes		   0.00
+	  2	d2:98:e0:b0:e4:6f	yes		   0.00
+
+3. routing table
+    networks interface mapping
+
+
+查看内核是否支持vlan
+    cat /boot/config-`uname -r` |grep CONFIG_VLAN_8021Q
+
+
+docker0网桥并没有桥任何物理设备，container仍能出外网
+    因为container的网关是docker0, docker0此时是作为一个router在工作，因此会走路由出网
+
+tun为三层设备，tap为二层设备
+
+

@@ -1,0 +1,1 @@
+bridge仅有两个端口，分别连接两个hub，bridge知道哪些host在哪个hub，用来决定是否转发

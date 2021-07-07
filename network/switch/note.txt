@@ -1,20 +1,73 @@
+二层交换技术
+    mac-port mapping table
+
+    1. 当交换机从某个端口收到一个数据包，它先读取包头中的源MAC地址，这样它就知道源MAC地址的机器是连在哪个端口上的
+    2. 再去读取包头中的目的MAC地址，并在地址表中查找相应的端口
+    3. 如表中有与这目的MAC地址对应的端口，把数据包直接复制到这端口上
+    4. 如表中找不到相应的端口则把数据包广播到所有端口上，当目的机器对源机器回应时，交换机又可以学习一目的MAC地址与哪个端口对应，在下次传送数据时就不再需要对所有端口进行广播了
+
+    不断的循环这个过程，对于全网的MAC地址信息都可以学习到，二层交换机就是这样建立和维护它自己的地址表。
+
+三层交换技术
+    基于L3, 支持vlan, 路由，交换功能
+
+
+网络隔离技术
+    802.1q: vlan tag, 修改L2 header
+    ISL: Cisco propriety protocol used for FastEthernet and Gigabit Ethernet links only.
+        将整个frame封装成起来，最前面加上ISL header，最尾部添加ISL FCS(frame check sequence), 通过L2进行传输
+        由于ethernet frame最大长度为1518 bytes, 因此最终的frame长度可能超过最大值，所以只有cisco设备才能处理
+        ISL使用PVST(per vlan spanning tree)
+
+Port
+    access/untagged: 只允许单个VID通过,
+    trunk/tagged: 允许多个VID通过
+
+    正常L2 header只有三部分src, dst, type, 是没有vlan tag的, 交换机会扩充L2 header, 增加或删除vlan tag, 并重新计算CFC
+
+    Trunk
+        每个trunk口均可配置自己的native vlan
+        接收
+            1. tagged，会只转发给相同vlan tag的port, 如果本机不存在这个vlan，则直接丢弃
+            2. untagged，会为其配置native vlan tag并进行转发
+        发送
+            数据此时全部是带vlan id的
+                如果vlan tag与native vlan相同，则删掉vlan tag
+                如果与native vlan不同，保留其原有vlan tag进行转发
+
+    Access
+        接收
+            1. untagged, 为其添加tag
+            2. tagged, 如果其tag与自己配置的不同，就直接丢弃且不学习其mac, 如果相同或者vid=0(priority tagged)可以转发
+        发送
+            数据会移除tag
+        
+
+
+tips
+    trunk port接收到了带vlan的frame, 即使跟native vlan相同， 都会原样转发, 并原样发送
+    trunk port接收到了不带vlan的frame, 会添加native vlan并发送, 最后删除vlan tag (因为交换机都有conntrack功能)
+
+    access port接收到了带vlan
+
+    default vlan: vlan id = 1，且无法删除
+    动态vlan: 将host mac与vlan进行绑定，host无论使用哪个port连接，都会自动分配规定的vlan
+
+    交换机启动配置
+        配置# copy running-config startup-config 
+        删除# erase startup-config 
+            
+
 网络分层
     核心层
     汇聚层
     接入层
     
-相关技术
-    access
-    trunk
+架构
     级联
     堆叠
     高可用
 
-网络虚拟化
-    openflow
-    openvswitch
-    GRE
-    VxLan
 路由
     静态
         本地路由器
@@ -25,105 +78,67 @@
 CCNA < CCNP < CCIE
 
 
-## Topic 
-1. Spanning-tree protocol生成树协议
-```
-功能
-一是在利用生成树算法、在以太网络中， 创建一个以某台交换机的某个端口为根的生成树，避免环路。
-二是在以太网络拓扑发生变化时，通过生成树协议达到收敛保护的目的
-```
-2.Vlan Trunking Protocol中继协议, 虚拟局域网干道协议
-把一台交换机配置成VTP Server, 其余交换机配置成VTP Client,这样他们可以自动学习到server 上的VLAN 信息
-要使用VTP，首先必须建立一个VTP管理域，在同一管理域中的交换机共享vlan信息，并且一个交换机只能参加一个管理域。不同域中的交换机不能共享vlan信息。
-###要求
-```
-1、域内的每台交换机都必须使用相同的域名，不论是通过配置实现，还是由交换自动学到的。
-2、Catalyst交换机必须是相邻的，即相邻的交换机需要具有相同的域名。
-3、在所有Catalyst交换机之间，必须配置中继链路。
-```
-###模式
-服务器模式(server)
-客户机模式(client)
-透明模式(transparent)
-
-## 级联
-1. 总线型
-2. 树形
-3. 星形
+级联
+    总线型
+    树形
+    星形
 
 uplink 端口, 普通端口
 
-## 堆叠
-堆叠线
-堆叠模块
+堆叠
+    堆叠线
+    堆叠模块
 
-逻辑堆叠
-物理堆叠
+    逻辑堆叠
+    物理堆叠
 
 
-## vlan
-静态
-动态
-    
-
-## FAQ
-1. line protocol is down : duplex auto
-2. vlan database is deprecated, use config mode 
-3. translating ... domain server: Router(config)#no ip domain-lookup
-4. hostname: conf t; hostname "switch"
-5. password: enable secret "password";  username admin password "cisco"
-6. save config:Router#copy running-config startup-config 
-6. erase config:Router#erase startup-config 
 
 连接交换机
     telnet 192.168.47.13
     username:
     password:
 
-## 2层交换机配置vlan
-```
-Switch#conf t
-Switch(config)#vlan 10
-Switch(config-vlan)#name vlan-10
-Switch(config-vlan)#exit
-Switch(config)#vlan 20
-Switch(config-vlan)#name vlan-20
-Switch(config-vlan)#exit
-Switch(config)#interface range FastEthernet0/1-12
-Switch(config-if-range)#no shutdown
-Switch(config-if-range)#switchport mode access
-Switch(config-if-range)#switchport access vlan 10
-Switch(config-if-range)#exit
-Switch(config)#interface range FastEthernet0/13-24
-Switch(config-if-range)#switchport mode access 
-Switch(config-if-range)#switchport access vlan 20
-Switch(config-if-range)#exit
-Switch(config)#interface range GigabitEthernet1/1-2
-Switch(config-if-range)#switchport mode trunk
-Switch(config-if)#switchport trunk allowed vlan all(允许所有vlan)
-Switch(config-if-range)#no shutdown
-Switch(config-if-range)#end
-Switch(config)#interface vlan 10
-Switch(config-if)#ip address 192.168.0.253 255.255.255.0
-Switch(config-if)#exit
-Switch(config)#interface vlan 20
-Switch(config-if)#ip address 192.168.1.253 255.255.255.0
-Switch(config-if)#exit
-```
+层交换机配置vlan
+    Switch#conf t
+    Switch(config)#vlan 10
+    Switch(config-vlan)#name vlan-10
+    Switch(config-vlan)#exit
+    Switch(config)#vlan 20
+    Switch(config-vlan)#name vlan-20
+    Switch(config-vlan)#exit
+    Switch(config)#interface range FastEthernet0/1-12
+    Switch(config-if-range)#no shutdown
+    Switch(config-if-range)#switchport mode access
+    Switch(config-if-range)#switchport access vlan 10
+    Switch(config-if-range)#exit
+    Switch(config)#interface range FastEthernet0/13-24
+    Switch(config-if-range)#switchport mode access 
+    Switch(config-if-range)#switchport access vlan 20
+    Switch(config-if-range)#exit
+    Switch(config)#interface range GigabitEthernet1/1-2
+    Switch(config-if-range)#switchport mode trunk
+    Switch(config-if)#switchport trunk allowed vlan all(允许所有vlan)
+    Switch(config-if-range)#no shutdown
+    Switch(config-if-range)#end
+    Switch(config)#interface vlan 10
+    Switch(config-if)#ip address 192.168.0.253 255.255.255.0
+    Switch(config-if)#exit
+    Switch(config)#interface vlan 20
+    Switch(config-if)#ip address 192.168.1.253 255.255.255.0
+    Switch(config-if)#exit
 
-## 端口镜像 SPAN: switch port analyzer  
-### Local SPAN
-1. single switch
-2. switch stack
+端口镜像 SPAN: switch port analyzer  
+Local SPAN
+    1. single switch
+    2. switch stack
+      
+    Local SPAN supports a SPAN session entirely within one switch; 
+    all source ports or source VLANs and destination ports are in the same switch 
+    or switch stack. Local SPAN copies traffic from one or more source ports in 
+    any VLAN or from one or more VLANs to a destination port for analysis 
 
-  
-Local SPAN supports a SPAN session entirely within one switch; 
-all source ports or source VLANs and destination ports are in the same switch 
-or switch stack. Local SPAN copies traffic from one or more source ports in 
-any VLAN or from one or more VLANs to a destination port for analysis 
-
-### Remote SPAN
-``` 
+Remote SPAN
 　　2900#conf t（进入配置状态）
 　　2900(config)#int f0/18（对f0/18端口进行配置）
 　　2900(config-if)#port monitor f 0/22（对f 0/22端口进行镜像）
@@ -137,50 +152,37 @@ any VLAN or from one or more VLANs to a destination port for analysis
     2940#show monitor
 　　2940(config)#monitor session 1 source interface fa 0/1 
 　　2940(config)#monitor session 1 destination interface fa 0/4
-```
-### 配置流程
-```
-switch#show ip route (L3 switch)
-switch#conf t
-switch(config)#interface vlan 1
-switch(config-if)# ip address 192.168.1.1 255.255.255.0
-switch(config-if)# exit
-switch(config)# ip default-gateway 192.168.1.254
-switch(config)# end
-switch# copy running-config startup-config
-switch# show startup-config
-switch# show version
-switch# show interface ge0/1
-switch# show mac address-table dynamic
 
-sw-outside(config)#enable password level1 cisco
-sw-outside(config-if)#description "this is business network"
-sw-outside(config-if-range)#duplex auto
-sw-outside(config)#interface range gigabitEthernet 0/10-20
-sw-outside(config-if-range)#switchport mode access|trunk
-sw-outside(config-if-range)#switchport access vlan 30
 
-sw-outside(config)#line ?
-  <0-16>   First Line number
-  console  Primary terminal line
-  vty      Virtual terminal
 
-```
+vlan配置网关
+    switch#show ip route (L3 switch)
+    switch#conf t
+    switch(config)#interface vlan 1
+    switch(config-if)# ip address 192.168.1.1 255.255.255.0
+    switch(config-if)# exit
+    switch(config)# ip default-gateway 192.168.1.254
+    switch(config)# end
+    switch# copy running-config startup-config
+    switch# show startup-config
+    switch# show version
+    switch# show interface ge0/1
+    switch# show mac address-table dynamic
+
+
+
 cisco 2960 设置密码
+    console：
+       conf t=> line console 0
+       conf t=> password switch
+       conf t=> end
 
-```
-console：
-   conf t=> line console 0
-   conf t=> password switch
-   conf t=> end
+    telnet:
+       conf t=> line vty 0 4
+                password switch
+                login
+                end
+    enable
+       conf t=> enable password switch
+                end
 
-telnet:
-   conf t=> line vty 0 4
-            password switch
-            login
-            end
-enable
-   conf t=> enable password switch
-            end
-
-```
