@@ -1,6 +1,5 @@
 ## note 
-tshark can compile with pf_ring
-
+tshark是wireshark的命令行工具, 可以和pf_ring一起编译使用
 
 ## options
 ```
