@@ -1,0 +1,25 @@
+ebtables nat表
+    同node的pod之间相互通信，通过PREROUTING->KUBE-IN-IPV4-VLAN11进行mac dnat，直接在bond0进行二层转发
+    对于不在本机的packet，通过POSTROUTING->KUBE-OUT-IPV4-VLAN11进行mac snat, 将src mac标记为bond0.11的mac
+
+eth1, eth2做了LACP，master为bond0
+
+逻辑层
+    network
+        switch-id
+        nodeSelector
+
+    subnet
+        network
+        cidr
+
+    ipinstance
+        ownerReference(statefulset pod固定ip)
+        ipaddr
+
+bond0 192.168.0.0/24
+podCIDR 192.168.0.0/22 比bond0网段要大
+
+目前仅支持物理交换机, 不支持在ECS环境部署
+
+linux bridge是个支持vlan的二层交换机，没有路由功能, 可以给网桥赋IP, 类似物理交换机的lo口

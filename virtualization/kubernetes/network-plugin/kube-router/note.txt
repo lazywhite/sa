@@ -21,9 +21,9 @@
 
 
 Tips:
-    1. 因为ipvs要求virtual-service的ip本机必须存在, 因此每个node都创建kube-dummy-if网卡，ip addr add <svc> dev kube-dummy-if
+    1. 因为ipvs要求virtual-service的ip本机必须存在, 因此每个node都创建kube-dummy-if网卡，用来hold service ip
     2. ipvs不支持自定义修改，会被kube-router覆盖掉
-    3. 正确配置的cni，所有pod都桥到kube-bridge
+    3. 正确配置的cni，所有pod都桥到kube-bridge, kube-bridge有一个ip地址,所有pod的默认网关指向这个地址, 不同node的kube-bridge ip不一样
 
 
 

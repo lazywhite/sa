@@ -1,0 +1,54 @@
+VID=11
+GW=192.168.198.30
+
+as_ns () {
+    NAME=$1
+    NETNS=rama-${NAME}
+    shift
+    ip netns exec ${NETNS} $@
+}
+
+create_ns () {
+    NAME=$1
+    IP=$2
+    NETNS=rama-${NAME}
+    ip netns add ${NETNS}
+    ip link add dev veth-${NAME} type veth peer name veth0 netns ${NETNS}
+    ip link set dev veth-${NAME} up
+    as_ns ${NAME} ip link set dev lo up
+    [ -n "${IP}" ] && as_ns ${NAME} ip addr add dev veth0 ${IP}
+    as_ns ${NAME} ip link set dev veth0 up
+
+    as_ns ${NAME} ip route add default via ${GW} dev veth0 # gw需要跟pod ip在同一个网段，否则添加失败
+}
+
+add_if () {
+    NAME=$1
+    NETNS=rama-${NAME}
+    brctl addif rama${VID} veth-${NAME}
+}
+
+
+cleanup () {
+    for NETNS in $( ip netns list | grep "rama-" | awk '{print $1}'); do
+        [ -n "${NETNS}" ] || continue
+        NAME=${NETNS#rama-}
+        # Remove netns and veth pair
+        brctl delif rama${VID} veth-${NAME}
+        ip link delete veth-${NAME}
+        ip netns delete ${NETNS}
+    done
+}
+
+
+get_vif_mac () {
+    #echo `ip -o link show bond0.${VID}|awk '{print $(NF-2)}'`
+    echo `ip -o link show bond0|awk '{print $(NF-2)}'`
+}
+
+get_pod_mac () {
+    NAME=$1
+    echo `as_ns ${NAME} ip -o link show veth0|awk '{print $(NF-4)}'`
+}
+
+

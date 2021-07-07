@@ -1,0 +1,22 @@
+工作原理
+    google/pause 负责拉起pod并配置lo, 然后kubelet调用cni
+
+
+
+tips
+    binary默认位置/opt/cni/bin
+    config默认位置/etc/cni/net.d
+
+
+    plugin可以链式调用, 前一个plugin的输出会作为cni config的preResult传递给下一个plugin
+
+    ipam 默认state file位置/var/lib/cni/networks/{.name}
+
+
+
+
+#### pod不互通问题 ####
+    同一台主机的pod-to-pod流量默认会被内核丢弃, 因为kernel认为非default namespace的
+    流量为外部流量, 需要在node设置iptables规则使其互通
+    iptables -t filter -A FORWARD -s <podCIDR> -j ACCEPT
+    iptables -t filter -A FORWARD -d <podCIDR> -j ACCEPT
