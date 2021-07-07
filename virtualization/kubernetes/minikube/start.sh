@@ -5,7 +5,8 @@
 
 version=v1.14.8
 
-minikube start  --feature-gates=KubeletPodResources=true \
+minikube start  \
+    --feature-gates=KubeletPodResources=true,DevicePlugins=true \
     --image-mirror-country cn  \
     --vm-driver=none \
     --kubernetes-version=$version \

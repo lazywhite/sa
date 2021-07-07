@@ -1,0 +1,15 @@
+# 新增node
+minikube-windows-amd64.exe add node
+
+
+# 操作
+minikube-windows-amd64.exe kubectl -- get node -o wide
+
+# ssh
+minikube-windows-amd64.exe ssh
+
+# ip
+minikube-windows-amd64.exe ip
+
+# mount
+minikube-windows-amd64.exe mount D:\:/host
