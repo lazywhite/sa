@@ -1,0 +1,14 @@
+apiVersion: storage.k8s.io/v1beta1
+kind: CSINode
+metadata:
+  name: node-10.212.101.210
+spec:
+  drivers:
+  - name: yodaplugin.csi.cloud.com
+    nodeID: node-10.212.101.210
+    topologyKeys:
+    - kubernetes.io/hostname
+  - name: pangu.csi.cloud.com
+    nodeID: a5441fd9013042ee8104a674e4a9666a
+    topologyKeys:
+    - topology.pangu.csi.cloud.com/zone

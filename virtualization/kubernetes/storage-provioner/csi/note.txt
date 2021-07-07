@@ -1,0 +1,42 @@
+https://developer.aliyun.com/article/783464
+
+
+Term
+	Volum
+	Block Volume
+	Mounted Volume
+	CO	Container Orchestration system, communicates with Plugins using CSI service RPCs.
+	SP	Storage Provider, the vendor of a CSI plugin implementation.
+	RPC
+	Node
+	Plugin	Aka “plugin implementation”, a gRPC endpoint that implements the CSI Services.
+	Plugin Supervisor	Process that governs the lifecycle of a Plugin, MAY be the CO.
+	Workload	The atomic unit of "work" scheduled by a CO. This MAY be a container or a collection of containers.
+
+Action
+    provision
+    attach
+    mount(kubelet)
+    umount(kubelet)
+    detach
+    delete
+
+    resize
+    snapshot
+
+Sidecar
+    node-driver-registrar
+    external-provider
+    external-attacher
+    external-resizer
+    liveness-prove
+
+Plugin Interface
+    IdentityServer
+    ControllerServer
+    NodeServer
+
+K8S CSI API object
+    CSIDriver
+    CSINode
+    VolumeAttachment

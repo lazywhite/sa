@@ -1,0 +1,41 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: standard
+provisioner: kubernetes.io/aws-ebs
+parameters:
+  type: gp2
+reclaimPolicy: Retain
+allowVolumeExpansion: true
+mountOptions:
+  - debug
+volumeBindingMode: Immediate
+allowedTopologies:
+- matchLabelExpressions:
+  - key: failure-domain.beta.kubernetes.io/zone
+    values:
+    - us-central1-a
+    - us-central1-b
+
+
+reclaimPolicy: 
+	Retain: pv变为release状态，里面的数据可以手动恢复
+	Recycle: volume里面的数据将会被清除，并且可以被bound到新的pvc
+	Delete(default)
+
+volumeBindingMode: 
+	WaitForFirstConsumer: 仅当一个使用pvc的pod被创建时，才会进行pv的provision和bound
+	Immediate(default): pvc被创建时，pv的provsion和bound会立即进行
+
+allowedTopologies:
+	对于大型集群，node可能分布在不同region，zone, pv可能只能限定在某一部分node，此时就需要
+	volumeBindingMode=WaitForFirstConsumer来解决, 一般有此项已经足够了，但仍然可以通过设置
+	topology来限定pv被调度到的节点
+    如果是WaitForFirstConsumer, csi-provisioner就不要开启--feature-gate=Topology=True了
+
+allowVolumeExpansion: true|false
+    允许卷扩展
+    只允许增大，不允许缩小
+    允许用户通过edit pvc来实现
+mountOptions:
+    如果volume plugin不支持指定的mountOptions, 则pv provsion和mount均会失败

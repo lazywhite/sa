@@ -1,0 +1,12 @@
+apiVersion: storage.k8s.io/v1beta1
+kind: CSIDriver
+metadata:
+  name: pangu.csi.cloud.com
+spec:
+    # 插件是否支持卷挂接（VolumeAttach）
+  attachRequired: true
+  # Mount阶段是否CSI插件需要Pod信息
+  podInfoOnMount: true
+  # 指定CSI支持的卷模式
+  volumeLifecycleModes:
+  - Persistent

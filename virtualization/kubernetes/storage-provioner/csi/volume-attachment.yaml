@@ -1,0 +1,15 @@
+apiVersion: storage.k8s.io/v1
+kind: VolumeAttachment
+metadata:
+  annotations:
+    csi.alpha.kubernetes.io/node-id: 21481ae252a2457f9abcb86a3d02ba05
+  finalizers:
+  - external-attacher/pangu-csi-cloud-com
+  name: csi-0996e5e9459e1ccc1b3a7aba07df4ef7301c8e283d99eabc1b69626b119ce750
+spec:
+  attacher: pangu.csi.cloud.com
+  nodeName: node-10.212.101.241
+  source:
+    persistentVolumeName: pangu-39aa24e7-8877-11eb-b02f-021234350de1
+status:
+  attached: true

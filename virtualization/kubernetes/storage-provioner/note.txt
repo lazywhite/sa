@@ -1,5 +1,10 @@
 pvc是NamespaceScope, pv是clusterScope
 
+Access modes
+	ReadWriteOnce – the volume can be mounted as read-write by a single node(RWO)
+	ReadOnlyMany – the volume can be mounted read-only by many nodes(ROX)
+	ReadWriteMany – the volume can be mounted as read-write by many nodes(RWX)
+
 
 pv的使用
 	1. 静态
@@ -10,25 +15,6 @@ pv的使用
 pvc的使用
 	1. 可以先创建一个pvc，pod来挂载这个pvc
 	2.  通过pvc template自动生成pvc
+    创建pvc，里面指定storageClass, storageClass里面指定的provisioner会拉起pv，并最终与pvc绑定
+    使用pv.Spec.claimRef来实现pvc, pv的双向绑定关系
 
-
-
-删除pvc，会自动删除关联的pv
-创建pvc，里面指定storageClass, storageClass里面指定的provisioner会拉起pv，并最终与pvc绑定
-pvc
-    spec
-        storageClass
-        reclaimPolicy
-
-pv
-    spec
-        accessModes: []
-        capacity:
-            storage: 1G
-        claimRef: # 如果此项不为空，且pvc,pv都ready，则pvc status为Bound
-        nfs:
-            path:
-            server:
-        reclaimPolicy:
-        storageClassName:
-        volumeMode: Filesystem|Block
