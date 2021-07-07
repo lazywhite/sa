@@ -138,12 +138,20 @@ FROM
 
 
 
+MultiStage
+    FROM go:1.13 as builder
+    go build -o /root/tool
+
+    FROM scratch  # 体积最小的母镜像
+    COPY --from=builder /root/tool /bin/tool
 
 
-ADD go /usr/local/
-    will copy the contents of your local go directory in the /usr/local/ directory of your docker image.
 
-ADD go /usr/local/go
-COPY go /usr/local/go
-    will copy the go directory itself to /usr/local/
+ADD的使用
+    ADD go /usr/local/
+        will copy the contents of your local go directory in the /usr/local/ directory of your docker image.
+
+    ADD go /usr/local/go
+    COPY go /usr/local/go
+        will copy the go directory itself to /usr/local/
 

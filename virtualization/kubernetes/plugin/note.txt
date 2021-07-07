@@ -1,0 +1,6 @@
+需要将二进制放置在$PATH并且可执行
+kubectl-foo
+    kubectl foo
+
+kubectl-foo-bar-baz
+    kubectl foo bar baz

@@ -11,10 +11,10 @@ resize2fs /dev/vg/lv_root
 
 ## vbox shrink vdisk
 ```
-dd if=/dev/zero of=/empty bs=1M
+dd if=/dev/zero of=/empty bs=1M count=10000
 rm -f /empty
 halt
-VBoxManage modifyhd new.vdi --compact
+VBoxManage modifymedium /path/to/new.vdi --compact
 ```
 
 ## headless
@@ -27,6 +27,8 @@ VBoxManage controlvm ubuntu reset
 
 ## tips
 ```
+host-only网卡可以设置ip地址，dhcp
+
 host-only vm不通host
     关闭windows防火墙
 
@@ -84,8 +86,8 @@ mac host-only出外网
 
 ## 备份占据超大空间
 ```
-备份30G, 磁盘10G，删除备份需要合并两个盘，需要额外的50G空闲空间
-如果实在没有那么多空闲空间， 可以直接删除备份文件，但会丢失磁盘内的数据, 需要实现把重要文件备份在宿主机
+备份30G, 磁盘20G，删除备份需要合并两个盘，需要额外的50G空闲空间
+如果实在没有那么多空闲空间， 可以直接删除备份文件，但会丢失磁盘内的数据, 需要事先把重要文件备份在宿主机
 然后在界面上删除备份
 ```
 
@@ -100,6 +102,18 @@ intel cpu需要输入命令
 
     启动后报错Cannot enable nested VT-x/AMD-V without nested-paging and unresricted guest execution! 证明无法开启
 
+```
 
+## share folder failed to delete
+```
+chmod 777 -R /folder
+chown root.root -R /folder
+git gc
+```
 
+## 删除vm
+```
+VBoxManage.exe unregistervm --delete <vm>
+# 如果提示lock, 使用此命令解锁
+VBoxManage.exe startvm --type emergencystop minikube-m02
 ```

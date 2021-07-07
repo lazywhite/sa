@@ -33,3 +33,8 @@ docker run
 ```
 docker exec -it <id> /bin/sh
 ```
+
+## port mapping
+```
+docker中container默认桥到docker0, 通过iptables进行port mapping
+```

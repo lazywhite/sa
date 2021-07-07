@@ -1,21 +1,20 @@
-# storage pool
-## type
-1. disk
-2. partition
-3. directory
-4. lvm
-5. iscsi
-6. nfs
-7. glusterfs  
-
-## example: directory base storage pool
+## storage pool
 ```
-<pool type="dir">
-        <name>virtimages</name>
-        <target>
-          <path>/data</path>
-        </target>
- </pool>
+disk
+partition
+directory
+lvm
+iscsi
+nfs
+glusterfs
+
+# dir pool example
+    <pool type="dir">
+            <name>virtimages</name>
+            <target>
+              <path>/data</path>
+            </target>
+     </pool>
   
 virsh pool-define /path/to/pool.xml
 virsh pool-list --all

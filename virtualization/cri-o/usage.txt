@@ -26,6 +26,11 @@ curl -L -o /etc/yum.repos.d/devel:kubic:libcontainers:stable:cri-o:$VERSION.repo
 
 yum install cri-o
 
+
+/etc/crio/crio.conf
+    [crio.network]
+    network_dir = "/etc/cni/net.d"
+
 systemctl daemon-reload
 systemctl start crio
 

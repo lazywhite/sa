@@ -1,4 +1,4 @@
-## Component
+## keyword
 ```
 master
     apiserver
@@ -33,18 +33,7 @@ object
     metadata
     spec: desired state
     status: actual state
-
-Access modes
-	ReadWriteOnce – the volume can be mounted as read-write by a single node(RWO)
-	ReadOnlyMany – the volume can be mounted read-only by many nodes(ROX)
-	ReadWriteMany – the volume can be mounted as read-write by many nodes(RWX)
-
-Reclaim Policy
- 	Retain: 保留volume
-	Recycle (只有本地盘和nfs支持数据盘Recycle 擦除回收)
-	Delete: 删除volume
 ```
-
 
 
 
@@ -257,6 +246,39 @@ endpoint
     service配置selector，endpoint controller才会自动创建对应的endpoint对象；否则，不会生成endpoint对象.
     k8s集群中创建一个名为hello的service，就会生成一个同名的endpoint对象，ENDPOINTS就是service关联的pod的ip地址和端口
 
+pod status.phase
+    Pending
+    Running
+    Succeeded (kubectl get pod 显示为Completed)
+    Failed
+    Unknown
+
+pod status.containerStatuses
+    Waiting
+    Running
+    Terminated
+
+pod status.conditions
+    PodScheduled
+    ContainersReady
+    Intialized
+    Ready
+
+pod status.reason
+    Evicted (此时status.Phase为Failed)
+    Null (default)
+
+
+VolumeMounts
+    mountPropagation
+        None(default)
+        HostToContainer
+        Bidirectional
+
+        需要docker mountFlags设置为shared，mount propagtion才生效
+        在docker.service里面设置MountFlags=shared， daemon-reload, restart docker
+
+        docker>=20.10.7默认mountFlags已经是shared, 
 
 Secret
 	data:
@@ -286,10 +308,11 @@ env
 		  configMapKeyRef:
 		    name: <>
 			key: <>
-		  
-kubectl -n argo port-forward --address 0.0.0.0 deployment/argo-server 2746:2746
+
+kubectl port-forward -n <ns> --address 0.0.0.0 <pod> <host port>:<pod port>
 	需要系统安装socat
 	不指定address, 仅监听在127.0.0.1
+    kube-proxy在本地启动一个进程来监听2746
 
 
 pod有生命周期, 一个pod内的所有容器共享网络和存储
@@ -361,6 +384,9 @@ kubectl get  custom field
 
     kubectl get pod -A -o=custom-columns='Namespace:metadata.namespace,Name:metadata.name,Tolerations:spec.tolerations'|grep -e 'map\[effect:NoSchedule operator:Exists\]' -e 'map\[operator:Exists\]' -e "node.kubernetes.io/unschedulable"|awk '{printf("%s/%s\n",$1,$2)}'
 
+    # 直接使用metadata.annotations.<key>就可以，但需要把特殊字符escape掉
+    kubectl get node -o=custom-columns='Node:metadata.name,IP:metadata.annotations.networking\.test\.com\/node_ip_list'
+
 
 kubectl get filter
 
@@ -375,6 +401,14 @@ kubectl get filter
         status.hostIP
 
 
+spec.restartPolicy
+	适用于pod中所有容器
+	Always(default)
+	OnFailure: 如果pod以状态码0退出，则不会重启
+	Never
+
+
+    sts, deploy, ds 仅支持Always, 只有job支持其它
 
 nodeAffinity
     taint: node污点，不容忍此污点的pod不会被调度到此node
@@ -437,6 +471,10 @@ headless service 作用
     对无头 Service 并不会分配 Cluster IP，kube-proxy 不会处理它们， 而且平台也不会为它们进行负载均衡和路由。 DNS 如何实现自动配置，依赖于 Service 是否定义了选择算符。
 
 
+kubectl proxy --address=0.0.0.0 --port 8001
+    建立kube-apiserver的代理，使外部应用可以绕过https认证，通过此代理来访问到kube-apiserver
+    curl 'http://localhost:8001/api/v1/pods'
+
 
 kubectl get不显示列标题
     kubectl get --no-headers=true
@@ -484,7 +522,7 @@ deployment无法使用volumeClaimTemplate
 
 
 readinessProbe:
-
+    initialDelaySeconds: 30  # 和liveness均需要配置
 livenessProbe:
     exec:
         command:
@@ -506,6 +544,7 @@ livenessProbe:
     successThreshold: 1
     failureThreashold: 3
 
+# 有些版本的kubelet有bug, httpGet的方式会报ClientTimeout, 改成exec方式即可
 
 startupProbe: # 优先级最高, 如果检测不通过，容器会被杀死，依赖重启策略进行重启
     failureThreashold: 10
@@ -557,8 +596,61 @@ bash添加自动补全
 kubectl delete --casecade=true //级联删除默认为true
 
 CSI: container storage interface
+	https://github.com/container-storage-interface/spec/blob/master/spec.md
+	service Controller {
+	  rpc CreateVolume (CreateVolumeRequest)
+		returns (CreateVolumeResponse) {}
+	  rpc DeleteVolume (DeleteVolumeRequest)
+		returns (DeleteVolumeResponse) {}
+	  rpc ListVolumes (ListVolumesRequest)
+		returns (ListVolumesResponse) {}
+	  rpc GetCapacity (GetCapacityRequest)
+		returns (GetCapacityResponse) {}
+	  rpc CreateSnapshot (CreateSnapshotRequest)
+		returns (CreateSnapshotResponse) {}
+	  rpc DeleteSnapshot (DeleteSnapshotRequest)
+		returns (DeleteSnapshotResponse) {}
+	  rpc ListSnapshots (ListSnapshotsRequest)
+		returns (ListSnapshotsResponse) {}
+
+	}
+
 CNI: container network interface
+	type CNI interface {
+		AddNetworkList(ctx context.Context, net *NetworkConfigList, rt *RuntimeConf) (types.Result, error)
+		CheckNetworkList(ctx context.Context, net *NetworkConfigList, rt *RuntimeConf) error
+		DelNetworkList(ctx context.Context, net *NetworkConfigList, rt *RuntimeConf) error
+		GetNetworkListCachedResult(net *NetworkConfigList, rt *RuntimeConf) (types.Result, error)
+		GetNetworkListCachedConfig(net *NetworkConfigList, rt *RuntimeConf) ([]byte, *RuntimeConf, error)
+
+		AddNetwork(ctx context.Context, net *NetworkConfig, rt *RuntimeConf) (types.Result, error)
+		CheckNetwork(ctx context.Context, net *NetworkConfig, rt *RuntimeConf) error
+		DelNetwork(ctx context.Context, net *NetworkConfig, rt *RuntimeConf) error
+		GetNetworkCachedResult(net *NetworkConfig, rt *RuntimeConf) (types.Result, error)
+		GetNetworkCachedConfig(net *NetworkConfig, rt *RuntimeConf) ([]byte, *RuntimeConf, error)
+
+		ValidateNetworkList(ctx context.Context, net *NetworkConfigList) ([]string, error)
+		ValidateNetwork(ctx context.Context, net *NetworkConfig) ([]string, error)
+	}
+
 CRI: container runtime interface
+	service RuntimeService {
+		// Pod operations.
+		rpc RunPodSandbox(RunPodSandboxRequest) returns (RunPodSandboxResponse) {}  
+		rpc StopPodSandbox(StopPodSandboxRequest) returns (StopPodSandboxResponse) {}  
+		rpc RemovePodSandbox(RemovePodSandboxRequest) returns (RemovePodSandboxResponse) {}  
+		rpc PodSandboxStatus(PodSandboxStatusRequest) returns (PodSandboxStatusResponse) {}  
+		rpc ListPodSandbox(ListPodSandboxRequest) returns (ListPodSandboxResponse) {}  
+
+		// Container operations.  
+		rpc CreateContainer(CreateContainerRequest) returns (CreateContainerResponse) {}  
+		rpc StartContainer(StartContainerRequest) returns (StartContainerResponse) {}  
+		rpc StopContainer(StopContainerRequest) returns (StopContainerResponse) {}  
+		rpc RemoveContainer(RemoveContainerRequest) returns (RemoveContainerResponse) {}  
+		rpc ListContainers(ListContainersRequest) returns (ListContainersResponse) {}  
+		rpc ContainerStatus(ContainerStatusRequest) returns (ContainerStatusResponse) {}
+	}
+
 
 
 
@@ -651,8 +743,9 @@ configmap value使用文件
 
 网络
     存储网: Volume
-    业务网: SLB
-    管理网: VM
+    业务网: vm
+    管理网: 不属于集群的node网卡
+    IPMI
 
 kubectl 删除 StatefulSet 会将其缩容为0，因此删除属于它的所有pods
 
@@ -661,11 +754,16 @@ pod启动
     initContainers
     containers
 
+kubelet
+    --hairpin-mode  # How should the kubelet setup hairpin NAT. This allows endpoints of a Service to load balance back to themselves if they should try to access their own Service.
 
 如果pod的env有改动， pod会被重建
 
 
 serviceAccount全名: system:serviceaccount:kube-system:default
+
+
+Role, ClusterRole里面的权限发生变化，pod需要重启才能生效
 
 
 ServiceBroker
@@ -674,6 +772,14 @@ ServiceBroker
 ServiceInstance
 
 kubectl drain <node> --ignore-daemonsets --force --delete-local-data
+
+由于docker不支持kubernetes CRI, 因此目前需要dockershim才能调用
+
+
+pod使用的volume都是临时的， 随pod的消失而消失，persistentVolume就是为了解决数据持久化的问题
+
+
+daemonSet desired pod为0, 可能是serviceAccountName写错了
 ```
 
 
@@ -769,4 +875,31 @@ networkPolicy
       - {}
 	  policyTypes:
 	  - Egress
+```
+
+
+
+### Volume
+```
+emptyDir
+    根目录在/var/lib/kubelet, pod被从node删除时，数据也会被删除
+
+hostPath:
+    path: /var/lib/docker/<>
+    type:
+        DirectoryOrCreate: owner为kubelet用户，权限为755, 如果container用户不是root，则无法写入
+        可以添加一个initContainer，里面给挂载好的volume设置权限
+    
+```
+
+### Eviction
+```
+默认阈值, 可通过kubelet config来配置
+memory.available<100Mi
+nodefs.available<10%
+imagefs.available<15%
+nodefs.inodesFree<5% (Linux nodes)
+Eviction monitoring interval
+
+一般DiskPressure肯定是磁盘容量问题， 不涉及到磁盘IO
 ```
