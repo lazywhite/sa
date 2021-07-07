@@ -14,3 +14,6 @@ __pycache__
 *.jar
 **/.DS_Store
 **/*.tar.gz
+
+
+**/nohup.out

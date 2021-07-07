@@ -114,3 +114,13 @@ xshell开启sock5代理
     1. 开启一个ssh session
     2. 查看->隧道窗格->连接规则->右键新建->sock5 设置端口8888
     3. 本机即可通过socks5://localhost:8888来做代理了
+
+xshell开始X11 Forwarding
+    1. 安装xming,或者vcxsrv
+    2. 会话->属性->ssh 隧道->转发X11到X Display: localhost:0.0
+    3. 虚拟机配置
+        yum install -y xorg-x11-server-Xorg xorg-x11-xauth xorg-x11-apps
+        /etc/profile
+            export TERM=xterm-256color
+        
+        重新登录 # xeyes

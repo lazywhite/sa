@@ -16,6 +16,13 @@ lvextend -l 100%FREE /dev/centos/root
 # 根据文件系统选择对应的工具
 resize2fs /dev/centos/root # fore ext3, ext4
 xfs_growfs / # for xfs
+```
 
-sed -i '/centos-home/d' /etc/fstab
+## 更换硬盘
+```
+pvcreate /dev/new_disk # 不用分区
+vgextend vg_store /dev/newdisk
+pvmove /dev/broken_disk /dev/new_disk
+vgreduce vg_store /dev/broken_disk
+pvremove /dev/broken_disk
 ```

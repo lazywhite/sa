@@ -1,3 +1,7 @@
+安装
+    yum install https://www.rdoproject.org/repos/rdo-release.rpm 
+    yum install openvswitch
+
 支持的特性
     vlan和trunk
     STP: spanning tree protocol

@@ -76,3 +76,9 @@ win8开启热点
 操作文件夹
 	mkdir
 	rmdir /s /q
+
+
+环境变量
+    dir env: #必须带冒号
+    $env:GOOS # 查看
+    $env:GOOS = 'linux' 设置

@@ -8,6 +8,16 @@ LVS: Linux Virtual Server
     3. 添加virtual service
     4. 添加real server (如果没有事先声明virtual service, 会报service not defined)
 
+tips:
+    NAT模式下, realserver需要配置vip，并且设置arp隔离
+
+
+virtual service四要素
+    1. vip
+    2. 工作模式
+    3. 调度算法
+    4. real server
+
 ######## 1. 管理virtual-service
 
 1.1 添加(设置调度算法)

@@ -23,9 +23,11 @@ http://www.cs.iit.edu/~cs561/cs450/ChilkuriDineshThreads/dinesh's%20files/User%2
 
 对于线程的实现，取决于操作系统，有的(Solaris)在内核空间实现(kThread)，有的(linux)在用户空间实现(pThread)
 
-kThread
+kernel-level thread
+    example: win95/NT, Solaris
 	kernel仅维护一个Thread Table(不是在每个进程内部一个TT)
  	thread table就是一个tcb的列表
 
-pThread
-	对于linux kernel来说没有thread的概念，而是用标准的process来实现，只不过这些process可以跟其它process共享内存
+user-level thread
+    example: POSIX Pthread/Mach C-threads
+    libpthread创建一个线程, 其实通过fork进程来实现, python由于GIL的存在，无法使用libpthread, 只能使用multiprocessing

@@ -490,6 +490,20 @@ spark mongodb
     df = spark.read.format("com.mongodb.spark.sql.DefaultSource").load()
     df = spark.read.format("com.mongodb.spark.sql.DefaultSource").option("uri", "mongodb://127.0.0.1/people.contacts").load()
 
+spark hdfs
+	(spark <= 1.6)
+	df = spark.read.
+          format("com.databricks.spark.csv").
+          option("delimiter","\t").
+          option("header","true").
+          load("hdfs:///demo/data/tsvtest.tsv")
+
+	(spark >= 2.0)
+	df = spark.read.
+		  option("delimiter","\t").
+		  option("header","true").
+		  csv("hdfs:///demo/data/tsvtest.tsv")
+
 spark性能高原因
     使用DAG算法, 避免生成HDFS的中间文件
 
@@ -518,7 +532,7 @@ spark动态资源分配
             yarn
                 http://spark.apache.org/docs/latest/running-on-yarn.html#configuring-the-external-shuffle-service
 
-spark application内部job调度                
+spark application内部job调度
     http://spark.apache.org/docs/latest/job-scheduling.html#scheduling-within-an-application
             --conf spark.shuffle.service.enabled=true 
 
@@ -534,7 +548,7 @@ spark 看不到hive database
         SPARK_CONF_DIR=/path/to/spark/conf
 
 parquet to csv
-    DataFrame df = sqlContext.parquetFile("parquet path");  
+    DataFrame df = sqlContext.parquetFile("parquet path");
     df.javaRDD().saveAsTextFile("outputpath");
 ```
 

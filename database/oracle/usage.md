@@ -1,10 +1,10 @@
 ## sqlplus
 ```
 进入cli再连接
-    sqlplus> connect <username>/<password>@<host>[:<port>]/[database]
+    sqlplus> <username>/<password>@<host>[:<port>]/[database]
 
 直接连接
-    # sqlplus connect <username>/<password>@<host>[:<port>]/[database]
+    # sqlplus <username>/<password>@<host>[:<port>]/[database]
 
 ```
 

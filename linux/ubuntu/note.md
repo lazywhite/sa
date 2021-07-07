@@ -27,6 +27,7 @@ apt-get install -y fuse
 
 ## timedatectl
 ```
+apt install chrony # 否则ntp无法开启
 timedatectl set-ntp on
 timedatectl set-timezone Asia/Shanghai
 timedatectl set-local-rtc 1 --adjust-system-clock

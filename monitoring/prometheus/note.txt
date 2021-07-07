@@ -1,3 +1,6 @@
+启动参数
+    --storage.tsdb.retention='365d'  # 数据留存时常
+
 rules
     recording rules
         预计算, 产生新的series并保存
