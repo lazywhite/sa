@@ -85,7 +85,6 @@ n: for exactly n
 -print0 print the full file name on the standard output, followed by a null character that -print uses
 -printf format:
 ```
-  
 ## Examples
 ```
 find /tmp -name core -type f -print|xargs /bin/rm -f
@@ -104,4 +103,5 @@ find . -path ./migrations -prune -o -name "*.py" # 排除某些文件夹
 
 find . -mtime +10 # 当前日期10天以前的
 find . -mtime -10 # 当前日期10天以内的
+find . -type f -exec grep -Iq . {} \; -print # 仅查找文本文件
 ```

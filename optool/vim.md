@@ -179,3 +179,8 @@ git config --global core.editor nvim # 默认使用vim, 否则merge分支会报�
 3. 检查是否应用256色
     :runtime syntax/colortest.vim 
 ```
+
+## ESC失效
+```
+nvim在insert mode无法ESC，可以尝试Ctrl+[
+```

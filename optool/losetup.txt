@@ -1,0 +1,8 @@
+dd if=/dev/zero of=/path/to/diskfile bs=1M count=50
+losetup /dev/loop100 /path/to/diskfile # 可以手动指定设备名,但必须是/dev/loop开头
+
+
+自动生成设备名
+losetup -Pf --show /path/to/diskfile
+    -P partscan #扫描分区信息
+    --show 与-f配合使用, setup成功后打印设备名

@@ -23,3 +23,7 @@ yum修复未完成的事务
     yum clean all 
     yum --disablerepo="epel" update nss
 
+
+
+/etc/yum.conf
+    metadata_expire=7d

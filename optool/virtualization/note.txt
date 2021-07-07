@@ -1,0 +1,30 @@
+yum -y install util-linux
+    nsenter
+    lsns
+
+yum -y install libcgroup-tools
+    cgcreate
+    cgget
+
+
+lsns 
+    -t mnt, net, ipc, user, pid, uts
+lsns -p <pid>
+
+nsenter 
+    -t --target <pid>
+    -n --network 
+    -m --mount 
+    -i --ipc 
+    -u --uts
+    -p --pid
+
+# show ip
+nsenter -t 7172 -n ip a
+# show process
+nsenter -t 7172 -p -r top
+# show hostname
+nsenter -t 7172 -u hostname
+
+# 老版本没有-a参数
+nsenter -t 7172 -a

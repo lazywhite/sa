@@ -1,0 +1,28 @@
+bridge: show / manipulate bridge addresses and devices
+
+
+bridge [options] object {command | help}
+    options:
+        -V: version
+        -s: statistics
+        -d: details
+        -o: online
+        -t: timestamp
+        -n: netns
+        -j: json
+
+    object:
+        link
+        vlan
+        fdb
+        mdb
+        monitor
+
+bridge vlan: VLAN filter list
+    
+    bridge vlan show
+    bridge vlan add dev <> vid <> [pvid <>]
+        pvid: native vlan
+
+
+bridge link show

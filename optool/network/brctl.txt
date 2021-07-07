@@ -1,0 +1,4 @@
+brctl showmacs br0 # 查看网桥mac table
+brctl showstp br0 # 查看stp
+
+brctl stp br0 on
