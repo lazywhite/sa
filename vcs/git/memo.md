@@ -271,6 +271,7 @@ git push -f origin master
 ```
 ### Remove files from all commits
 ```
+需要在repo根目录运行
 git filter-branch \
 --index-filter 'git rm --cached --ignore-unmatch linux/bzImage' -f
 ```

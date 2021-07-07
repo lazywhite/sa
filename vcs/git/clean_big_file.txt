@@ -1,3 +1,5 @@
+!!! 需要在内存较大的机器进行，否则容易内存耗尽
+
 # 1. 首先进行一次gc, 把孤立的blob全删掉
 git gc --aggressive --prune=now
 
